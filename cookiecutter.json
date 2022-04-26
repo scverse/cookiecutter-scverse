@@ -1,0 +1,20 @@
+{
+    "project_name": "project_name",
+    "package_name": "{{ cookiecutter.project_name|lower|replace('-', '_') }}",
+    "project_description": "A very interesting piece of code",
+    "author_full_name": "Isaac Virshup",
+    "author_email": "ivirshup@gmail.com",
+    "github_organization": "ivirshup",
+    "project_repo": "https://github.com/{{ cookiecutter.github_organization }}/{{ cookiecutter.package_name }}",
+    "license": [
+        "MIT License",
+        "BSD 2-Clause License",
+        "BSD 3-Clause License",
+        "Apache License Version 2.0",
+        "GNU General Public License Version 3",
+        "Unlicense"
+    ],
+    "_copy_without_render": [
+        ".github/workflows/**.yaml"
+    ]
+}

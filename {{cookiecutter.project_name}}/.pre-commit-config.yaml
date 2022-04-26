@@ -1,0 +1,23 @@
+repos:
+-   repo: https://github.com/psf/black
+    rev: 21.12b0
+    hooks:
+    -   id: black
+-   repo: https://github.com/PyCQA/flake8
+    rev: 4.0.1
+    hooks:
+    -   id: flake8
+-   repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: v1.6.0
+    hooks:
+    -   id: autopep8
+        args: ["-i"]
+-   repo: https://github.com/PyCQA/isort
+    rev: 5.10.1
+    hooks:
+    -   id: isort
+-   repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+    rev: 16762a19ddaa3a966ca7c4edd9ade6189f0df627
+    hooks:
+    -   id: pretty-format-yaml
+        args: ["--indent=4"]
