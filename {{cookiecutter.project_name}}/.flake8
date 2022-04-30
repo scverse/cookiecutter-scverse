@@ -1,7 +1,7 @@
 # Can't yet be moved to the pyproject.toml due to https://github.com/PyCQA/flake8/issues/234
 [flake8]
 max-line-length = 88
-ignore = 
+ignore =
     # line break before a binary operator -> black does not adhere to PEP8
     W503,
     # line break occured after a binary operator -> black does not adhere to PEP8
@@ -26,4 +26,3 @@ exclude =
     build,
     docs/_build,
     dist,
-

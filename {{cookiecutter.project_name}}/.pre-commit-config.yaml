@@ -11,7 +11,7 @@ repos:
     rev: v1.6.0
     hooks:
     -   id: autopep8
-        args: ["-i"]
+        args: [-i]
 -   repo: https://github.com/PyCQA/isort
     rev: 5.10.1
     hooks:
@@ -20,4 +20,4 @@ repos:
     rev: 16762a19ddaa3a966ca7c4edd9ade6189f0df627
     hooks:
     -   id: pretty-format-yaml
-        args: ["--indent=4"]
+        args: [--autofix, --indent=4]
