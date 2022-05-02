@@ -2,7 +2,6 @@
 build-backend = "flit_core.buildapi"
 requires = [
     "flit_core >=3.4,<4",
-    "setuptools_scm",
     "importlib_metadata>=0.7; python_version < '3.8'",
 ]
 
@@ -11,29 +10,30 @@ requires = [
 name = "{{ cookiecutter.package_name }}"
 description = "{{ cookiecutter.project_description }}"
 authors = [
-  {name = "{{ cookiecutter.author_full_name }}"},
+    {name = "{{ cookiecutter.author_full_name }}"},
 ]
 maintainers = [
-  {name = "{{ cookiecutter.author_full_name }}", email = "{{ cookiecutter.author_email }}"},
+    {name = "{{ cookiecutter.author_full_name }}", email = "{{ cookiecutter.author_email }}"},
 ]
+urls.Documentation = "https://{{ cookiecutter.project_name }}.readthedocs.io/"
+urls.Source = "{{ cookiecutter.project_repo }}"
+urls.Home-page = "{{ cookiecutter.project_repo }}"
 requires-python = ">=3.7"
 license = {file = "LICENSE"}
 readme = "README.md"
-dependencies = []
 dynamic = ["version"]
-
-[project.urls]
-Documentation = "https://{{ cookiecutter.project_name }}.readthedocs.io/"
-Source = "{{ cookiecutter.project_repo }}"
-Home-page = "{{ cookiecutter.project_repo }}"
+dependencies = []
 
 [project.optional-dependencies]
 dev = [
     # dev version generation
-    "setuptools_scm",
 ]
 doc = [
     "sphinx",
+    "furo", 
+    "myst-parser",
+    "sphinxcontrib-bibtex>=1.0.0",
+    'scanpydoc[typehints]>=0.7.4',
 ]
 test = [
     "pytest",
@@ -43,15 +43,21 @@ test = [
 [tool.coverage.run]
 source = ["{{ cookiecutter.package_name }}"]
 omit = [
-	"**/test_*.py",
+    "**/test_*.py",
 ]
 
 [tool.pytest.ini_options]
-testpaths = [
-  "tests",
+testpaths = ["tests"]
+xfail_strict = true
+addopts = [
+    '-Werror',  # if 3rd party libs raise DeprecationWarnings, just use filterwarnings below
+    '--import-mode=importlib',  # allow using test files with same name
+]
+filterwarnings = [
+    # 'ignore:.*U.*mode is deprecated:DeprecationWarning',
 ]
 
 [tool.isort]
 multi_line_output = 3
 profile = "black"
-skip = ""
+skip = []
