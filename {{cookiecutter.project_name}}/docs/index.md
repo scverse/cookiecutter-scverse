@@ -6,5 +6,6 @@
 :maxdepth: 1
 
 api.md
+developer_docs.md
 references.md
 ```
