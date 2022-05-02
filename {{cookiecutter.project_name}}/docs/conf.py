@@ -91,3 +91,17 @@ nitpick_ignore = [
     # you can add an exception to this list.
     #     ("py:class", "igraph.Graph"),
 ]
+
+# app setup hook
+def setup(app):
+    app.add_config_value(
+        "recommonmark_config",
+        {
+            "auto_toc_tree_section": "Contents",
+            "enable_auto_toc_tree": True,
+            "enable_math": True,
+            "enable_inline_math": False,
+            "enable_eval_rst": True,
+        },
+        True,
+    )
