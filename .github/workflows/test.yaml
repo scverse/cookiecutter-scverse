@@ -46,4 +46,4 @@ jobs:
             run: |
                 cd project_name
                 git add .
-                pre-commit --color=always run --show-diff-on-failure --all-files
+                pre-commit run --color=always --show-diff-on-failure --all-files
