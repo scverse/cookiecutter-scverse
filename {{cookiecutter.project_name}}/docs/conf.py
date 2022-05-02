@@ -8,23 +8,22 @@
 import sys
 from pathlib import Path
 from datetime import datetime
+from importlib.metadata import metadata
 
 HERE = Path(__file__).parent
-sys.path.insert(0, str(HERE.parent))
 sys.path.insert(0, str(HERE / "extensions"))
 
 
 # -- Project information -----------------------------------------------------
 
-from {{cookiecutter.package_name}} import __author__, __version__
-
-project = "{{cookiecutter.package_name}}"
-author = __author__
+info = metadata("{{cookiecutter.project_name}}")
+project = info["Name"]
+author = info["Author"]
 copyright = f"{datetime.now():%Y}, {author}."
-version = __version__
+version = info["Version"]
 
 # The full version, including alpha/beta/rc tags
-release = __version__
+release = info["Version"]
 
 templates_path = ["_templates"]
 nitpicky = True  # Warn about broken links
