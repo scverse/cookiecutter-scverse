@@ -44,6 +44,6 @@ jobs:
             run: cookiecutter --no-input .
         -   name: Run pre-commit
             run: |
-                cd project_name
+                cd project-name
                 git add .
                 pre-commit run --color=always --show-diff-on-failure --all-files
