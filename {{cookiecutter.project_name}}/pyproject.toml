@@ -2,7 +2,6 @@
 build-backend = "flit_core.buildapi"
 requires = [
     "flit_core >=3.4,<4",
-    "setuptools_scm",
     "importlib_metadata>=0.7; python_version < '3.8'",
 ]
 
@@ -28,7 +27,6 @@ dependencies = []
 [project.optional-dependencies]
 dev = [
     # dev version generation
-    "setuptools_scm",
 ]
 doc = [
     "sphinx",
