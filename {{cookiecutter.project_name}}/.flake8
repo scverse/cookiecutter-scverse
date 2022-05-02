@@ -19,7 +19,7 @@ ignore =
     # Do not assign a lambda expression, use a def -> lambda expression assignments are convenient
     E731,
     # allow I, O, l as variable names -> I is the identity matrix, i, j, k, l is reasonable indexing notation
-    E741
+    E741,
 exclude =
     .git,
     __pycache__,
