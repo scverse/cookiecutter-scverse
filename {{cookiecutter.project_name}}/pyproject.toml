@@ -34,6 +34,8 @@ dev = [
 ]
 doc = [
     "sphinx",
+    "furo", 
+    "myst-parser",
 ]
 test = [
     "pytest",
