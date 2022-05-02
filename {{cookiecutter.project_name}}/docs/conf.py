@@ -31,9 +31,8 @@ needs_sphinx = "4.0"
 
 # -- General configuration ---------------------------------------------------
 
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
+# Add any Sphinx extension module names here, as strings.
+# They can be extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
@@ -41,7 +40,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinxcontrib.bibtex",
     "sphinx_autodoc_typehints",
-    "scanpydoc",
+    "scanpydoc.definition_list_typed_field",
     *[p.stem for p in (HERE / "extensions").glob("*.py")],
 ]
 
@@ -54,10 +53,10 @@ napoleon_include_init_with_doc = False
 napoleon_use_rtype = True  # having a separate entry generally helps readability
 napoleon_use_param = True
 
-intersphinx_mapping = {
-    "anndata": ("https://anndata.readthedocs.io/en/stable/", None),
-    "numpy": ("https://numpy.org/doc/stable/", None),
-}
+intersphinx_mapping = dict(
+    anndata=("https://anndata.readthedocs.io/en/stable/", None),
+    numpy=("https://numpy.org/doc/stable/", None),
+)
 
 
 # List of patterns, relative to source directory, that match files and
@@ -75,7 +74,7 @@ html_theme = "furo"
 html_static_path = ["_static"]
 
 nitpick_ignore = [
-# If building the documentation fails because of a missing link that is outside your control, 
-# you can add an exception to this list. 
-#     ("py:class", "igraph.Graph"),
+    # If building the documentation fails because of a missing link that is outside your control,
+    # you can add an exception to this list.
+    #     ("py:class", "igraph.Graph"),
 ]
