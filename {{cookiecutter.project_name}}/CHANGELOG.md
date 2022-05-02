@@ -10,5 +10,6 @@ and this project adheres to [Semantic Versioning][].
 
 ## [Unreleased]
 
-### Added 
+### Added
+
 - Basic tool, preprocessing and plotting functions
