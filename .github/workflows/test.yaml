@@ -1,0 +1,49 @@
+name: Test
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+
+    test:
+        runs-on: ${{ matrix.os }}
+        defaults:
+            run:
+                shell: bash -e {0}  # -e to fail on error
+
+        strategy:
+            fail-fast: false
+            matrix:
+                python: ['3.8', '3.10']
+                os: [ubuntu-latest, macos-latest]
+
+        steps:
+        -   uses: actions/checkout@v2
+        -   name: Set up Python ${{ matrix.python }}
+            uses: actions/setup-python@v2
+            with:
+                python-version: ${{ matrix.python }}
+
+        -   name: Get pip cache dir
+            id: pip-cache-dir
+            run: |
+                echo "::set-output name=dir::$(pip cache dir)"
+        -   name: Restore pip cache
+            uses: actions/cache@v2
+            with:
+                path: ${{ steps.pip-cache-dir.outputs.dir }}
+                key: pip-${{ runner.os }}-${{ env.pythonLocation }}-${{ hashFiles('**/pyproject.toml') }}
+                restore-keys: |
+                    pip-${{ runner.os }}-${{ env.pythonLocation }}-
+        -   name: Install dependencies
+            run: python -m pip install --upgrade pip wheel cookiecutter pre-commit
+        -   name: Build from template
+            run: cookiecutter --no-input .
+        -   name: Run pre-commit
+            run: |
+                cd project_name
+                git add .
+                pre-commit run --color=always --show-diff-on-failure --all-files
