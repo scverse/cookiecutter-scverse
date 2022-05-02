@@ -23,6 +23,10 @@ repos:
     rev: v2.5.1
     hooks:
     -   id: prettier
+-   repo: https://github.com/asottile/blacken-docs
+    rev: v1.12.1
+    hooks:
+    -   id: blacken-docs
 -   repo: https://github.com/PyCQA/flake8
     rev: 4.0.1
     hooks:
@@ -54,7 +58,3 @@ repos:
     hooks:
     -   id: pyupgrade
         args: [--py3-plus, --py38-plus, --keep-runtime-typing]
--   repo: https://github.com/asottile/blacken-docs
-    rev: v1.12.1
-    hooks:
-    -   id: blacken-docs

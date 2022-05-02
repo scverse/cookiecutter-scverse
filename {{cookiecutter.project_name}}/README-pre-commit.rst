@@ -9,7 +9,7 @@ The following pre-commit checks for code style and format.
 * `black`_: standard code formatter in Python.
 * `autopep8`_: code formatter to conform to `PEP8`_ style guide.
 * `isort`_: sort module imports into sections and types.
-* `rstcheck`_: check syntax of reStructuredText.
+* `prettier`_: standard code formatter for non-Python files (e.g. YAML).
 * `blacken-docs`_: black on python code in docs.
 
 The following pre-commit checks for errors, inconsistencies and typing.
@@ -24,14 +24,17 @@ The following pre-commit checks for errors, inconsistencies and typing.
    * `flake8-builtins`_: check for python builtins being used as variables or parameters.
    * `flake8-pytest-style`_: check common style/inconsistency issues with pytest-based tests.
    * `flake8-string-format`_: check strings and parameters using ``str.format``.
-* `yesqa`_: remove unneccesary ``# noqa`` comments.
-* `pyupgrade`: upgrade syntax for newer versions of the language.
-* `pre-commit-hooks`_: generic pre-commit hooks.
+* `yesqa`_: remove unneccesary ``# noqa`` comments, follows additional dependencies listed above.
 * `autoflake`_: remove unused imports and variables.*
-
-* `mypy`_: static type checker for Python.
-   * silence errors add ``# ignore`` or ``# noqa[<error_id>]`` next to the offending line.
-   * To silence errors add ``# noqa`` or ``# noqa[<error_id>]`` next to the offending line.
+* `pre-commit-hooks`_: generic pre-commit hooks.
+   * **detect-private-key**: checks for the existence of private keys.
+   * **check-ast**: check whether files parse as valid python.
+   * **check-added-large-files**: prevent giant files from being committed.
+   * **end-of-file-fixer**:check files end in a newline and only a newline.
+   * **mixed-line-ending**: checks mixed line ending.
+   * **trailing-whitespace**: trims trailing whitespace.
+   * **check-case-conflict**: check files that would conflict with case-insensitive file systems.
+* `pyupgrade`_: upgrade syntax for newer versions of the language.
 
 .. _pre-commit: https://pre-commit.com/
 .. _mypy: http://www.mypy-lang.org/
@@ -39,7 +42,8 @@ The following pre-commit checks for errors, inconsistencies and typing.
 .. _autopep8: https://github.com/hhatto/autopep8
 .. _pep8: https://peps.python.org/pep-0008/
 .. _isort: https://pycqa.github.io/isort/
-.. _pretty-format-yaml: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+.. _prettier: https://prettier.io/docs/en/index.html
+.. _blacken-docs: https://github.com/asottile/blacken-docs
 .. _flake8: https://flake8.pycqa.org/en/latest/
 .. _flake8-tidy-imports: https://github.com/adamchainz/flake8-tidy-imports
 .. _flake8-docstrings: https://github.com/PyCQA/flake8-docstrings
@@ -50,10 +54,7 @@ The following pre-commit checks for errors, inconsistencies and typing.
 .. _flake8-builtins: https://github.com/gforcada/flake8-builtins
 .. _flake8-pytest-style: https://pypi.org/project/flake8-pytest-style/
 .. _flake8-string-format: https://pypi.org/project/flake8-string-format/
-
 .. _yesqa: https://github.com/asottile/yesqa
 .. _pre-commit-hooks: https://github.com/pre-commit/pre-commit-hooks
 .. _autoflake: https://github.com/PyCQA/autoflake
-.. _rstcheck: https://github.com/myint/rstcheck
-.. _blacken-docs: https://github.com/asottile/blacken-docs
-.. _doc8: https://github.com/PyCQA/doc8
+.. _pyupgrade: https://github.com/asottile/pyupgrade
