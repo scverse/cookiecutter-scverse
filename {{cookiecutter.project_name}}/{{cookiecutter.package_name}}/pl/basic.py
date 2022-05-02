@@ -1,5 +1,6 @@
 from anndata import AnnData
 
+
 def basic_plot(adata: AnnData):
     """
     Generate a basic plot for an AnnData object.

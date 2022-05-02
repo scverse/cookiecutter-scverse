@@ -1,5 +1,6 @@
 from anndata import AnnData
 
+
 def basic_preproc(adata: AnnData):
     """
     Run a basic preprocessing on the AnnData object.

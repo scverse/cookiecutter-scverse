@@ -1,5 +1,6 @@
 from anndata import AnnData
 
+
 def basic_tool(adata: AnnData):
     """
     Run a tool on the AnnData object.
