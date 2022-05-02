@@ -51,6 +51,8 @@ extensions = [
     "sphinxcontrib.bibtex",
     "sphinx_autodoc_typehints",
     "scanpydoc.definition_list_typed_field",
+    "nbsphinx",
+    "sphinx.ext.mathjax",
     *[p.stem for p in (HERE / "extensions").glob("*.py")],
 ]
 
@@ -68,11 +70,12 @@ intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable/", None),
 }
 
+nbsphinx_execute = 'never'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints"]
 
 
 # -- Options for HTML output -------------------------------------------------

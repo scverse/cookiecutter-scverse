@@ -7,4 +7,5 @@
 
 api.md
 references.md
+notebooks/example
 ```
