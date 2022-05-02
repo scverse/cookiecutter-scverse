@@ -25,15 +25,25 @@ version = info["Version"]
 # The full version, including alpha/beta/rc tags
 release = info["Version"]
 
+bibtex_bibfiles = ["references.bib"]
 templates_path = ["_templates"]
 nitpicky = True  # Warn about broken links
 needs_sphinx = "4.0"
+
+html_context = {
+    "display_github": True,  # Integrate GitHub
+    "github_user": "{{cookiecutter.github_organization}}",  # Username
+    "github_repo": project,  # Repo name
+    "github_version": "master",  # Version
+    "conf_py_path": "/docs/",  # Path in the checkout to the docs root
+}
 
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings.
 # They can be extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
+    "myst_parser",
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
     "sphinx.ext.autosummary",
@@ -53,10 +63,10 @@ napoleon_include_init_with_doc = False
 napoleon_use_rtype = True  # having a separate entry generally helps readability
 napoleon_use_param = True
 
-intersphinx_mapping = dict(
-    anndata=("https://anndata.readthedocs.io/en/stable/", None),
-    numpy=("https://numpy.org/doc/stable/", None),
-)
+intersphinx_mapping = {
+    "anndata": ("https://anndata.readthedocs.io/en/stable/", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+}
 
 
 # List of patterns, relative to source directory, that match files and
