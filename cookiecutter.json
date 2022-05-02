@@ -1,11 +1,11 @@
 {
-    "project_name": "project_name",
+    "project_name": "project-name",
     "package_name": "{{ cookiecutter.project_name|lower|replace('-', '_') }}",
     "project_description": "A very interesting piece of code",
     "author_full_name": "Isaac Virshup",
     "author_email": "ivirshup@gmail.com",
     "github_organization": "ivirshup",
-    "project_repo": "https://github.com/{{ cookiecutter.github_organization }}/{{ cookiecutter.package_name }}",
+    "project_repo": "https://github.com/{{ cookiecutter.github_organization }}/{{ cookiecutter.project_name }}",
     "license": [
         "MIT License",
         "BSD 2-Clause License",
