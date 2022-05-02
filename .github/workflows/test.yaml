@@ -44,5 +44,5 @@ jobs:
             run: cookiecutter --no-input .
         -   name: Run pre-commit
             run: |
-                cd pythonproject
+                cd project_name
                 pre-commit run --all-files
