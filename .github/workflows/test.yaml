@@ -19,6 +19,8 @@ jobs:
             matrix:
                 python: ['3.8', '3.10']
                 os: [ubuntu-latest, macos-latest]
+            env:
+                PROJECT_ROOT: project-name
 
         steps:
         -   uses: actions/checkout@v2
@@ -44,6 +46,15 @@ jobs:
             run: cookiecutter --no-input .
         -   name: Run pre-commit
             run: |
-                cd project-name
+                cd "$PROJECT_ROOT"
                 git add .
                 pre-commit run --color=always --show-diff-on-failure --all-files
+        -   name: Install the package
+            run: |
+                cd $PROJECT_ROOT
+                pip install .'[docs]'
+                python -c "import project_name"
+        -   name: Build the documentation
+            run: |
+                cd "$PROJECT_ROOT/docs"
+                make html -- -W --keep-going
