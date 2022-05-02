@@ -52,7 +52,7 @@ jobs:
         -   name: Install the package
             run: |
                 cd $PROJECT_ROOT
-                pip install .'[docs]'
+                pip install .'[doc]'
                 python -c "import project_name"
         -   name: Build the documentation
             run: |
