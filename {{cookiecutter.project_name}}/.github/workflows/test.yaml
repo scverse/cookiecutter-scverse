@@ -11,8 +11,8 @@ jobs:
     test:
         runs-on: ${{ matrix.os }}
         defaults:
-          run:
-            shell: bash -e {0}  # -e to fail on error
+            run:
+                shell: bash -e {0}  # -e to fail on error
 
         strategy:
             fail-fast: false
@@ -55,12 +55,12 @@ jobs:
                 PLATFORM: ${{ matrix.os }}
                 DISPLAY: :42
             run: |
-                pytest --cov
+                pytest -v --cov --color=always
         -   name: Upload coverage
             env:
                 CODECOV_NAME: ${{ matrix.python }}-${{ matrix.os }}
             run: |
-                codecov --no-color --required --flags unittests
+                codecov --required --flags=unittests
 
     package:
         runs-on: ubuntu-latest
