@@ -19,6 +19,19 @@ repos:
     rev: 5.10.1
     hooks:
       - id: isort
+  - repo: https://github.com/asottile/yesqa
+    rev: v1.3.0
+    hooks:
+      - id: yesqa
+        additional_dependencies:
+          [
+            flake8-tidy-imports,
+            flake8-docstrings,
+            flake8-rst-docstrings,
+            flake8-comprehensions,
+            flake8-bugbear,
+            flake8-blind-except,
+          ]
   - repo: https://github.com/myint/autoflake
     rev: v1.4
     hooks:
@@ -42,19 +55,6 @@ repos:
     rev: 4.0.1
     hooks:
       - id: flake8
-        additional_dependencies:
-          [
-            flake8-tidy-imports,
-            flake8-docstrings,
-            flake8-rst-docstrings,
-            flake8-comprehensions,
-            flake8-bugbear,
-            flake8-blind-except,
-          ]
-  - repo: https://github.com/asottile/yesqa
-    rev: v1.3.0
-    hooks:
-      - id: yesqa
         additional_dependencies:
           [
             flake8-tidy-imports,
