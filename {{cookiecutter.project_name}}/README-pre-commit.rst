@@ -6,35 +6,32 @@ This is a brief documentation of pre-commits checks pre-sets in the scverse-temp
 
 The following pre-commit checks for code style and format.
 
-* `black`_: standard code formatter in Python.
-* `autopep8`_: code formatter to conform to `PEP8`_ style guide.
-* `isort`_: sort module imports into sections and types.
-* `prettier`_: standard code formatter for non-Python files (e.g. YAML).
-* `blacken-docs`_: black on python code in docs.
+* black_: standard code formatter in Python.
+* autopep8_: code formatter to conform to `PEP8`_ style guide.
+* isort_: sort module imports into sections and types.
+* prettier_: standard code formatter for non-Python files (e.g. YAML).
+* blacken-docs_: black on python code in docs.
 
 The following pre-commit checks for errors, inconsistencies and typing.
 
-* `flake8`_: standard check for errors in Python files.
-   * `flake8-tidy-imports`_: tidy module imports.
-   * `flake8-docstrings`_: pydocstyle extension of flake8.
-   * `flake8-rst-docstrings`_: extension of ``flake8-docstrings`` for ``rst`` docs.
-   * `flake8-comprehensions`_: write better list/set/dict comprehensions.
-   * `flake8-bugbear`_: find possible bugs and design issues in program.
-   * `flake8-blind-except`_: checks for blind, catch-all ``except`` statements.
-   * `flake8-builtins`_: check for python builtins being used as variables or parameters.
-   * `flake8-pytest-style`_: check common style/inconsistency issues with pytest-based tests.
-   * `flake8-string-format`_: check strings and parameters using ``str.format``.
-* `yesqa`_: remove unneccesary ``# noqa`` comments, follows additional dependencies listed above.
-* `autoflake`_: remove unused imports and variables.*
-* `pre-commit-hooks`_: generic pre-commit hooks.
+* flake8_: standard check for errors in Python files.
+   * flake8-tidy-imports_: tidy module imports.
+   * flake8-docstrings_: pydocstyle extension of flake8.
+   * flake8-rst-docstrings_: extension of ``flake8-docstrings`` for ``rst`` docs.
+   * flake8-comprehensions_: write better list/set/dict comprehensions.
+   * flake8-bugbear_: find possible bugs and design issues in program.
+   * flake8-blind-except_: checks for blind, catch-all ``except`` statements.
+* yesqa_: remove unneccesary ``# noqa`` comments, follows additional dependencies listed above.
+* autoflake_: remove unused imports and variables.
+* pre-commit-hooks_: generic pre-commit hooks.
    * **detect-private-key**: checks for the existence of private keys.
    * **check-ast**: check whether files parse as valid python.
-   * **check-added-large-files**: prevent giant files from being committed.
+   * **check-added-large-files**: prevent giant files from being committed. accept ipynbs.
    * **end-of-file-fixer**:check files end in a newline and only a newline.
    * **mixed-line-ending**: checks mixed line ending.
    * **trailing-whitespace**: trims trailing whitespace.
    * **check-case-conflict**: check files that would conflict with case-insensitive file systems.
-* `pyupgrade`_: upgrade syntax for newer versions of the language.
+* pyupgrade_: upgrade syntax for newer versions of the language.
 
 .. _pre-commit: https://pre-commit.com/
 .. _mypy: http://www.mypy-lang.org/
@@ -51,9 +48,6 @@ The following pre-commit checks for errors, inconsistencies and typing.
 .. _flake8-comprehensions: https://github.com/adamchainz/flake8-comprehensions
 .. _flake8-bugbear: https://github.com/PyCQA/flake8-bugbear
 .. _flake8-blind-except: https://github.com/elijahandrews/flake8-blind-except
-.. _flake8-builtins: https://github.com/gforcada/flake8-builtins
-.. _flake8-pytest-style: https://pypi.org/project/flake8-pytest-style/
-.. _flake8-string-format: https://pypi.org/project/flake8-string-format/
 .. _yesqa: https://github.com/asottile/yesqa
 .. _pre-commit-hooks: https://github.com/pre-commit/pre-commit-hooks
 .. _autoflake: https://github.com/PyCQA/autoflake
