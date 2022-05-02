@@ -1,7 +1,7 @@
 from anndata import AnnData
 
 
-def basic_tool(adata: AnnData):
+def basic_tool(adata: AnnData) -> int:
     """
     Run a tool on the AnnData object.
     """
