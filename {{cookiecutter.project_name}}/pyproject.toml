@@ -54,6 +54,54 @@ filterwarnings = [
 ]
 
 [tool.isort]
+include_trailing_comma = true
 multi_line_output = 3
 profile = "black"
-skip = []
+skip_glob = ["docs/*"]
+
+[tool.black]
+line-length = 120
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+)
+'''
+
+[tool.flake8]
+per-file-ignores =
+    */__init__.py: D104, F401
+    tests/*: D
+    docs/*: D,B
+ignore = D100,D107,B008,W503,D105,E203,P101
+# D104 Missing docstring in public package
+# F401 ... imported but unused
+# D100 D100 Missing docstring in public module
+# D107 Missing docstring in __init__
+# B008 Do not perform function calls in argument defaults.
+# W503 line break before binary operator
+# D105 Missing docstring in magic method
+# E203 whitespace before ':'
+# P101 format string does contain unindexed parameters
+
+exclude =
+    .git
+    build
+    dist
+    __pycache__
+    setup.py
+max_line_length = 120
+filename = *.py
+ban-relative-imports = true
