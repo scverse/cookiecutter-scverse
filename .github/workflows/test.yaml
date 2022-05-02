@@ -55,6 +55,8 @@ jobs:
                 pip install .'[doc]'
                 python -c "import project_name"
         -   name: Build the documentation
+            env:
+                SPHINXOPTS: "-W --keep-going"
             run: |
                 cd "$PROJECT_ROOT/docs"
-                make html -- -W --keep-going
+                make html
