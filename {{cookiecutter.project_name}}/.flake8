@@ -45,5 +45,5 @@ exclude =
     build,
     docs/_build,
     tests/*: D,S,
-    */__init__.py: D100, D104, F401,
+    */__init__.py: F401,
     dist,
