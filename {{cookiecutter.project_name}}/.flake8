@@ -19,10 +19,31 @@ ignore =
     # Do not assign a lambda expression, use a def -> lambda expression assignments are convenient
     E731,
     # allow I, O, l as variable names -> I is the identity matrix, i, j, k, l is reasonable indexing notation
-    E741
+    E741,
+    # Missing docstring in public package
+    D104,
+    # ... imported but unused
+    F401,
+    # Missing docstring in public module
+    D100,
+    # Missing docstring in __init__
+    D107,
+    # Do not perform function calls in argument defaults.
+    B008,
+    # line break before binary operator
+    W503,
+    # Missing docstring in magic method
+    D105,
+    # whitespace before ':'
+    E203,
+    # format string does contain unindexed parameters
+    P101,
+
 exclude =
     .git,
     __pycache__,
     build,
     docs/_build,
+    tests/*: D,
+    __init__.py: D100, D104, F401,
     dist,

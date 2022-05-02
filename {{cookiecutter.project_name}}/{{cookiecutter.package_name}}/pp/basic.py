@@ -2,8 +2,6 @@ from anndata import AnnData
 
 
 def basic_preproc(adata: AnnData):
-    """
-    Run a basic preprocessing on the AnnData object.
-    """
+    """Run a basic preprocessing on the AnnData object."""
     print("Implement a preprocessing function here.")
     return 0
