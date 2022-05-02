@@ -5,8 +5,8 @@ build:
   tools:
     python: "3.10"
 sphinx:
-    configuration: docs/conf.py
-    fail_on_warning: true
+  configuration: docs/conf.py
+  fail_on_warning: true
 python:
   install:
     - method: pip
