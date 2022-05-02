@@ -39,7 +39,7 @@ jobs:
                 restore-keys: |
                     pip-${{ runner.os }}-${{ env.pythonLocation }}-
         -   name: Install dependencies
-            run: python -m pip install --upgrade pip wheel cookiecutter
+            run: python -m pip install --upgrade pip wheel cookiecutter pre-commit
         -   name: Build from template
             run: cookiecutter --no-input .
         -   name: Run pre-commit
