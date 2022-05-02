@@ -44,6 +44,6 @@ exclude =
     __pycache__,
     build,
     docs/_build,
-    tests/*: D,
+    tests/*: D,S,
     */__init__.py: D100, D104, F401,
     dist,

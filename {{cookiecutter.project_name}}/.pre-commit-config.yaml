@@ -32,6 +32,17 @@ repos:
             flake8-bugbear,
             flake8-blind-except,
           ]
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      - id: detect-private-key
+      - id: check-ast
+      - id: check-added-large-files # config
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: trailing-whitespace
+      - id: check-case-conflict
   - repo: https://github.com/myint/autoflake
     rev: v1.4
     hooks:
@@ -64,17 +75,6 @@ repos:
             flake8-bugbear,
             flake8-blind-except,
           ]
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
-    hooks:
-      - id: detect-private-key
-      - id: check-ast
-      - id: check-added-large-files # config
-      - id: end-of-file-fixer
-      - id: mixed-line-ending
-        args: [--fix=lf]
-      - id: trailing-whitespace
-      - id: check-case-conflict
   - repo: https://github.com/asottile/pyupgrade
     rev: v2.31.1
     hooks:
