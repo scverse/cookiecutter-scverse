@@ -45,4 +45,5 @@ jobs:
         -   name: Run pre-commit
             run: |
                 cd project_name
+                git add .
                 pre-commit run --all-files
