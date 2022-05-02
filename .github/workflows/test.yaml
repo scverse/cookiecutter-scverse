@@ -19,8 +19,8 @@ jobs:
             matrix:
                 python: ['3.8', '3.10']
                 os: [ubuntu-latest, macos-latest]
-            env:
-                PROJECT_ROOT: project-name
+        env:
+            PROJECT_ROOT: project-name
 
         steps:
         -   uses: actions/checkout@v2
