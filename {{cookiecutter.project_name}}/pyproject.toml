@@ -30,7 +30,7 @@ dev = [
 ]
 doc = [
     "sphinx",
-    "furo", 
+    "furo",
     "myst-parser",
     "sphinxcontrib-bibtex>=1.0.0",
     "scanpydoc[typehints]>=0.7.4",
@@ -58,6 +58,28 @@ filterwarnings = [
 ]
 
 [tool.isort]
+include_trailing_comma = true
 multi_line_output = 3
 profile = "black"
-skip = []
+skip_glob = ["docs/*"]
+
+[tool.black]
+line-length = 120
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+)
+'''
