@@ -18,11 +18,11 @@ maintainers = [
 urls.Documentation = "https://{{ cookiecutter.project_name }}.readthedocs.io/"
 urls.Source = "{{ cookiecutter.project_repo }}"
 urls.Home-page = "{{ cookiecutter.project_repo }}"
-requires-python = ">=3.7"
+version = "0.1"
+requires-python = ">=3.8"
 license = {file = "LICENSE"}
 readme = "README.md"
-dynamic = ["version"]
-dependencies = []
+dependencies = ["anndata"]
 
 [project.optional-dependencies]
 dev = [
