@@ -13,4 +13,4 @@ jobs:
             - uses: actions/setup-python@v2
             - uses: pre-commit/action@v2.0.3
               with:
-                  extra_args: pre-commit run --color=always --show-diff-on-failure
+                  extra_args: --color=always, --show-diff-on-failure
