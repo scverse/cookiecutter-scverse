@@ -61,3 +61,7 @@ filterwarnings = [
 multi_line_output = 3
 profile = "black"
 skip = []
+
+[tool.jupytext.formats]
+"docs/notebooks/" = "ipynb"
+"docs/notebooks/" = "py:percent"
