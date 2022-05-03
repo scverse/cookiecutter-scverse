@@ -1,1 +1,1 @@
-from {{ cookiecutter.package_name }}.pp.basic import basic_preproc  # noqa: F401
+from .basic import basic_preproc  # noqa: F401

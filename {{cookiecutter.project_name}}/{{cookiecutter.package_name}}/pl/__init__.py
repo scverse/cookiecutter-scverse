@@ -1,1 +1,1 @@
-from {{ cookiecutter.package_name }}.pl.basic import basic_plot  # noqa: F401
+from .basic import basic_plot  # noqa: F401
