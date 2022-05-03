@@ -12,7 +12,7 @@
 ## Getting started
 Please refer to the [documentation][link-docs]. In particular, the
 
-- [API documentation][link-api].  
+- [API documentation][link-api].
 
 ## Installation
 
@@ -21,11 +21,11 @@ Python installed, we recommend installing `Miniconda <https://docs.conda.io/en/l
 
 There are several alternative options to install {{ cookiecutter.project_name }}:
 
-<!-- 
+<!--
 1) Install the latest release of `{{ cookiecutter.project_name }}` from `PyPI <https://pypi.org/project/{{ cookiecutter.project_name }}/>`_:
 
 ```bash
-pip install {{ cookiecutter.project_name }} 
+pip install {{ cookiecutter.project_name }}
 ```
 -->
 
@@ -43,7 +43,7 @@ See the [changelog][changelog].
 ## Contact
 
 For questions and help requests, you can reach out in the [scverse discourse][scverse-discourse].
-If you found a bug, please use the [issue tracker][issue-tracker]. 
+If you found a bug, please use the [issue tracker][issue-tracker].
 
 ## Citation
 
@@ -51,6 +51,6 @@ If you found a bug, please use the [issue tracker][issue-tracker].
 
 [scverse-discourse]: https://discourse.scverse.org/
 [issue-tracker]: https://github.com/{{ cookiecutter.github_organization}}/{{ cookiecutter.project_name}}/issues
-[changelog]: https://{{ cookiecutter.project_name }}.readthedocs.io/latest/changelog.html 
+[changelog]: https://{{ cookiecutter.project_name }}.readthedocs.io/latest/changelog.html
 [link-docs]: https://{{ cookiecutter.project_name }}.readthedocs.io
 [link-api]: https://{{ cookiecutter.project_name }}.readthedocs.io/latest/api.html
