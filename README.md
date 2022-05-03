@@ -1,16 +1,16 @@
 # Scverse Cookiecutter Template
 
-The purpose of this template is to get you started quickly building a best-practice python library for a [scverse][] ecosystem package. 
-Ecosystem packages are independent software libraries that interact with scverse core packages and depend on [anndata][] and [mudata][] data structures. 
+The purpose of this template is to get you started quickly building a best-practice python library for a [scverse][] ecosystem package.
+Ecosystem packages are independent software libraries that interact with scverse core packages and depend on [anndata][] and [mudata][] data structures.
 
 ## Features
 
- * [flit][] as build system
- * [bump2version][]
- * [pre-commit][] checks
- * continuous integration using GitHub actions. 
- * documentation built on [readthedocs][]
- * tutorials built with [nbsphinx][]
+-   [flit][] as build system
+-   [bump2version][]
+-   [pre-commit][] checks
+-   continuous integration using GitHub actions.
+-   documentation built on [readthedocs][]
+-   tutorials built with [nbsphinx][]
 
 ## Usage
 
