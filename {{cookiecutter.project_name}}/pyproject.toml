@@ -62,6 +62,5 @@ multi_line_output = 3
 profile = "black"
 skip = []
 
-[tool.jupytext.formats]
-"docs/notebooks/" = "ipynb"
-"docs/notebooks/" = "myst.md"
+[tool.jupytext]
+formats = "ipynb,md"
