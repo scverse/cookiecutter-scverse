@@ -1,7 +1,7 @@
 import {{cookiecutter.package_name}}
 
 
-def test_package_has_version():  # noqa: D103
+def test_package_has_version():
     {{cookiecutter.package_name}}.__version__
 
 
