@@ -1,8 +1,6 @@
 from importlib.metadata import version
 
-from . import pp
-from . import tl
-from . import pl
+from . import pp, tl, pl
 
 __all__ = ["pp", "tl", "pl"]
 
