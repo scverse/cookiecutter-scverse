@@ -64,4 +64,4 @@ skip = []
 
 [tool.jupytext.formats]
 "docs/notebooks/" = "ipynb"
-"docs/notebooks/" = "py:percent"
+"docs/notebooks/" = "myst.md"
