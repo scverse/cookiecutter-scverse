@@ -32,14 +32,12 @@ repos:
     hooks:
       - id: yesqa
         additional_dependencies:
-          [
-            flake8-tidy-imports,
-            flake8-docstrings,
-            flake8-rst-docstrings,
-            flake8-comprehensions,
-            flake8-bugbear,
-            flake8-blind-except,
-          ]
+          - flake8-tidy-imports
+          - flake8-docstrings
+          - flake8-rst-docstrings
+          - flake8-comprehensions
+          - flake8-bugbear
+          - flake8-blind-except
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.1.0
     hooks:
@@ -56,25 +54,21 @@ repos:
     hooks:
       - id: autoflake
         args:
-          [
-            --in-place,
-            --remove-all-unused-imports,
-            --remove-unused-variable,
-            --ignore-init-module-imports,
-          ]
+          - --in-place
+          - --remove-all-unused-imports
+          - --remove-unused-variable
+          - --ignore-init-module-imports
   - repo: https://github.com/PyCQA/flake8
     rev: 4.0.1
     hooks:
       - id: flake8
         additional_dependencies:
-          [
-            flake8-tidy-imports,
-            flake8-docstrings,
-            flake8-rst-docstrings,
-            flake8-comprehensions,
-            flake8-bugbear,
-            flake8-blind-except,
-          ]
+          - flake8-tidy-imports
+          - flake8-docstrings
+          - flake8-rst-docstrings
+          - flake8-comprehensions
+          - flake8-bugbear
+          - flake8-blind-except
   - repo: https://github.com/asottile/pyupgrade
     rev: v2.31.1
     hooks:
