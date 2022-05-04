@@ -41,7 +41,7 @@ test = [
 ]
 
 [tool.coverage.run]
-source = ["{{ cookiecutter.package_name }}"]
+source = ["src"]
 omit = [
     "**/test_*.py",
 ]
