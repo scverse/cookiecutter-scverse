@@ -1,0 +1,2 @@
+# jinja templated files
+{{cookiecutter.project_name}}/README.md
