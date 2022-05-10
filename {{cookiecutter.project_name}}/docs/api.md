@@ -7,7 +7,7 @@
 .. currentmodule:: {{ cookiecutter.package_name }}
 
 .. autosummary::
-    :toctree: api
+    :toctree: generated
 
     pp.basic_preproc
 ```
@@ -19,7 +19,7 @@
 .. currentmodule:: {{ cookiecutter.package_name }}
 
 .. autosummary::
-    :toctree: api
+    :toctree: generated
 
     tl.basic_tool
 ```
@@ -31,7 +31,7 @@
 .. currentmodule:: {{ cookiecutter.package_name }}
 
 .. autosummary::
-    :toctree: api
+    :toctree: generated
 
     pl.basic_plot
 ```

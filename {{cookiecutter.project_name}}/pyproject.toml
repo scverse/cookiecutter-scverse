@@ -18,7 +18,7 @@ maintainers = [
 urls.Documentation = "https://{{ cookiecutter.project_name }}.readthedocs.io/"
 urls.Source = "{{ cookiecutter.project_repo }}"
 urls.Home-page = "{{ cookiecutter.project_repo }}"
-version = "0.1"
+version = "0.0.1"
 requires-python = ">=3.8"
 license = {file = "LICENSE"}
 readme = "README.md"
@@ -27,6 +27,7 @@ dependencies = ["anndata"]
 [project.optional-dependencies]
 dev = [
     # dev version generation
+    "bump2version",
 ]
 doc = [
     "sphinx>=4",
@@ -41,7 +42,7 @@ test = [
 ]
 
 [tool.coverage.run]
-source = ["src"]
+source = ["{{ cookiecutter.package_name }}"]
 omit = [
     "**/test_*.py",
 ]
