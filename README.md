@@ -5,12 +5,12 @@ Ecosystem packages are independent software libraries that interact with scverse
 
 ## Features
 
+-   continuous integration using GitHub actions.
+-   [pre-commit][] checks
+-   tutorials built with [nbsphinx][]
+-   documentation hosted by [readthedocs][]
 -   [flit][] as build system
 -   [bump2version][]
--   [pre-commit][] checks
--   continuous integration using GitHub actions.
--   documentation built on [readthedocs][]
--   tutorials built with [nbsphinx][]
 
 ## Usage
 
