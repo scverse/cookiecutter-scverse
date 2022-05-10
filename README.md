@@ -14,8 +14,28 @@ Ecosystem packages are independent software libraries that interact with scverse
 
 ## Usage
 
+To use this template, you will need a few dependencies:
+
 ```bash
-cookiecutter
+pip install cookiecutter pre-commit
+```
+
+Now create the project and follow the prompts:
+
+```bash
+cookiecutter https://github.com/scverse/cookiecutter-scverse
+```
+
+This will create a git repository with a filed out template in it.
+Now `cd` into the newly created directory and make the initial commit!
+
+Further instructions on using this template can be found in the contributing guide included in the project. Build the docs by installing a development version of the package and running sphinx:
+
+```
+pip install -e ".[dev,doc,test]"
+cd docs
+make html
+open _build/html/index.html
 ```
 
 [flit]: https://flit.pypa.io/en/latest/
