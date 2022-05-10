@@ -27,6 +27,7 @@ dependencies = ["anndata"]
 [project.optional-dependencies]
 dev = [
     # dev version generation
+    "bump2version",
 ]
 doc = [
     "sphinx>=4",
