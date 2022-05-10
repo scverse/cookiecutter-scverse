@@ -51,7 +51,7 @@ If you found a bug, please use the [issue tracker][issue-tracker].
 
 [scverse-discourse]: https://discourse.scverse.org/
 
-[issue-tracker]: https://github.com/{{ cookiecutter.github_organization}}/{{ cookiecutter.project_name}}/issues
+[issue-tracker]: https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.project_name }}/issues
 [changelog]: https://{{ cookiecutter.project_name }}.readthedocs.io/latest/changelog.html
 [link-docs]: https://{{ cookiecutter.project_name }}.readthedocs.io
 [link-api]: https://{{ cookiecutter.project_name }}.readthedocs.io/latest/api.html
