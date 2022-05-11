@@ -70,7 +70,7 @@ intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable/", None),
 }
 
-nbsphinx_execute = 'never'
+nbsphinx_execute = "never"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -93,6 +93,8 @@ nitpick_ignore = [
 ]
 
 # app setup hook
+
+
 def setup(app):
     app.add_config_value(
         "recommonmark_config",
