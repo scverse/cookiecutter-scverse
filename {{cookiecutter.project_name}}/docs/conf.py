@@ -94,7 +94,7 @@ nitpick_ignore = [
 
 
 def setup(app):
-    """ App setup hook. """
+    """App setup hook."""
     app.add_config_value(
         "recommonmark_config",
         {
