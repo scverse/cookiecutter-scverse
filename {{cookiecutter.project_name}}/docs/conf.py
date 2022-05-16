@@ -92,6 +92,7 @@ nitpick_ignore = [
     #     ("py:class", "igraph.Graph"),
 ]
 
+
 def setup(app):
     """
     App setup hook
