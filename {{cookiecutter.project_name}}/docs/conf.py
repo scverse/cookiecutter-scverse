@@ -92,10 +92,10 @@ nitpick_ignore = [
     #     ("py:class", "igraph.Graph"),
 ]
 
-# app setup hook
-
-
 def setup(app):
+    """
+    App setup hook
+    """
     app.add_config_value(
         "recommonmark_config",
         {
