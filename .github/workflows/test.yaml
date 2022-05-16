@@ -27,7 +27,7 @@ jobs:
               uses: actions/setup-python@v2
               with:
                   python-version: ${{ matrix.python }}
-            
+
             - name: Install macOS system dependencies
               if: matrix.os == 'macos-latest'
               run: |
