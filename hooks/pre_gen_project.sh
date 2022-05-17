@@ -1,2 +1,2 @@
 #!/bin/sh
-git init .
+git init --initial-branch=main .
