@@ -1,4 +1,5 @@
 import pytest
+
 import {{cookiecutter.package_name}}
 
 
