@@ -38,6 +38,20 @@ make html
 open _build/html/index.html
 ```
 
+#### Codecov set up
+
+Once the newly generated repository has been pushed to github, there is one last thing to do: set up code coverage with **codecov**.
+To do this, head over to [codecov][] and follow instructions 1 to 3 under [codecov setup][]. You can directly login with your github account to codecov.
+
+In short, you need to:
+
+1. Go to the _Settings_ of your newly created repository on github.
+2. Go to _Security > Secrets > Actions_.
+3. Create new repository secret with Name **CODECOV_TOKEN** and Value alphanumeric sequence.
+4. Go back to Github Actions page an re-run previously failed jobs.
+
+All CI checks should pass, you are ready to start developing your new tool!
+
 [flit]: https://flit.pypa.io/en/latest/
 [readthedocs]: https://readthedocs.org/
 [nbsphinx]: https://github.com/spatialaudio/nbsphinx
@@ -46,3 +60,5 @@ open _build/html/index.html
 [scverse]: https://scverse.org/
 [anndata]: https://anndata.readthedocs.io/en/latest/
 [mudata]: https://muon.readthedocs.io/en/latest/notebooks/quickstart_mudata.html
+[codecov]: https://about.codecov.io/
+[codecov setup]: https://about.codecov.io/blog/how-to-set-up-codecov-with-unity-and-github-actions/#:~:text=Sign%20Up%20to%20Codecov,presented%20with%20an%20upload%20token.
