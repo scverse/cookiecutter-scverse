@@ -41,7 +41,7 @@ open _build/html/index.html
 #### Codecov set up
 
 Once the newly generated repository has been pushed to github, there is one last thing to do: set up code coverage with **codecov**.
-To do this, head over to [codecov][] and follow instructions 1 to 3 under [codecov setup][]. You can directly login with your github account to codecov.
+To do this, head over to [codecov][] and the "getting started" instructions on the [codecov setup docs][]. You can directly login with your github account to codecov.
 
 In short, you need to:
 
@@ -61,4 +61,4 @@ All CI checks should pass, you are ready to start developing your new tool!
 [anndata]: https://anndata.readthedocs.io/en/latest/
 [mudata]: https://muon.readthedocs.io/en/latest/notebooks/quickstart_mudata.html
 [codecov]: https://about.codecov.io/
-[codecov setup]: https://about.codecov.io/blog/how-to-set-up-codecov-with-unity-and-github-actions/#:~:text=Sign%20Up%20to%20Codecov,presented%20with%20an%20upload%20token.
+[codecov setup]: https://docs.codecov.com/docs
