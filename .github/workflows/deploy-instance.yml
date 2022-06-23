@@ -20,6 +20,11 @@ jobs:
               with:
                   python-version: ${{ env.PYTHON_VERSION }}
 
+            - name: Install SSH Client 🔑 # set-up deploy key to push to other repo
+              uses: webfactory/ssh-agent@v0.4.0
+              with:
+                  ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+
             - name: Get pip cache dir
               id: pip-cache-dir
               run: |
@@ -58,3 +63,4 @@ jobs:
                   repository: scverse/cookiecutter-scverse-instance
                   force: true
                   directory: ${{ env.INSTANCE_DIR }}/${{ env.PROJECT_NAME }}
+                  ssh: true
