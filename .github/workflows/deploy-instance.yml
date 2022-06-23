@@ -41,10 +41,13 @@ jobs:
                   cookiecutter --output-dir $INSTANCE_DIR --no-input .
 
             - name: Commit changes
-              run: |
-                  cd $INSTANCE_DIR/$PROJECT_NAME && \
-                  git add -A && \
-                  git commit -m "Generate instance repo from cookiecutter template"
+              uses: EndBug/add-and-commit@v9
+              with:
+                  default_author: github_actions
+                  commit: "--no-verify" # no need to run pre-commit at this point - saves runtime!
+                  cwd: ${{ env.INSTANCE_DIR }}/${{ env.PROJECT_NAME }}
+                  message: Generate instance repo from cookiecutter template
+                  new_branch: ${{ github.ref }}
 
             - name: Deploy to instance repo
               uses: ad-m/github-push-action@master
