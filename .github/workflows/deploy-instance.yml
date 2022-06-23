@@ -1,7 +1,8 @@
 name: deploy instance repo
 
 on:
-    push:
+    pull_request:
+        branches: [main]
 
 jobs:
     deploy:
@@ -19,6 +20,10 @@ jobs:
               uses: actions/setup-python@v4
               with:
                   python-version: ${{ env.PYTHON_VERSION }}
+
+            - name: Get id of current pull request
+              uses: jwalton/gh-find-current-pr@v1
+              id: findPr
 
             - name: Install SSH Client 🔑 # set-up deploy key to push to other repo
               uses: webfactory/ssh-agent@v0.5.4
@@ -52,7 +57,7 @@ jobs:
                   commit: "--no-verify" # no need to run pre-commit at this point - saves runtime!
                   cwd: ${{ env.INSTANCE_DIR }}/${{ env.PROJECT_NAME }}
                   message: Generate instance repo from cookiecutter template
-                  new_branch: ${{ github.ref }}
+                  new_branch: pr-${{ steps.findPr.outputs.pr }}
                   push: false
 
             - name: Deploy to instance repo
@@ -64,3 +69,6 @@ jobs:
                   force: true
                   directory: ${{ env.INSTANCE_DIR }}/${{ env.PROJECT_NAME }}
                   ssh: true
+
+            - name: Setup tmate session
+              uses: mxschmitt/action-tmate@v3
