@@ -64,7 +64,7 @@ jobs:
               uses: ad-m/github-push-action@master
               with:
                   github_token: ${{ secrets.GITHUB_TOKEN }}
-                  branch: ${{ github.ref }}
+                  branch: pr-${{ steps.findPr.outputs.pr }}
                   repository: scverse/cookiecutter-scverse-instance
                   force: true
                   directory: ${{ env.INSTANCE_DIR }}/${{ env.PROJECT_NAME }}
