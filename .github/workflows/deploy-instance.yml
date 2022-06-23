@@ -44,7 +44,7 @@ jobs:
               run: |
                   cd $INSTANCE_DIR/$PROJECT_NAME && \
                   git add -A && \
-                  cm -m "Generate instance repo from cookiecutter template"
+                  git commit -m "Generate instance repo from cookiecutter template"
 
             - name: Deploy to instance repo
               uses: ad-m/github-push-action@master
