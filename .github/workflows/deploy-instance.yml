@@ -48,6 +48,7 @@ jobs:
                   cwd: ${{ env.INSTANCE_DIR }}/${{ env.PROJECT_NAME }}
                   message: Generate instance repo from cookiecutter template
                   new_branch: ${{ github.ref }}
+                  push: false
 
             - name: Deploy to instance repo
               uses: ad-m/github-push-action@master
