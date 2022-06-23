@@ -55,6 +55,6 @@ jobs:
               with:
                   github_token: ${{ secrets.GITHUB_TOKEN }}
                   branch: ${{ github.ref }}
-                  repository: scverse/cookiecutter-scverse-template
+                  repository: scverse/cookiecutter-scverse-instance
                   force: true
                   directory: ${{ env.INSTANCE_DIR }}/${{ env.PROJECT_NAME }}
