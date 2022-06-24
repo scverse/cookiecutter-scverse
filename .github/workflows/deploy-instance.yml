@@ -15,7 +15,7 @@ jobs:
             INSTANCE_REPO: "TEMPLATE_INSTANCE"
             INSTANCE_GENERATED: "TEMPLATE_INSTANCE_GENERATED"
             PROJECT_NAME: "project-name"
-            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # for gh cli
+            GH_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }} # for gh cli
 
         steps:
             - name: Checkout template repository
