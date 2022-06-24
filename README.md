@@ -11,6 +11,7 @@ Ecosystem packages are independent software libraries that interact with scverse
 -   documentation hosted by [readthedocs][]
 -   [flit][] as build system
 -   [bump2version][]
+-   test test test
 
 ## Usage
 
