@@ -34,7 +34,11 @@ jobs:
 
             - name: Get id of current pull request
               uses: jwalton/gh-find-current-pr@v1
-              id: findPr
+              id: findThisPr
+
+            - name: Set env vars
+              run: |
+                  echo "SISTER_PR_BRANCH=pr-${{ steps.findThisPr.outputs.pr }}" >> $GITHUB_ENV
 
             - name: Install cookiecutter
               run: |
@@ -42,27 +46,35 @@ jobs:
 
             - name: Build from template
               run: |
-                  cookiecutter --output-dir $INSTANCE_DIR --no-input .
+                  cookiecutter --output-dir $INSTANCE_GENERATED --no-input .
+
+            - name: Transfer changes to template repo
+              run: |
+                  export GIT_WORK_TREE=$INSTANCE_REPO
+                  # checkout branch or create if it does not exist
+                  git checkout $SISTER_PR_BRANCH 2>/dev/null || git checkout -b $SISTER_PR_BRANCH
+                  # transfer changes from generated repo
+                  rsync -va --delete --exclude .git $INSTANCE_GENERATED/$PROJECT_NAME/ $INSTANCE_REPO
 
             - name: Commit changes
               uses: EndBug/add-and-commit@v9
               with:
                   default_author: github_actions
                   commit: "--no-verify" # no need to run pre-commit at this point - saves runtime!
-                  cwd: ${{ env.INSTANCE_DIR }}/${{ env.PROJECT_NAME }}
-                  message: Generate instance repo from cookiecutter template
-                  new_branch: pr-${{ steps.findPr.outputs.pr }}
+                  cwd: ${{ env.INSTANCE_REPO }}
+                  message: Update instance repo from cookiecutter template
+                  new_branch: ${{ env.SISTER_PR_BRANCH }}
                   push: false
 
             - name: Deploy to instance repo
               uses: ad-m/github-push-action@master
               with:
                   github_token: ${{ secrets.GITHUB_TOKEN }}
-                  branch: pr-${{ steps.findPr.outputs.pr }}
+                  branch: ${{ env.SISTER_PR_BRANCH }}
                   repository: scverse/cookiecutter-scverse-instance
-                  force: true
-                  directory: ${{ env.INSTANCE_DIR }}/${{ env.PROJECT_NAME }}
+                  force: false
+                  directory: ${{ env.INSTANCE_REPO }}
                   ssh: true
 
-            - name: Setup tmate session
-              uses: mxschmitt/action-tmate@v3
+            # - name: Setup tmate session
+            #   uses: mxschmitt/action-tmate@v3
