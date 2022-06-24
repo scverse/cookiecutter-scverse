@@ -16,6 +16,10 @@ jobs:
             PROJECT_NAME: "project-name"
 
         steps:
+            - name: Authenticate github cli
+              run: |
+                  echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
+
             - name: Checkout template repository
               uses: actions/checkout@v3
 
