@@ -25,6 +25,7 @@ jobs:
                   repository: scverse/cookiecutter-scverse-instance
                   ssh-key: ${{ secrets.DEPLOY_KEY }}
                   path: ${{ env.INSTANCE_REPO }}
+                  persist-credentials: true
 
             - name: Set up Python ${{ env.PYTHON_VERSION }}
               uses: actions/setup-python@v4
@@ -34,23 +35,6 @@ jobs:
             - name: Get id of current pull request
               uses: jwalton/gh-find-current-pr@v1
               id: findPr
-
-            - name: Install SSH Client 🔑 # set-up deploy key to push to other repo
-              uses: webfactory/ssh-agent@v0.5.4
-              with:
-                  ssh-private-key: ${{ secrets.DEPLOY_KEY }}
-
-            - name: Get pip cache dir
-              id: pip-cache-dir
-              run: |
-                  echo "::set-output name=dir::$(pip cache dir)"
-            - name: Restore pip cache
-              uses: actions/cache@v2
-              with:
-                  path: ${{ steps.pip-cache-dir.outputs.dir }}
-                  key: pip-${{ runner.os }}-${{ env.pythonLocation }}-${{ hashFiles('**/pyproject.toml') }}
-                  restore-keys: |
-                      pip-${{ runner.os }}-${{ env.pythonLocation }}-
 
             - name: Install cookiecutter
               run: |
