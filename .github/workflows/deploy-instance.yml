@@ -76,6 +76,16 @@ jobs:
                   new_branch: ${{ env.SISTER_PR_BRANCH }}
                   push: false
 
+            - name: Push to instance repo
+              uses: ad-m/github-push-action@master
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  branch: ${{ env.SISTER_PR_BRANCH }}
+                  repository: scverse/cookiecutter-scverse-instance
+                  force: true
+                  directory: ${{ env.INSTANCE_REPO }}
+                  ssh: true
+
             - name: Create sister PR in instance repo
               run: |
                   cd $INSTANCE_REPO
