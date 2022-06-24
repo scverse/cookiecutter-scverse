@@ -14,12 +14,9 @@ jobs:
             INSTANCE_REPO: "TEMPLATE_INSTANCE"
             INSTANCE_GENERATED: "TEMPLATE_INSTANCE_GENERATED"
             PROJECT_NAME: "project-name"
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # for gh cli
 
         steps:
-            - name: Authenticate github cli
-              run: |
-                  echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
-
             - name: Checkout template repository
               uses: actions/checkout@v3
 
