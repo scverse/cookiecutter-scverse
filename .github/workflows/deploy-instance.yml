@@ -40,6 +40,10 @@ jobs:
               run: |
                   echo "SISTER_PR_BRANCH=pr-${{ steps.findThisPr.outputs.pr }}" >> $GITHUB_ENV
 
+            # - name: Get id of sister pull request
+            #   uses: jwalton/gh-find-current-pr@v1
+            #   id: findSisterPr
+
             - name: Install cookiecutter
               run: |
                   python -m pip install --upgrade pip wheel cookiecutter pre-commit
@@ -71,12 +75,9 @@ jobs:
                   new_branch: ${{ env.SISTER_PR_BRANCH }}
                   push: false
 
-            - name: Deploy to instance repo
-              uses: ad-m/github-push-action@master
-              with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
-                  branch: ${{ env.SISTER_PR_BRANCH }}
-                  repository: scverse/cookiecutter-scverse-instance
-                  force: true
-                  directory: ${{ env.INSTANCE_REPO }}
-                  ssh: true
+            - name: Create sister PR in instance repo
+              run: |
+                  cd $INSTANCE_REPO
+                  gh pr create \
+                      --base main \
+                      --fill
