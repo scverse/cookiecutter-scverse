@@ -77,6 +77,6 @@ jobs:
                   github_token: ${{ secrets.GITHUB_TOKEN }}
                   branch: ${{ env.SISTER_PR_BRANCH }}
                   repository: scverse/cookiecutter-scverse-instance
-                  force: false
+                  force: true
                   directory: ${{ env.INSTANCE_REPO }}
                   ssh: true
