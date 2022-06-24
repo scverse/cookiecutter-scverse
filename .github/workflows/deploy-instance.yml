@@ -50,11 +50,12 @@ jobs:
 
             - name: Transfer changes to template repo
               run: |
-                  export GIT_WORK_TREE=$INSTANCE_REPO
                   # checkout branch or create if it does not exist
                   git checkout $SISTER_PR_BRANCH 2>/dev/null || git checkout -b $SISTER_PR_BRANCH
                   # transfer changes from generated repo
                   rsync -va --delete --exclude .git $INSTANCE_GENERATED/$PROJECT_NAME/ $INSTANCE_REPO
+              env:
+                  GIT_WORK_TREE: ${{ env.INSTANCE_REPO }}
 
             - name: Setup tmate session
               uses: mxschmitt/action-tmate@v3
