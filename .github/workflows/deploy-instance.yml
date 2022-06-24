@@ -93,5 +93,6 @@ jobs:
                   gh pr create \
                       --base main \
                       --head ${{ env.SISTER_PR_BRANCH }} \
-                      --fill \
+                      --body "created automatically" \
+                      --title "Update instance repo" \
                       -R ${{ env.INSTANCE_REPO_GITHUB }}
