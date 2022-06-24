@@ -11,6 +11,7 @@ jobs:
         env:
             PYTHON_VERSION: "3.9"
             # directory in which cookiecuter generates the new repository
+            INSTANCE_REPO_GITHUB: scverse/cookiecutter-scverse-instance
             INSTANCE_REPO: "TEMPLATE_INSTANCE"
             INSTANCE_GENERATED: "TEMPLATE_INSTANCE_GENERATED"
             PROJECT_NAME: "project-name"
@@ -23,7 +24,7 @@ jobs:
             - name: Checkout instance repository
               uses: actions/checkout@v3
               with:
-                  repository: scverse/cookiecutter-scverse-instance
+                  repository: ${{ env.INSTANCE_REPO_GITHUB }}
                   ssh-key: ${{ secrets.DEPLOY_KEY }}
                   path: ${{ env.INSTANCE_REPO }}
                   persist-credentials: true
@@ -91,4 +92,6 @@ jobs:
                   cd $INSTANCE_REPO
                   gh pr create \
                       --base main \
-                      --fill
+                      --head ${{ env.SISTER_PR_BRANCH }} \
+                      --fill \
+                      -R ${{ env.INSTANCE_REPO_GITHUB }}
