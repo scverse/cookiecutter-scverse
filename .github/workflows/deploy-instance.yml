@@ -53,6 +53,8 @@ jobs:
                   export GIT_WORK_TREE=$INSTANCE_REPO
                   # checkout branch or create if it does not exist
                   git checkout $SISTER_PR_BRANCH 2>/dev/null || git checkout -b $SISTER_PR_BRANCH
+                  git branch --set-upstream-to origin/$SISTER_PR_BRANCH
+                  git pull
                   # transfer changes from generated repo
                   rsync -va --delete --exclude .git $INSTANCE_GENERATED/$PROJECT_NAME/ $INSTANCE_REPO
 
