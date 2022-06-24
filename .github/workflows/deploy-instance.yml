@@ -56,6 +56,7 @@ jobs:
                   rsync -va --delete --exclude .git $INSTANCE_GENERATED/$PROJECT_NAME/ $INSTANCE_REPO
               env:
                   GIT_WORK_TREE: ${{ env.INSTANCE_REPO }}
+                  GIT_DIR: ${{ env.INSTANCE_REPO}}/.git
 
             - name: Setup tmate session
               uses: mxschmitt/action-tmate@v3
