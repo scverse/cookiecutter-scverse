@@ -10,9 +10,9 @@ jobs:
 
         env:
             PYTHON_VERSION: "3.9"
-            # directory in which cookiecuter generates the new repository
             INSTANCE_REPO_GITHUB: scverse/cookiecutter-scverse-instance
             INSTANCE_REPO: "TEMPLATE_INSTANCE"
+            # directory in which cookiecuter generates the new repository
             INSTANCE_GENERATED: "TEMPLATE_INSTANCE_GENERATED"
             PROJECT_NAME: "project-name"
             GH_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }} # for gh cli
