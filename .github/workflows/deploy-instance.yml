@@ -135,6 +135,7 @@ jobs:
 
             - name: Query status of checks in template repository
               run: |
+                  sleep 5
                   .github/scripts/query_check_status.py \
                       --commit $SISTER_PR_SHA \
                       --repo $INSTANCE_REPO_GITHUB \
