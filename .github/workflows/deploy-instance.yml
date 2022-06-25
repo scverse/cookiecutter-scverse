@@ -117,7 +117,7 @@ jobs:
               with:
                   message: |
                       A PR has been generated to the instance repo:
-                      https://github.com/${{ env.INSTANCE_REPO_GITHUB }}/pulls/${{ env.PR_ID }}
+                      https://github.com/${{ env.INSTANCE_REPO_GITHUB }}/pull/${{ env.SISTER_PR_ID }}
 
 
                       You can check out the PR to preview your changes
