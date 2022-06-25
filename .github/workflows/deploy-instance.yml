@@ -94,7 +94,7 @@ jobs:
                   echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
 
             - name: Create sister PR in instance repo
-              if: ${{ env.SISTER_PR_ID != "NA" }}
+              if: ${{ env.SISTER_PR_ID != 'NA' }}
               run: |
                   cd $INSTANCE_REPO
                   gh pr create \
