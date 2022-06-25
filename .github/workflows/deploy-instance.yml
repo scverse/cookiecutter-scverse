@@ -125,3 +125,19 @@ jobs:
                       this PR automatically.
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
                   allow-repeats: false
+
+            - name: Get git SHA of latest commit to instance repo
+              run: |
+                  echo "SISTER_PR_SHA=$( git log --format="%H" -n 1) >> $GITHUB_ENV"
+              env:
+                  GIT_WORK_TREE: ${{ env.INSTANCE_REPO }}
+                  GIT_DIR: ${{ env.INSTANCE_REPO}}/.git
+
+            - name: Query status of checks in template repository
+              run: |
+                  .github/scripts/query_check_status.py \
+                      --commit $SISTER_PR_SHA \
+                      --repo $INSTANCE_REPO_GITHUB \
+                      --token $GH_TOKEN \
+                      --interval 10 \
+                      --timeout 1800
