@@ -128,7 +128,7 @@ jobs:
 
             - name: Get git SHA of latest commit to instance repo
               run: |
-                  echo "SISTER_PR_SHA=$( git log --format="%H" -n 1) >> $GITHUB_ENV"
+                  echo "SISTER_PR_SHA=$( git log --format='%H' -n 1)" >> $GITHUB_ENV
               env:
                   GIT_WORK_TREE: ${{ env.INSTANCE_REPO }}
                   GIT_DIR: ${{ env.INSTANCE_REPO}}/.git
