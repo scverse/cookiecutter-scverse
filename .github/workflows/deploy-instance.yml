@@ -42,10 +42,6 @@ jobs:
               run: |
                   echo "SISTER_PR_BRANCH=pr-${{ steps.findThisPr.outputs.pr }}" >> $GITHUB_ENV
 
-            # - name: Get id of sister pull request
-            #   uses: jwalton/gh-find-current-pr@v1
-            #   id: findSisterPr
-
             - name: Install cookiecutter
               run: |
                   python -m pip install --upgrade pip wheel cookiecutter pre-commit
@@ -87,12 +83,45 @@ jobs:
                   directory: ${{ env.INSTANCE_REPO }}
                   ssh: true
 
+            - name: Check if "sister PR" exists and find its ID
+              run: |
+                  PR_ID=$( \
+                      gh pr view $SISTER_PR_BRANCH \
+                      -R $INSTANCE_REPO_GITHUB \
+                      --json number --jq '.number' \
+                      || echo "NA"
+                  )
+                  echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
+
             - name: Create sister PR in instance repo
+              if: ${{ env.SISTER_PR_ID != "NA" }}
               run: |
                   cd $INSTANCE_REPO
                   gh pr create \
                       --base main \
-                      --head ${{ env.SISTER_PR_BRANCH }} \
+                      --head $SISTER_PR_BRANCH \
                       --body "created automatically" \
                       --title "Update instance repo" \
-                      -R ${{ env.INSTANCE_REPO_GITHUB }}
+                      -R $INSTANCE_REPO_GITHUB
+
+                  # now an ID should be available
+                  PR_ID=$( \
+                      gh pr view $SISTER_PR_BRANCH \
+                      -R $INSTANCE_REPO_GITHUB \
+                      --json number --jq '.number' \
+                  )
+                  echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
+
+            - name: Add comment about sister PR
+              uses: mshick/add-pr-comment@v1
+              with:
+                  message: |
+                      A PR has been generated to the instance repo:
+                      https://github.com/${{ env.INSTANCE_REPO_GITHUB }}/pulls/${{ env.PR_ID }}
+
+
+                      You can check out the PR to preview your changes
+                      in an instance of the cookiecutter template. The PR will be kept in sync with
+                      this PR automatically.
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+                  allow-repeats: false
