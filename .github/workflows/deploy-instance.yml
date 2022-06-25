@@ -138,6 +138,6 @@ jobs:
                   .github/scripts/query_check_status.py \
                       --commit $SISTER_PR_SHA \
                       --repo $INSTANCE_REPO_GITHUB \
-                      --token $GH_TOKEN \
+                      --gh_token $GH_TOKEN \
                       --interval 10 \
                       --timeout 1800
