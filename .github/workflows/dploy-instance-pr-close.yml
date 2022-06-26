@@ -1,0 +1,37 @@
+name: sync instance PR
+on:
+    pull_request:
+        branches: [main]
+        types: [closed]
+jobs:
+    close_pr:
+        runs-on: ubuntu-latest
+
+        env:
+            INSTANCE_REPO_GITHUB: scverse/cookiecutter-scverse-instance
+            GH_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }} # for gh cli
+
+        steps:
+            - name: Get id of current pull request
+              uses: jwalton/gh-find-current-pr@v1
+              id: findThisPr
+
+            - name: Define sister PR branch name
+              run: |
+                  echo "SISTER_PR_BRANCH=pr-${{ steps.findThisPr.outputs.pr }}" >> $GITHUB_ENV
+
+            - name: Check if "sister PR" exists and find its ID
+              run: |
+                  PR_ID=$( \
+                      gh pr view $SISTER_PR_BRANCH \
+                      -R $INSTANCE_REPO_GITHUB \
+                      --json number --jq '.number' \
+                      || echo "NA"
+                  )
+                  echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
+
+            - name: Close sister PR
+              if: ${{ env.SISTER_PR_ID != "NA" }}
+              run: |
+                  gh pr close $SISTER_PR_ID \
+                      -R $INSTANCE_REPO_GITHUB
