@@ -57,14 +57,19 @@ jobs:
                   git checkout $SISTER_PR_BRANCH 2>/dev/null || git checkout -b $SISTER_PR_BRANCH
                   # transfer changes from generated repo
                   rsync -va --delete --exclude .git $INSTANCE_GENERATED/$PROJECT_NAME/ $INSTANCE_REPO
+
+                  # check if there is a commit to be made
+                  if [[ `git status --porcelain` ]]; then
+                    echo "GIT_HAS_CHANGES=TRUE" >> $GITHUB_ENV
+                  else
+                    echo "GIT_HAS_CHANGES=FALSE" >> $GITHUB_ENV
+                  fi
               env:
                   GIT_WORK_TREE: ${{ env.INSTANCE_REPO }}
                   GIT_DIR: ${{ env.INSTANCE_REPO}}/.git
 
-            # - name: Setup tmate session
-            #   uses: mxschmitt/action-tmate@v3
-
             - name: Commit changes
+              if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
               uses: EndBug/add-and-commit@v9
               with:
                   default_author: github_actions
@@ -75,6 +80,7 @@ jobs:
                   push: false
 
             - name: Push to instance repo
+              if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
               uses: ad-m/github-push-action@master
               with:
                   github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -85,6 +91,7 @@ jobs:
                   ssh: true
 
             - name: Check if "sister PR" exists and find its ID
+              if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
               run: |
                   PR_ID=$( \
                       gh pr view $SISTER_PR_BRANCH \
@@ -95,7 +102,7 @@ jobs:
                   echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
 
             - name: Create sister PR in instance repo
-              if: ${{ env.SISTER_PR_ID == 'NA' }}
+              if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }} && ${{ env.SISTER_PR_ID == 'NA' }}
               run: |
                   cd $INSTANCE_REPO
                   gh pr create \
@@ -114,6 +121,7 @@ jobs:
                   echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
 
             - name: Add comment about sister PR
+              if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
               uses: mshick/add-pr-comment@v1
               with:
                   message: |
@@ -128,6 +136,7 @@ jobs:
                   allow-repeats: false
 
             - name: Get git SHA of latest commit to instance repo
+              if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
               run: |
                   echo "SISTER_PR_SHA=$( git log --format='%H' -n 1)" >> $GITHUB_ENV
               env:
@@ -135,6 +144,7 @@ jobs:
                   GIT_DIR: ${{ env.INSTANCE_REPO}}/.git
 
             - name: Query status of checks in template repository
+              if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
               run: |
                   sleep 5  # without sleep, 0 checks are discovered.
                   .github/scripts/query_check_status.py \
