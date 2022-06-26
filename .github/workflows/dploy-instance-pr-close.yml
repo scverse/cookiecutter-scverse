@@ -4,7 +4,7 @@ on:
         branches: [main]
         types: [closed, reopened]
 jobs:
-    close_pr:
+    sync_pr_status:
         runs-on: ubuntu-latest
 
         env:
@@ -25,15 +25,17 @@ jobs:
                       || echo "NA"
                   )
                   echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
+                  echo ${{ github.event.pull_request.action }}
+                  echo ${{ github.event.pull_request.merged }}
 
             - name: Close sister PR
-              if: ${{ env.SISTER_PR_ID != 'NA' && github.event.pull_request.action == 'closed' && !github.event.pull_request.merged}}
+              if: ${{ env.SISTER_PR_ID != 'NA' && github.event.pull_request.action == 'closed' && !github.event.pull_request.merged }}
               run: |
                   gh pr close $SISTER_PR_ID \
                       -R $INSTANCE_REPO_GITHUB
 
             - name: Merge sister PR
-              if: ${{ env.SISTER_PR_ID != 'NA' && github.event.pull_request.action == 'closed' && github.event.pull_request.merged}}
+              if: ${{ env.SISTER_PR_ID != 'NA' && github.event.pull_request.action == 'closed' && github.event.pull_request.merged }}
               run: |
                   gh pr merge $SISTER_PR_ID \
                       --squash \
