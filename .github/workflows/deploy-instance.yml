@@ -32,13 +32,9 @@ jobs:
               with:
                   python-version: ${{ env.PYTHON_VERSION }}
 
-            - name: Get id of current pull request
-              uses: jwalton/gh-find-current-pr@v1
-              id: findThisPr
-
             - name: define sister PR branch name
               run: |
-                  echo "SISTER_PR_BRANCH=pr-${{ steps.findThisPr.outputs.pr }}" >> $GITHUB_ENV
+                  echo "SISTER_PR_BRANCH=pr-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
 
             - name: Install cookiecutter
               run: |
