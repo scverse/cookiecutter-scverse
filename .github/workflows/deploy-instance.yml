@@ -91,7 +91,6 @@ jobs:
                   ssh: true
 
             - name: Check if "sister PR" exists and find its ID
-              if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
               run: |
                   PR_ID=$( \
                       gh pr view $SISTER_PR_BRANCH \
@@ -102,7 +101,7 @@ jobs:
                   echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
 
             - name: Create sister PR in instance repo
-              if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }} && ${{ env.SISTER_PR_ID == 'NA' }}
+              if: ${{ env.GIT_HAS_CHANGES == 'TRUE' && env.SISTER_PR_ID == 'NA' }}
               run: |
                   cd $INSTANCE_REPO
                   gh pr create \
@@ -136,7 +135,9 @@ jobs:
                   allow-repeats: false
 
             - name: Get git SHA of latest commit to instance repo
-              if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
+              # run this also if no changes were made in the last commit, but a PR has already been created
+              # from a previous commit
+              if: ${{ env.SISTER_PR_ID != 'NA' }}
               run: |
                   echo "SISTER_PR_SHA=$( git log --format='%H' -n 1)" >> $GITHUB_ENV
               env:
@@ -144,7 +145,7 @@ jobs:
                   GIT_DIR: ${{ env.INSTANCE_REPO}}/.git
 
             - name: Query status of checks in template repository
-              if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
+              if: ${{ env.SISTER_PR_ID != 'NA' }}
               run: |
                   sleep 5  # without sleep, 0 checks are discovered.
                   .github/scripts/query_check_status.py \
