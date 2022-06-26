@@ -25,7 +25,8 @@ jobs:
                       || echo "NA"
                   )
                   echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
-                  echo ${{ github.event.pull_request.action }}
+                  echo ${{ github.event.pull_request }}`
+                  ehco ${{ github.event.action }}
                   echo ${{ github.event.pull_request.merged }}
 
             - name: Close sister PR
