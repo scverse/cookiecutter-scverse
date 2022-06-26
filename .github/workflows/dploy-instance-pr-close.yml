@@ -31,7 +31,14 @@ jobs:
                   echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
 
             - name: Close sister PR
-              if: ${{ env.SISTER_PR_ID != 'NA' }}
+              if: ${{ env.SISTER_PR_ID != 'NA' && !github.event.pull_request.merged}}
               run: |
                   gh pr close $SISTER_PR_ID \
+                      -R $INSTANCE_REPO_GITHUB
+
+            - name: Merge sister PR
+              if: ${{ env.SISTER_PR_ID != 'NA' && github.event.pull_request.merged}}
+              run: |
+                  gh pr merge $SISTER_PR_ID \
+                      --squash \
                       -R $INSTANCE_REPO_GITHUB
