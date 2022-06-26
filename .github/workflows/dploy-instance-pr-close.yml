@@ -25,25 +25,22 @@ jobs:
                       || echo "NA"
                   )
                   echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
-                  echo ${{ github.event.pull_request }}`
-                  ehco ${{ github.event.action }}
-                  echo ${{ github.event.pull_request.merged }}
 
             - name: Close sister PR
-              if: ${{ env.SISTER_PR_ID != 'NA' && github.event.pull_request.action == 'closed' && !github.event.pull_request.merged }}
+              if: ${{ env.SISTER_PR_ID != 'NA' && github.event.action == 'closed' && !github.event.pull_request.merged }}
               run: |
                   gh pr close $SISTER_PR_ID \
                       -R $INSTANCE_REPO_GITHUB
 
             - name: Merge sister PR
-              if: ${{ env.SISTER_PR_ID != 'NA' && github.event.pull_request.action == 'closed' && github.event.pull_request.merged }}
+              if: ${{ env.SISTER_PR_ID != 'NA' && github.event.action == 'closed' && github.event.pull_request.merged }}
               run: |
                   gh pr merge $SISTER_PR_ID \
                       --squash \
                       -R $INSTANCE_REPO_GITHUB
 
             - name: Reopen sister PR
-              if: ${{ env.SISTER_PR_ID != 'NA' && github.event.pull_request.action == 'reopened' }}
+              if: ${{ env.SISTER_PR_ID != 'NA' && github.event.action == 'reopened' }}
               run: |
                   gh pr reopen $SISTER_PR_ID \
                       -R $INSTANCE_REPO_GITHUB
