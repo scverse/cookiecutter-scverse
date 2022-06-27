@@ -44,7 +44,7 @@ jobs:
               run: |
                   cookiecutter --output-dir $INSTANCE_GENERATED --no-input .
 
-            - name: Transfer changes to template repo
+            - name: Transfer changes to instance repo
               run: |
                   # checkout branch or create if it does not exist
                   git fetch origin $SISTER_PR_BRANCH || true
