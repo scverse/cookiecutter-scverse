@@ -2,7 +2,6 @@
 
 TEST TEST TEST
 another test
-another test
 
 [![Tests][badge-tests]][link-tests]
 [![Documentation][badge-docs]][link-docs]
