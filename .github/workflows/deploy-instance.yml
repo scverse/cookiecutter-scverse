@@ -38,7 +38,7 @@ jobs:
 
             - name: Install cookiecutter
               run: |
-                  python -m pip install --upgrade pip wheel cookiecutter pre-commit pygithub
+                  python -m pip install --upgrade pip wheel cookiecutter pre-commit
 
             - name: Build from template
               run: |
@@ -128,23 +128,8 @@ jobs:
                   repo-token: ${{ secrets.GITHUB_TOKEN }}
                   allow-repeats: false
 
-            - name: Get git SHA of latest commit to instance repo
-              # run this also if no changes were made in the last commit, but a PR has already been created
-              # from a previous commit
-              if: ${{ env.SISTER_PR_ID != 'NA' }}
-              run: |
-                  echo "SISTER_PR_SHA=$( git log --format='%H' -n 1)" >> $GITHUB_ENV
-              env:
-                  GIT_WORK_TREE: ${{ env.INSTANCE_REPO }}
-                  GIT_DIR: ${{ env.INSTANCE_REPO}}/.git
-
             - name: Query status of checks in template repository
               if: ${{ env.SISTER_PR_ID != 'NA' }}
               run: |
                   sleep 5  # without sleep, 0 checks are discovered.
-                  .github/scripts/query_check_status.py \
-                      --commit $SISTER_PR_SHA \
-                      --repo $INSTANCE_REPO_GITHUB \
-                      --gh_token $GH_TOKEN \
-                      --interval 10 \
-                      --timeout 1800
+                  gh pr checks ${{ env.SISTER_PR_ID }} --watch -R $INSTANCE_REPO_GITHUB
