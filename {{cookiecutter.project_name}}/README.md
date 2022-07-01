@@ -1,8 +1,5 @@
 # {{ cookiecutter.project_name }}
 
-TEST TEST TEST
-another test
-
 [![Tests][badge-tests]][link-tests]
 [![Documentation][badge-docs]][link-docs]
 
