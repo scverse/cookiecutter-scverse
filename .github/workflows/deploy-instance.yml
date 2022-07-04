@@ -13,7 +13,7 @@ jobs:
             # directory in which cookiecuter generates the new repository
             INSTANCE_GENERATED: "TEMPLATE_INSTANCE_GENERATED"
             PROJECT_NAME: "project-name"
-            GH_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }} # for gh cli
+            GH_TOKEN: ${{ secrets.BOT_GH_TOKEN }} # for gh cli
 
         steps:
             - name: Checkout template repository
@@ -23,7 +23,7 @@ jobs:
               uses: actions/checkout@v3
               with:
                   repository: ${{ env.INSTANCE_REPO_GITHUB }}
-                  ssh-key: ${{ secrets.DEPLOY_KEY }}
+                  token: ${{ secrets.BOT_GH_TOKEN }}
                   path: ${{ env.INSTANCE_REPO }}
                   persist-credentials: true
 
@@ -77,7 +77,7 @@ jobs:
               if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
               uses: ad-m/github-push-action@master
               with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  github_token: ${{ secrets.BOT_GH_TOKEN }}
                   branch: ${{ env.SISTER_PR_BRANCH }}
                   repository: scverse/cookiecutter-scverse-instance
                   force: false
