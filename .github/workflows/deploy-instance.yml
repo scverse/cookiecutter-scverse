@@ -82,7 +82,6 @@ jobs:
                   repository: scverse/cookiecutter-scverse-instance
                   force: false
                   directory: ${{ env.INSTANCE_REPO }}
-                  ssh: true
 
             - name: Check if "sister PR" exists and find its ID
               run: |
