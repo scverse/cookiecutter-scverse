@@ -103,7 +103,7 @@ jobs:
                       --base main \
                       --head $SISTER_PR_BRANCH \
                       --body "created automatically" \
-                      --title "Update instance repo (PR $SISTER_PR_ID)" \
+                      --title "Update instance repo (PR ${{ github.event.pull_request.number }})" \
                       -R $INSTANCE_REPO_GITHUB
 
                   # now an ID should be available
