@@ -1,10 +1,31 @@
 # Developer documentation
 
-Please refer to the [scanpy developer guide][].
+Welcome to the developer guidelines! This document is split into two parts:
 
-[scanpy developer guide]: https://scanpy.readthedocs.io/en/latest/dev/index.html
+-   A section about the repository setup. It describes how the build system and automated checks work
+-   A contributor guide. It contains all information relevant to developers who want to make a contribution.
 
-## Pre-commit documentation
+## Repository set-up
+
+### Documentation on _readthedocs_
+
+-   make sure to enable PR builds
+
+### Tutorials with _nbsphinx_
+
+### Coverage tests with _Codecov_
+
+To enable coverage checks, head over to [codecov][] and the "getting started" instructions on the [codecov setup][].
+You can directly login with your GitHub account to Codecov.
+
+In short, you need to:
+
+1. Go to the _Settings_ of your newly created repository on github.
+2. Go to _Security > Secrets > Actions_.
+3. Create new repository secret with Name **CODECOV_TOKEN** and Value alphanumeric sequence.
+4. Go back to Github Actions page an re-run previously failed jobs.
+
+### Pre-commit checks
 
 [Pre-commit](https://pre-commit.com/) checks are fast programs that
 check code for errors, inconsistencies and code styles, before the code
@@ -53,7 +74,7 @@ The following pre-commit checks for errors, inconsistencies and typing.
 -   [pyupgrade](https://github.com/asottile/pyupgrade):
     upgrade syntax for newer versions of the language.
 
-### Notes on pre-commit checks
+#### Notes on pre-commit checks
 
 -   **flake8**: to ignore errors, you can add a comment `# noqa` to the offending line.
     You can also specify the error id to ignore with e.g. `# noqa: E731`.
@@ -61,3 +82,28 @@ The following pre-commit checks for errors, inconsistencies and typing.
 -   You can add or remove pre-commit checks by simply deleting relevant lines in the `.pre-commit-config.yaml` file.
     Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` or pre-commit
     specific config files, such as `.prettierrc.yml` for **prettier** and `.flake8` for **flake8**.
+
+### Customize linting
+
+### Template sync with _cookietemple_
+
+TODO
+
+## Contributing guide
+
+Scanpy provides extensive [developer documentation][scanpy developer guide], most of which applies to this repo, too.
+This document will not reproduce the entire content from there. Instead, it aims at summarizing the most important
+information to get you started on contributing.
+
+### Getting set-up
+
+We assume that you are already familiar with git and with making pull requests on GitHub. If not, please refer
+to the [scanpy developer guide][].
+
+### Making a release
+
+<!-- Links -->
+
+[scanpy developer guide]: https://scanpy.readthedocs.io/en/latest/dev/index.html
+[codecov]: https://about.codecov.io/
+[codecov setup]: https://docs.codecov.com/docs
