@@ -4,8 +4,8 @@ requires = ["hatchling"]
 
 
 [project]
+dynamic = ["version"]
 name = "{{ cookiecutter.package_name }}"
-version = "0.0.1"
 authors = [
     {name = "{{ cookiecutter.author_full_name }}"},
 ]
@@ -40,6 +40,9 @@ test = [
     "pytest",
     "pytest-cov",
 ]
+
+[tool.hatch.version]
+path = "src/{{ cookiecutter.package_name }}/__init__.py"
 
 [tool.coverage.run]
 source = ["{{ cookiecutter.package_name }}"]
