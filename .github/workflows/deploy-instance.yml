@@ -43,7 +43,6 @@ jobs:
             - name: Build from template
               run: |
                   cookiecutter --output-dir $INSTANCE_GENERATED \
-                    --no-input \
                     --replay-file .github/assets/cookiecutter-scverse.instance.json \
                     .
 
