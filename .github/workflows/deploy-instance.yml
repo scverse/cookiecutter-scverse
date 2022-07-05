@@ -43,7 +43,7 @@ jobs:
             - name: Build from template
               run: |
                   cookiecutter --output-dir $INSTANCE_GENERATED \
-                    --replay-file .github/assets/cookiecutter-scverse.instance.json \
+                    --replay-file .github/assets/cookiecutter-scverse-instance.json \
                     .
 
             - name: Transfer changes to instance repo
