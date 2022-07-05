@@ -2,6 +2,7 @@
 
 [![Tests][badge-tests]][link-tests]
 [![Documentation][badge-docs]][link-docs]
+
 [badge-tests]: https://img.shields.io/github/workflow/status/{{ cookiecutter.github_user }}/{{ cookiecutter.project_name }}/Test/main
 [link-tests]: {{ cookiecutter.project_repo }}/actions/workflows/test.yml
 [badge-docs]: https://img.shields.io/readthedocs/{{ cookiecutter.project_name }}
@@ -17,7 +18,7 @@ Please refer to the [documentation][link-docs]. In particular, the
 ## Installation
 
 You need to have Python 3.8 or newer installed on your system. If you don't have
-Python installed, we recommend installing `Miniconda <https://docs.conda.io/en/latest/miniconda.html>`\_.
+Python installed, we recommend installing [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
 
 There are several alternative options to install {{ cookiecutter.project_name }}:
 
