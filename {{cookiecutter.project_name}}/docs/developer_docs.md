@@ -102,8 +102,62 @@ to the [scanpy developer guide][].
 
 ### Making a release
 
+### Building the docs
+
+```
+pip install -e ".[dev,doc,test]"
+cd docs
+make html
+open _build/html/index.html
+```
+
 <!-- Links -->
 
 [scanpy developer guide]: https://scanpy.readthedocs.io/en/latest/dev/index.html
 [codecov]: https://about.codecov.io/
 [codecov setup]: https://docs.codecov.com/docs
+
+<!--
+
+TODO
+
+-   API explanation
+-   Requirements:
+
+    -   We strongly encourage you to
+        -   write tests
+        -   adapt an scverse-like api (although other apis may make sense)
+        -   embrace semantic versioning
+
+-   Setting up RTD
+
+    -   make sure to check PR builds
+
+-   tutorials
+
+    -   This repository is currently set-up for including jupyter notebooks in ipynb format _including outputs_.
+        We are thinking about adding CI builds for tutorials in the future, but this can be challenging depending on the resource requiresments to build the tutorials. See the discussion at <> if you are interested in this feature.
+
+-   installing the package with hatch
+-   versioning
+
+    -   by default, this package is set-up to use `hatch`'s bump version. You may switch to vcs-based versioning using
+        the hatch-vcs pluging if you prefer.
+
+-   template sync
+
+    -   We use cookietemple to keep your package in sync with the template. A bot will make a pull request to your repository if we update the template. Like that you may benefit from new features or if we fix the build system.
+
+-   Planned features
+
+    -   centralized logging
+
+-   customize linting
+-   how to add tests
+
+Take inspirations from the scanpy, scvi and muon developer guides!
+
+TODO: write developer guide first, then docs of the template!
+
+
+-->

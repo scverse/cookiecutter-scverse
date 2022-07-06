@@ -26,7 +26,7 @@ and how to customize it for your needs.
 
 ### Install dependencies
 
-You need `git >=2.38` and `python >=3.8`. In addition you need to install the following python dependencies:
+You need `git >=2.38` and `python >=3.8`. In addition you need to install the following Python dependencies:
 
 ```bash
 pip install cookiecutter pre-commit
@@ -43,30 +43,20 @@ cookiecutter https://github.com/scverse/cookiecutter-scverse
 This will create a git repository with a filed out template in it.
 Now `cd` into the newly created directory and make the initial commit!
 
-Further instructions on using this template can be found in the contributing guide included in the project. Build the docs by installing a development version of the package and running sphinx:
+### Set up online services
 
-TODO: link to instance repo
+Your repository is now ready. However, to use all features of the template you will need to set up the following
+online services:
 
-```
-pip install -e ".[dev,doc,test]"
-cd docs
-make html
-open _build/html/index.html
-```
-
-### Codecov set up
-
-Once the newly generated repository has been pushed to github, there is one last thing to do: set up code coverage with **codecov**.
-To do this, head over to [codecov][] and the "getting started" instructions on the [codecov setup docs][]. You can directly login with your github account to codecov.
-
-In short, you need to:
-
-1. Go to the _Settings_ of your newly created repository on github.
-2. Go to _Security > Secrets > Actions_.
-3. Create new repository secret with Name **CODECOV_TOKEN** and Value alphanumeric sequence.
-4. Go back to Github Actions page an re-run previously failed jobs.
+TODO
 
 All CI checks should pass, you are ready to start developing your new tool!
+
+### Customizations
+
+Further instructions on using this template can be found in the contributing guide included in the project.
+
+<!-- links -->
 
 [flit]: https://flit.pypa.io/en/latest/
 [readthedocs]: https://readthedocs.org/
@@ -78,43 +68,3 @@ All CI checks should pass, you are ready to start developing your new tool!
 [mudata]: https://muon.readthedocs.io/en/latest/notebooks/quickstart_mudata.html
 [codecov]: https://about.codecov.io/
 [codecov setup]: https://docs.codecov.com/docs
-
-TODO
-
--   API explanation
--   Requirements:
-
-    -   We strongly encourage you to
-        -   write tests
-        -   adapt an scverse-like api (although other apis may make sense)
-        -   embrace semantic versioning
-
--   Setting up RTD
-
-    -   make sure to check PR builds
-
--   tutorials
-
-    -   This repository is currently set-up for including jupyter notebooks in ipynb format _including outputs_.
-        We are thinking about adding CI builds for tutorials in the future, but this can be challenging depending on the resource requiresments to build the tutorials. See the discussion at <> if you are interested in this feature.
-
--   installing the package with hatch
--   versioning
-
-    -   by default, this package is set-up to use `hatch`'s bump version. You may switch to vcs-based versioning using
-        the hatch-vcs pluging if you prefer.
-
--   template sync
-
-    -   We use cookietemple to keep your package in sync with the template. A bot will make a pull request to your repository if we update the template. Like that you may benefit from new features or if we fix the build system.
-
--   Planned features
-
-    -   centralized logging
-
--   customize linting
--   how to add tests
-
-Take inspirations from the scanpy, scvi and muon developer guides!
-
-TODO: write developer guide first, then docs of the template!
