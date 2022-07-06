@@ -42,11 +42,19 @@ cookiecutter https://github.com/scverse/cookiecutter-scverse
 
 This will create a git repository with a filed out template in it.
 Now `cd` into the newly created directory and make the initial commit!
+Don't forget to create a repository on GitHub and upload your project.
 
 ### Set up online services
 
 Your repository is now ready. However, to use all features of the template you will need to set up the following
-online services:
+online services. Clicking on the links will take you to the respective sections of the developer documentation.
+The developer documentation is also shipped as part of the template in `docs/developer_docs.md`.
+
+1.  [pre-commit.ci] to check for inconsistencies and to enforce a code style
+2.  [readthedocs.org] to build and host documentation
+3.  [codecov] to generate test coverage reports
+
+### Write tests
 
 TODO
 
@@ -67,4 +75,3 @@ Further instructions on using this template can be found in the contributing gui
 [anndata]: https://anndata.readthedocs.io/en/latest/
 [mudata]: https://muon.readthedocs.io/en/latest/notebooks/quickstart_mudata.html
 [codecov]: https://about.codecov.io/
-[codecov setup]: https://docs.codecov.com/docs
