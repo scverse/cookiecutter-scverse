@@ -22,7 +22,11 @@ version = "0.0.1"
 requires-python = ">=3.8"
 license = {file = "LICENSE"}
 readme = "README.md"
-dependencies = ["anndata"]
+dependencies = [
+    "anndata",
+    # for debug logging (referenced from the issue template)
+    "session-info"
+]
 
 [project.optional-dependencies]
 dev = [
