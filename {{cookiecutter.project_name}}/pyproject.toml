@@ -23,8 +23,8 @@ dependencies = ["anndata"]
 
 [project.optional-dependencies]
 dev = [
-    # CLI for managing the python project
-    "hatch",
+    # CLI for bumping the version number
+    "bump2version",
 ]
 doc = [
     "sphinx>=4",
