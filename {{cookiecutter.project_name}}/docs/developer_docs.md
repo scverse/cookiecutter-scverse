@@ -56,8 +56,6 @@ The following pre-commit checks for code style and format.
 
 -   [black](https://black.readthedocs.io/en/stable/): standard code
     formatter in Python.
--   [autopep8](https://github.com/hhatto/autopep8): code formatter to
-    conform to [PEP8](https://peps.python.org/pep-0008/) style guide.
 -   [isort](https://pycqa.github.io/isort/): sort module imports into
     sections and types.
 -   [prettier](https://prettier.io/docs/en/index.html): standard code
@@ -127,9 +125,15 @@ information to get you started on contributing.
 We assume that you are already familiar with git and with making pull requests on GitHub. If not, please refer
 to the [scanpy developer guide][].
 
+### Code-style
+
+TODO run pre-commit locally
+
 ### scverse API
 
 ### Writing tests
+
+TODO run tests locally
 
 ### Making a release
 
