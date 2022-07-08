@@ -1,14 +1,15 @@
 [build-system]
-build-backend = "flit_core.buildapi"
-requires = [
-    "flit_core >=3.4,<4",
-    "importlib_metadata>=0.7; python_version < '3.8'",
-]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
 
 
 [project]
 name = "{{ cookiecutter.package_name }}"
+version = "0.0.1"
 description = "{{ cookiecutter.project_description }}"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
 authors = [
     {name = "{{ cookiecutter.author_full_name }}"},
 ]
@@ -18,15 +19,11 @@ maintainers = [
 urls.Documentation = "https://{{ cookiecutter.project_name }}.readthedocs.io/"
 urls.Source = "{{ cookiecutter.project_repo }}"
 urls.Home-page = "{{ cookiecutter.project_repo }}"
-version = "0.0.1"
-requires-python = ">=3.8"
-license = {file = "LICENSE"}
-readme = "README.md"
 dependencies = ["anndata"]
 
 [project.optional-dependencies]
 dev = [
-    # dev version generation
+    # CLI for bumping the version number
     "bump2version",
     "pre-commit"
 ]
