@@ -64,6 +64,14 @@ All CI checks should pass, you are ready to start developing your new tool!
 
 Further instructions on using this template can be found in the contributing guide included in the project.
 
+### Committment
+
+We expect developers of ecosystem packages to
+
+-   write unit tests
+-   provide documentation, including tutorials where applicable
+-   support users through github and the [scverse discourse][]
+
 <!-- links -->
 
 [flit]: https://flit.pypa.io/en/latest/
@@ -75,3 +83,4 @@ Further instructions on using this template can be found in the contributing gui
 [anndata]: https://anndata.readthedocs.io/en/latest/
 [mudata]: https://muon.readthedocs.io/en/latest/notebooks/quickstart_mudata.html
 [codecov]: https://about.codecov.io/
+[scverse discourse]: https://discourse.scverse.org/
