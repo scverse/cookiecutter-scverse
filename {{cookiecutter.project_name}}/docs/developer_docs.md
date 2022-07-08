@@ -5,7 +5,7 @@ Welcome to the developer guidelines! This document is split into two parts:
 -   A section about the repository setup. It describes how the build system and automated checks work
 -   A contributor guide. It contains all information relevant to developers who want to make a contribution.
 
-## Repository set-up
+## Setting up the repository
 
 ### Documentation on _readthedocs_
 
@@ -13,18 +13,16 @@ We recommend using [readthedocs.org][] (RTD) to build and host the documentation
 To enable readthedocs, head over to [their webiste][readthedocs.org] and sign in with your GitHub account.
 On the RTD dashboard choose "Import a Project" and follow the instructions to add your repository.
 
--   Make sure to choose the correct name of the default branch. On GitHub the default name of the default branch has
+-   Make sure to choose the correct name of the default branch. On GitHub, the default name of the default branch has
     recently changed from `master` to `main`.
 -   We recommend to enable documentation builds for pull requests. This ensures that a PR doesn't introduce changes
     that break the documentation. To do so, got to `Admin -> Advanced Settings`, check the
-    `Build pull requests for this projects` option, and click `Save`.
-
-For more information, please refer to the [official RTD documentation](https://docs.readthedocs.io/en/stable/pull-requests.html).
-
-### Tutorials with _nbsphinx_
+    `Build pull requests for this projects` option, and click `Save`. For more information, please refer to
+    the [official RTD documentation](https://docs.readthedocs.io/en/stable/pull-requests.html).
 
 ### Coverage tests with _Codecov_
 
+Coverage tells you what fraction of your code is "covered" by unit tests.
 To enable coverage checks, head over to [codecov][] and sign in with your GitHub account.
 You'll find more information in "getting started" section of the [codecov docs][].
 You can directly login with your GitHub account to Codecov.
@@ -105,11 +103,18 @@ The following pre-commit checks for errors, inconsistencies and typing.
     Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` or pre-commit
     specific config files, such as `.prettierrc.yml` for **prettier** and `.flake8` for **flake8**.
 
+### Tutorials with nbsphinx and jupyter notebooks
+
 ### Customize linting
+
+### Using VCS-based versioning
 
 ### Template sync with _cookietemple_
 
 TODO
+
+<!--
+ We use cookietemple to keep your package in sync with the template. A bot will make a pull request to your repository if we update the template. Like that you may benefit from new features or if we fix the build system. -->
 
 ## Contributing guide
 
@@ -122,7 +127,13 @@ information to get you started on contributing.
 We assume that you are already familiar with git and with making pull requests on GitHub. If not, please refer
 to the [scanpy developer guide][].
 
+### scverse API
+
+### Writing tests
+
 ### Making a release
+
+-   semver
 
 ### Upload on PyPI
 
@@ -149,39 +160,11 @@ open _build/html/index.html
 
 TODO
 
--   API explanation
--   Requirements:
-
-    -   We strongly encourage you to
-        -   write tests
-        -   adapt an scverse-like api (although other apis may make sense)
-        -   embrace semantic versioning
-
--   Setting up RTD
-
-    -   make sure to check PR builds
-
 -   tutorials
 
     -   This repository is currently set-up for including jupyter notebooks in ipynb format _including outputs_.
         We are thinking about adding CI builds for tutorials in the future, but this can be challenging depending on the resource requiresments to build the tutorials. See the discussion at <> if you are interested in this feature.
 
--   installing the package with hatch
--   versioning
-
-    -   by default, this package is set-up to use `hatch`'s bump version. You may switch to vcs-based versioning using
-        the hatch-vcs pluging if you prefer.
-
--   template sync
-
-    -   We use cookietemple to keep your package in sync with the template. A bot will make a pull request to your repository if we update the template. Like that you may benefit from new features or if we fix the build system.
-
--   Planned features
-
-    -   centralized logging
-
--   customize linting
--   how to add tests
 
 Take inspirations from the scanpy, scvi and muon developer guides!
 
