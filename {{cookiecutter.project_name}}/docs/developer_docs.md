@@ -103,7 +103,22 @@ The following pre-commit checks for errors, inconsistencies and typing.
 
 ### Tutorials with nbsphinx and jupyter notebooks
 
-### Customize linting
+### Ignore certain lint warnings
+
+The [pre-commit checks](#pre-commit-checks) include [flake8](https://flake8.pycqa.org/en/latest/) which checks
+for errors in Python files, including stylistic errors.
+
+In some cases it might overshoot and you may have good reasons to ignore certain warnings. To do so, edit the `.flake8`
+file in the root of the repository. Add one line per linting code you wish to ignore and don't forget to add a comment.
+
+```toml
+...
+# line break before a binary operator -> black does not adhere to PEP8
+W503
+# line break occured after a binary operator -> black does not adhere to PEP8
+W504
+...
+```
 
 ### Using VCS-based versioning
 
