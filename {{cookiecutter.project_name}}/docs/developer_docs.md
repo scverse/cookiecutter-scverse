@@ -130,6 +130,38 @@ W504
 
 ### Using VCS-based versioning
 
+By default, the template uses hard-coded version numbers that are set in `pyproject.toml` and managed with
+[bump2version](#making-a-release). If you prefer to have your project automatically infer version numbers from git
+tags, it is straightforward to switch to vcs-based versioning using [hatch-vcs][].
+
+In `pyproject.toml` add the following changes, and you are good to go!
+
+```diff
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,11 +1,11 @@
+ [build-system]
+ build-backend = "hatchling.build"
+-requires = ["hatchling"]
++requires = ["hatchling", "hatch-vcs"]
+
+
+ [project]
+ name = "{{ cookiecutter.project_name }}"
+-version = "0.3.1dev"
++dynamic = ["version"]
+
+@@ -60,6 +60,9 @@
++[tool.hatch.version]
++source = "vcs"
++
+ [tool.coverage.run]
+ source = ["{{ cookiecutter.project_name }}"]
+ omit = [
+```
+
+[hatch-vcs]: https://pypi.org/project/hatch-vcs/
+
 ### Template sync with _cookietemple_
 
 TODO
