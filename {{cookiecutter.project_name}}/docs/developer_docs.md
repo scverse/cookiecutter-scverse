@@ -103,6 +103,14 @@ The following pre-commit checks for errors, inconsistencies and typing.
 
 ### Tutorials with nbsphinx and jupyter notebooks
 
+The documentation is set-up to render jupyter notebooks stored in the `docs/notebooks` directory using [nbsphinx][].
+Currently, only fully executed notebooks in `.ipynb` format are supported. It is your reponsibility to update
+and re-run the notebook whenever necessary.
+
+If you are interested in automatically running notebooks as part of the continuous integration, please check
+out [this feature request](https://github.com/scverse/cookiecutter-scverse/issues/40) in the `cookiecutter-scverse`
+repository.
+
 ### Ignore certain lint warnings
 
 The [pre-commit checks](#pre-commit-checks) include [flake8](https://flake8.pycqa.org/en/latest/) which checks
@@ -158,6 +166,11 @@ TODO run tests locally
 
 TODO
 
+### Writing documentation
+
+-   update intersphinx mappings
+-   ignore warnings
+
 ### Building the docs
 
 ```
@@ -174,6 +187,8 @@ open _build/html/index.html
 [codecov docs]: https://docs.codecov.com/docs
 [pre-commit.ci]: https://pre-commit.ci/
 [readthedocs.org]: https://readthedocs.org/
+[nbshpinx]: https://github.com/spatialaudio/nbsphinx
+[jupytext]: https://jupytext.readthedocs.io/en/latest/
 
 <!--
 
