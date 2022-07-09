@@ -2,8 +2,9 @@
 
 Welcome to the developer guidelines! This document is split into two parts:
 
--   A section about the repository setup. It describes how the build system and automated checks work
--   A contributor guide. It contains all information relevant to developers who want to make a contribution.
+1.  The [repository setup](#setting-up-the-repository). This section is relevant primarily for the repository maintainer and shows how to connect
+    continuous integration services and documents initial set-up of the repository.
+2.  The [contributor guide](#contributing-guide). It contains information relevant to all developers who want to make a contribution.
 
 ## Setting up the repository
 
@@ -15,17 +16,17 @@ On the RTD dashboard choose "Import a Project" and follow the instructions to ad
 
 -   Make sure to choose the correct name of the default branch. On GitHub, the default name of the default branch has
     recently changed from `master` to `main`.
--   We recommend to enable documentation builds for pull requests. This ensures that a PR doesn't introduce changes
+-   We recommend to enable documentation builds for pull requests (PRs). This ensures that a PR doesn't introduce changes
     that break the documentation. To do so, got to `Admin -> Advanced Settings`, check the
     `Build pull requests for this projects` option, and click `Save`. For more information, please refer to
     the [official RTD documentation](https://docs.readthedocs.io/en/stable/pull-requests.html).
 
 ### Coverage tests with _Codecov_
 
-Coverage tells you what fraction of your code is "covered" by unit tests.
+Coverage tells what fraction of the code is "covered" by unit tests, thereby encouraging contributors to
+[write tests](#writing-tests).
 To enable coverage checks, head over to [codecov][] and sign in with your GitHub account.
 You'll find more information in "getting started" section of the [codecov docs][].
-You can directly login with your GitHub account to Codecov.
 
 In brief, you need to:
 
@@ -52,7 +53,7 @@ Once authorized, pre-commit.ci should automatically be activated.
 
 #### Overview of pre-commit hooks used by the template
 
-The following pre-commit checks for code style and format.
+The following pre-commit checks are for code style and format:
 
 -   [black](https://black.readthedocs.io/en/stable/): standard code
     formatter in Python.
@@ -63,7 +64,7 @@ The following pre-commit checks for code style and format.
 -   [blacken-docs](https://github.com/asottile/blacken-docs): black on
     python code in docs.
 
-The following pre-commit checks for errors, inconsistencies and typing.
+The following pre-commit checks are for errors and inconsistencies:
 
 -   [flake8](https://flake8.pycqa.org/en/latest/): standard check for errors in Python files.
     -   [flake8-tidy-imports](https://github.com/adamchainz/flake8-tidy-imports):
@@ -96,20 +97,23 @@ The following pre-commit checks for errors, inconsistencies and typing.
 
 -   To ignore lint warnigs from **flake8**, see [Ignore certain lint warnings](#ignore-certain-lint-warnings).
 -   You can add or remove pre-commit checks by simply deleting relevant lines in the `.pre-commit-config.yaml` file.
-    Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` or pre-commit
-    specific config files, such as `.prettierrc.yml` for **prettier** and `.flake8` for **flake8**.
+    Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` or tool-specific
+    config files, such as `.prettierrc.yml` for **prettier** and `.flake8` for **flake8**.
 
-### Tutorials with nbsphinx and jupyter notebooks
+### API design
 
-The documentation is set-up to render jupyter notebooks stored in the `docs/notebooks` directory using [nbsphinx][].
-Currently, only fully executed notebooks in `.ipynb` format are supported. It is your reponsibility to update
-and re-run the notebook whenever necessary.
+Scverse ecosystem packages should operate on [AnnData][] and/or [MuData][] datastructures and typically use an API
+as originally [introduced by scanpy][scanpy-api] with the following submodules:
 
-If you are interested in automatically running notebooks as part of the continuous integration, please check
-out [this feature request](https://github.com/scverse/cookiecutter-scverse/issues/40) in the `cookiecutter-scverse`
-repository.
+-   `pp` for preprocessing
+-   `tl` for tools (that, compared to `pp` generate interpretable output, often associated with a corresponding plotting
+    function)
+-   `pl` for plotting functions
 
-[nbsphinx]: https://github.com/spatialaudio/nbsphinx
+You may add additional submodules as appropriate. While we encourage to follow a scanpy-like API for ecosystem packages,
+there may also be good reasons to choose a different approach, e.g. using an object-oriented API.
+
+[scanpy-api]: https://scanpy.readthedocs.io/en/stable/usage-principles.html
 
 ### Ignore certain lint warnings
 
@@ -118,8 +122,8 @@ for errors in Python files, including stylistic errors.
 
 In some cases it might overshoot and you may have good reasons to ignore certain warnings.
 
-To ignore an specific error on a per-case basis, you can add a commeng `# noqa` to the offending line. You can also
-specify the error id to ignore with e.g. `# noqa: E731`. Check the [flake8 guide][] for reference.
+To ignore an specific error on a per-case basis, you can add a comment `# noqa` to the offending line. You can also
+specify the error ID to ignore, with e.g. `# noqa: E731`. Check the [flake8 guide][] for reference.
 
 Alternatively, you can disable certain error messages for the entire project. To do so, edit the `.flake8`
 file in the root of the repository. Add one line per linting code you wish to ignore and don't forget to add a comment.
@@ -137,8 +141,8 @@ W504
 
 ### Using VCS-based versioning
 
-By default, the template uses hard-coded version numbers that are set in `pyproject.toml` and managed with
-[bump2version](#making-a-release). If you prefer to have your project automatically infer version numbers from git
+By default, the template uses hard-coded version numbers that are set in `pyproject.toml` and [managed with
+bump2version](#making-a-release). If you prefer to have your project automatically infer version numbers from git
 tags, it is straightforward to switch to vcs-based versioning using [hatch-vcs][].
 
 In `pyproject.toml` add the following changes, and you are good to go!
@@ -189,8 +193,8 @@ to the [scanpy developer guide][].
 
 ### Installing dev dependencies
 
-In addition to the packages needed to _use_ this package, you need additional python packages to run tests and building
-the documentation. It's easy to install them using `pip`:
+In addition to the packages needed to _use_ this package, you need additional python packages to _run tests_ and _build
+the documentation_. It's easy to install them using `pip`:
 
 ```bash
 pip install "{{ cookiecutter.project_name }}[dev,test,doc]"
@@ -227,21 +231,6 @@ and [prettier][prettier-editors].
 [black-editors]: https://black.readthedocs.io/en/stable/integrations/editors.html
 [prettier-editors]: https://prettier.io/docs/en/editors.html
 
-### API design
-
-Scverse ecosystem packages should operate on [AnnData][] and/or [MuData][] datastructures and typically use an API
-as originally [introduced by scanpy][scanpy-api] with the following submodules:
-
--   `pp` for preprocessing
--   `tl` for tools (that, compared to `pp` generate interpretable output, often associated with a corresponding plotting
-    function)
--   `pl` for plotting functions
-
-You may add additional submodules as appropriate. While we encourage to follow a scanpy-like API for ecosystem packages,
-there may also be good reasons to choose a differnt approach, e.g. using an object-oriented API.
-
-[scanpy-api]: https://scanpy.readthedocs.io/en/stable/usage-principles.html
-
 ### Writing tests
 
 This package uses the [pytest][] for automated testing. Please [write tests][scanpy-test-docs] for every function added
@@ -254,7 +243,7 @@ command line by executing
 pytest
 ```
 
-in the root of the repository.
+in the root of the repository. Continuous integration will automatically run the tests on all pull requests.
 
 [scanpy-test-docs]: https://scanpy.readthedocs.io/en/latest/dev/testing.html#writing-tests
 
@@ -312,6 +301,18 @@ Please write documentation for your package. This project uses [sphinx][] with t
 
 See the [scanpy developer docs](https://scanpy.readthedocs.io/en/latest/dev/documentation.html) for more information
 on how to write documentation.
+
+### Tutorials with nbsphinx and jupyter notebooks
+
+The documentation is set-up to render jupyter notebooks stored in the `docs/notebooks` directory using [nbsphinx][].
+Currently, only notebooks in `.ipynb` format are supported that will be included with both their input and output cells.
+It is your reponsibility to update and re-run the notebook whenever necessary.
+
+If you are interested in automatically running notebooks as part of the continuous integration, please check
+out [this feature request](https://github.com/scverse/cookiecutter-scverse/issues/40) in the `cookiecutter-scverse`
+repository.
+
+[nbsphinx]: https://github.com/spatialaudio/nbsphinx
 
 #### Hints
 
