@@ -50,9 +50,9 @@ Your repository is now ready. However, to use all features of the template you w
 online services. Clicking on the links will take you to the respective sections of the developer documentation.
 The developer documentation is also shipped as part of the template in `docs/developer_docs.md`.
 
-1.  [pre-commit.ci] to check for inconsistencies and to enforce a code style
-2.  [readthedocs.org] to build and host documentation
-3.  [codecov] to generate test coverage reports
+1.  [pre-commit.ci][setup-pre-commit] to check for inconsistencies and to enforce a code style
+2.  [readthedocs.org][setup-rtd] to build and host documentation
+3.  [codecov][setup-codecov] to generate test coverage reports
 
 ### Write tests
 

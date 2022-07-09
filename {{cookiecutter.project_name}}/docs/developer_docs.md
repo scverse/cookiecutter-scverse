@@ -37,7 +37,7 @@ In brief, you need to:
 
 ### Pre-commit checks
 
-[Pre-commit](https://pre-commit.com/) checks are fast programs that
+[Pre-commit][] checks are fast programs that
 check code for errors, inconsistencies and code styles, before the code
 is committed.
 
@@ -167,6 +167,8 @@ In `pyproject.toml` add the following changes, and you are good to go!
  omit = [
 ```
 
+Don't forget to update the [Making a release section](#making-a-release) in this document accordingly, after you are done!
+
 [hatch-vcs]: https://pypi.org/project/hatch-vcs/
 
 ### Template sync with _cookietemple_
@@ -182,38 +184,133 @@ Scanpy provides extensive [developer documentation][scanpy developer guide], mos
 This document will not reproduce the entire content from there. Instead, it aims at summarizing the most important
 information to get you started on contributing.
 
-### Getting set-up
-
 We assume that you are already familiar with git and with making pull requests on GitHub. If not, please refer
 to the [scanpy developer guide][].
 
+### Installing dev dependencies
+
+In addition to the packages needed to _use_ this package, you need additional python packages to run tests and building
+the documentation. It's easy to install them using `pip`:
+
+```bash
+pip install "{{ cookiecutter.project_name }}[dev,test,doc]"
+```
+
 ### Code-style
 
-TODO run pre-commit locally
+This template uses [pre-commit][] to enforce consistent code-styles. On every commit, pre-commit checks will either
+automatically fix issues with the code, or raise an error message. See [pre-commit checks](#pre-commit-checks) for
+a full list of checks enabled for this repository.
 
-### scverse API
+To enable pre-commit locally, simply run
+
+```bash
+pre-commit install
+```
+
+in the root of the repository. Pre-commit will automatically download all dependencies when it is run for the first time.
+
+Alternatively, you can rely on the [pre-commit.ci][] service enabled on GitHub. If you didn't run `pre-commit` before
+pushing changes to GitHub it will automatically commit fixes to your pull request, or show an error message.
+
+If pre-commit.ci added a commit on a branch you still have been working on locally, simply use
+
+```bash
+git pull --rebase
+```
+
+to integrate the changes into yours.
+
+Finally, most editors have an _autoformat on save_ feature. Consider enabling this option for [black][black-editors]
+and [prettier][prettier-editors].
+
+[black-editors]: https://black.readthedocs.io/en/stable/integrations/editors.html
+[prettier-editors]: https://prettier.io/docs/en/editors.html
+
+### API design
+
+Scverse ecosystem packages should operate on [AnnData][] and/or [MuData][] datastructures and typically use an API
+as originally [introduced by scanpy][scanpy-api] with the following submodules:
+
+-   `pp` for preprocessing
+-   `tl` for tools (that, compared to `pp` generate interpretable output, often associated with a corresponding plotting
+    function)
+-   `pl` for plotting functions
+
+You may add additional submodules as appropriate. While we encourage to follow a scanpy-like API for ecosystem packages,
+there may also be good reasons to choose a differnt approach, e.g. using an object-oriented API.
+
+[scanpy-api]: https://scanpy.readthedocs.io/en/stable/usage-principles.html
 
 ### Writing tests
 
-TODO run tests locally
+This package uses the [pytest][] for automated testing. Please [write tests][scanpy-test-docs] for every function added
+to the package.
+
+Most IDEs integrate with pytest and provide a GUI to run tests. Alternatively, you can run all tests from the
+command line by executing
+
+```bash
+pytest
+```
+
+in the root of the repository.
+
+[scanpy-test-docs]: https://scanpy.readthedocs.io/en/latest/dev/testing.html#writing-tests
 
 ### Making a release
 
--   semver
+#### Updating the version number
 
-### Upload on PyPI
+Before making a release, you need to update the version number. Please adhere to [Semantic Versioning][semver], in brief
 
-TODO
+> Given a version number MAJOR.MINOR.PATCH, increment the:
+>
+> 1.  MAJOR version when you make incompatible API changes,
+> 2.  MINOR version when you add functionality in a backwards compatible manner, and
+> 3.  PATCH version when you make backwards compatible bug fixes.
+>
+> Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
+
+We use [bump2version][] to automatically update the version number in all places and automatically create a git tag.
+Run one of the following commands in the root of the repository
+
+```bash
+bump2version patch
+bump2version minor
+bump2version major
+```
+
+Once you are done, run
+
+```
+git push --tags
+```
+
+to publish the created tag on GitHub.
+
+[bump2version]: https://github.com/c4urself/bump2version
+
+#### Upload on PyPI
+
+Please follow the [Python packaging tutorial][].
+
+It is possible to automate this with GitHub actions, see also [this feature request][pypi-feature-request]
+in the cookiecutter-scverse template.
+
+[python packaging tutorial]: https://packaging.python.org/en/latest/tutorials/packaging-projects/#generating-distribution-archives
+[pypi-feature-request]: https://github.com/scverse/cookiecutter-scverse/issues/88
 
 ### Writing documentation
+
+Please write documentation for your package. This project uses [sphinx]
 
 -   update intersphinx mappings
 -   ignore warnings
 
-### Building the docs
+#### Building the docs locally
 
-```
-pip install -e ".[dev,doc,test]"
+```bash
 cd docs
 make html
 open _build/html/index.html
@@ -228,20 +325,8 @@ open _build/html/index.html
 [readthedocs.org]: https://readthedocs.org/
 [nbshpinx]: https://github.com/spatialaudio/nbsphinx
 [jupytext]: https://jupytext.readthedocs.io/en/latest/
-
-<!--
-
-TODO
-
--   tutorials
-
-    -   This repository is currently set-up for including jupyter notebooks in ipynb format _including outputs_.
-        We are thinking about adding CI builds for tutorials in the future, but this can be challenging depending on the resource requiresments to build the tutorials. See the discussion at <> if you are interested in this feature.
-
-
-Take inspirations from the scanpy, scvi and muon developer guides!
-
-TODO: write developer guide first, then docs of the template!
-
-
--->
+[pre-commit]: https://pre-commit.com/
+[anndata]: https://github.com/scverse/anndata
+[mudata]: https://github.com/scverse/mudata
+[pytest]: https://docs.pytest.org/
+[semver]: https://semver.org/
