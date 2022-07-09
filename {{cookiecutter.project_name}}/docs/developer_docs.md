@@ -94,9 +94,7 @@ The following pre-commit checks for errors, inconsistencies and typing.
 
 #### Notes on pre-commit checks
 
--   **flake8**: to ignore errors, you can add a comment `# noqa` to the offending line.
-    You can also specify the error id to ignore with e.g. `# noqa: E731`.
-    Check [flake8 guide](https://flake8.pycqa.org/en/3.1.1/user/ignoring-errors.html) for reference.
+-   To ignore lint warnigs from **flake8**, see [Ignore certain lint warnings](#ignore-certain-lint-warnings).
 -   You can add or remove pre-commit checks by simply deleting relevant lines in the `.pre-commit-config.yaml` file.
     Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` or pre-commit
     specific config files, such as `.prettierrc.yml` for **prettier** and `.flake8` for **flake8**.
@@ -111,12 +109,19 @@ If you are interested in automatically running notebooks as part of the continuo
 out [this feature request](https://github.com/scverse/cookiecutter-scverse/issues/40) in the `cookiecutter-scverse`
 repository.
 
+[nbsphinx]: https://github.com/spatialaudio/nbsphinx
+
 ### Ignore certain lint warnings
 
 The [pre-commit checks](#pre-commit-checks) include [flake8](https://flake8.pycqa.org/en/latest/) which checks
 for errors in Python files, including stylistic errors.
 
-In some cases it might overshoot and you may have good reasons to ignore certain warnings. To do so, edit the `.flake8`
+In some cases it might overshoot and you may have good reasons to ignore certain warnings.
+
+To ignore an specific error on a per-case basis, you can add a commeng `# noqa` to the offending line. You can also
+specify the error id to ignore with e.g. `# noqa: E731`. Check the [flake8 guide][] for reference.
+
+Alternatively, you can disable certain error messages for the entire project. To do so, edit the `.flake8`
 file in the root of the repository. Add one line per linting code you wish to ignore and don't forget to add a comment.
 
 ```toml
@@ -127,6 +132,8 @@ W503
 W504
 ...
 ```
+
+[flake8 guide]: https://flake8.pycqa.org/en/3.1.1/user/ignoring-errors.html
 
 ### Using VCS-based versioning
 
