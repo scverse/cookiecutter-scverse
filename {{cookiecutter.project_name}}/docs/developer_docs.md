@@ -303,10 +303,22 @@ in the cookiecutter-scverse template.
 
 ### Writing documentation
 
-Please write documentation for your package. This project uses [sphinx]
+Please write documentation for your package. This project uses [sphinx][] with the following features:
 
--   update intersphinx mappings
--   ignore warnings
+-   the [myst][] extension allows to write documentation in markdown/Markedly Structured Text
+-   [Numpy-style docstrings][numpydoc] (through the [napoloen][numpydoc-napoleon] extension).
+-   Jupyter notebooks as tutorials through [nbsphinx][] (See [Tutorials with nbsphinx](#tutorials-with-nbsphinx-and-jupyter-notebooks))
+-   [Sphinx autodoc typehints][], to automatically reference annotated input and output types
+
+See the [scanpy developer docs](https://scanpy.readthedocs.io/en/latest/dev/documentation.html) for more information
+on how to write documentation.
+
+#### Hints
+
+-   If you refer to objects from other packages, please add an entry to `intersphinx_mapping` in `docs/conf.py`. Only
+    if you do so can sphinx automatically create a link to the external documentation.
+-   If building the documentation fails because of a missing link that is outside your control, you can add an entry to
+    the `nitpick_ignore` list in `docs/conf.py`
 
 #### Building the docs locally
 
@@ -330,3 +342,8 @@ open _build/html/index.html
 [mudata]: https://github.com/scverse/mudata
 [pytest]: https://docs.pytest.org/
 [semver]: https://semver.org/
+[sphinx]: https://www.sphinx-doc.org/en/master/
+[myst]: https://myst-parser.readthedocs.io/en/latest/intro.html
+[numpydoc-napoleon]: https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html
+[numpydoc]: https://numpydoc.readthedocs.io/en/latest/format.html
+[sphinx autodoc typehints]: https://github.com/tox-dev/sphinx-autodoc-typehints
