@@ -1,23 +1,27 @@
 # Scverse Cookiecutter Template
 
-TODO: badges
+[![Test](https://github.com/scverse/cookiecutter-scverse/actions/workflows/test.yaml/badge.svg)](https://github.com/scverse/cookiecutter-scverse/actions/workflows/test.yaml)
 
 The purpose of this template is to get you started quickly building a best-practice python library for a [scverse][] ecosystem package.
 Ecosystem packages are independent software libraries that interact with scverse core packages and depend on [anndata][] and [mudata][] data structures.
 
-TODO: link to instance repo
+Please check out the
+
+-   [example repo](https://github.com/scverse/cookiecutter-scverse-instance) and the
+-   [example documentation](https://cookiecutter-scverse-instance.readthedocs.io/en/latest/)
+
+that are automatically generated and kept in sync with this template.
 
 ## Features
 
+-   automated testing with [pytest][]
 -   continuous integration using GitHub actions.
--   [pre-commit][] checks
--   tutorials built with [nbsphinx][]
 -   documentation hosted by [readthedocs][]
--   [flit][] as build system
--   issue templates
--   [bump2version][]
-
-TODO complete list and explain what the features are doing
+-   coverage tests with [codecov][]
+-   [pre-commit][] checks for code style and consistency
+-   tutorials with [nbsphinx][] and jupyter notebooks
+-   issue templates for better bug reports and feature requests
+-   [bump2version][] for managing releases
 
 ## Getting started
 
@@ -40,7 +44,7 @@ Now create the project and follow the prompts:
 cookiecutter https://github.com/scverse/cookiecutter-scverse
 ```
 
-This will create a git repository with a filed out template in it.
+This will create a git repository generated from the template.
 Now `cd` into the newly created directory and make the initial commit!
 Don't forget to create a repository on GitHub and upload your project.
 
@@ -54,10 +58,6 @@ The developer documentation is also shipped as part of the template in `docs/dev
 2.  [readthedocs.org][setup-rtd] to build and host documentation
 3.  [codecov][setup-codecov] to generate test coverage reports
 
-### Write tests
-
-TODO
-
 All CI checks should pass, you are ready to start developing your new tool!
 
 ### Customizations
@@ -66,15 +66,19 @@ Further instructions on using this template can be found in the contributing gui
 
 ### Committment
 
-We expect developers of ecosystem packages to
+We expect developers of scverse ecosystem packages to
 
--   write unit tests
--   provide documentation, including tutorials where applicable
+-   [write unit tests][write-tests]
+-   [provide documentation][write-docs], including tutorials where applicable
 -   support users through github and the [scverse discourse][]
 
 <!-- links -->
 
-[flit]: https://flit.pypa.io/en/latest/
+[setup-pre-commit]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#pre-commit-checks
+[setup-rtd]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#documentation-on-readthedocs
+[setup-codecov]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#coverage-tests-with-codecov
+[write-tests]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#writing-tests
+[write-docs]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#writing-documentation
 [readthedocs]: https://readthedocs.org/
 [nbsphinx]: https://github.com/spatialaudio/nbsphinx
 [pre-commit]: https://pre-commit.com/
@@ -84,3 +88,4 @@ We expect developers of ecosystem packages to
 [mudata]: https://muon.readthedocs.io/en/latest/notebooks/quickstart_mudata.html
 [codecov]: https://about.codecov.io/
 [scverse discourse]: https://discourse.scverse.org/
+[pytest]: https://docs.pytest.org
