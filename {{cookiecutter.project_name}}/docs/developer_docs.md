@@ -175,13 +175,6 @@ Don't forget to update the [Making a release section](#making-a-release) in this
 
 [hatch-vcs]: https://pypi.org/project/hatch-vcs/
 
-### Template sync with _cookietemple_
-
-TODO
-
-<!--
- We use cookietemple to keep your package in sync with the template. A bot will make a pull request to your repository if we update the template. Like that you may benefit from new features or if we fix the build system. -->
-
 ## Contributing guide
 
 Scanpy provides extensive [developer documentation][scanpy developer guide], most of which applies to this repo, too.
