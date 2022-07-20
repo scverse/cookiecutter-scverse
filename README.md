@@ -30,7 +30,7 @@ and how to customize it for your needs.
 
 ### Install dependencies
 
-You need `git >=2.38` and `python >=3.8`. In addition you need to install the following Python dependencies:
+You need `git >=2.28` and `python >=3.8`. In addition you need to install the following Python dependencies:
 
 ```bash
 pip install cookiecutter pre-commit
