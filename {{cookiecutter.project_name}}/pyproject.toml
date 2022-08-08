@@ -25,6 +25,7 @@ dependencies = ["anndata"]
 dev = [
     # CLI for bumping the version number
     "bump2version",
+    "pre-commit"
 ]
 doc = [
     "sphinx>=4",
@@ -34,7 +35,7 @@ doc = [
     "scanpydoc[typehints]>=0.7.4",
     # For notebooks
     "nbsphinx",
-    "ipython>=8.3.0"
+    "ipykernel"
 ]
 test = [
     "pytest",
@@ -51,11 +52,7 @@ omit = [
 testpaths = ["tests"]
 xfail_strict = true
 addopts = [
-    "-Werror",  # if 3rd party libs raise DeprecationWarnings, just use filterwarnings below
     "--import-mode=importlib",  # allow using test files with same name
-]
-filterwarnings = [
-    # "ignore:.*U.*mode is deprecated:DeprecationWarning",
 ]
 
 [tool.isort]
