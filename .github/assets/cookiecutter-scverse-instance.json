@@ -1,0 +1,13 @@
+{
+    "cookiecutter": {
+        "project_name": "cookiecutter-scverse-instance",
+        "package_name": "cookiecutter_scverse_instance",
+        "project_description": "An example repo generated from the `cookiecutter-scverse` template. Feel free to look around this repo and check out the docs to find out if the template works for you!",
+        "author_full_name": "scverse community",
+        "author_email": "core-team@scverse.org",
+        "github_user": "scverse",
+        "project_repo": "https://github.com/scverse/cookiecutter-scverse-instance",
+        "license": "BSD 3-Clause License",
+        "_copy_without_render": [".github/workflows/**.yaml"]
+    }
+}

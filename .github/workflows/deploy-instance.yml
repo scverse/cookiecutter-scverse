@@ -12,7 +12,7 @@ jobs:
             INSTANCE_REPO: "TEMPLATE_INSTANCE"
             # directory in which cookiecuter generates the new repository
             INSTANCE_GENERATED: "TEMPLATE_INSTANCE_GENERATED"
-            PROJECT_NAME: "project-name"
+            PROJECT_NAME: "cookiecutter-scverse-instance"
             GH_TOKEN: ${{ secrets.BOT_GH_TOKEN }} # for gh cli
 
         steps:
@@ -42,7 +42,9 @@ jobs:
 
             - name: Build from template
               run: |
-                  cookiecutter --output-dir $INSTANCE_GENERATED --no-input .
+                  cookiecutter --output-dir $INSTANCE_GENERATED \
+                    --replay-file .github/assets/cookiecutter-scverse-instance.json \
+                    .
 
             - name: Transfer changes to instance repo
               run: |
@@ -101,7 +103,7 @@ jobs:
                       --base main \
                       --head $SISTER_PR_BRANCH \
                       --body "created automatically" \
-                      --title "Update instance repo" \
+                      --title "Update instance repo (PR ${{ github.event.pull_request.number }})" \
                       -R $INSTANCE_REPO_GITHUB
 
                   # now an ID should be available

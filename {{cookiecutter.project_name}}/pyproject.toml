@@ -1,14 +1,15 @@
 [build-system]
-build-backend = "flit_core.buildapi"
-requires = [
-    "flit_core >=3.4,<4",
-    "importlib_metadata>=0.7; python_version < '3.8'",
-]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
 
 
 [project]
 name = "{{ cookiecutter.package_name }}"
+version = "0.0.1"
 description = "{{ cookiecutter.project_description }}"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
 authors = [
     {name = "{{ cookiecutter.author_full_name }}"},
 ]
@@ -18,10 +19,6 @@ maintainers = [
 urls.Documentation = "https://{{ cookiecutter.project_name }}.readthedocs.io/"
 urls.Source = "{{ cookiecutter.project_repo }}"
 urls.Home-page = "{{ cookiecutter.project_repo }}"
-version = "0.0.1"
-requires-python = ">=3.8"
-license = {file = "LICENSE"}
-readme = "README.md"
 dependencies = [
     "anndata",
     # for debug logging (referenced from the issue template)
@@ -30,8 +27,9 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    # dev version generation
+    # CLI for bumping the version number
     "bump2version",
+    "pre-commit"
 ]
 doc = [
     "sphinx>=4",
@@ -41,7 +39,7 @@ doc = [
     "scanpydoc[typehints]>=0.7.4",
     # For notebooks
     "nbsphinx",
-    "ipython>=8.3.0"
+    "ipykernel"
 ]
 test = [
     "pytest",
@@ -58,11 +56,7 @@ omit = [
 testpaths = ["tests"]
 xfail_strict = true
 addopts = [
-    "-Werror",  # if 3rd party libs raise DeprecationWarnings, just use filterwarnings below
     "--import-mode=importlib",  # allow using test files with same name
-]
-filterwarnings = [
-    # "ignore:.*U.*mode is deprecated:DeprecationWarning",
 ]
 
 [tool.isort]
