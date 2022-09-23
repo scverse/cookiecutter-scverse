@@ -33,15 +33,19 @@ and how to customize it for your needs.
 You need `git >=2.28` and `python >=3.8`. In addition you need to install the following Python dependencies:
 
 ```bash
-pip install cookiecutter pre-commit
+pip install cruft pre-commit
 ```
 
 ### Create the project
 
-Now create the project and follow the prompts:
+We are using [cruft](https://github.com/cruft/cruft) to initialize the project from the template. Cruft
+is fully compatible with [cookiecutter](https://github.com/cookiecutter/cookiecutter), but enables automatic
+updates to your project whenever a new template version is released.
+
+To create the project, run the following command and follow the prompts:
 
 ```bash
-cookiecutter https://github.com/scverse/cookiecutter-scverse
+cruft create https://github.com/scverse/cookiecutter-scverse
 ```
 
 This will create a git repository generated from the template.
