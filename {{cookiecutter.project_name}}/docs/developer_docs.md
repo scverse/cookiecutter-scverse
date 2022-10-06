@@ -257,8 +257,9 @@ Additionally, the following hints may be useful to work with the template sync:
 
 -   You can trigger the sync manually by navigating to `Actions` -> `Sync Template` in your GitHub repository
 -   If you want to ignore certain files from the template update, you can add them to the `skip` section in the
-    `.cruft.json` file in the root of your repository. More details are described in the [cruft documentation][cruft-update-proejct].
--   To disable the sync entirely, simply remove the file `.github/workflows/sync.yaml`
+    `.cruft.json` file in the root of your repository. More details are described in the
+    [cruft documentation][cruft-update-proejct].
+-   To disable the sync entirely, simply remove the file `.github/workflows/sync.yaml`.
 
 [cruft]: https://cruft.github.io/cruft/
 [cruft-update-project]: https://cruft.github.io/cruft/#updating-a-project
