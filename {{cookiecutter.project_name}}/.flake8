@@ -57,4 +57,3 @@ rst-substitutions =
     version,
 extend-ignore =
     RST307,
-
