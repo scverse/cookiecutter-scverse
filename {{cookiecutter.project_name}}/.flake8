@@ -16,8 +16,6 @@ ignore =
     E231
     # continuation line over-indented for hanging indent -> black does not adhere to PEP8
     E126
-    # whitespace before ':' -> black does not adhere to PEP8
-    E203
     # too many leading '#' for block comment -> this is fine for indicating sections
     E262
     # Do not assign a lambda expression, use a def -> lambda expression assignments are convenient
