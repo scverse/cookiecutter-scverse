@@ -41,7 +41,7 @@ per-file-ignores =
     tests/*: D
     */__init__.py: F401
 extend-immutable-calls =
-    # If you see B008 but know 
+    # Add functions returning immutable values here to avoid B008
     pathlib.Path
     Path
 rst-roles =
