@@ -14,5 +14,8 @@
         "GNU General Public License Version 3",
         "Unlicense"
     ],
-    "_copy_without_render": [".github/workflows/**.yaml"]
+    "_copy_without_render": [
+        ".github/workflows/**.yaml",
+        "docs/_templates/autosummary/*.rst"
+    ]
 }
