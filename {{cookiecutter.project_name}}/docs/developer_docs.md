@@ -306,8 +306,6 @@ If you are interested in automatically running notebooks as part of the continuo
 out [this feature request](https://github.com/scverse/cookiecutter-scverse/issues/40) in the `cookiecutter-scverse`
 repository.
 
-[myst-nb]: https://myst-nb.readthedocs.io/en/latest/
-
 #### Hints
 
 -   If you refer to objects from other packages, please add an entry to `intersphinx_mapping` in `docs/conf.py`. Only
