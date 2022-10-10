@@ -165,6 +165,11 @@ html_theme = "sphinx_book_theme"
 html_static_path = ["_static"]
 html_title = project_name
 
+html_theme_options = {
+    "repository_url": github_repo,
+    "use_repository_button": True,
+}
+
 pygments_style = "default"
 
 nitpick_ignore = [
