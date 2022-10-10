@@ -8,6 +8,9 @@
         "github_user": "scverse",
         "project_repo": "https://github.com/scverse/cookiecutter-scverse-instance",
         "license": "BSD 3-Clause License",
-        "_copy_without_render": [".github/workflows/**.yaml"]
+        "_copy_without_render": [
+            ".github/workflows/**.yaml",
+            "docs/_templates/autosummary/**.rst"
+        ]
     }
 }
