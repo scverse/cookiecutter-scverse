@@ -35,7 +35,7 @@ doc = [
     "sphinx-autodoc-typehints",
     # For notebooks
     "nbsphinx",
-    "ipykernel"
+    "ipykernel",
     "sphinx-copybutton",
 ]
 test = [
