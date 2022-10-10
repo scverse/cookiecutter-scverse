@@ -36,6 +36,7 @@ doc = [
     # For notebooks
     "nbsphinx",
     "ipykernel"
+    "sphinx-copybutton",
 ]
 test = [
     "pytest",

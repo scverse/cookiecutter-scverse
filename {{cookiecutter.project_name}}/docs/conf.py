@@ -22,8 +22,9 @@ sys.path.insert(0, str(HERE / "extensions"))
 
 # -- Project information -----------------------------------------------------
 
-info = metadata("{{cookiecutter.project_name}}")
-project = info["Name"]
+project_name = "{{cookiecutter.project_name}}"
+info = metadata(project_name)
+package_name = info["Name"]
 author = info["Author"]
 copyright = f"{datetime.now():%Y}, {author}."
 version = info["Version"]
@@ -127,10 +128,8 @@ if not git_ref or re.search(r"[\^~]", git_ref):
         git_ref = "main"
 
 # https://github.com/DisnakeDev/disnake/blob/7853da70b13fcd2978c39c0b7efa59b34d298186/docs/conf.py#L192
-# If package name differs from the project name, set it here
-package_name = project
-github_repo = "https://github.com/" + html_context["github_user"] + "/" + project
-_project_module_path = os.path.dirname(importlib.util.find_spec(package_name).origin)  # type: ignore
+github_repo = "https://github.com/" + html_context["github_user"] + "/" + package_name
+_project_module_path = os.path.dirname(importlib.util.find_spec(project_name).origin)  # type: ignore
 
 
 def linkcode_resolve(domain, info):
@@ -153,7 +152,7 @@ def linkcode_resolve(domain, info):
         return None
 
     path = f"{path}#L{lineno}-L{lineno + len(src) - 1}"
-    return f"{github_repo}/blob/{git_ref}/{package_name}/{path}"
+    return f"{github_repo}/blob/{git_ref}/src/{project_name}/{path}"
 
 
 # -- Options for HTML output -------------------------------------------------
