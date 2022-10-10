@@ -106,6 +106,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints"]
 
 # -- Linkcode settings -------------------------------------------------
 
+
 def git(*args):
     """Run a git command and return the output."""
     return subprocess.check_output(["git", *args]).strip().decode()
