@@ -152,7 +152,7 @@ def linkcode_resolve(domain, info):
         return None
 
     path = f"{path}#L{lineno}-L{lineno + len(src) - 1}"
-    return f"{github_repo}/blob/{git_ref}/src/{project_name}/{path}"
+    return f"{github_repo}/blob/{git_ref}/src/{package_name}/{path}"
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -162,7 +162,7 @@ def linkcode_resolve(domain, info):
 #
 html_theme = "sphinx_book_theme"
 html_static_path = ["_static"]
-html_title = project
+html_title = project_name
 
 pygments_style = "default"
 
