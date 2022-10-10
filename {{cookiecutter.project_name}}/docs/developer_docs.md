@@ -20,6 +20,7 @@ On the RTD dashboard choose "Import a Project" and follow the instructions to ad
     that break the documentation. To do so, got to `Admin -> Advanced Settings`, check the
     `Build pull requests for this projects` option, and click `Save`. For more information, please refer to
     the [official RTD documentation](https://docs.readthedocs.io/en/stable/pull-requests.html).
+-   If you find the RTD builds are failing, you can disable the `fail_on_warning` option in `.readthedocs.yaml`.
 
 ### Coverage tests with _Codecov_
 
