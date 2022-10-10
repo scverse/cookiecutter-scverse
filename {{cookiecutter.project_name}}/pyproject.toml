@@ -28,8 +28,8 @@ dev = [
     "pre-commit"
 ]
 doc = [
-    "sphinx>=4",
-    "sphinx-book-theme",
+    "sphinx>=5",
+    "sphinx-book-theme>0.3.3",
     "myst-nb",
     "sphinxcontrib-bibtex>=1.0.0",
     "sphinx-autodoc-typehints",
