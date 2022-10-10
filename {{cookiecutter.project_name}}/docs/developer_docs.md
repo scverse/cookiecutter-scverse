@@ -290,15 +290,15 @@ Please write documentation for your package. This project uses [sphinx][] with t
 
 -   the [myst][] extension allows to write documentation in markdown/Markedly Structured Text
 -   [Numpy-style docstrings][numpydoc] (through the [napoloen][numpydoc-napoleon] extension).
--   Jupyter notebooks as tutorials through [nbsphinx][] (See [Tutorials with nbsphinx](#tutorials-with-nbsphinx-and-jupyter-notebooks))
+-   Jupyter notebooks as tutorials through [myst-nb][] (See [Tutorials with myst-nb](#tutorials-with-myst-nb-and-jupyter-notebooks))
 -   [Sphinx autodoc typehints][], to automatically reference annotated input and output types
 
 See the [scanpy developer docs](https://scanpy.readthedocs.io/en/latest/dev/documentation.html) for more information
 on how to write documentation.
 
-### Tutorials with nbsphinx and jupyter notebooks
+### Tutorials with myst-nb and jupyter notebooks
 
-The documentation is set-up to render jupyter notebooks stored in the `docs/notebooks` directory using [nbsphinx][].
+The documentation is set-up to render jupyter notebooks stored in the `docs/notebooks` directory using [myst-nb][].
 Currently, only notebooks in `.ipynb` format are supported that will be included with both their input and output cells.
 It is your reponsibility to update and re-run the notebook whenever necessary.
 
@@ -306,7 +306,7 @@ If you are interested in automatically running notebooks as part of the continuo
 out [this feature request](https://github.com/scverse/cookiecutter-scverse/issues/40) in the `cookiecutter-scverse`
 repository.
 
-[nbsphinx]: https://github.com/spatialaudio/nbsphinx
+[myst-nb]: https://myst-nb.readthedocs.io/en/latest/
 
 #### Hints
 
@@ -330,7 +330,7 @@ open _build/html/index.html
 [codecov docs]: https://docs.codecov.com/docs
 [pre-commit.ci]: https://pre-commit.ci/
 [readthedocs.org]: https://readthedocs.org/
-[nbshpinx]: https://github.com/spatialaudio/nbsphinx
+[myst-nb]: https://myst-nb.readthedocs.io/en/latest/
 [jupytext]: https://jupytext.readthedocs.io/en/latest/
 [pre-commit]: https://pre-commit.com/
 [anndata]: https://github.com/scverse/anndata
