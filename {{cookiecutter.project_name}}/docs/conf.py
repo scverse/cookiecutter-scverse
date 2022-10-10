@@ -24,7 +24,7 @@ sys.path.insert(0, str(HERE / "extensions"))
 
 project_name = "{{cookiecutter.project_name}}"
 info = metadata(project_name)
-package_name = info["Name"]
+package_name = "{{ cookiecutter.package_name }}"
 author = info["Author"]
 copyright = f"{datetime.now():%Y}, {author}."
 version = info["Version"]
