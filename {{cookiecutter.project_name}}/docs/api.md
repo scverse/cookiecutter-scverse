@@ -34,4 +34,5 @@
     :toctree: generated
 
     pl.basic_plot
+    pl.BasicClass
 ```
