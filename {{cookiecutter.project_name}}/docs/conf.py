@@ -21,7 +21,7 @@ project_name = info["Name"]
 author = info["Author"]
 copyright = f"{datetime.now():%Y}, {author}."
 version = info["Version"]
-repository_url = info["urls.Source"]
+repository_url = "https://github.com/" + "{{cookiecutter.github_user}}" + "/" + project_name
 
 # The full version, including alpha/beta/rc tags
 release = info["Version"]
