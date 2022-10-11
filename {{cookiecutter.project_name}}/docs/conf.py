@@ -18,10 +18,10 @@ sys.path.insert(0, str(HERE / "extensions"))
 
 project_name = "{{cookiecutter.project_name}}"
 info = metadata(project_name)
-package_name = "{{ cookiecutter.package_name }}"
 author = info["Author"]
 copyright = f"{datetime.now():%Y}, {author}."
 version = info["Version"]
+repository_url = info["urls.Source"]
 
 # The full version, including alpha/beta/rc tags
 release = info["Version"]
@@ -106,9 +106,8 @@ html_theme = "sphinx_book_theme"
 html_static_path = ["_static"]
 html_title = project_name
 
-github_repo = "https://github.com/" + html_context["github_user"] + "/" + project_name
 html_theme_options = {
-    "repository_url": github_repo,
+    "repository_url": repository_url,
     "use_repository_button": True,
 }
 
