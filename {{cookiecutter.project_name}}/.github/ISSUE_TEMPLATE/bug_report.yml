@@ -24,7 +24,7 @@ body:
       id: repex
       attributes:
           label: Minimal reproducible example
-          description: A code snipped that we can copy&paste to reproduce the bug without having any data
+          description: A code snippet that we can copy&paste to reproduce the bug without having any data
           render: python
           placeholder: |
               import scanpy as sc
