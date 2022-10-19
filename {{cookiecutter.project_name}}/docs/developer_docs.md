@@ -93,6 +93,8 @@ The following pre-commit checks are for errors and inconsistencies:
     -   **check-case-conflict**: check files that would conflict with case-insensitive file systems.
 -   [pyupgrade](https://github.com/asottile/pyupgrade):
     upgrade syntax for newer versions of the language.
+-   **forbid-to-commit**: Make sure that `*.rej` files cannot be commited. These files are created by the
+    [automated template sync](#automated-template-sync) if there's a merge conflict and need to be addressed manually.
 
 #### Notes on pre-commit checks
 
@@ -240,6 +242,32 @@ pytest
 in the root of the repository. Continuous integration will automatically run the tests on all pull requests.
 
 [scanpy-test-docs]: https://scanpy.readthedocs.io/en/latest/dev/testing.html#writing-tests
+
+### Automated template sync
+
+Automated template sync is enabled by default. This means that every night, a GitHub action runs [cruft][] to check
+if a new version of the `scverse-cookiecutter` template got released. If there are any new changes, a pull request
+proposing these changes is created automatically. This helps keeping the repository up-to-date with the latest
+coding standards.
+
+It may happen that a template sync results in a merge conflict. If this is the case a `*.ref` file with the
+diff is created. You need to manually address these changes and remove the `.rej` file when you are done.
+The pull request can only be merged after all `*.rej` files have been removed.
+
+:::{tip}
+The following hints may be useful to work with the template sync:
+
+-   GitHub automatically disables scheduled actions if there has been not activity to the repository for 60 days.
+    You can re-enable or manually trigger the sync by navigating to `Actions` -> `Sync Template` in your GitHub repository.
+-   If you want to ignore certain files from the template update, you can add them to the `[tool.cruft]` section in the
+    `pyproject.toml` file in the root of your repository. More details are described in the
+    [cruft documentation][cruft-update-project].
+-   To disable the sync entirely, simply remove the file `.github/workflows/sync.yaml`.
+
+:::
+
+[cruft]: https://cruft.github.io/cruft/
+[cruft-update-project]: https://cruft.github.io/cruft/#updating-a-project
 
 ### Making a release
 

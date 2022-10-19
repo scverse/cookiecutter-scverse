@@ -33,15 +33,19 @@ and how to customize it for your needs.
 You need `git >=2.28` and `python >=3.8`. In addition you need to install the following Python dependencies:
 
 ```bash
-pip install cookiecutter pre-commit
+pip install cruft pre-commit
 ```
 
 ### Create the project
 
-Now create the project and follow the prompts:
+We are using [cruft](https://github.com/cruft/cruft) to initialize the project from the template. Cruft
+is fully compatible with [cookiecutter](https://github.com/cookiecutter/cookiecutter), but enables automatic
+updates to your project whenever a new template version is released.
+
+To create the project, run the following command and follow the prompts:
 
 ```bash
-cookiecutter https://github.com/scverse/cookiecutter-scverse
+cruft create https://github.com/scverse/cookiecutter-scverse
 ```
 
 This will create a git repository generated from the template.
@@ -71,6 +75,18 @@ We expect developers of scverse ecosystem packages to
 -   [write unit tests][write-tests]
 -   [provide documentation][write-docs], including tutorials where applicable
 -   support users through github and the [scverse discourse][]
+
+## Changelog
+
+See the [release section](https://github.com/scverse/cookiecutter-scverse/releases).
+
+## Releasing a new template version
+
+To release a new version of the template, create a new release
+on the [GitHub release page](https://github.com/scverse/cookiecutter-scverse/releases).
+Choose a tag name of the format `vX.X.X` that adheres to [semantic versioning](https://semver.org/).
+
+Note that when creating a new release, changes will be propagated to packages using this template.
 
 <!-- links -->
 
