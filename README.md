@@ -19,7 +19,7 @@ that are automatically generated and kept in sync with this template.
 -   documentation hosted by [readthedocs][]
 -   coverage tests with [codecov][]
 -   [pre-commit][] checks for code style and consistency
--   tutorials with [nbsphinx][] and jupyter notebooks
+-   tutorials with [myst-nb][] and jupyter notebooks
 -   issue templates for better bug reports and feature requests
 -   [bump2version][] for managing releases
 
@@ -62,7 +62,7 @@ All CI checks should pass, you are ready to start developing your new tool!
 
 ### Customizations
 
-Further instructions on using this template can be found in the contributing guide included in the project.
+Further instructions on using this template can be found in the [dev docs included in the project](https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html).
 
 ### Committment
 
@@ -80,7 +80,7 @@ We expect developers of scverse ecosystem packages to
 [write-tests]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#writing-tests
 [write-docs]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#writing-documentation
 [readthedocs]: https://readthedocs.org/
-[nbsphinx]: https://github.com/spatialaudio/nbsphinx
+[myst-nb]: https://myst-nb.readthedocs.io/
 [pre-commit]: https://pre-commit.com/
 [bump2version]: https://github.com/c4urself/bump2version/
 [scverse]: https://scverse.org/
