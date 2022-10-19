@@ -76,6 +76,18 @@ We expect developers of scverse ecosystem packages to
 -   [provide documentation][write-docs], including tutorials where applicable
 -   support users through github and the [scverse discourse][]
 
+## Changelog
+
+See the [release section](https://github.com/scverse/cookiecutter-scverse/releases).
+
+## Releasing a new template version
+
+To release a new version of the template, create a new release
+on the [GitHub release page](https://github.com/scverse/cookiecutter-scverse/releases).
+Choose a tag name of the format `vX.X.X` that adheres to [semantic versioning](https://semver.org/).
+
+Note that when creating a new release, changes will be propagated to packages using this template.
+
 <!-- links -->
 
 [setup-pre-commit]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#pre-commit-checks
