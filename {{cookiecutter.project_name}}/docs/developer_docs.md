@@ -20,6 +20,7 @@ On the RTD dashboard choose "Import a Project" and follow the instructions to ad
     that break the documentation. To do so, got to `Admin -> Advanced Settings`, check the
     `Build pull requests for this projects` option, and click `Save`. For more information, please refer to
     the [official RTD documentation](https://docs.readthedocs.io/en/stable/pull-requests.html).
+-   If you find the RTD builds are failing, you can disable the `fail_on_warning` option in `.readthedocs.yaml`.
 
 ### Coverage tests with _Codecov_
 
@@ -289,23 +290,21 @@ Please write documentation for your package. This project uses [sphinx][] with t
 
 -   the [myst][] extension allows to write documentation in markdown/Markedly Structured Text
 -   [Numpy-style docstrings][numpydoc] (through the [napoloen][numpydoc-napoleon] extension).
--   Jupyter notebooks as tutorials through [nbsphinx][] (See [Tutorials with nbsphinx](#tutorials-with-nbsphinx-and-jupyter-notebooks))
+-   Jupyter notebooks as tutorials through [myst-nb][] (See [Tutorials with myst-nb](#tutorials-with-myst-nb-and-jupyter-notebooks))
 -   [Sphinx autodoc typehints][], to automatically reference annotated input and output types
 
 See the [scanpy developer docs](https://scanpy.readthedocs.io/en/latest/dev/documentation.html) for more information
 on how to write documentation.
 
-### Tutorials with nbsphinx and jupyter notebooks
+### Tutorials with myst-nb and jupyter notebooks
 
-The documentation is set-up to render jupyter notebooks stored in the `docs/notebooks` directory using [nbsphinx][].
+The documentation is set-up to render jupyter notebooks stored in the `docs/notebooks` directory using [myst-nb][].
 Currently, only notebooks in `.ipynb` format are supported that will be included with both their input and output cells.
 It is your reponsibility to update and re-run the notebook whenever necessary.
 
 If you are interested in automatically running notebooks as part of the continuous integration, please check
 out [this feature request](https://github.com/scverse/cookiecutter-scverse/issues/40) in the `cookiecutter-scverse`
 repository.
-
-[nbsphinx]: https://github.com/spatialaudio/nbsphinx
 
 #### Hints
 
@@ -329,7 +328,7 @@ open _build/html/index.html
 [codecov docs]: https://docs.codecov.com/docs
 [pre-commit.ci]: https://pre-commit.ci/
 [readthedocs.org]: https://readthedocs.org/
-[nbshpinx]: https://github.com/spatialaudio/nbsphinx
+[myst-nb]: https://myst-nb.readthedocs.io/en/latest/
 [jupytext]: https://jupytext.readthedocs.io/en/latest/
 [pre-commit]: https://pre-commit.com/
 [anndata]: https://github.com/scverse/anndata
