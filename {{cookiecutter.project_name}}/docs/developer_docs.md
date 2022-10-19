@@ -258,9 +258,9 @@ The pull request can only be merged after all `*.rej` files have been removed.
 The following hints may be useful to work with the template sync:
 
 -   GitHub automatically disables scheduled actions if there has been not activity to the repository for 60 days.
-    You can re-enable or manually trigger the sync by navigating to `Actions` -> `Sync Template` in your GitHub repository
--   If you want to ignore certain files from the template update, you can add them to the `skip` section in the
-    `.cruft.json` file in the root of your repository. More details are described in the
+    You can re-enable or manually trigger the sync by navigating to `Actions` -> `Sync Template` in your GitHub repository.
+-   If you want to ignore certain files from the template update, you can add them to the `[tool.cruft]` section in the
+    `pyproject.toml` file in the root of your repository. More details are described in the
     [cruft documentation][cruft-update-project].
 -   To disable the sync entirely, simply remove the file `.github/workflows/sync.yaml`.
 
