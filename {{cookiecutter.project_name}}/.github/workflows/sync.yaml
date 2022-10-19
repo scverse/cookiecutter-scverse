@@ -35,7 +35,7 @@ jobs:
                   branch: template-update
                   title: Automated template update from cookiecutter-scverse
                   body: |
-                      A new version of the [scverse cookiecutter template](https://github.com/scverse/cookiecutter-scverse)
+                      A new version of the [scverse cookiecutter template](https://github.com/scverse/cookiecutter-scverse/releases)
                       got released. This PR adds all new changes to your repository and helps to to stay in sync with
                       the latest best-practice template maintained by the scverse team.
 
