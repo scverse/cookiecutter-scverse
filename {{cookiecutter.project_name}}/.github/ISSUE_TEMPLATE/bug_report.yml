@@ -13,41 +13,12 @@ body:
                   available datasets or to share a subset of your data.
 
     - type: textarea
-      id: description
+      id: report
       attributes:
-          label: Description of the bug
+          label: Report
           description: A clear and concise description of what the bug is.
       validations:
           required: true
-
-    - type: textarea
-      id: repex
-      attributes:
-          label: Minimal reproducible example
-          description: A code snippet that we can copy&paste to reproduce the bug without having any data
-          render: python
-          placeholder: |
-              import scanpy as sc
-              adata = sc.datasets.pbmc3k()
-
-              sc.do_something_that_doesnt_work(adata)
-
-    - type: textarea
-      id: stacktrace
-      attributes:
-          label: The error message produced by the code above
-          description: Please paste the entire error message
-          render: pytb
-          placeholder: |
-              ---------------------------------------------------------------------------
-              AssertionError                            Traceback (most recent call last)
-              <ipython-input-5-78750baef17a> in <module>
-              ----> 1 adata = sc.do_something_that_doesnt_work(adata)
-
-              /opt/conda/lib/python3.8/site-packages/scanpy/_preprocessing.py in do_something_that_doesnt_work(adata)
-                  438
-              --> 439     raise AssertionError("Demo function that fails")
-                  440
 
     - type: textarea
       id: versions
