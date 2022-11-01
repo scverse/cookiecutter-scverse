@@ -46,10 +46,11 @@ test = [
     "pytest-cov",
 ]
 
-{%- if cookiecutter.project_name.lower().replace('-', '_') != cookiecutter.package_name -%}
+{% if cookiecutter.project_name.lower().replace('-', '_') != cookiecutter.package_name -%}
 [tool.hatch.build.targets.wheel]
 packages = ['src/{{ cookiecutter.package_name }}']
-{% endif %}
+
+{% endif -%}
 
 [tool.coverage.run]
 source = ["{{ cookiecutter.package_name }}"]
