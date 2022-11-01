@@ -64,6 +64,9 @@ xfail_strict = true
 addopts = [
     "--import-mode=importlib",  # allow using test files with same name
 ]
+pythonpath = [
+    "src"
+]
 
 [tool.isort]
 include_trailing_comma = true
