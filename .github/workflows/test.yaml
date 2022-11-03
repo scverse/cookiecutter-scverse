@@ -39,7 +39,11 @@ jobs:
               run: python -m pip install --upgrade pip wheel cookiecutter pre-commit
             # Build
             - name: Build from template
-              run: cookiecutter --no-input .
+              shell: python
+              run: |
+                from cookiecutter.main import cookiecutter
+                overrides = dict(package_name='${{ matrix.package-name }}')
+                cookiecutter('.', no_input=True, extra_context=overrides)
             # Check
             - name: Run pre-commit
               run: |
