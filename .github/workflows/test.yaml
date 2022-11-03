@@ -18,16 +18,16 @@ jobs:
             matrix:
                 python: ["3.8", "3.10"]
                 os: [ubuntu-latest]
-                project-name: [package-name]
-                # one that matches project-name.lower().replace('-', '_'), one that doesn’t:
-                package-name: [package_name, package_alt]
+                # one that matches "project-name".lower().replace('-', '_'), one that doesn’t:
+                package-name: [project_name, package_alt]
         env:
             PROJECT_ROOT: project-name
 
         steps:
+            # Setup
             - uses: actions/checkout@v2
             - name: Set up Python ${{ matrix.python }}
-              uses: actions/setup-python@v2
+              uses: actions/setup-python@v4
               with:
                   python-version: ${{ matrix.python }}
                   cache: "pip"
@@ -37,8 +37,10 @@ jobs:
               run: sudo apt-get install pandoc
             - name: Install build & check dependencies
               run: python -m pip install --upgrade pip wheel cookiecutter pre-commit
+            # Build
             - name: Build from template
               run: cookiecutter --no-input .
+            # Check
             - name: Run pre-commit
               run: |
                   cd "$PROJECT_ROOT"
@@ -49,6 +51,7 @@ jobs:
                   cd $PROJECT_ROOT
                   pip install ".[doc]"
                   python -c "import {{ matrix.package-name }}"
+            # Docs
             - name: Build the documentation
               env:
                   SPHINXOPTS: -W --keep-going
