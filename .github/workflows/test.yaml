@@ -18,6 +18,9 @@ jobs:
             matrix:
                 python: ["3.8", "3.10"]
                 os: [ubuntu-latest]
+                project-name: [package-name]
+                # one that matches project-name.lower().replace('-', '_'), one that doesn’t:
+                package-name: [package_name, package_alt]
         env:
             PROJECT_ROOT: project-name
 
@@ -27,24 +30,12 @@ jobs:
               uses: actions/setup-python@v2
               with:
                   python-version: ${{ matrix.python }}
-
+                  cache: 'pip'
+                  cache-dependency-path: '**/pyproject.toml'
             - name: Install Ubuntu system dependencies
               if: matrix.os == 'ubuntu-latest'
-              run: |
-                  sudo apt-get install pandoc
-
-            - name: Get pip cache dir
-              id: pip-cache-dir
-              run: |
-                  echo "::set-output name=dir::$(pip cache dir)"
-            - name: Restore pip cache
-              uses: actions/cache@v2
-              with:
-                  path: ${{ steps.pip-cache-dir.outputs.dir }}
-                  key: pip-${{ runner.os }}-${{ env.pythonLocation }}-${{ hashFiles('**/pyproject.toml') }}
-                  restore-keys: |
-                      pip-${{ runner.os }}-${{ env.pythonLocation }}-
-            - name: Install dependencies
+              run: sudo apt-get install pandoc
+            - name: Install build & check dependencies
               run: python -m pip install --upgrade pip wheel cookiecutter pre-commit
             - name: Build from template
               run: cookiecutter --no-input .
@@ -57,7 +48,7 @@ jobs:
               run: |
                   cd $PROJECT_ROOT
                   pip install ".[doc]"
-                  python -c "import project_name"
+                  python -c "import {{ matrix.package-name }}"
             - name: Build the documentation
               env:
                   SPHINXOPTS: -W --keep-going
