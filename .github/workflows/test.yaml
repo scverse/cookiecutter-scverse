@@ -30,8 +30,8 @@ jobs:
               uses: actions/setup-python@v2
               with:
                   python-version: ${{ matrix.python }}
-                  cache: 'pip'
-                  cache-dependency-path: '**/pyproject.toml'
+                  cache: "pip"
+                  cache-dependency-path: "**/pyproject.toml"
             - name: Install Ubuntu system dependencies
               if: matrix.os == 'ubuntu-latest'
               run: sudo apt-get install pandoc
