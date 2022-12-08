@@ -46,7 +46,7 @@ class BasicClass:
         """
         print("Implement a method here.")
         return 0
-    
+
     def my_other_method(self, param: str) -> str:
         """Another basic method.
 
