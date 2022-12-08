@@ -77,3 +77,7 @@ repos:
                 Fix the merge conflicts manually and remove the .rej files.
             language: fail
             files: '.*\.rej$'
+    - repo: https://github.com/PyCQA/doc8
+      rev: v1.0.0
+      hooks:
+          - id: doc8

@@ -106,3 +106,6 @@ skip = [
     "docs/references.md",
     "docs/notebooks/example.ipynb"
 ]
+
+[tool.doc8]
+ignore-path = "/docs/_templates/autosummary/*.rst"
