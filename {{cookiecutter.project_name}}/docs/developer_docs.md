@@ -8,6 +8,62 @@ Welcome to the developer guidelines! This document is split into two parts:
 
 ## Setting up the repository
 
+### First commit
+
+If you are reading this, you should have just completed the repository creation with :
+
+```bash
+cruft create https://github.com/scverse/cookiecutter-scverse
+```
+
+and you should have
+
+```
+cd your-awesome-project
+```
+
+into the new project directory. Now that you have created a new repository locally, the first step is to push it to github. To do this, you'd have to create a **new repository** on github.
+You can follow the instructions directly on [github](https://docs.github.com/en/get-started/quickstart/create-a-repo?tool=webui).
+Since `cruft` already populated the local repository of your project with all the necessary files, we suggest to _NOT_ initialize the repository with a `README.md` file or `.gitignore`, because you might encounter git conflicts on your first push.
+If you are familiar with git and knows how to handle git conflicts, you can go ahead with your preferred choice.
+
+Now that your new project repository has been created on github at `https://github.com/your-account/your-awesome-project` you can push your first commit to github.
+To do this, simply follow the instructions on your github repository page or a more verbose walkthrough here:
+
+Assuming you are in `/your/path/to/your-awesome-project`. Add all files and commit.
+
+```bash
+# stage all files of your new repo
+git add --all
+# commit
+git commit -m "first commit"
+```
+
+You'll notice that the command `git commit` installed a bunch of packages and triggered their execution: those are pre-commit! To read more about what they are and what they do, you can go to the related section [Pre-commit checks](developer_docs.md#pre-commit-checks) in this document.
+
+```{note}
+There is a chance that the `git commit -m "first commit"` fails due to the `prettier` pre-commit formatting the `.cruft.json` file. No problem, you have just experienced what pre-commit checks do in action. Just go ahead and re-add the modified file and try to commit again. E.g. with
+
+```
+
+git add -u # add (or update) all tracked file
+git commit -m "first commit"
+
+```
+
+```
+
+Now that all the files of the newly created project have been committed, go ahead with the remaining steps:
+
+```bash
+# update the `origin` of your local repo with the remote github link
+git remote add origin https://github.com/giovp/temp_repo.git
+# rename the default branch to main
+git branch -M main
+# push all your files to remote
+git push -u origin main
+```
+
 ### Documentation on _readthedocs_
 
 We recommend using [readthedocs.org][] (RTD) to build and host the documentation for your project.
