@@ -23,13 +23,13 @@ cd {{cookiecutter.project_name}}
 ```
 
 into the new project directory. Now that you have created a new repository locally, the first step is to push it to github. To do this, you'd have to create a **new repository** on github.
-You can follow the instructions directly on [github](https://docs.github.com/en/get-started/quickstart/create-a-repo?tool=webui).
+You can follow the instructions directly on [github quickstart guide][].
 Since `cruft` already populated the local repository of your project with all the necessary files, we suggest to _NOT_ initialize the repository with a `README.md` file or `.gitignore`, because you might encounter git conflicts on your first push.
 If you are familiar with git and knows how to handle git conflicts, you can go ahead with your preferred choice.
 
-```{note}
-If you are looking at this document in the `cookiecutter-scverse-instance` repository documentation, throughout this document the name of this project should be the same. Otherwise it should be replaced by your new project name: `{{cookiecutter.project_name}}`.
-```
+:::{note}
+If you are looking at this document in the `[cookiecutter-scverse-instance][]` repository documentation, throughout this document the name of the project is `cookiecutter-scverse-instance`. Otherwise it should be replaced by your new project name: `{{cookiecutter.project_name}}`.
+:::
 
 Now that your new project repository has been created on github at `https://github.com/your-username/{{cookiecutter.project_name}}` you can push your first commit to github.
 To do this, simply follow the instructions on your github repository page or a more verbose walkthrough here:
@@ -434,6 +434,8 @@ open _build/html/index.html
 <!-- Links -->
 
 [scanpy developer guide]: https://scanpy.readthedocs.io/en/latest/dev/index.html
+[cookiecutter-scverse-instance]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html
+[github quickstart guide]: https://docs.github.com/en/get-started/quickstart/create-a-repo?tool=webui
 [codecov]: https://about.codecov.io/sign-up/
 [codecov docs]: https://docs.codecov.com/docs
 [codecov bot]: https://docs.codecov.com/docs/team-bot
