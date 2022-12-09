@@ -96,7 +96,7 @@ In brief, you need to:
     - name: Upload coverage
       uses: codecov/codecov-action@v3
       with:
-          token: {{${{ secrets.CODECOV_TOKEN }}}}
+          token: ${{ "{{" }}secrets.CODECOV_TOKEN{{ "}}" }}
     ```
 7. Go back to Github Actions page an re-run previously failed jobs.
 
