@@ -27,7 +27,11 @@ You can follow the instructions directly on [github](https://docs.github.com/en/
 Since `cruft` already populated the local repository of your project with all the necessary files, we suggest to _NOT_ initialize the repository with a `README.md` file or `.gitignore`, because you might encounter git conflicts on your first push.
 If you are familiar with git and knows how to handle git conflicts, you can go ahead with your preferred choice.
 
-Now that your new project repository has been created on github at `https://github.com/your-user-name/{{cookiecutter.project_name}}` you can push your first commit to github.
+```{note}
+If you are looking at this document in the `cookiecutter-scverse-instance` repository documentation, throughout this document the name of this project should be the same. Otherwise it should be replaced by your new project name: `{{cookiecutter.project_name}}`.
+```
+
+Now that your new project repository has been created on github at `https://github.com/your-username/{{cookiecutter.project_name}}` you can push your first commit to github.
 To do this, simply follow the instructions on your github repository page or a more verbose walkthrough here:
 
 Assuming you are in `/your/path/to/{{cookiecutter.project_name}}`. Add all files and commit.
@@ -49,14 +53,14 @@ Now that all the files of the newly created project have been committed, go ahea
 
 ```bash
 # update the `origin` of your local repo with the remote github link
-git remote add origin https://github.com/giovp/temp_repo.git
+git remote add origin https://github.com/your-username/{{cookiecutter.project_name}}.git
 # rename the default branch to main
 git branch -M main
 # push all your files to remote
 git push -u origin main
 ```
 
-Your project should be now available at `https://github.com/your-user-name/{{cookiecutter.project_name}}`. While the repository at this point can be directly used, there are few remaining steps that needs to be done in order to achieve full functionality.
+Your project should be now available at `https://github.com/your-username/{{cookiecutter.project_name}}`. While the repository at this point can be directly used, there are few remaining steps that needs to be done in order to achieve full functionality.
 
 ### Coverage tests with _Codecov_
 
@@ -80,7 +84,7 @@ While [codecov docs][] has a very extensive documentation on how to get started,
 To set it up, simply go to the [codecov app][] page and follow the instructions to activate it for your repository.
 Once the activation is completed, go back to the `Actions` tab and re-run the failing workflows.
 
-The workflows should now succeed and you will be able to find the code coverage at this link: `https://app.codecov.io/gh/your-user-name/{{cookiecutter.project_name}}`. You might have to wait couple of minutes and the code coverage of this repository should be ~60%.
+The workflows should now succeed and you will be able to find the code coverage at this link: `https://app.codecov.io/gh/your-username/{{cookiecutter.project_name}}`. You might have to wait couple of minutes and the code coverage of this repository should be ~60%.
 
 If your repository is private, you will have to specify an additional token in the repository secrets.
 In brief, you need to:
@@ -96,7 +100,7 @@ In brief, you need to:
     - name: Upload coverage
       uses: codecov/codecov-action@v3
       with:
-          token: ${{ "{{" }}secrets.CODECOV_TOKEN{{ "}}" }}
+          token: ${{ "{{" }} secrets.CODECOV_TOKEN {{ "}}" }}
     ```
 7. Go back to Github Actions page an re-run previously failed jobs.
 
