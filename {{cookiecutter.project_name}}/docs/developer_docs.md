@@ -4,7 +4,7 @@ Welcome to the developer guidelines! This document is split into two parts:
 
 1.  The [repository setup](#setting-up-the-repository). This section is relevant primarily for the repository maintainer and shows how to connect
     continuous integration services and documents initial set-up of the repository.
-2.  The [contributor guide](#contributing-guide). It contains information relevant to all developers who want to make a contribution.
+2.  The [contributor guide](contributing.md#contributing-guide). It contains information relevant to all developers who want to make a contribution.
 
 ## Setting up the repository
 
@@ -71,7 +71,7 @@ Your project should be now available at `https://github.com/your-username/{{cook
 ### Coverage tests with _Codecov_
 
 Coverage tells what fraction of the code is "covered" by unit tests, thereby encouraging contributors to
-[write tests](#writing-tests).
+[write tests](contributing.md#writing-tests).
 To enable coverage checks, head over to [codecov][] and sign in with your GitHub account.
 You'll find more information in "getting started" section of the [codecov docs][].
 
@@ -184,29 +184,14 @@ The following pre-commit checks are for errors and inconsistencies:
 -   **forbid-to-commit**: Make sure that `*.rej` files cannot be commited. These files are created by the
     [automated template sync](#automated-template-sync) if there's a merge conflict and need to be addressed manually.
 
-#### Notes on pre-commit checks
+### How to disable or add pre-commit checks
 
 -   To ignore lint warnigs from **flake8**, see [Ignore certain lint warnings](#ignore-certain-lint-warnings).
 -   You can add or remove pre-commit checks by simply deleting relevant lines in the `.pre-commit-config.yaml` file.
     Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` or tool-specific
     config files, such as `.prettierrc.yml` for **prettier** and `.flake8` for **flake8**.
 
-### API design
-
-Scverse ecosystem packages should operate on [AnnData][] and/or [MuData][] data structures and typically use an API
-as originally [introduced by scanpy][scanpy-api] with the following submodules:
-
--   `pp` for preprocessing
--   `tl` for tools (that, compared to `pp` generate interpretable output, often associated with a corresponding plotting
-    function)
--   `pl` for plotting functions
-
-You may add additional submodules as appropriate. While we encourage to follow a scanpy-like API for ecosystem packages,
-there may also be good reasons to choose a different approach, e.g. using an object-oriented API.
-
-[scanpy-api]: https://scanpy.readthedocs.io/en/stable/usage-principles.html
-
-### Ignore certain lint warnings
+### How to ignore certain lint warnings
 
 The [pre-commit checks](#pre-commit-checks) include [flake8](https://flake8.pycqa.org/en/latest/) which checks
 for errors in Python files, including stylistic errors.
@@ -230,10 +215,25 @@ W504
 
 [flake8 guide]: https://flake8.pycqa.org/en/3.1.1/user/ignoring-errors.html
 
+### API design
+
+Scverse ecosystem packages should operate on [AnnData][] and/or [MuData][] data structures and typically use an API
+as originally [introduced by scanpy][scanpy-api] with the following submodules:
+
+-   `pp` for preprocessing
+-   `tl` for tools (that, compared to `pp` generate interpretable output, often associated with a corresponding plotting
+    function)
+-   `pl` for plotting functions
+
+You may add additional submodules as appropriate. While we encourage to follow a scanpy-like API for ecosystem packages,
+there may also be good reasons to choose a different approach, e.g. using an object-oriented API.
+
+[scanpy-api]: https://scanpy.readthedocs.io/en/stable/usage-principles.html
+
 ### Using VCS-based versioning
 
 By default, the template uses hard-coded version numbers that are set in `pyproject.toml` and [managed with
-bump2version](#making-a-release). If you prefer to have your project automatically infer version numbers from git
+bump2version](contributing.md#making-a-release). If you prefer to have your project automatically infer version numbers from git
 tags, it is straightforward to switch to vcs-based versioning using [hatch-vcs][].
 
 In `pyproject.toml` add the following changes, and you are good to go!
@@ -265,6 +265,32 @@ In `pyproject.toml` add the following changes, and you are good to go!
 Don't forget to update the [Making a release section](contributing.md#making-a-release) in this document accordingly, after you are done!
 
 [hatch-vcs]: https://pypi.org/project/hatch-vcs/
+
+### Automated template sync
+
+Automated template sync is enabled by default. This means that every night, a GitHub action runs [cruft][] to check
+if a new version of the `scverse-cookiecutter` template got released. If there are any new changes, a pull request
+proposing these changes is created automatically. This helps keeping the repository up-to-date with the latest
+coding standards.
+
+It may happen that a template sync results in a merge conflict. If this is the case a `*.ref` file with the
+diff is created. You need to manually address these changes and remove the `.rej` file when you are done.
+The pull request can only be merged after all `*.rej` files have been removed.
+
+:::{tip}
+The following hints may be useful to work with the template sync:
+
+-   GitHub automatically disables scheduled actions if there has been not activity to the repository for 60 days.
+    You can re-enable or manually trigger the sync by navigating to `Actions` -> `Sync Template` in your GitHub repository.
+-   If you want to ignore certain files from the template update, you can add them to the `[tool.cruft]` section in the
+    `pyproject.toml` file in the root of your repository. More details are described in the
+    [cruft documentation][cruft-update-project].
+-   To disable the sync entirely, simply remove the file `.github/workflows/sync.yaml`.
+
+:::
+
+[cruft]: https://cruft.github.io/cruft/
+[cruft-update-project]: https://cruft.github.io/cruft/#updating-a-project
 
 ## Moving forward
 
