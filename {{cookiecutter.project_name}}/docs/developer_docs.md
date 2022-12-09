@@ -186,7 +186,7 @@ The following pre-commit checks are for errors and inconsistencies:
 
 ### How to disable or add pre-commit checks
 
--   To ignore lint warnigs from **flake8**, see [Ignore certain lint warnings](#ignore-certain-lint-warnings).
+-   To ignore lint warnigs from **flake8**, see [Ignore certain lint warnings](#how-to-ignore-certain-lint-warnings).
 -   You can add or remove pre-commit checks by simply deleting relevant lines in the `.pre-commit-config.yaml` file.
     Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` or tool-specific
     config files, such as `.prettierrc.yml` for **prettier** and `.flake8` for **flake8**.
