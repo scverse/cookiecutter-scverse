@@ -42,15 +42,7 @@ git commit -m "first commit"
 You'll notice that the command `git commit` installed a bunch of packages and triggered their execution: those are pre-commit! To read more about what they are and what they do, you can go to the related section [Pre-commit checks](developer_docs.md#pre-commit-checks) in this document.
 
 ```{note}
-There is a chance that the `git commit -m "first commit"` fails due to the `prettier` pre-commit formatting the `.cruft.json` file. No problem, you have just experienced what pre-commit checks do in action. Just go ahead and re-add the modified file and try to commit again. E.g. with
-
-```
-
-git add -u # add (or update) all tracked file
-git commit -m "first commit"
-
-```
-
+There is a chance that the `git commit -m "first commit"` fails due to the `prettier` pre-commit formatting the `.cruft.json` file. No problem, you have just experienced what pre-commit checks do in action. Just go ahead and re-add the modified file and try to commit again. E.g. with `git add -u # add (or update) all tracked file` and  `git commit -m "first commit"`
 ```
 
 Now that all the files of the newly created project have been committed, go ahead with the remaining steps:
