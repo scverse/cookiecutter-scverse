@@ -1,4 +1,4 @@
-# Developer documentation
+# Using this template
 
 Welcome to the developer guidelines! This document is split into two parts:
 
