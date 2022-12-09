@@ -262,14 +262,14 @@ In `pyproject.toml` add the following changes, and you are good to go!
  omit = [
 ```
 
-Don't forget to update the [Making a release section](#making-a-release) in this document accordingly, after you are done!
+Don't forget to update the [Making a release section](contributing.md#making-a-release) in this document accordingly, after you are done!
 
 [hatch-vcs]: https://pypi.org/project/hatch-vcs/
 
 ## Moving forward
 
 You have reached the end of this document. Congratulations! You have successfully set up your project and are ready to start.
-For everything else related to documentation, code style, testing and publishing, please refer to the [contributing documentation][contributing.md# contributing guide].
+For everything else related to documentation, code style, testing and publishing your project ot pypi, please refer to the [contributing docs](contributing.md#contributing-guide).
 
 <!-- Links -->
 
