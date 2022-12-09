@@ -64,7 +64,7 @@ in the root of the repository. Continuous integration will automatically run the
 
 [scanpy-test-docs]: https://scanpy.readthedocs.io/en/latest/dev/testing.html#writing-tests
 
-## Making a release
+## Publishing a release
 
 ### Updating the version number
 
@@ -97,9 +97,31 @@ to publish the created tag on GitHub.
 
 [bump2version]: https://github.com/c4urself/bump2version
 
-### Upload on PyPI
+### Building and publishing the package on PyPI
 
-Please follow the [Python packaging tutorial][].
+Python packages are not distributed as source code, but as _distributions_. The most common distribution format is the so-called _wheel_. To build a _wheel_, run
+
+```bash
+python -m build
+```
+
+This command creates a _source archive_ and a _wheel_, which are required for publishing your package to [PyPI][]. These files are created directly in the root of the repository.
+
+Before uploading them to [PyPI][] you can check that your _distribution_ is valid by running:
+
+```bash
+twine check dist/*
+```
+
+and finally publishing it with:
+
+```bash
+twine upload dist/*
+```
+
+Provide your username and password when requested and then go check out your package on [PyPI][]!
+
+For more information, follow the [Python packaging tutorial][].
 
 It is possible to automate this with GitHub actions, see also [this feature request][pypi-feature-request]
 in the cookiecutter-scverse template.
@@ -167,3 +189,4 @@ open _build/html/index.html
 [numpydoc-napoleon]: https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html
 [numpydoc]: https://numpydoc.readthedocs.io/en/latest/format.html
 [sphinx autodoc typehints]: https://github.com/tox-dev/sphinx-autodoc-typehints
+[pypi]: https://pypi.org/
