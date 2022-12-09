@@ -233,7 +233,7 @@ there may also be good reasons to choose a different approach, e.g. using an obj
 ### Using VCS-based versioning
 
 By default, the template uses hard-coded version numbers that are set in `pyproject.toml` and [managed with
-bump2version](contributing.md#making-a-release). If you prefer to have your project automatically infer version numbers from git
+bump2version](contributing.md#publishing-a-release). If you prefer to have your project automatically infer version numbers from git
 tags, it is straightforward to switch to vcs-based versioning using [hatch-vcs][].
 
 In `pyproject.toml` add the following changes, and you are good to go!
@@ -262,7 +262,7 @@ In `pyproject.toml` add the following changes, and you are good to go!
  omit = [
 ```
 
-Don't forget to update the [Making a release section](contributing.md#making-a-release) in this document accordingly, after you are done!
+Don't forget to update the [Making a release section](contributing.md#publishing-a-release) in this document accordingly, after you are done!
 
 [hatch-vcs]: https://pypi.org/project/hatch-vcs/
 
