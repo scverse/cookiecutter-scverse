@@ -41,6 +41,7 @@ git pull --rebase
 ```
 
 to integrate the changes into yours.
+While the [pre-commit.ci][] is useful, we strongly encourage installing and running pre-commit locally first to understand its usage.
 
 Finally, most editors have an _autoformat on save_ feature. Consider enabling this option for [black][black-editors]
 and [prettier][prettier-editors].
