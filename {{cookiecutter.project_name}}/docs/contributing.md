@@ -135,7 +135,7 @@ in the cookiecutter-scverse template.
 
 ## Writing documentation
 
-Please write documentation for your package. This project uses [sphinx][] with the following features:
+Please write documentation for new or changed features and use-cases. This project uses [sphinx][] with the following features:
 
 -   the [myst][] extension allows to write documentation in markdown/Markedly Structured Text
 -   [Numpy-style docstrings][numpydoc] (through the [napoloen][numpydoc-napoleon] extension).
