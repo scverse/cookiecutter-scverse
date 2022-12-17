@@ -56,7 +56,7 @@ Don't forget to create a repository on GitHub and upload your project.
 
 Your repository is now ready. However, to use all features of the template you will need to set up the following
 online services. Clicking on the links will take you to the respective sections of the developer documentation.
-The developer documentation is also shipped as part of the template in `docs/developer_docs.md`.
+The developer documentation is also shipped as part of the template in `docs/template_usage.md`.
 
 1.  [pre-commit.ci][setup-pre-commit] to check for inconsistencies and to enforce a code style
 2.  [readthedocs.org][setup-rtd] to build and host documentation
@@ -66,7 +66,7 @@ All CI checks should pass, you are ready to start developing your new tool!
 
 ### Customizations
 
-Further instructions on using this template can be found in the [dev docs included in the project](https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html).
+Further instructions on using this template can be found in the [dev docs included in the project](https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html).
 
 ### Committment
 
@@ -90,11 +90,11 @@ Note that when creating a new release, changes will be propagated to packages us
 
 <!-- links -->
 
-[setup-pre-commit]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#pre-commit-checks
-[setup-rtd]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#documentation-on-readthedocs
-[setup-codecov]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#coverage-tests-with-codecov
-[write-tests]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#writing-tests
-[write-docs]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#writing-documentation
+[setup-pre-commit]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#pre-commit-checks
+[setup-rtd]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#documentation-on-readthedocs
+[setup-codecov]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#coverage-tests-with-codecov
+[write-tests]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#writing-tests
+[write-docs]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#writing-documentation
 [readthedocs]: https://readthedocs.org/
 [myst-nb]: https://myst-nb.readthedocs.io/
 [pre-commit]: https://pre-commit.com/
