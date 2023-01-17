@@ -14,6 +14,10 @@ repos:
       rev: v2.5.1
       hooks:
           - id: prettier
+            # Newer versions of node don't work on systems that have an older version of GLIBC
+            # See https://github.com/scverse/cookiecutter-scverse/issues/143 and 
+            # https://github.com/jupyterlab/jupyterlab/issues/12675
+            language_version: 17
     - repo: https://github.com/asottile/blacken-docs
       rev: v1.12.1
       hooks:
