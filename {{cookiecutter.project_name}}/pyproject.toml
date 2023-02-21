@@ -71,7 +71,16 @@ addopts = [
 line-length = 120
 target-version = ["py38"]
 extend-exclude = ["buck-out"]
-extend-select = ["W", "B", "Q"]
+extend-select = [
+    "W",  # Pycodestyle warnings
+    "I",  # isort
+    "D",  # pydocstyle
+    "B",  # flake8-bugbear
+    "TID",  # flake8-tidy-imports
+    "C4",  # flake8-comprehensions
+    "BLE",  # flake8-blind-except
+    "PTH",  # flake8-use-pathlib
+]
 ignore = [
     # line break before a binary operator -> black does not adhere to PEP8
     "W503",
