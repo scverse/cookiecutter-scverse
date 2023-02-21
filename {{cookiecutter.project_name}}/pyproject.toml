@@ -101,8 +101,6 @@ ignore = [
     "B008",
     # Missing docstring in magic method
     "D105",
-    # format string does contain unindexed parameters
-    "P101",
     # first line should end with a period [Bug: doesn't work with single-line docstrings]
     "D400",
     # First line should be in imperative mood; try rephrasing
