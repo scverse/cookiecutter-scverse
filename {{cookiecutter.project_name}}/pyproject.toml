@@ -87,8 +87,6 @@ extend-select = [
 ignore = [
     # line too long -> we accept long comment lines; black gets rid of long code lines
     "E501",
-    # line break before binary operator -> black does not adhere to PEP8
-    "W503",
     # Do not assign a lambda expression, use a def -> lambda expression assignments are convenient
     "E731",
     # allow I, O, l as variable names -> I is the identity matrix
