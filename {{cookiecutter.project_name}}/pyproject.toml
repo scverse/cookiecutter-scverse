@@ -84,6 +84,7 @@ extend-select = [
     "C4",  # flake8-comprehensions
     "BLE",  # flake8-blind-except
     "PTH",  # flake8-use-pathlib
+    "RUF100",  # Report unused noqa directives
 ]
 ignore = [
     # line too long -> we accept long comment lines; black gets rid of long code lines
