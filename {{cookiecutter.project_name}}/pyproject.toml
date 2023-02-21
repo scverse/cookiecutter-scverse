@@ -29,7 +29,8 @@ dependencies = [
 dev = [
     # CLI for bumping the version number
     "bump2version",
-    "pre-commit"
+    "pre-commit",
+    "twine>=4.0.2"
 ]
 doc = [
     "sphinx>=4",
@@ -39,6 +40,7 @@ doc = [
     "sphinx-autodoc-typehints",
     # For notebooks
     "ipykernel",
+    "ipython",
     "sphinx-copybutton",
 ]
 test = [
@@ -46,10 +48,11 @@ test = [
     "pytest-cov",
 ]
 
-{%- if cookiecutter.project_name.lower().replace('-', '_') != cookiecutter.package_name -%}
+{% if cookiecutter.project_name.lower().replace('-', '_') != cookiecutter.package_name -%}
 [tool.hatch.build.targets.wheel]
 packages = ['src/{{ cookiecutter.package_name }}']
-{% endif %}
+
+{% endif -%}
 
 [tool.coverage.run]
 source = ["{{ cookiecutter.package_name }}"]

@@ -18,36 +18,33 @@ jobs:
             matrix:
                 python: ["3.8", "3.10"]
                 os: [ubuntu-latest]
+                # one that matches "project-name".lower().replace('-', '_'), one that doesn’t:
+                package-name: [project_name, package_alt]
         env:
             PROJECT_ROOT: project-name
 
         steps:
+            # Setup
             - uses: actions/checkout@v2
             - name: Set up Python ${{ matrix.python }}
-              uses: actions/setup-python@v2
+              uses: actions/setup-python@v4
               with:
                   python-version: ${{ matrix.python }}
-
+                  cache: "pip"
+                  cache-dependency-path: "**/pyproject.toml"
             - name: Install Ubuntu system dependencies
               if: matrix.os == 'ubuntu-latest'
-              run: |
-                  sudo apt-get install pandoc
-
-            - name: Get pip cache dir
-              id: pip-cache-dir
-              run: |
-                  echo "::set-output name=dir::$(pip cache dir)"
-            - name: Restore pip cache
-              uses: actions/cache@v2
-              with:
-                  path: ${{ steps.pip-cache-dir.outputs.dir }}
-                  key: pip-${{ runner.os }}-${{ env.pythonLocation }}-${{ hashFiles('**/pyproject.toml') }}
-                  restore-keys: |
-                      pip-${{ runner.os }}-${{ env.pythonLocation }}-
-            - name: Install dependencies
+              run: sudo apt-get install pandoc
+            - name: Install build & check dependencies
               run: python -m pip install --upgrade pip wheel cookiecutter pre-commit
+            # Build
             - name: Build from template
-              run: cookiecutter --no-input .
+              shell: python
+              run: |
+                  from cookiecutter.main import cookiecutter
+                  overrides = dict(package_name='${{ matrix.package-name }}')
+                  cookiecutter('.', no_input=True, extra_context=overrides)
+            # Check
             - name: Run pre-commit
               run: |
                   cd "$PROJECT_ROOT"
@@ -57,7 +54,8 @@ jobs:
               run: |
                   cd $PROJECT_ROOT
                   pip install ".[doc]"
-                  python -c "import project_name"
+                  python -c "import ${{ matrix.package-name }}"
+            # Docs
             - name: Build the documentation
               env:
                   SPHINXOPTS: -W --keep-going
