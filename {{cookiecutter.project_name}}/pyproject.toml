@@ -72,6 +72,7 @@ line-length = 120
 target-version = ["py38"]
 
 [tool.ruff]
+src = ["src"]
 line-length = 120
 target-version = "py38"
 extend-select = [
@@ -112,7 +113,7 @@ ignore = [
     #"W504",
     # whitespace before : -> black does not adhere to PEP8
     #"E203",
-    # missing whitespace after ,', ';', or ':' -> black does not adhere to PEP8
+    # missing whitespace after ',', ';', or ':' -> black does not adhere to PEP8
     #"E231",
     # continuation line over-indented for hanging indent -> black does not adhere to PEP8
     #"E126",
