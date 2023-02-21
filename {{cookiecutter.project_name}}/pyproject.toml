@@ -67,10 +67,13 @@ addopts = [
     "--import-mode=importlib",  # allow using test files with same name
 ]
 
+[tool.black]
+line-length = 120
+target-version = ["py38"]
+
 [tool.ruff]
 line-length = 120
 target-version = "py38"
-extend-exclude = ["buck-out"]
 extend-select = [
     "W",  # Pycodestyle warnings
     "I",  # isort

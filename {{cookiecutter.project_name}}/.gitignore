@@ -1,9 +1,12 @@
 # Temp files
 .DS_Store
 *~
+buck-out/
 
 # Compiled files
+.venv/
 __pycache__/
+.mypy_cache/
 
 # Distribution / packaging
 /build/
