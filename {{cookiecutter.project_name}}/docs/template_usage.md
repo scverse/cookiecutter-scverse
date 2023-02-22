@@ -131,6 +131,10 @@ If your project is private, there are ways to enable docs rendering on [readthed
 check code for errors, inconsistencies and code styles, before the code
 is committed.
 
+This template uses a number of pre-commit checks. In this section we'll detail what is used, where they're defined, and how to modify these checks.
+
+#### Pre-commit CI
+
 We recommend setting up [pre-commit.ci][] to enforce consistency checks on every commit
 and pull-request.
 
@@ -174,7 +178,7 @@ The following pre-commit hooks are for errors and inconsistencies:
 -   **forbid-to-commit**: Make sure that `*.rej` files cannot be commited.
     These files are created by the [automated template sync](#automated-template-sync)
     if there's a merge conflict and need to be addressed manually.
--   [ruff][]: Many configurable checks for Python code, see [Overview of Ruff checks](#overview-of-ruff-checks).
+-   [ruff][] based checks:
     -   [pyflakes](https://beta.ruff.rs/docs/rules/#pyflakes-f) (`F`):
         various checks for errors.
     -   [pycodestyle](https://beta.ruff.rs/docs/rules/#pycodestyle-e-w) (`E`, `W`):
@@ -184,24 +188,28 @@ The following pre-commit hooks are for errors and inconsistencies:
     -   [flake8-blind-except](https://beta.ruff.rs/docs/rules/#flake8-blind-except-ble) (`BLE`):
         checks for blind, catch-all `except` statements.
     -   [Ruff-specific rules](https://beta.ruff.rs/docs/rules/#ruff-specific-rules-ruf) (`RUF`):
-        -   `RUF100`: remove unneccesary `# noqa` comments.
+        -   `RUF100`: remove unneccesary `# noqa` comments ()
 
-### How to add or remove pre-commit checks
+#### How to add or remove pre-commit checks
 
 The [pre-commit checks](#pre-commit-checks) check for both correctness and stylistic errors.
 In some cases it might overshoot and you may have good reasons to ignore certain warnings.
 This section shows you where these checks are defined, and how to enable/ disable them.
 
-#### How to disable or add pre-commit checks
+##### pre-commit
 
 You can add or remove pre-commit checks by simply deleting relevant lines in the `.pre-commit-config.yaml` file under the repository root.
 Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` (for `ruff` and `black`) or tool-specific
 config files, such as `.prettierrc.yml` for **prettier**.
 
-#### How to modify Ruff checks
+##### Ruff
 
 To ignore an specific error on a per-case basis, you can add a `# noqa: <rule>[, <rule>, …]` comment to the offending line.
 Specify the rule ID(s) to ignore, with e.g. `# noqa: E731`. Check the [Ruff guide][] for reference.
+
+The `RUF100` check will remove `noqa` IDs that are no longer necessary.
+If you want to add an ID that comes from a tool other than Ruff,
+add it to Ruff’s [`external = [...]`](https://beta.ruff.rs/docs/settings/#external) setting to prevent `RUF100` from removing it.
 
 Alternatively, you can disable certain error messages for the entire project.
 To do so, edit the `[tool.ruff]` section in `pyproject.toml` in the root of the repository.
