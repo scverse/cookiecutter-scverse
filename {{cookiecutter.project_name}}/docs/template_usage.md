@@ -179,7 +179,7 @@ The following checks are for code style and format:
 -   [isort](https://beta.ruff.rs/docs/rules/#isort-i): sort module imports into
     sections and types.
 -   [pydocstyle](https://beta.ruff.rs/docs/rules/#pydocstyle-d) (`D`):
-pydocstyle extension of flake8.
+    pydocstyle extension of flake8.
 -   [flake8-tidy-imports](https://beta.ruff.rs/docs/rules/#flake8-tidy-imports-tid) (`TID`):
     tidy module imports.
 -   [flake8-comprehensions](https://beta.ruff.rs/docs/rules/#flake8-comprehensions-c4) (`C4`):
@@ -200,9 +200,9 @@ The following checks are for errors and inconsistencies:
 -   [flake8-blind-except](https://beta.ruff.rs/docs/rules/#flake8-blind-except-ble) (`BLE`):
     checks for blind, catch-all `except` statements.
 -   [Ruff-specific rules](https://beta.ruff.rs/docs/rules/#ruff-specific-rules-ruf) (`RUF`):
-    - `RUF100`: remove unneccesary `# noqa` comments, follows additional dependencies listed above.
+    -   `RUF100`: remove unneccesary `# noqa` comments, follows additional dependencies listed above.
 
-[Ruff]: https://beta.ruff.rs/docs/
+[ruff]: https://beta.ruff.rs/docs/
 
 ### How to disable or add pre-commit checks
 
