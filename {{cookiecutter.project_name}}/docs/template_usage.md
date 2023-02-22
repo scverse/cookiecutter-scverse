@@ -176,8 +176,8 @@ extend-select = [..., "I", ...]
 
 The following checks are for code style and format:
 
--   [isort](https://beta.ruff.rs/docs/rules/#isort-i): sort module imports into
-    sections and types.
+-   [isort](https://beta.ruff.rs/docs/rules/#isort-i) (`I`):
+    sort module imports into sections and types.
 -   [pydocstyle](https://beta.ruff.rs/docs/rules/#pydocstyle-d) (`D`):
     pydocstyle extension of flake8.
 -   [flake8-tidy-imports](https://beta.ruff.rs/docs/rules/#flake8-tidy-imports-tid) (`TID`):
@@ -189,8 +189,10 @@ The following checks are for code style and format:
 
 The following checks are for errors and inconsistencies:
 
--   [pyflakes](https://beta.ruff.rs/docs/rules/#pyflakes-f) (`F`): various checks for errors.
--   [pycodestyle](https://beta.ruff.rs/docs/rules/#pycodestyle-e-w) (`E`, `W`): various checks for errors.
+-   [pyflakes](https://beta.ruff.rs/docs/rules/#pyflakes-f) (`F`):
+    various checks for errors.
+-   [pycodestyle](https://beta.ruff.rs/docs/rules/#pycodestyle-e-w) (`E`, `W`):
+    various checks for errors.
 <!--
 -   [flake8-rst-docstrings](https://github.com/peterjc/e8-rst-docstrings):
     extension of `flake8-docstrings` for `rst` docs.
@@ -206,34 +208,35 @@ The following checks are for errors and inconsistencies:
 
 ### How to disable or add pre-commit checks
 
--   To ignore lint warnigs from **flake8**, see [Ignore certain lint warnings](#how-to-ignore-certain-lint-warnings).
+-   To ignore lint warnigs from [Ruff][], see [Ignore certain lint warnings](#how-to-ignore-certain-lint-warnings).
 -   You can add or remove pre-commit checks by simply deleting relevant lines in the `.pre-commit-config.yaml` file.
     Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` or tool-specific
     config files, such as `.prettierrc.yml` for **prettier** and `.flake8` for **flake8**.
 
 ### How to ignore certain lint warnings
 
-The [pre-commit checks](#pre-commit-checks) include [flake8](https://flake8.pycqa.org/en/latest/) which checks
+The [pre-commit checks](#pre-commit-checks) include [Ruff][] which checks
 for errors in Python files, including stylistic errors.
 
 In some cases it might overshoot and you may have good reasons to ignore certain warnings.
 
-To ignore an specific error on a per-case basis, you can add a comment `# noqa` to the offending line. You can also
-specify the error ID to ignore, with e.g. `# noqa: E731`. Check the [flake8 guide][] for reference.
+To ignore an specific error on a per-case basis, you can add a `# noqa: <rule>[, <rule>, …]` comment to the offending line.
+Specify the rule ID(s) to ignore, with e.g. `# noqa: E731`. Check the [Ruff guide][] for reference.
 
-Alternatively, you can disable certain error messages for the entire project. To do so, edit the `.flake8`
-file in the root of the repository. Add one line per linting code you wish to ignore and don't forget to add a comment.
+Alternatively, you can disable certain error messages for the entire project.
+To do so, edit the `[tool.ruff]` section in `pyproject.toml` in the root of the repository.
+Add the rule ID(s) you want to ignore and don't forget to add a comment explaining why.
 
 ```toml
-...
-# line break before a binary operator -> black does not adhere to PEP8
-W503
-# line break occured after a binary operator -> black does not adhere to PEP8
-W504
-...
+ignore = [
+    ...
+    # __magic__ methods are are often self-explanatory, allow missing docstrings
+    "D105",
+    ...
+]
 ```
 
-[flake8 guide]: https://flake8.pycqa.org/en/3.1.1/user/ignoring-errors.html
+[Ruff guide]: https://beta.ruff.rs/docs/configuration/#suppressing-errors
 
 ### API design
 
