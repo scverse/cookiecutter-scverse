@@ -45,7 +45,8 @@ jobs:
                   overrides = dict(package_name='${{ matrix.package-name }}')
                   cookiecutter('.', no_input=True, extra_context=overrides)
             # Check
-            - uses: actions/cache@v3
+            - name: Set up pre-commit cache
+              uses: actions/cache@v3
               with:
                   path: ~/.cache/pre-commit
                   key: pre-commit-3|${{ matrix.python }}|${{ hashFiles(format('{0}/.pre-commit-config.yaml', env.PROJECT_ROOT)) }}
