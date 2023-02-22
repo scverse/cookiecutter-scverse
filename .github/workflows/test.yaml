@@ -54,7 +54,7 @@ jobs:
               run: |
                   cd "$PROJECT_ROOT"
                   git add .
-                  pre-commit run --color=always --show-diff-on-failure --all-files
+                  pre-commit run --verbose --color=always --show-diff-on-failure --all-files
             - name: Install the package
               run: |
                   cd $PROJECT_ROOT

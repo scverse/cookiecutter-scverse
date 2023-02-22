@@ -108,6 +108,9 @@ ignore = [
     "D400",
     # First line should be in imperative mood; try rephrasing
     "D401",
+    ## Disable one in each pair of mutually incompatible rules
+    "one-blank-line-before-class",
+    "multi-line-summary-second-line",
     ## Flake8 rules not supported by ruff:
     # line break before a binary operator -> black does not adhere to PEP8
     #"W503",
