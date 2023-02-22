@@ -85,7 +85,6 @@ select = [
     "TID",  # flake8-tidy-imports
     "C4",  # flake8-comprehensions
     "BLE",  # flake8-blind-except
-    "PTH",  # flake8-use-pathlib
     "UP",  # pyupgrade
     "RUF100",  # Report unused noqa directives
 ]
