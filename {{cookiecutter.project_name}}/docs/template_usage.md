@@ -147,14 +147,14 @@ The following pre-commit hooks are for code style and format:
 -   [black](https://black.readthedocs.io/en/stable/):
     standard code formatter in Python.
 -   [blacken-docs](https://github.com/asottile/blacken-docs):
-    black on python code in docs.
+    black on Python code in docs.
 -   [prettier](https://prettier.io/docs/en/index.html):
     standard code formatter for non-Python files (e.g. YAML).
 
 The following pre-commit hooks are for errors and inconsistencies:
 
--   [ruff][]: Many configurable checks, see [Overview of Ruff checks](#overview-of-ruff-checks).
--   [pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks): generic pre-commit hooks.
+-   [ruff][]: Many configurable checks for Python code, see [Overview of Ruff checks](#overview-of-ruff-checks).
+-   [pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks): generic pre-commit hooks for text files.
     -   **detect-private-key**: checks for the existence of private keys.
     -   **check-ast**: check whether files parse as valid python.
     -   **end-of-file-fixer**: check files end in a newline and only a newline.
@@ -169,8 +169,8 @@ The following pre-commit hooks are for errors and inconsistencies:
 
 #### Overview of Ruff checks
 
-[Ruff][] implements several checks,
-and therefore each check below mentions a the code that enables it when added to `pyproject.toml`.
+[Ruff][] implements several checks for Python code and docstrings.
+Therefore each check below mentions a the rule prefix that enables it when added to `pyproject.toml`.
 E.g. `isort` is enabled with:
 
 ```toml
