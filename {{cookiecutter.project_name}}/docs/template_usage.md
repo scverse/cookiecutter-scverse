@@ -144,15 +144,16 @@ Once authorized, pre-commit.ci should automatically be activated.
 
 The following pre-commit hooks are for code style and format:
 
--   [black](https://black.readthedocs.io/en/stable/): standard code
-    formatter in Python.
--   [blacken-docs](https://github.com/asottile/blacken-docs): black on
-    python code in docs.
--   [prettier](https://prettier.io/docs/en/index.html): standard code
-    formatter for non-Python files (e.g. YAML).
+-   [black](https://black.readthedocs.io/en/stable/):
+    standard code formatter in Python.
+-   [blacken-docs](https://github.com/asottile/blacken-docs):
+    black on python code in docs.
+-   [prettier](https://prettier.io/docs/en/index.html):
+    standard code formatter for non-Python files (e.g. YAML).
 
 The following pre-commit hooks are for errors and inconsistencies:
 
+-   [Ruff][]: Many configurable checks, see [Overview of Ruff checks][].
 -   [pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks): generic pre-commit hooks.
     -   **detect-private-key**: checks for the existence of private keys.
     -   **check-ast**: check whether files parse as valid python.
@@ -160,8 +161,11 @@ The following pre-commit hooks are for errors and inconsistencies:
     -   **mixed-line-ending**: checks mixed line ending.
     -   **trailing-whitespace**: trims trailing whitespace.
     -   **check-case-conflict**: check files that would conflict with case-insensitive file systems.
--   **forbid-to-commit**: Make sure that `*.rej` files cannot be commited. These files are created by the
-    [automated template sync](#automated-template-sync) if there's a merge conflict and need to be addressed manually.
+-   **forbid-to-commit**: Make sure that `*.rej` files cannot be commited.
+    These files are created by the [automated template sync](#automated-template-sync)
+    if there's a merge conflict and need to be addressed manually.
+
+[Ruff]: https://beta.ruff.rs/docs/
 
 #### Overview of Ruff checks
 
@@ -192,19 +196,13 @@ The following checks are for errors and inconsistencies:
 -   [pyflakes](https://beta.ruff.rs/docs/rules/#pyflakes-f) (`F`):
     various checks for errors.
 -   [pycodestyle](https://beta.ruff.rs/docs/rules/#pycodestyle-e-w) (`E`, `W`):
-various checks for errors.
-<!--
--   [flake8-rst-docstrings](https://github.com/peterjc/e8-rst-docstrings):
-    extension of `flake8-docstrings` for `rst` docs.
-    -->
+    various checks for errors.
 -   [flake8-bugbear](https://beta.ruff.rs/docs/rules/#flake8-bugbear-b) (`B`):
     find possible bugs and design issues in program.
 -   [flake8-blind-except](https://beta.ruff.rs/docs/rules/#flake8-blind-except-ble) (`BLE`):
     checks for blind, catch-all `except` statements.
 -   [Ruff-specific rules](https://beta.ruff.rs/docs/rules/#ruff-specific-rules-ruf) (`RUF`):
-    -   `RUF100`: remove unneccesary `# noqa` comments, follows additional dependencies listed above.
-
-[ruff]: https://beta.ruff.rs/docs/
+    -   `RUF100`: remove unneccesary `# noqa` comments.
 
 ### How to disable or add pre-commit checks
 
