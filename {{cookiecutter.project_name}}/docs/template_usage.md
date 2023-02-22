@@ -203,6 +203,7 @@ The following checks are for errors and inconsistencies:
     checks for blind, catch-all `except` statements.
 -   [Ruff-specific rules](https://beta.ruff.rs/docs/rules/#ruff-specific-rules-ruf) (`RUF`):
     -   `RUF100`: remove unneccesary `# noqa` comments.
+        See [How to ignore certain lint warnings](#how-to-ignore-certain-lint-warnings) for details.
 
 ### How to disable or add pre-commit checks
 
@@ -221,7 +222,11 @@ In some cases it might overshoot and you may have good reasons to ignore certain
 To ignore an specific error on a per-case basis, you can add a `# noqa: <rule>[, <rule>, …]` comment to the offending line.
 Specify the rule ID(s) to ignore, with e.g. `# noqa: E731`. Check the [Ruff guide][] for reference.
 
-Alternatively, you can disable certain error messages for the entire project.
+The `RUF100` check will remove `noqa` IDs that are no longer necessary.
+If you want to add an ID that comes from a tool other than Ruff,
+add it to Ruff’s [`external = [...]`](https://beta.ruff.rs/docs/settings/#external) setting to prevent `RUF100` from removing it.
+
+You can also disable certain error messages for the entire project.
 To do so, edit the `[tool.ruff]` section in `pyproject.toml` in the root of the repository.
 Add the rule ID(s) you want to ignore and don't forget to add a comment explaining why.
 
