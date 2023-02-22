@@ -84,6 +84,7 @@ extend-select = [
     "C4",  # flake8-comprehensions
     "BLE",  # flake8-blind-except
     "PTH",  # flake8-use-pathlib
+    "UP",  # pyupgrade
     "RUF100",  # Report unused noqa directives
 ]
 ignore = [
@@ -122,12 +123,6 @@ ignore = [
     #"E262",
 ]
 exclude = [".git", "__pycache__", "build", "docs/_build", "dist"]
-
-# TODO: flake8-rst-docstrings
-# rst-roles = ["class", "func", "ref", "cite:p", "cite:t"]
-# rst-directives = ["envvar", "exception"]
-# rst-substitutions = ["version"]
-# extend-ignore = ["RST307"]
 
 [tool.ruff.per-file-ignores]
 "docs/*" = ["I"]
