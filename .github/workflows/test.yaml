@@ -48,7 +48,7 @@ jobs:
             - uses: actions/cache@v3
               with:
                   path: ~/.cache/pre-commit
-                  key: pre-commit-3|${{ matrix.python }}|${{ hashFiles(format('{0}/.pre-commit-config.yaml'), env.PROJECT_ROOT) }}
+                  key: pre-commit-3|${{ matrix.python }}|${{ hashFiles(format('{0}/.pre-commit-config.yaml', env.PROJECT_ROOT)) }}
             - name: Run pre-commit
               run: |
                   cd "$PROJECT_ROOT"
