@@ -142,17 +142,7 @@ Once authorized, pre-commit.ci should automatically be activated.
 
 #### Overview of pre-commit hooks used by the template
 
-[^ruff]:
-    Several of the following hooks are implemented as part of [ruff][],
-    and therefore mention a the code that enables them in `pyproject.toml`.
-    E.g. `isort` is enabled with:
-
-```toml
-[tool.ruff]
-extend-select = [..., "I", ...]
-```
-
-The following pre-commit checks are for code style and format:
+The following pre-commit hooks are for code style and format:
 
 -   [black](https://black.readthedocs.io/en/stable/): standard code
     formatter in Python.
@@ -160,31 +150,9 @@ The following pre-commit checks are for code style and format:
     python code in docs.
 -   [prettier](https://prettier.io/docs/en/index.html): standard code
     formatter for non-Python files (e.g. YAML).
--   [isort](https://pycqa.github.io/isort/) ([`I`](https://beta.ruff.rs/docs/rules/#isort-i)[^ruff]): sort module imports into
-    sections and types.
 
-The following pre-commit checks are mostly for errors and inconsistencies:
+The following pre-commit hooks are for errors and inconsistencies:
 
--   [pyflakes](https://github.com/PyCQA/pyflakes):
--   [pycodestyle](https://pycodestyle.pycqa.org/en/latest/): standard check for errors in Python files.
--   [flake8-tidy-imports](https://github.com/adamchainz/flake8-tidy-imports):
-    tidy module imports.
--   [flake8-docstrings](https://github.com/PyCQA/flake8-docstrings):
-pydocstyle extension of flake8.
-<!--
--   [flake8-rst-docstrings](https://github.com/peterjc/e8-rst-docstrings):
-    extension of `flake8-docstrings` for `rst` docs.
-    -->
--   [flake8-comprehensions](https://github.com/adamchainz/e8-comprehensions):
-    write better list/set/dict comprehensions.
--   [flake8-bugbear](https://github.com/PyCQA/flake8-bugbear):
-    find possible bugs and design issues in program.
--   [flake8-blind-except](https://github.com/elijahandrews/flake8-blind-except):
-    checks for blind, catch-all `except` statements.
--   [yesqa](https://github.com/asottile/yesqa):
-    remove unneccesary `# noqa` comments, follows additional dependencies listed above.
--   [autoflake](https://github.com/PyCQA/autoflake):
-    remove unused imports and variables.
 -   [pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks): generic pre-commit hooks.
     -   **detect-private-key**: checks for the existence of private keys.
     -   **check-ast**: check whether files parse as valid python.
@@ -192,12 +160,49 @@ pydocstyle extension of flake8.
     -   **mixed-line-ending**: checks mixed line ending.
     -   **trailing-whitespace**: trims trailing whitespace.
     -   **check-case-conflict**: check files that would conflict with case-insensitive file systems.
--   [pyupgrade](https://github.com/asottile/pyupgrade):
-    upgrade syntax for newer versions of the language.
 -   **forbid-to-commit**: Make sure that `*.rej` files cannot be commited. These files are created by the
     [automated template sync](#automated-template-sync) if there's a merge conflict and need to be addressed manually.
 
-[ruff]: https://beta.ruff.rs/docs/
+#### Overview of Ruff checks
+
+[Ruff][] implements several checks,
+and therefore mention a the code that enables them in `pyproject.toml`.
+E.g. `isort` is enabled with:
+
+```toml
+[tool.ruff]
+extend-select = [..., "I", ...]
+```
+
+The following checks are for code style and format:
+
+-   [isort](https://beta.ruff.rs/docs/rules/#isort-i): sort module imports into
+    sections and types.
+-   [pydocstyle](https://beta.ruff.rs/docs/rules/#pydocstyle-d) (`D`):
+pydocstyle extension of flake8.
+-   [flake8-tidy-imports](https://beta.ruff.rs/docs/rules/#flake8-tidy-imports-tid) (`TID`):
+    tidy module imports.
+-   [flake8-comprehensions](https://beta.ruff.rs/docs/rules/#flake8-comprehensions-c4) (`C4`):
+    write better list/set/dict comprehensions.
+-   [pyupgrade](https://beta.ruff.rs/docs/rules/#pyupgrade-up) (`UP`):
+    upgrade syntax for newer versions of the language.
+
+The following checks are for errors and inconsistencies:
+
+-   [pyflakes](https://beta.ruff.rs/docs/rules/#pyflakes-f) (`F`): various checks for errors.
+-   [pycodestyle](https://beta.ruff.rs/docs/rules/#pycodestyle-e-w) (`E`, `W`): various checks for errors.
+<!--
+-   [flake8-rst-docstrings](https://github.com/peterjc/e8-rst-docstrings):
+    extension of `flake8-docstrings` for `rst` docs.
+    -->
+-   [flake8-bugbear](https://beta.ruff.rs/docs/rules/#flake8-bugbear-b) (`B`):
+    find possible bugs and design issues in program.
+-   [flake8-blind-except](https://beta.ruff.rs/docs/rules/#flake8-blind-except-ble) (`BLE`):
+    checks for blind, catch-all `except` statements.
+-   [Ruff-specific rules](https://beta.ruff.rs/docs/rules/#ruff-specific-rules-ruf) (`RUF`):
+    - `RUF100`: remove unneccesary `# noqa` comments, follows additional dependencies listed above.
+
+[Ruff]: https://beta.ruff.rs/docs/
 
 ### How to disable or add pre-commit checks
 
