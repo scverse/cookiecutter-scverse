@@ -170,7 +170,7 @@ The following pre-commit hooks are for errors and inconsistencies:
 #### Overview of Ruff checks
 
 [Ruff][] implements several checks,
-and therefore mention a the code that enables them in `pyproject.toml`.
+and therefore each check below mentions a the code that enables it when added to `pyproject.toml`.
 E.g. `isort` is enabled with:
 
 ```toml
