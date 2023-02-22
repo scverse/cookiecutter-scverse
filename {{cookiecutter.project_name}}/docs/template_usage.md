@@ -175,7 +175,7 @@ E.g. `isort` is enabled with:
 
 ```toml
 [tool.ruff]
-extend-select = [..., "I", ...]
+select = [..., "I", ...]
 ```
 
 The following checks are for code style and format:
