@@ -192,7 +192,7 @@ The following checks are for errors and inconsistencies:
 -   [pyflakes](https://beta.ruff.rs/docs/rules/#pyflakes-f) (`F`):
     various checks for errors.
 -   [pycodestyle](https://beta.ruff.rs/docs/rules/#pycodestyle-e-w) (`E`, `W`):
-    various checks for errors.
+various checks for errors.
 <!--
 -   [flake8-rst-docstrings](https://github.com/peterjc/e8-rst-docstrings):
     extension of `flake8-docstrings` for `rst` docs.
@@ -236,7 +236,7 @@ ignore = [
 ]
 ```
 
-[Ruff guide]: https://beta.ruff.rs/docs/configuration/#suppressing-errors
+[ruff guide]: https://beta.ruff.rs/docs/configuration/#suppressing-errors
 
 ### API design
 
