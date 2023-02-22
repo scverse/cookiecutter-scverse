@@ -45,11 +45,16 @@ jobs:
                   overrides = dict(package_name='${{ matrix.package-name }}')
                   cookiecutter('.', no_input=True, extra_context=overrides)
             # Check
+            - name: Set up pre-commit cache
+              uses: actions/cache@v3
+              with:
+                  path: ~/.cache/pre-commit
+                  key: pre-commit-3|${{ matrix.python }}|${{ hashFiles(format('{0}/.pre-commit-config.yaml', env.PROJECT_ROOT)) }}
             - name: Run pre-commit
               run: |
                   cd "$PROJECT_ROOT"
                   git add .
-                  pre-commit run --color=always --show-diff-on-failure --all-files
+                  pre-commit run --verbose --color=always --show-diff-on-failure --all-files
             - name: Install the package
               run: |
                   cd $PROJECT_ROOT
