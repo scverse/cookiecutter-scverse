@@ -142,9 +142,10 @@ Once authorized, pre-commit.ci should automatically be activated.
 
 #### Overview of pre-commit hooks used by the template
 
-[^ruff]: Several of the following hooks are implemented as part of [ruff][],
-and therefore mention a the code that enables them in `pyproject.toml`.
-E.g. `isort` is enabled with:
+[^ruff]:
+    Several of the following hooks are implemented as part of [ruff][],
+    and therefore mention a the code that enables them in `pyproject.toml`.
+    E.g. `isort` is enabled with:
 
 ```toml
 [tool.ruff]
@@ -169,11 +170,11 @@ The following pre-commit checks are mostly for errors and inconsistencies:
 -   [flake8-tidy-imports](https://github.com/adamchainz/flake8-tidy-imports):
     tidy module imports.
 -   [flake8-docstrings](https://github.com/PyCQA/flake8-docstrings):
-    pydocstyle extension of flake8.
+pydocstyle extension of flake8.
 <!--
 -   [flake8-rst-docstrings](https://github.com/peterjc/e8-rst-docstrings):
     extension of `flake8-docstrings` for `rst` docs.
--->
+    -->
 -   [flake8-comprehensions](https://github.com/adamchainz/e8-comprehensions):
     write better list/set/dict comprehensions.
 -   [flake8-bugbear](https://github.com/PyCQA/flake8-bugbear):
