@@ -75,8 +75,10 @@ target-version = ["py38"]
 src = ["src"]
 line-length = 120
 target-version = "py38"
-extend-select = [
-    "W",  # Pycodestyle warnings
+select = [
+    "F",  # Errors detected by Pyflakes
+    "E",  # Error detected by Pycodestyle
+    "W",  # Warning detected by Pycodestyle
     "I",  # isort
     "D",  # pydocstyle
     "B",  # flake8-bugbear
@@ -113,19 +115,6 @@ ignore = [
     "D203",
     # We want docstrings to start immediately after the opening triple quote
     "D213",
-    ## Flake8 rules not supported by ruff:
-    # line break before a binary operator -> black does not adhere to PEP8
-    #"W503",
-    # line break occured after a binary operator -> black does not adhere to PEP8
-    #"W504",
-    # whitespace before : -> black does not adhere to PEP8
-    #"E203",
-    # missing whitespace after ',', ';', or ':' -> black does not adhere to PEP8
-    #"E231",
-    # continuation line over-indented for hanging indent -> black does not adhere to PEP8
-    #"E126",
-    # too many leading '#' for block comment -> this is fine for indicating sections
-    #"E262",
 ]
 exclude = [".git", "__pycache__", "build", "docs/_build", "dist"]
 

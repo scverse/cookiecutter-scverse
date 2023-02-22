@@ -142,32 +142,44 @@ Once authorized, pre-commit.ci should automatically be activated.
 
 #### Overview of pre-commit hooks used by the template
 
+[^ruff]: Several of the following hooks are implemented as part of [ruff][],
+and therefore mention a the code that enables them in `pyproject.toml`.
+E.g. `isort` is enabled with:
+
+```toml
+[tool.ruff]
+extend-select = [..., "I", ...]
+```
+
 The following pre-commit checks are for code style and format:
 
 -   [black](https://black.readthedocs.io/en/stable/): standard code
     formatter in Python.
--   [isort](https://pycqa.github.io/isort/): sort module imports into
-    sections and types.
--   [prettier](https://prettier.io/docs/en/index.html): standard code
-    formatter for non-Python files (e.g. YAML).
 -   [blacken-docs](https://github.com/asottile/blacken-docs): black on
     python code in docs.
+-   [prettier](https://prettier.io/docs/en/index.html): standard code
+    formatter for non-Python files (e.g. YAML).
+-   [isort](https://pycqa.github.io/isort/) ([`I`](https://beta.ruff.rs/docs/rules/#isort-i)[^ruff]): sort module imports into
+    sections and types.
 
-The following pre-commit checks are for errors and inconsistencies:
+The following pre-commit checks are mostly for errors and inconsistencies:
 
--   [flake8](https://flake8.pycqa.org/en/latest/): standard check for errors in Python files.
-    -   [flake8-tidy-imports](https://github.com/adamchainz/flake8-tidy-imports):
-        tidy module imports.
-    -   [flake8-docstrings](https://github.com/PyCQA/flake8-docstrings):
-        pydocstyle extension of flake8.
-    -   [flake8-rst-docstrings](https://github.com/peterjc/e8-rst-docstrings):
-        extension of `flake8-docstrings` for `rst` docs.
-    -   [flake8-comprehensions](https://github.com/adamchainz/e8-comprehensions):
-        write better list/set/dict comprehensions.
-    -   [flake8-bugbear](https://github.com/PyCQA/flake8-bugbear):
-        find possible bugs and design issues in program.
-    -   [flake8-blind-except](https://github.com/elijahandrews/flake8-blind-except):
-        checks for blind, catch-all `except` statements.
+-   [pyflakes](https://github.com/PyCQA/pyflakes):
+-   [pycodestyle](https://pycodestyle.pycqa.org/en/latest/): standard check for errors in Python files.
+-   [flake8-tidy-imports](https://github.com/adamchainz/flake8-tidy-imports):
+    tidy module imports.
+-   [flake8-docstrings](https://github.com/PyCQA/flake8-docstrings):
+    pydocstyle extension of flake8.
+<!--
+-   [flake8-rst-docstrings](https://github.com/peterjc/e8-rst-docstrings):
+    extension of `flake8-docstrings` for `rst` docs.
+-->
+-   [flake8-comprehensions](https://github.com/adamchainz/e8-comprehensions):
+    write better list/set/dict comprehensions.
+-   [flake8-bugbear](https://github.com/PyCQA/flake8-bugbear):
+    find possible bugs and design issues in program.
+-   [flake8-blind-except](https://github.com/elijahandrews/flake8-blind-except):
+    checks for blind, catch-all `except` statements.
 -   [yesqa](https://github.com/asottile/yesqa):
     remove unneccesary `# noqa` comments, follows additional dependencies listed above.
 -   [autoflake](https://github.com/PyCQA/autoflake):
@@ -175,7 +187,7 @@ The following pre-commit checks are for errors and inconsistencies:
 -   [pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks): generic pre-commit hooks.
     -   **detect-private-key**: checks for the existence of private keys.
     -   **check-ast**: check whether files parse as valid python.
-    -   **end-of-file-fixer**:check files end in a newline and only a newline.
+    -   **end-of-file-fixer**: check files end in a newline and only a newline.
     -   **mixed-line-ending**: checks mixed line ending.
     -   **trailing-whitespace**: trims trailing whitespace.
     -   **check-case-conflict**: check files that would conflict with case-insensitive file systems.
@@ -183,6 +195,8 @@ The following pre-commit checks are for errors and inconsistencies:
     upgrade syntax for newer versions of the language.
 -   **forbid-to-commit**: Make sure that `*.rej` files cannot be commited. These files are created by the
     [automated template sync](#automated-template-sync) if there's a merge conflict and need to be addressed manually.
+
+[ruff]: https://beta.ruff.rs/docs/
 
 ### How to disable or add pre-commit checks
 
