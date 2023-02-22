@@ -165,7 +165,7 @@ The following pre-commit hooks are for errors and inconsistencies:
     These files are created by the [automated template sync](#automated-template-sync)
     if there's a merge conflict and need to be addressed manually.
 
-[Ruff]: https://beta.ruff.rs/docs/
+[ruff]: https://beta.ruff.rs/docs/
 
 #### Overview of Ruff checks
 
