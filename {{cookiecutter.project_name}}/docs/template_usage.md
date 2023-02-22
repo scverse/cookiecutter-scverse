@@ -153,7 +153,7 @@ The following pre-commit hooks are for code style and format:
 
 The following pre-commit hooks are for errors and inconsistencies:
 
--   [ruff][]: Many configurable checks, see [Overview of Ruff checks][#overview-of-ruff-checks].
+-   [ruff][]: Many configurable checks, see [Overview of Ruff checks](#overview-of-ruff-checks).
 -   [pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks): generic pre-commit hooks.
     -   **detect-private-key**: checks for the existence of private keys.
     -   **check-ast**: check whether files parse as valid python.
