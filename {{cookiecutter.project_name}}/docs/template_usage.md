@@ -207,7 +207,7 @@ config files, such as `.prettierrc.yml` for **prettier**.
 This template configures `ruff` through the `[tool.ruff]` entry in the `pyproject.toml`.
 For further information `ruff` configuration, see [the docs](https://beta.ruff.rs/docs/configuration/).
 
-Ruff assigns code to the rules it checks (e.g. `E401`) and groups them under a rule category (e.g. `E`). 
+Ruff assigns code to the rules it checks (e.g. `E401`) and groups them under a rule category (e.g. `E`).
 Rule categories are selectively enabled by including them under the `select` key:
 
 ```toml
