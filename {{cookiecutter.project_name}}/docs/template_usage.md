@@ -155,15 +155,15 @@ The following pre-commit hooks are for code style and format:
 -   [prettier](https://prettier.io/docs/en/index.html):
     standard code formatter for non-Python files (e.g. YAML).
 -   [ruff][] based checks:
-    -   [isort](https://beta.ruff.rs/docs/rules/#isort-i) (rule code: `I`):
+    -   [isort](https://beta.ruff.rs/docs/rules/#isort-i) (rule category: `I`):
         sort module imports into sections and types.
-    -   [pydocstyle](https://beta.ruff.rs/docs/rules/#pydocstyle-d) (rule code: `D`):
+    -   [pydocstyle](https://beta.ruff.rs/docs/rules/#pydocstyle-d) (rule category: `D`):
         pydocstyle extension of flake8.
-    -   [flake8-tidy-imports](https://beta.ruff.rs/docs/rules/#flake8-tidy-imports-tid) (rule code: `TID`):
+    -   [flake8-tidy-imports](https://beta.ruff.rs/docs/rules/#flake8-tidy-imports-tid) (rule category: `TID`):
         tidy module imports.
-    -   [flake8-comprehensions](https://beta.ruff.rs/docs/rules/#flake8-comprehensions-c4) (rule code: `C4`):
+    -   [flake8-comprehensions](https://beta.ruff.rs/docs/rules/#flake8-comprehensions-c4) (rule category: `C4`):
         write better list/set/dict comprehensions.
-    -   [pyupgrade](https://beta.ruff.rs/docs/rules/#pyupgrade-up) (rule code: `UP`):
+    -   [pyupgrade](https://beta.ruff.rs/docs/rules/#pyupgrade-up) (rule category: `UP`):
         upgrade syntax for newer versions of the language.
 
 The following pre-commit hooks are for errors and inconsistencies:
@@ -179,15 +179,15 @@ The following pre-commit hooks are for errors and inconsistencies:
     These files are created by the [automated template sync](#automated-template-sync)
     if there's a merge conflict and need to be addressed manually.
 -   [ruff][] based checks:
-    -   [pyflakes](https://beta.ruff.rs/docs/rules/#pyflakes-f) (rule code: `F`):
+    -   [pyflakes](https://beta.ruff.rs/docs/rules/#pyflakes-f) (rule category: `F`):
         various checks for errors.
-    -   [pycodestyle](https://beta.ruff.rs/docs/rules/#pycodestyle-e-w) (rule codes: `E`, `W`):
+    -   [pycodestyle](https://beta.ruff.rs/docs/rules/#pycodestyle-e-w) (rule category: `E`, `W`):
         various checks for errors.
-    -   [flake8-bugbear](https://beta.ruff.rs/docs/rules/#flake8-bugbear-b) (rule code: `B`):
+    -   [flake8-bugbear](https://beta.ruff.rs/docs/rules/#flake8-bugbear-b) (rule category: `B`):
         find possible bugs and design issues in program.
-    -   [flake8-blind-except](https://beta.ruff.rs/docs/rules/#flake8-blind-except-ble) (rule code: `BLE`):
+    -   [flake8-blind-except](https://beta.ruff.rs/docs/rules/#flake8-blind-except-ble) (rule category: `BLE`):
         checks for blind, catch-all `except` statements.
-    -   [Ruff-specific rules](https://beta.ruff.rs/docs/rules/#ruff-specific-rules-ruf) (rule code: `RUF`):
+    -   [Ruff-specific rules](https://beta.ruff.rs/docs/rules/#ruff-specific-rules-ruf) (rule category: `RUF`):
         -   `RUF100`: remove unneccesary `# noqa` comments ()
 
 #### How to add or remove pre-commit checks
@@ -207,7 +207,8 @@ config files, such as `.prettierrc.yml` for **prettier**.
 This template configures `ruff` through the `[tool.ruff]` entry in the `pyproject.toml`.
 For further information `ruff` configuration, see [the docs](https://beta.ruff.rs/docs/configuration/).
 
-Sets of checks are selectively enabled by including their code under the `select` key:
+Ruff assigns code to the rules it checks (e.g. `E401`) and groups them under a rule category (e.g. `E`). 
+Rule categories are selectively enabled by including them under the `select` key:
 
 ```toml
 [tool.ruff]
