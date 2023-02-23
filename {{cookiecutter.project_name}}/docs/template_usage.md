@@ -254,6 +254,7 @@ If you want to add a code that comes from a tool other than Ruff,
 add it to Ruff’s [`external = [...]`](https://beta.ruff.rs/docs/settings/#external) setting to prevent `RUF100` from removing it.
 ```
 
+[ruff]: https://beta.ruff.rs/docs/
 [ruff guide]: https://beta.ruff.rs/docs/configuration/#suppressing-errors
 
 ### API design
