@@ -155,15 +155,15 @@ The following pre-commit hooks are for code style and format:
 -   [prettier](https://prettier.io/docs/en/index.html):
     standard code formatter for non-Python files (e.g. YAML).
 -   [ruff][] based checks:
-    -   [isort](https://beta.ruff.rs/docs/rules/#isort-i) (error code: `I`):
+    -   [isort](https://beta.ruff.rs/docs/rules/#isort-i) (rule code: `I`):
         sort module imports into sections and types.
-    -   [pydocstyle](https://beta.ruff.rs/docs/rules/#pydocstyle-d) (error code: `D`):
+    -   [pydocstyle](https://beta.ruff.rs/docs/rules/#pydocstyle-d) (rule code: `D`):
         pydocstyle extension of flake8.
-    -   [flake8-tidy-imports](https://beta.ruff.rs/docs/rules/#flake8-tidy-imports-tid) (error code: `TID`):
+    -   [flake8-tidy-imports](https://beta.ruff.rs/docs/rules/#flake8-tidy-imports-tid) (rule code: `TID`):
         tidy module imports.
-    -   [flake8-comprehensions](https://beta.ruff.rs/docs/rules/#flake8-comprehensions-c4) (error code: `C4`):
+    -   [flake8-comprehensions](https://beta.ruff.rs/docs/rules/#flake8-comprehensions-c4) (rule code: `C4`):
         write better list/set/dict comprehensions.
-    -   [pyupgrade](https://beta.ruff.rs/docs/rules/#pyupgrade-up) (error code: `UP`):
+    -   [pyupgrade](https://beta.ruff.rs/docs/rules/#pyupgrade-up) (rule code: `UP`):
         upgrade syntax for newer versions of the language.
 
 The following pre-commit hooks are for errors and inconsistencies:
@@ -179,15 +179,15 @@ The following pre-commit hooks are for errors and inconsistencies:
     These files are created by the [automated template sync](#automated-template-sync)
     if there's a merge conflict and need to be addressed manually.
 -   [ruff][] based checks:
-    -   [pyflakes](https://beta.ruff.rs/docs/rules/#pyflakes-f) (error code: `F`):
+    -   [pyflakes](https://beta.ruff.rs/docs/rules/#pyflakes-f) (rule code: `F`):
         various checks for errors.
-    -   [pycodestyle](https://beta.ruff.rs/docs/rules/#pycodestyle-e-w) (error codes: `E`, `W`):
+    -   [pycodestyle](https://beta.ruff.rs/docs/rules/#pycodestyle-e-w) (rule codes: `E`, `W`):
         various checks for errors.
-    -   [flake8-bugbear](https://beta.ruff.rs/docs/rules/#flake8-bugbear-b) (error code: `B`):
+    -   [flake8-bugbear](https://beta.ruff.rs/docs/rules/#flake8-bugbear-b) (rule code: `B`):
         find possible bugs and design issues in program.
-    -   [flake8-blind-except](https://beta.ruff.rs/docs/rules/#flake8-blind-except-ble) (error code: `BLE`):
+    -   [flake8-blind-except](https://beta.ruff.rs/docs/rules/#flake8-blind-except-ble) (rule code: `BLE`):
         checks for blind, catch-all `except` statements.
-    -   [Ruff-specific rules](https://beta.ruff.rs/docs/rules/#ruff-specific-rules-ruf) (error code: `RUF`):
+    -   [Ruff-specific rules](https://beta.ruff.rs/docs/rules/#ruff-specific-rules-ruf) (rule code: `RUF`):
         -   `RUF100`: remove unneccesary `# noqa` comments ()
 
 #### How to add or remove pre-commit checks
@@ -222,8 +222,8 @@ select = [
 ]
 ```
 
-The `ignore` entry is used to disable specific error messages for the entire project.
-Add the rule ID(s) you want to ignore and don't forget to add a comment explaining why.
+The `ignore` entry is used to disable specific rules for the entire project.
+Add the rule code(s) you want to ignore and don't forget to add a comment explaining why.
 You can find a long list of checks that this template disables by default sitting there already.
 
 ```toml
@@ -244,12 +244,12 @@ Checks can be ignored per-file (or glob pattern) with `[tool.ruff.per-file-ignor
 "*/__init__.py" = ["F401"]
 ```
 
-To ignore an specific error on a per-case basis, you can add a `# noqa: <rule>[, <rule>, …]` comment to the offending line.
-Specify the rule ID(s) to ignore, with e.g. `# noqa: E731`. Check the [Ruff guide][] for reference.
+To ignore a specific rule on a per-case basis, you can add a `# noqa: <rule>[, <rule>, …]` comment to the offending line.
+Specify the rule code(s) to ignore, with e.g. `# noqa: E731`. Check the [Ruff guide][] for reference.
 
 ```{note}
-The `RUF100` check will remove `noqa` IDs that are no longer necessary.
-If you want to add an ID that comes from a tool other than Ruff,
+The `RUF100` check will remove rule codes that are no longer necessary from `noqa` comments.
+If you want to add a code that comes from a tool other than Ruff,
 add it to Ruff’s [`external = [...]`](https://beta.ruff.rs/docs/settings/#external) setting to prevent `RUF100` from removing it.
 ```
 
