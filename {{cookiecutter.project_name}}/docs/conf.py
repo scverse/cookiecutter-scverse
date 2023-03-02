@@ -109,6 +109,7 @@ html_title = project_name
 html_theme_options = {
     "repository_url": repository_url,
     "use_repository_button": True,
+    "path_to_docs": "docs/",
 }
 
 pygments_style = "default"
