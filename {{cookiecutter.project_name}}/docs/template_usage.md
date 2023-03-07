@@ -175,9 +175,9 @@ The following pre-commit hooks are for errors and inconsistencies:
     -   **mixed-line-ending**: checks mixed line ending.
     -   **trailing-whitespace**: trims trailing whitespace.
     -   **check-case-conflict**: check files that would conflict with case-insensitive file systems.
--   **forbid-to-commit**: Make sure that `*.rej` files cannot be commited.
-    These files are created by the [automated template sync](#automated-template-sync)
-    if there's a merge conflict and need to be addressed manually.
+    -   **forbid-to-commit**: Make sure that `*.rej` files cannot be commited.
+        These files are created by the [automated template sync](#automated-template-sync)
+        if there's a merge conflict and need to be addressed manually.
 -   [ruff][] based checks:
     -   [pyflakes](https://beta.ruff.rs/docs/rules/#pyflakes-f) (rule category: `F`):
         various checks for errors.
