@@ -19,7 +19,7 @@ def _process_return(lines: Iterable[str]) -> Generator[str, None, None]:
 
 def _parse_returns_section(self: NumpyDocstring, section: str) -> list[str]:
     lines_raw = self._dedent(self._consume_to_next_section())
-    if lines_raw[0] == ':':
+    if lines_raw[0] == ":":
         del lines_raw[0]
     lines = self._format_block(":returns: ", list(_process_return(lines_raw)))
     if lines and lines[-1]:
