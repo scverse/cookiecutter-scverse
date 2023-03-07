@@ -52,6 +52,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinxcontrib.bibtex",
     "sphinx.ext.mathjax",
+    "sphinx_autodoc_typehints",
     "IPython.sphinxext.ipython_console_highlighting",
     *[p.stem for p in (HERE / "extensions").glob("*.py")],
 ]
@@ -59,7 +60,6 @@ extensions = [
 autosummary_generate = True
 autodoc_member_order = "groupwise"
 default_role = "literal"
-autodoc_typehints = "description"
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 napoleon_include_init_with_doc = False
