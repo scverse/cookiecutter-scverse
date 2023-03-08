@@ -131,6 +131,10 @@ If your project is private, there are ways to enable docs rendering on [readthed
 check code for errors, inconsistencies and code styles, before the code
 is committed.
 
+This template uses a number of pre-commit checks. In this section we'll detail what is used, where they're defined, and how to modify these checks.
+
+#### Pre-commit CI
+
 We recommend setting up [pre-commit.ci][] to enforce consistency checks on every commit
 and pull-request.
 
@@ -150,10 +154,20 @@ The following pre-commit hooks are for code style and format:
     black on Python code in docs.
 -   [prettier](https://prettier.io/docs/en/index.html):
     standard code formatter for non-Python files (e.g. YAML).
+-   [ruff][] based checks:
+    -   [isort](https://beta.ruff.rs/docs/rules/#isort-i) (rule category: `I`):
+        sort module imports into sections and types.
+    -   [pydocstyle](https://beta.ruff.rs/docs/rules/#pydocstyle-d) (rule category: `D`):
+        pydocstyle extension of flake8.
+    -   [flake8-tidy-imports](https://beta.ruff.rs/docs/rules/#flake8-tidy-imports-tid) (rule category: `TID`):
+        tidy module imports.
+    -   [flake8-comprehensions](https://beta.ruff.rs/docs/rules/#flake8-comprehensions-c4) (rule category: `C4`):
+        write better list/set/dict comprehensions.
+    -   [pyupgrade](https://beta.ruff.rs/docs/rules/#pyupgrade-up) (rule category: `UP`):
+        upgrade syntax for newer versions of the language.
 
 The following pre-commit hooks are for errors and inconsistencies:
 
--   [ruff][]: Many configurable checks for Python code, see [Overview of Ruff checks](#overview-of-ruff-checks).
 -   [pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks): generic pre-commit hooks for text files.
     -   **detect-private-key**: checks for the existence of private keys.
     -   **check-ast**: check whether files parse as valid python.
@@ -161,74 +175,57 @@ The following pre-commit hooks are for errors and inconsistencies:
     -   **mixed-line-ending**: checks mixed line ending.
     -   **trailing-whitespace**: trims trailing whitespace.
     -   **check-case-conflict**: check files that would conflict with case-insensitive file systems.
--   **forbid-to-commit**: Make sure that `*.rej` files cannot be commited.
-    These files are created by the [automated template sync](#automated-template-sync)
-    if there's a merge conflict and need to be addressed manually.
+    -   **forbid-to-commit**: Make sure that `*.rej` files cannot be commited.
+        These files are created by the [automated template sync](#automated-template-sync)
+        if there's a merge conflict and need to be addressed manually.
+-   [ruff][] based checks:
+    -   [pyflakes](https://beta.ruff.rs/docs/rules/#pyflakes-f) (rule category: `F`):
+        various checks for errors.
+    -   [pycodestyle](https://beta.ruff.rs/docs/rules/#pycodestyle-e-w) (rule category: `E`, `W`):
+        various checks for errors.
+    -   [flake8-bugbear](https://beta.ruff.rs/docs/rules/#flake8-bugbear-b) (rule category: `B`):
+        find possible bugs and design issues in program.
+    -   [flake8-blind-except](https://beta.ruff.rs/docs/rules/#flake8-blind-except-ble) (rule category: `BLE`):
+        checks for blind, catch-all `except` statements.
+    -   [Ruff-specific rules](https://beta.ruff.rs/docs/rules/#ruff-specific-rules-ruf) (rule category: `RUF`):
+        -   `RUF100`: remove unneccesary `# noqa` comments ()
 
-[ruff]: https://beta.ruff.rs/docs/
+#### How to add or remove pre-commit checks
 
-#### Overview of Ruff checks
+The [pre-commit checks](#pre-commit-checks) check for both correctness and stylistic errors.
+In some cases it might overshoot and you may have good reasons to ignore certain warnings.
+This section shows you where these checks are defined, and how to enable/ disable them.
 
-[Ruff][] implements several checks for Python code and docstrings.
-Therefore each check below mentions a the rule prefix that enables it when added to `pyproject.toml`.
-E.g. `isort` is enabled with:
+##### pre-commit
+
+You can add or remove pre-commit checks by simply deleting relevant lines in the `.pre-commit-config.yaml` file under the repository root.
+Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` (for `ruff` and `black`) or tool-specific
+config files, such as `.prettierrc.yml` for **prettier**.
+
+##### Ruff
+
+This template configures `ruff` through the `[tool.ruff]` entry in the `pyproject.toml`.
+For further information `ruff` configuration, see [the docs](https://beta.ruff.rs/docs/configuration/).
+
+Ruff assigns code to the rules it checks (e.g. `E401`) and groups them under a rule category (e.g. `E`).
+Rule categories are selectively enabled by including them under the `select` key:
 
 ```toml
 [tool.ruff]
-select = [ ..., "I", ... ]
+...
+
+select = [
+    "F",  # Errors detected by Pyflakes
+    "E",  # Error detected by Pycodestyle
+    "W",  # Warning detected by Pycodestyle
+    "I",  # isort
+    ...
+]
 ```
 
-The following checks are for code style and format:
-
--   [isort](https://beta.ruff.rs/docs/rules/#isort-i) (`I`):
-    sort module imports into sections and types.
--   [pydocstyle](https://beta.ruff.rs/docs/rules/#pydocstyle-d) (`D`):
-    pydocstyle extension of flake8.
--   [flake8-tidy-imports](https://beta.ruff.rs/docs/rules/#flake8-tidy-imports-tid) (`TID`):
-    tidy module imports.
--   [flake8-comprehensions](https://beta.ruff.rs/docs/rules/#flake8-comprehensions-c4) (`C4`):
-    write better list/set/dict comprehensions.
--   [pyupgrade](https://beta.ruff.rs/docs/rules/#pyupgrade-up) (`UP`):
-    upgrade syntax for newer versions of the language.
-
-The following checks are for errors and inconsistencies:
-
--   [pyflakes](https://beta.ruff.rs/docs/rules/#pyflakes-f) (`F`):
-    various checks for errors.
--   [pycodestyle](https://beta.ruff.rs/docs/rules/#pycodestyle-e-w) (`E`, `W`):
-    various checks for errors.
--   [flake8-bugbear](https://beta.ruff.rs/docs/rules/#flake8-bugbear-b) (`B`):
-    find possible bugs and design issues in program.
--   [flake8-blind-except](https://beta.ruff.rs/docs/rules/#flake8-blind-except-ble) (`BLE`):
-    checks for blind, catch-all `except` statements.
--   [Ruff-specific rules](https://beta.ruff.rs/docs/rules/#ruff-specific-rules-ruf) (`RUF`):
-    -   `RUF100`: remove unneccesary `# noqa` comments.
-        See [How to ignore certain lint warnings](#how-to-ignore-certain-lint-warnings) for details.
-
-### How to disable or add pre-commit checks
-
--   To ignore lint warnigs from [Ruff][], see [How to ignore certain lint warnings](#how-to-ignore-certain-lint-warnings).
--   You can add or remove pre-commit checks by simply deleting relevant lines in the `.pre-commit-config.yaml` file.
-    Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` or tool-specific
-    config files, such as `.prettierrc.yml` for **prettier** and `.flake8` for **flake8**.
-
-### How to ignore certain lint warnings
-
-The [pre-commit checks](#pre-commit-checks) include [Ruff][] which checks
-for errors in Python files, including stylistic errors.
-
-In some cases it might overshoot and you may have good reasons to ignore certain warnings.
-
-To ignore an specific error on a per-case basis, you can add a `# noqa: <rule>[, <rule>, …]` comment to the offending line.
-Specify the rule ID(s) to ignore, with e.g. `# noqa: E731`. Check the [Ruff guide][] for reference.
-
-The `RUF100` check will remove `noqa` IDs that are no longer necessary.
-If you want to add an ID that comes from a tool other than Ruff,
-add it to Ruff’s [`external = [...]`](https://beta.ruff.rs/docs/settings/#external) setting to prevent `RUF100` from removing it.
-
-You can also disable certain error messages for the entire project.
-To do so, edit the `[tool.ruff]` section in `pyproject.toml` in the root of the repository.
-Add the rule ID(s) you want to ignore and don't forget to add a comment explaining why.
+The `ignore` entry is used to disable specific rules for the entire project.
+Add the rule code(s) you want to ignore and don't forget to add a comment explaining why.
+You can find a long list of checks that this template disables by default sitting there already.
 
 ```toml
 ignore = [
@@ -239,6 +236,25 @@ ignore = [
 ]
 ```
 
+Checks can be ignored per-file (or glob pattern) with `[tool.ruff.per-file-ignores]`.
+
+```toml
+[tool.ruff.per-file-ignores]
+"docs/*" = ["I"]
+"tests/*" = ["D"]
+"*/__init__.py" = ["F401"]
+```
+
+To ignore a specific rule on a per-case basis, you can add a `# noqa: <rule>[, <rule>, …]` comment to the offending line.
+Specify the rule code(s) to ignore, with e.g. `# noqa: E731`. Check the [Ruff guide][] for reference.
+
+```{note}
+The `RUF100` check will remove rule codes that are no longer necessary from `noqa` comments.
+If you want to add a code that comes from a tool other than Ruff,
+add it to Ruff’s [`external = [...]`](https://beta.ruff.rs/docs/settings/#external) setting to prevent `RUF100` from removing it.
+```
+
+[ruff]: https://beta.ruff.rs/docs/
 [ruff guide]: https://beta.ruff.rs/docs/configuration/#suppressing-errors
 
 ### API design
