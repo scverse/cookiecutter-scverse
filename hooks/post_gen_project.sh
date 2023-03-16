@@ -18,7 +18,7 @@ cat << EOF
 ║                        [1mSet-up online services[0m                        ║
 ╚══════════════════════════════════════════════════════════════════════╝
 
-[1mYour repsoitory is now ready. However, to use all features of the [0m
+[1mYour repository is now ready. However, to use all features of the [0m
 [1mtemplate you will need to set up the following online services.[0m Clicking
 on the links will take you to the respective sections of the developer
 documentation. The developer documentation is also shipped as part of

@@ -47,7 +47,7 @@ with open("/home/sturm/Downloads/report.txt", "wt") as report_file:
             """
 # Set-up online services
 
-**Your repsoitory is now ready. However, to use all features of the template you will need to set up the following online services.**
+**Your repository is now ready. However, to use all features of the template you will need to set up the following online services.**
 Clicking on the links will take you to the respective sections of the developer documentation.
 The developer documentation is also shipped as part of the template in docs/developer_docs.md.
 
