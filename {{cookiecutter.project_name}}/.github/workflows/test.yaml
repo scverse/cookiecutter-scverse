@@ -6,6 +6,10 @@ on:
     pull_request:
         branches: [main]
 
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
 jobs:
     test:
         runs-on: ${{ matrix.os }}
@@ -22,10 +26,6 @@ jobs:
         env:
             OS: ${{ matrix.os }}
             PYTHON: ${{ matrix.python }}
-
-        concurrency:
-            group: ${{ github.workflow }}-${{ github.ref }}
-            cancel-in-progress: true
 
         steps:
             - uses: actions/checkout@v2
