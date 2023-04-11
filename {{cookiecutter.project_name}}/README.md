@@ -47,6 +47,8 @@ If you found a bug, please use the [issue tracker][issue-tracker].
 
 ## Citation
 
+> t.b.a.
+
 You can cite the scverse publication as follows:
 
 > **The scverse project provides a computational ecosystem for single-cell omics data analysis**
