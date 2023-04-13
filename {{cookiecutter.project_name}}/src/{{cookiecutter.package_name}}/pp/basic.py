@@ -2,7 +2,7 @@ from anndata import AnnData
 
 
 def basic_preproc(adata: AnnData) -> int:
-    """Run a basic preprocessing on the AnnData :cite:p:`Wolf2018` object.
+    """Run a basic preprocessing on the AnnData object.
 
     Parameters
     ----------
