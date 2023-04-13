@@ -33,7 +33,7 @@ dev = [
 ]
 doc = [
     "sphinx>=4",
-    "sphinx-book-theme>=0.3.3",
+    "sphinx-book-theme>=1.0.0",
     "myst-nb",
     "sphinxcontrib-bibtex>=1.0.0",
     "sphinx-autodoc-typehints",
@@ -114,6 +114,9 @@ ignore = [
     # We want docstrings to start immediately after the opening triple quote
     "D213",
 ]
+
+[tool.ruff.pydocstyle]
+convention = "numpy"
 
 [tool.ruff.per-file-ignores]
 "docs/*" = ["I"]
