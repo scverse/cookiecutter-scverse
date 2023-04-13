@@ -45,7 +45,6 @@ See the [changelog][changelog].
 For questions and help requests, you can reach out in the [scverse discourse][scverse-discourse].
 If you found a bug, please use the [issue tracker][issue-tracker].
 
-
 [scverse-discourse]: https://discourse.scverse.org/
 [issue-tracker]: https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.project_name }}/issues
 [changelog]: https://{{ cookiecutter.project_name }}.readthedocs.io/latest/changelog.html
