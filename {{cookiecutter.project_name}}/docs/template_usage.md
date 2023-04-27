@@ -274,8 +274,7 @@ there may also be good reasons to choose a different approach, e.g. using an obj
 
 ### Using VCS-based versioning
 
-By default, the template uses hard-coded version numbers that are set in `pyproject.toml` and [managed with
-bump2version](contributing.md#publishing-a-release). If you prefer to have your project automatically infer version numbers from git
+By default, the template uses hard-coded version numbers that are set in `pyproject.toml`. If you prefer to have your project automatically infer version numbers from git
 tags, it is straightforward to switch to vcs-based versioning using [hatch-vcs][].
 
 In `pyproject.toml` add the following changes, and you are good to go!
@@ -333,10 +332,6 @@ The following hints may be useful to work with the template sync:
 
 [cruft]: https://cruft.github.io/cruft/
 [cruft-update-project]: https://cruft.github.io/cruft/#updating-a-project
-
-### Making releases
-
-TODO
 
 ## Moving forward
 
