@@ -124,7 +124,7 @@ For more information, follow the [Python packaging tutorial][].
 
 Any tag pushed to the `main` branch will trigger the release Github workflow that automatically builds and uploads the Python package to [PyPI][].
 For this to work, the `PYPI_API_TOKEN` Github secret needs to be set to the value of the [PyPI][] token.
-See [Creating PyPI tokens] for instructions on how to create a [PyPI][] token.
+See [Creating PyPI tokens][] for instructions on how to create a [PyPI][] token.
 Finally, set your `PYPI_API_TOKEN` Github secret equal to the value of the just created [PyPI][] token by following [creating Github secrets][].
 
 [creating github secrets]: https://docs.github.com/en/actions/security-guides/encrypted-secrets
