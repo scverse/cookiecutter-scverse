@@ -122,7 +122,7 @@ For more information, follow the [Python packaging tutorial][].
 
 #### Configuring the Github workflow
 
-Any tag pushed to the `main` branch will trigger the release Github workflow that automatically builds and uploads the Python package to [PyPI][].
+Tags adhering to `"*.*.*"` that are pushed to the `main` branch will trigger the release Github workflow that automatically builds and uploads the Python package to [PyPI][].
 For this to work, the `PYPI_API_TOKEN` Github secret needs to be set to the value of the [PyPI][] token.
 See [Creating PyPI tokens][] for instructions on how to create a [PyPI][] token.
 Finally, set your `PYPI_API_TOKEN` Github secret equal to the value of the just created [PyPI][] token by following [creating Github secrets][].
