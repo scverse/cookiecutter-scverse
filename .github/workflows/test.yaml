@@ -1,69 +1,69 @@
 name: Test
 
 on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-    test:
-        runs-on: ${{ matrix.os }}
-        defaults:
-            run:
-                shell: bash -e {0} # -e to fail on error
+  test:
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash -e {0} # -e to fail on error
 
-        strategy:
-            fail-fast: false
-            matrix:
-                python: ["3.8", "3.10"]
-                os: [ubuntu-latest]
-                # one that matches "project-name".lower().replace('-', '_'), one that doesn’t:
-                package-name: [project_name, package_alt]
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.8", "3.10"]
+        os: [ubuntu-latest]
+        # one that matches "project-name".lower().replace('-', '_'), one that doesn’t:
+        package-name: [project_name, package_alt]
+    env:
+      PROJECT_ROOT: project-name
+
+    steps:
+      # Setup
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
+          cache: "pip"
+          cache-dependency-path: "**/pyproject.toml"
+      - name: Install Ubuntu system dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install pandoc
+      - name: Install build & check dependencies
+        run: python -m pip install --upgrade pip wheel cookiecutter pre-commit
+      # Build
+      - name: Build from template
+        shell: python
+        run: |
+          from cookiecutter.main import cookiecutter
+          overrides = dict(package_name='${{ matrix.package-name }}')
+          cookiecutter('.', no_input=True, extra_context=overrides)
+      # Check
+      - name: Set up pre-commit cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-3|${{ matrix.python }}|${{ hashFiles(format('{0}/.pre-commit-config.yaml', env.PROJECT_ROOT)) }}
+      - name: Run pre-commit
+        run: |
+          cd "$PROJECT_ROOT"
+          git add .
+          pre-commit run --verbose --color=always --show-diff-on-failure --all-files
+      - name: Install the package
+        run: |
+          cd $PROJECT_ROOT
+          pip install ".[doc]"
+          python -c "import ${{ matrix.package-name }}"
+      # Docs
+      - name: Build the documentation
         env:
-            PROJECT_ROOT: project-name
-
-        steps:
-            # Setup
-            - uses: actions/checkout@v2
-            - name: Set up Python ${{ matrix.python }}
-              uses: actions/setup-python@v4
-              with:
-                  python-version: ${{ matrix.python }}
-                  cache: "pip"
-                  cache-dependency-path: "**/pyproject.toml"
-            - name: Install Ubuntu system dependencies
-              if: matrix.os == 'ubuntu-latest'
-              run: sudo apt-get install pandoc
-            - name: Install build & check dependencies
-              run: python -m pip install --upgrade pip wheel cookiecutter pre-commit
-            # Build
-            - name: Build from template
-              shell: python
-              run: |
-                  from cookiecutter.main import cookiecutter
-                  overrides = dict(package_name='${{ matrix.package-name }}')
-                  cookiecutter('.', no_input=True, extra_context=overrides)
-            # Check
-            - name: Set up pre-commit cache
-              uses: actions/cache@v3
-              with:
-                  path: ~/.cache/pre-commit
-                  key: pre-commit-3|${{ matrix.python }}|${{ hashFiles(format('{0}/.pre-commit-config.yaml', env.PROJECT_ROOT)) }}
-            - name: Run pre-commit
-              run: |
-                  cd "$PROJECT_ROOT"
-                  git add .
-                  pre-commit run --verbose --color=always --show-diff-on-failure --all-files
-            - name: Install the package
-              run: |
-                  cd $PROJECT_ROOT
-                  pip install ".[doc]"
-                  python -c "import ${{ matrix.package-name }}"
-            # Docs
-            - name: Build the documentation
-              env:
-                  SPHINXOPTS: -W --keep-going
-              run: |
-                  cd "$PROJECT_ROOT/docs"
-                  make html
+          SPHINXOPTS: -W --keep-going
+        run: |
+          cd "$PROJECT_ROOT/docs"
+          make html
