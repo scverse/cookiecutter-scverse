@@ -9,3 +9,17 @@ repos:
         # See https://github.com/scverse/cookiecutter-scverse/issues/143 and
         # https://github.com/jupyterlab/jupyterlab/issues/12675
         language_version: "17.9.1"
+  # scripts
+  - repo: https://github.com/psf/black
+    rev: "22.3.0"
+    hooks:
+      - id: black
+        args: ["--force-exclude={{cookiecutter.project_name}}"]
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.0.250
+    hooks:
+      - id: ruff
+        args:
+          - "--extend-exclude=\\{\\{cookiecutter.project_name\\}\\}/**"
+          - "--fix"
+          - "--exit-non-zero-on-fix"
