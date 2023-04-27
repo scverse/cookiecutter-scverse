@@ -1,0 +1,39 @@
+name: make cruft PRs for all projects using us
+on:
+  release:
+    types: [published]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout template repository
+        uses: actions/checkout@v3
+
+      - name: Checkout instance repository
+        uses: actions/checkout@v3
+        with:
+          repository: scverse/ecosystem-packages
+          token: ${{ secrets.BOT_GH_TOKEN }}
+          path: data
+          persist-credentials: true
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          title: Update template to ${{ github.event.release.tag_name }}
+          body: |
+            `cookiecutter-scverse` released [${{ github.event.release.name }}](${{ github.event.release.html_url }}).
+
+            ## Changes
+
+            ${{ github.event.release.body }}
+
+            ## Additional remarks
+            * unsubscribe: If you don’t want to receive these PRs in the future, add `skip: true` to [this file](https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml) using a PR or, if you never want to sync from the template again, delete your `.cruft` file.
+            * If there are **merge conflicts**, they either show up inline (`>>>>>>>`) or a `.rej` file will have been created for the respective files. You need to address these conflicts manually. Make sure to enable pre-commit.ci (see below) to detect such files.
+            * The scverse template works best when the [pre-commit.ci][], [readthedocs][] and [codecov][] services are enabled. Make sure to activate those apps if you haven't already.
+
+            [pre-commit.ci]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#pre-commit-ci
+            [readthedocs]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#documentation-on-readthedocs
+            [codecov]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#coverage-tests-with-codecov
