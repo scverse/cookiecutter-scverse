@@ -11,7 +11,9 @@ from typing import IO, NotRequired, TypedDict, cast
 import typer
 from github import Github
 from github.ContentFile import ContentFile
-from github.GitRelease import GitRelease
+from github.GitRelease import GitRelease as GHRelease
+from github.Repository import Repository as GHRepo
+from pygit2 import RemoteCallbacks, Signature, UserPass, clone_repository
 from yaml import safe_load
 
 log = getLogger(__name__)
@@ -22,7 +24,7 @@ class Repo(TypedDict):
     skip: NotRequired[bool]
 
 
-def get_template_release(gh: Github, tag_name: str) -> GitRelease:
+def get_template_release(gh: Github, tag_name: str) -> GHRelease:
     template_repo = gh.get_repo("scverse/cookiecutter-scverse")
     return template_repo.get_release(tag_name)
 
@@ -41,10 +43,31 @@ def get_repo_urls(gh: Github) -> Generator[str]:
             yield repo["url"]
 
 
-def make_pr(gh: Github, release: GitRelease, repo_url: str) -> None:
-    log.info(f"Sending PR to {repo_url}")
+def cruft_update(token: str, repo: GHRepo):
+    author = committer = Signature("scverse-bot", "core-team@scverse.org")
+    callbacks = RemoteCallbacks(UserPass(author.name, token))
 
-    # TODO
+    # TODO: path, contents, commit msg, cruft exec, …
+
+    # Clone the newly created repo
+    clone = clone_repository(repo.git_url, "/path/to/clone/to", callbacks=callbacks)
+
+    # put the files in the repository here
+
+    # Commit it
+    clone.remotes.set_url("origin", repo.clone_url)
+    index = clone.index
+    index.add_all()
+    index.write()
+    tree = index.write_tree()
+    clone.create_commit("refs/heads/master", author, committer, "init commit", tree, [clone.head.get_object().hex])
+    remote = clone.remotes["origin"]
+    # remote.credentials = UserPass...
+
+    remote.push(["refs/heads/master"], callbacks=callbacks)
+
+
+def create_pr_data(release: GHRelease) -> tuple[str, str]:
     template_usage = "https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html"
     title = f"Update template to {release.tag_name}"
     body = f"""\
@@ -69,7 +92,19 @@ def make_pr(gh: Github, release: GitRelease, repo_url: str) -> None:
 [readthedocs]: {template_usage}#documentation-on-readthedocs
 [codecov]: {template_usage}#coverage-tests-with-codecov
 """
-    print(gh, release, repo_url, title, body)
+
+    return title, body
+
+
+def make_pr(gh: Github, release: GHRelease, repo_url: str) -> None:
+    title, body = create_pr_data(release)
+    log.info(f"Sending PR to {repo_url}: {title}")
+
+    # create fork, populate branch, do PR from it
+    origin = gh.get_repo(repo_url.removeprefix("https://github.com/"))
+    repo = origin.create_fork()
+    cruft_update(repo)
+    origin.create_pull(title, body, ...)  # TODO
 
 
 def setup() -> None:

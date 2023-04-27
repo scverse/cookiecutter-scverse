@@ -18,6 +18,7 @@ urls.Source = "https://github.com/scverse/cookiecutter-scverse"
 dependencies = [
     "rich",
     "typer",
+    "pygit2",
     "PyGitHub",
     "PyYAML",
 ]
