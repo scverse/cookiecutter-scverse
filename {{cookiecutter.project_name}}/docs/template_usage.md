@@ -334,6 +334,10 @@ The following hints may be useful to work with the template sync:
 [cruft]: https://cruft.github.io/cruft/
 [cruft-update-project]: https://cruft.github.io/cruft/#updating-a-project
 
+### Making releases
+
+TODO
+
 ## Moving forward
 
 You have reached the end of this document. Congratulations! You have successfully set up your project and are ready to start.
