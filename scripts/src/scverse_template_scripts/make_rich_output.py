@@ -1,10 +1,13 @@
 from rich.console import Console
 from rich.markdown import Markdown
 
-message = """\
+dev_docs_url = "https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html"
+
+message = f"""\
 # Set-up online services
 
-**Your repository is now ready. However, to use all features of the template you will need to set up the following online services.**
+**Your repository is now ready.
+However, to use all features of the template you will need to set up the following online services.**
 Clicking on the links will take you to the respective sections of the developer documentation.
 The developer documentation is also shipped as part of the template in docs/developer_docs.md.
 
@@ -16,7 +19,8 @@ All CI checks should pass, you are ready to start developing your new tool!
 
 # Install the package
 
-To run tests or build the documentation locally, you need to install your package and its dependencies. You can do so with
+To run tests or build the documentation locally, you need to install your package and its dependencies.
+You can do so with
 
 ```bash
 pip install ".[test,dev,doc]"
@@ -24,7 +28,7 @@ pip install ".[test,dev,doc]"
 
 # Customizations
 
-Further instructions on using this template can be found in the [dev docs included in the project](https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html).
+Further instructions on using this template can be found in the [dev docs included in the project][dev-docs].
 
 # Committment
 
@@ -34,11 +38,12 @@ We expect developers of scverse ecosystem packages to
 -   [provide documentation][write-docs], including tutorials where applicable
 -   support users through github and the [scverse discourse][]
 
-[setup-pre-commit]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#pre-commit-checks
-[setup-rtd]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#documentation-on-readthedocs
-[setup-codecov]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#coverage-tests-with-codecov
-[write-tests]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#writing-tests
-[write-docs]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#writing-documentation
+[dev-docs]: {dev_docs_url}
+[setup-pre-commit]: {dev_docs_url}#pre-commit-checks
+[setup-rtd]: {dev_docs_url}#documentation-on-readthedocs
+[setup-codecov]: {dev_docs_url}#coverage-tests-with-codecov
+[write-tests]: {dev_docs_url}#writing-tests
+[write-docs]: {dev_docs_url}#writing-documentation
 [scverse discourse]: https://discourse.scverse.org/
 """
 

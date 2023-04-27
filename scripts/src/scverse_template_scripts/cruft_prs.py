@@ -45,6 +45,31 @@ def make_pr(gh: Github, release: GitRelease, repo_url: str) -> None:
     log.info(f"Sending PR to {repo_url}")
 
     # TODO
+    template_usage = "https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html"
+    title = f"Update template to {release.tag_name}"
+    body = f"""\
+`cookiecutter-scverse` released [{release.title}]({release.html_url}).
+
+## Changes
+
+{release.body}
+
+## Additional remarks
+* unsubscribe: If you don`t want to receive these PRs in the future,
+  add `skip: true` to [`template-repos.yml`][] using a PR or,
+  if you never want to sync from the template again, delete your `.cruft` file.
+* If there are **merge conflicts**,
+  they either show up inline (`>>>>>>>`) or a `.rej` file will have been created for the respective files.
+  You need to address these conflicts manually. Make sure to enable pre-commit.ci (see below) to detect such files.
+* The scverse template works best when the [pre-commit.ci][], [readthedocs][] and [codecov][] services are enabled.
+  Make sure to activate those apps if you haven't already.
+
+[template-repos.yml]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
+[pre-commit.ci]: {template_usage}#pre-commit-ci
+[readthedocs]: {template_usage}#documentation-on-readthedocs
+[codecov]: {template_usage}#coverage-tests-with-codecov
+"""
+    print(gh, release, repo_url, title, body)
 
 
 def setup() -> None:

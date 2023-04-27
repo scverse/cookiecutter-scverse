@@ -14,12 +14,10 @@ repos:
     rev: "22.3.0"
     hooks:
       - id: black
-        args: ["--force-exclude={{cookiecutter.project_name}}"]
+        files: ^scripts/
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: v0.0.250
     hooks:
       - id: ruff
-        args:
-          - "--extend-exclude=\\{\\{cookiecutter.project_name\\}\\}/**"
-          - "--fix"
-          - "--exit-non-zero-on-fix"
+        args: [--fix, --exit-non-zero-on-fix]
+        files: ^scripts/
