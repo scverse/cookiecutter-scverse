@@ -73,7 +73,7 @@ in the root of the repository. Continuous integration will automatically run the
 
 ### Updating the version number
 
-Before making a release, you need to update the version number. Please adhere to [Semantic Versioning][semver], in brief
+Before making a release, you need to update the version number in the `pyproject.toml` file. Please adhere to [Semantic Versioning][semver], in brief
 
 > Given a version number MAJOR.MINOR.PATCH, increment the:
 >
@@ -150,7 +150,7 @@ on how to write documentation.
 
 The documentation is set-up to render jupyter notebooks stored in the `docs/notebooks` directory using [myst-nb][].
 Currently, only notebooks in `.ipynb` format are supported that will be included with both their input and output cells.
-It is your reponsibility to update and re-run the notebook whenever necessary.
+It is your responsibility to update and re-run the notebook whenever necessary.
 
 If you are interested in automatically running notebooks as part of the continuous integration, please check
 out [this feature request](https://github.com/scverse/cookiecutter-scverse/issues/40) in the `cookiecutter-scverse`
