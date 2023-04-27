@@ -1,136 +1,136 @@
 name: deploy instance repo
 on:
-  pull_request:
-    branches: [main]
+    pull_request:
+        branches: [main]
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+    deploy:
+        runs-on: ubuntu-latest
 
-    env:
-      PYTHON_VERSION: "3.9"
-      INSTANCE_REPO_GITHUB: scverse/cookiecutter-scverse-instance
-      INSTANCE_REPO: "TEMPLATE_INSTANCE"
-      # directory in which cookiecuter generates the new repository
-      INSTANCE_GENERATED: "TEMPLATE_INSTANCE_GENERATED"
-      PROJECT_NAME: "cookiecutter-scverse-instance"
-      GH_TOKEN: ${{ secrets.BOT_GH_TOKEN }} # for gh cli
-
-    steps:
-      - name: Checkout template repository
-        uses: actions/checkout@v3
-
-      - name: Checkout instance repository
-        uses: actions/checkout@v3
-        with:
-          repository: ${{ env.INSTANCE_REPO_GITHUB }}
-          token: ${{ secrets.BOT_GH_TOKEN }}
-          path: ${{ env.INSTANCE_REPO }}
-          persist-credentials: true
-
-      - name: Set up Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: define sister PR branch name
-        run: |
-          echo "SISTER_PR_BRANCH=pr-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
-
-      - name: Install cookiecutter
-        run: |
-          python -m pip install --upgrade pip wheel cookiecutter pre-commit
-
-      - name: Build from template
-        run: |
-          cookiecutter --output-dir $INSTANCE_GENERATED \
-            --replay-file .github/assets/cookiecutter-scverse-instance.json \
-            .
-
-      - name: Transfer changes to instance repo
-        run: |
-          # checkout branch or create if it does not exist
-          git fetch origin $SISTER_PR_BRANCH || true
-          git checkout $SISTER_PR_BRANCH 2>/dev/null || git checkout -b $SISTER_PR_BRANCH
-          # transfer changes from generated repo
-          rsync -va --delete --exclude .git $INSTANCE_GENERATED/$PROJECT_NAME/ $INSTANCE_REPO
-
-          # check if there is a commit to be made
-          if [[ `git status --porcelain` ]]; then
-            echo "GIT_HAS_CHANGES=TRUE" >> $GITHUB_ENV
-          else
-            echo "GIT_HAS_CHANGES=FALSE" >> $GITHUB_ENV
-          fi
         env:
-          GIT_WORK_TREE: ${{ env.INSTANCE_REPO }}
-          GIT_DIR: ${{ env.INSTANCE_REPO}}/.git
+            PYTHON_VERSION: "3.9"
+            INSTANCE_REPO_GITHUB: scverse/cookiecutter-scverse-instance
+            INSTANCE_REPO: "TEMPLATE_INSTANCE"
+            # directory in which cookiecuter generates the new repository
+            INSTANCE_GENERATED: "TEMPLATE_INSTANCE_GENERATED"
+            PROJECT_NAME: "cookiecutter-scverse-instance"
+            GH_TOKEN: ${{ secrets.BOT_GH_TOKEN }} # for gh cli
 
-      - name: Commit changes
-        if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
-        uses: EndBug/add-and-commit@v9
-        with:
-          default_author: github_actions
-          commit: "--no-verify" # no need to run pre-commit at this point - saves runtime!
-          cwd: ${{ env.INSTANCE_REPO }}
-          message: Update instance repo from cookiecutter template
-          new_branch: ${{ env.SISTER_PR_BRANCH }}
-          push: false
+        steps:
+            - name: Checkout template repository
+              uses: actions/checkout@v3
 
-      - name: Push to instance repo
-        if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.BOT_GH_TOKEN }}
-          branch: ${{ env.SISTER_PR_BRANCH }}
-          repository: scverse/cookiecutter-scverse-instance
-          force: false
-          directory: ${{ env.INSTANCE_REPO }}
+            - name: Checkout instance repository
+              uses: actions/checkout@v3
+              with:
+                  repository: ${{ env.INSTANCE_REPO_GITHUB }}
+                  token: ${{ secrets.BOT_GH_TOKEN }}
+                  path: ${{ env.INSTANCE_REPO }}
+                  persist-credentials: true
 
-      - name: Check if "sister PR" exists and find its ID
-        run: |
-          PR_ID=$( \
-            gh pr view $SISTER_PR_BRANCH \
-            -R $INSTANCE_REPO_GITHUB \
-            --json number --jq '.number' \
-            || echo "NA"
-          )
-          echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
+            - name: Set up Python ${{ env.PYTHON_VERSION }}
+              uses: actions/setup-python@v4
+              with:
+                  python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Create sister PR in instance repo
-        if: ${{ env.GIT_HAS_CHANGES == 'TRUE' && env.SISTER_PR_ID == 'NA' }}
-        run: |
-          cd $INSTANCE_REPO
-          gh pr create \
-              --base main \
-              --head $SISTER_PR_BRANCH \
-              --body "created automatically" \
-              --title "Update instance repo (PR ${{ github.event.pull_request.number }})" \
-              -R $INSTANCE_REPO_GITHUB
+            - name: define sister PR branch name
+              run: |
+                  echo "SISTER_PR_BRANCH=pr-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
 
-          # now an ID should be available
-          PR_ID=$( \
-              gh pr view $SISTER_PR_BRANCH \
-              -R $INSTANCE_REPO_GITHUB \
-              --json number --jq '.number' \
-          )
-          echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
+            - name: Install cookiecutter
+              run: |
+                  python -m pip install --upgrade pip wheel cookiecutter pre-commit
 
-      - name: Add comment about sister PR
-        if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
-        uses: mshick/add-pr-comment@v1
-        with:
-          message: |
-            A PR has been generated to the instance repo:
-            https://github.com/${{ env.INSTANCE_REPO_GITHUB }}/pull/${{ env.SISTER_PR_ID }}
+            - name: Build from template
+              run: |
+                  cookiecutter --output-dir $INSTANCE_GENERATED \
+                    --replay-file .github/assets/cookiecutter-scverse-instance.json \
+                    .
+
+            - name: Transfer changes to instance repo
+              run: |
+                  # checkout branch or create if it does not exist
+                  git fetch origin $SISTER_PR_BRANCH || true
+                  git checkout $SISTER_PR_BRANCH 2>/dev/null || git checkout -b $SISTER_PR_BRANCH
+                  # transfer changes from generated repo
+                  rsync -va --delete --exclude .git $INSTANCE_GENERATED/$PROJECT_NAME/ $INSTANCE_REPO
+
+                  # check if there is a commit to be made
+                  if [[ `git status --porcelain` ]]; then
+                    echo "GIT_HAS_CHANGES=TRUE" >> $GITHUB_ENV
+                  else
+                    echo "GIT_HAS_CHANGES=FALSE" >> $GITHUB_ENV
+                  fi
+              env:
+                  GIT_WORK_TREE: ${{ env.INSTANCE_REPO }}
+                  GIT_DIR: ${{ env.INSTANCE_REPO}}/.git
+
+            - name: Commit changes
+              if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
+              uses: EndBug/add-and-commit@v9
+              with:
+                  default_author: github_actions
+                  commit: "--no-verify" # no need to run pre-commit at this point - saves runtime!
+                  cwd: ${{ env.INSTANCE_REPO }}
+                  message: Update instance repo from cookiecutter template
+                  new_branch: ${{ env.SISTER_PR_BRANCH }}
+                  push: false
+
+            - name: Push to instance repo
+              if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
+              uses: ad-m/github-push-action@master
+              with:
+                  github_token: ${{ secrets.BOT_GH_TOKEN }}
+                  branch: ${{ env.SISTER_PR_BRANCH }}
+                  repository: scverse/cookiecutter-scverse-instance
+                  force: false
+                  directory: ${{ env.INSTANCE_REPO }}
+
+            - name: Check if "sister PR" exists and find its ID
+              run: |
+                  PR_ID=$( \
+                    gh pr view $SISTER_PR_BRANCH \
+                    -R $INSTANCE_REPO_GITHUB \
+                    --json number --jq '.number' \
+                    || echo "NA"
+                  )
+                  echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
+
+            - name: Create sister PR in instance repo
+              if: ${{ env.GIT_HAS_CHANGES == 'TRUE' && env.SISTER_PR_ID == 'NA' }}
+              run: |
+                  cd $INSTANCE_REPO
+                  gh pr create \
+                      --base main \
+                      --head $SISTER_PR_BRANCH \
+                      --body "created automatically" \
+                      --title "Update instance repo (PR ${{ github.event.pull_request.number }})" \
+                      -R $INSTANCE_REPO_GITHUB
+
+                  # now an ID should be available
+                  PR_ID=$( \
+                      gh pr view $SISTER_PR_BRANCH \
+                      -R $INSTANCE_REPO_GITHUB \
+                      --json number --jq '.number' \
+                  )
+                  echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
+
+            - name: Add comment about sister PR
+              if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
+              uses: mshick/add-pr-comment@v1
+              with:
+                  message: |
+                      A PR has been generated to the instance repo:
+                      https://github.com/${{ env.INSTANCE_REPO_GITHUB }}/pull/${{ env.SISTER_PR_ID }}
 
 
-            You can check out the PR to preview your changes
-            in an instance of the cookiecutter template. The PR will be kept in sync with
-            this PR automatically.
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          allow-repeats: false
+                      You can check out the PR to preview your changes
+                      in an instance of the cookiecutter template. The PR will be kept in sync with
+                      this PR automatically.
+                  repo-token: ${{ secrets.GITHUB_TOKEN }}
+                  allow-repeats: false
 
-      - name: Query status of checks in template repository
-        if: ${{ env.SISTER_PR_ID != 'NA' }}
-        run: |
-          sleep 5  # without sleep, 0 checks are discovered.
-          gh pr checks ${{ env.SISTER_PR_ID }} --watch -R $INSTANCE_REPO_GITHUB
+            - name: Query status of checks in template repository
+              if: ${{ env.SISTER_PR_ID != 'NA' }}
+              run: |
+                  sleep 5  # without sleep, 0 checks are discovered.
+                  gh pr checks ${{ env.SISTER_PR_ID }} --watch -R $INSTANCE_REPO_GITHUB
