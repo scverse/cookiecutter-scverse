@@ -8,15 +8,18 @@ from collections.abc import Generator
 from dataclasses import dataclass, field
 from logging import basicConfig, getLogger
 from pathlib import Path
+from subprocess import run
 from tempfile import TemporaryDirectory
 from typing import IO, NotRequired, TypedDict, cast
+from urllib.parse import urlparse
 
 import typer
+from git.repo import Repo
+from git.util import Actor
 from github import Github
 from github.ContentFile import ContentFile
 from github.GitRelease import GitRelease as GHRelease
 from github.Repository import Repository as GHRepo
-from pygit2 import RemoteCallbacks, Signature, UserPass, clone_repository
 from yaml import safe_load
 
 log = getLogger(__name__)
@@ -28,13 +31,18 @@ class GitHubConnection:
     email: str
     token: str = field(repr=False)
     gh: Github = field(init=False)
-    sig: Signature = field(init=False)
-    cbs: RemoteCallbacks = field(init=False)
+    sig: Actor = field(init=False)
 
     def __post_init__(self) -> None:
         self.gh = Github(self.token)
-        self.sig = Signature(self.name, self.email)
-        self.cbs = RemoteCallbacks(UserPass(self.name, self.token))
+        self.sig = Actor(self.name, self.email)
+
+    def auth(self, url_str: str) -> str:
+        url = urlparse(url_str)
+        # TODO: not mutable
+        url.username = self.name
+        url.password = self.token
+        return url
 
 
 @dataclass
@@ -76,7 +84,7 @@ class PR:
 """
 
 
-class Repo(TypedDict):
+class RepoInfo(TypedDict):
     url: str
     skip: NotRequired[bool]
 
@@ -86,8 +94,8 @@ def get_template_release(gh: Github, tag_name: str) -> GHRelease:
     return template_repo.get_release(tag_name)
 
 
-def parse_repos(f: IO[str] | str) -> list[Repo]:
-    repos = cast(list[Repo], safe_load(f))
+def parse_repos(f: IO[str] | str) -> list[RepoInfo]:
+    repos = cast(list[RepoInfo], safe_load(f))
     log.info(f"Found {len(repos)} known repos")
     return repos
 
@@ -101,27 +109,27 @@ def get_repo_urls(gh: Github) -> Generator[str]:
 
 
 def cruft_update(con: GitHubConnection, repo: GHRepo, path: Path, pr: PR) -> bool:
-    clone = clone_repository(repo.git_url, path, callbacks=con.cbs)
-    branch = clone.create_branch(pr.branch, clone.head.peel())
+    clone = Repo.clone_from(con.auth(repo.git_url), path)
+    branch = clone.create_head(pr.branch)
+    branch.checkout()
 
-    # TODO run cruft
+    args = ["cruft", "update", " --checkout=main", "--skip-apply-ask", "--project-dir=."]
+    run(args, check=True)
 
-    clean = True
-    if clean:
+    if not clone.is_dirty():
         return False
 
     # Stage & Commit
-    clone.index.add_all()
-    clone.index.write()
-    tree = clone.index.write_tree()
-    oid = clone.create_commit(branch.name, con.sig, con.sig, pr.title, tree, parents=[clone.head.target])
-    clone.set_head(oid)  # not really necessary
+    # Maybe clean? changed_files = [diff.b_path or diff.a_path for diff in cast(list[Diff], clone.index.diff(None))]
+    # and then: clone.index.add([*clone.untracked_files, changed_files])
+    clone.git.add(all=True)
+    commit = clone.index.commit(pr.title, parent_commits=[branch.commit], author=con.sig, committer=con.sig)
+    branch.commit = commit
 
     # Push
-    clone.remotes.set_url("origin", repo.clone_url)
-    remote = clone.remotes["origin"]
-    # remote.credentials = UserPass? or remote.connect?
-    remote.push([branch.name], callbacks=con.cbs)
+    remote = clone.remote()
+    remote.set_url(con.auth(repo.clone_url))
+    remote.push([branch.name])
     return True
 
 
