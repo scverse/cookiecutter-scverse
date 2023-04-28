@@ -29,6 +29,11 @@ def con() -> GitHubConnection:
 
 @pytest.fixture
 def repo(git_repo: GitRepo) -> GHRepo:
+    assert not git_repo.api.bare
+    (git_repo.workspace / "a").write_text("a content")
+    (git_repo.workspace / "b").write_text("b content")
+    git_repo.api.index.add(["a", "b"])
+    git_repo.api.index.commit("initial commit")
     return cast(GHRepo, MockGHRepo(git_repo.uri, git_repo.uri))
 
 

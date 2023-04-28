@@ -110,7 +110,7 @@ def get_repo_urls(gh: Github) -> Generator[str]:
 
 def cruft_update(con: GitHubConnection, repo: GHRepo, path: Path, pr: PR) -> bool:
     clone = Repo.clone_from(con.auth(repo.git_url), path)
-    branch = clone.create_head(pr.branch)
+    branch = clone.create_head(pr.branch, clone.active_branch)
     branch.checkout()
 
     args = ["cruft", "update", " --checkout=main", "--skip-apply-ask", "--project-dir=."]
