@@ -18,10 +18,14 @@ urls.Source = "https://github.com/scverse/cookiecutter-scverse"
 dependencies = [
     "rich",
     "typer",
+    "furl",
     "GitPython",
     "PyGitHub",
     "PyYAML",
 ]
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-git"]
 
 [project.scripts]
 send-cruft-prs = "scverse_template_scripts.cruft_prs:cli"
@@ -33,6 +37,18 @@ fallback-version = "0.0"
 
 [tool.hatch.envs.default]
 python = "3.11"
+
+[tool.hatch.envs.test]
+dependencies = ["scverse-template-scripts[test]"]
+[tool.hatch.envs.test.scripts]
+test = "pytest"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+    "-pgit",
+]
+filterwarnings = ["error"]
 
 [tool.black]
 target-version = ["py310"]  # py311 not supported yet
@@ -68,4 +84,10 @@ select = [
     "W",
     "YTT",
 ]
-ignore = []
+ignore = [
+    "S101",  # assert should be allowed
+    "S603",  # suprocess with shell=False should be allowed
+]
+
+[tool.ruff.per-file-ignores]
+"tests/*.py" = ["ARG001"]  # pytest fixtures don’t need to be used

@@ -11,9 +11,9 @@ from pathlib import Path
 from subprocess import run
 from tempfile import TemporaryDirectory
 from typing import IO, NotRequired, TypedDict, cast
-from urllib.parse import urlparse
 
 import typer
+from furl import furl
 from git.repo import Repo
 from git.util import Actor
 from github import Github
@@ -29,7 +29,7 @@ log = getLogger(__name__)
 class GitHubConnection:
     name: str
     email: str
-    token: str = field(repr=False)
+    token: str | None = field(repr=False, default=None)
     gh: Github = field(init=False)
     sig: Actor = field(init=False)
 
@@ -38,11 +38,11 @@ class GitHubConnection:
         self.sig = Actor(self.name, self.email)
 
     def auth(self, url_str: str) -> str:
-        url = urlparse(url_str)
-        # TODO: not mutable
-        url.username = self.name
-        url.password = self.token
-        return url
+        url = furl(url_str)
+        if self.token:
+            url.username = self.name
+            url.password = self.token
+        return str(url)
 
 
 @dataclass
