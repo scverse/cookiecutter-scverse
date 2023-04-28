@@ -17,6 +17,8 @@ Please refer to the [documentation][link-docs]. In particular, the
 
 ## Installation
 
+TEST TEST
+
 You need to have Python 3.8 or newer installed on your system. If you don't have
 Python installed, we recommend installing [Mambaforge](https://github.com/conda-forge/miniforge#mambaforge).
 

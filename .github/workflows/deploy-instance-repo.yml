@@ -1,7 +1,10 @@
-name: deploy instance repo
+name: Create PRs to the instance repo
 on:
   pull_request:
     branches: [main]
+  push:
+    branches: [main]
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -32,9 +35,14 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: define sister PR branch name
+      - name: define sister PR branch name for pull request
+        if: github.event_name == 'pull_request'
         run: |
           echo "SISTER_PR_BRANCH=pr-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+      - name: define branch name for push event
+        if: github.event_name == 'push'
+        run: |
+          echo "SISTER_PR_BRANCH=main" >> $GITHUB_ENV
 
       - name: Install cookiecutter
         run: |
@@ -85,7 +93,10 @@ jobs:
           force: false
           directory: ${{ env.INSTANCE_REPO }}
 
+      # Run the following steps only on the pull request event -- in the other case we just commited
+      # to the main branch and are done with it.
       - name: Check if "sister PR" exists and find its ID
+        if: github.event_name == 'pull_request'
         run: |
           PR_ID=$( \
             gh pr view $SISTER_PR_BRANCH \
@@ -96,14 +107,14 @@ jobs:
           echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
 
       - name: Create sister PR in instance repo
-        if: ${{ env.GIT_HAS_CHANGES == 'TRUE' && env.SISTER_PR_ID == 'NA' }}
+        if: ${{ github.event_name == 'pull_request' && env.GIT_HAS_CHANGES == 'TRUE' && env.SISTER_PR_ID == 'NA' }}
         run: |
           cd $INSTANCE_REPO
           gh pr create \
               --base main \
               --head $SISTER_PR_BRANCH \
-              --body "created automatically" \
-              --title "Update instance repo (PR ${{ github.event.pull_request.number }})" \
+              --body "Created automatically from scverse/cookiecutter-scverse#${{ github.event.pull_request.number }}" \
+              --title "Update instance repo (PR ${{ github.event.pull_request.number }} -- ${{ github.event.pull_request.title }})" \
               -R $INSTANCE_REPO_GITHUB
 
           # now an ID should be available
@@ -115,7 +126,7 @@ jobs:
           echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
 
       - name: Add comment about sister PR
-        if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
+        if: ${{ github.event_name == 'pull_request' && env.GIT_HAS_CHANGES == 'TRUE' }}
         uses: mshick/add-pr-comment@v1
         with:
           message: |
@@ -130,7 +141,7 @@ jobs:
           allow-repeats: false
 
       - name: Query status of checks in template repository
-        if: ${{ env.SISTER_PR_ID != 'NA' }}
+        if: ${{ github.event_name == 'pull_request' && env.SISTER_PR_ID != 'NA' }}
         run: |
           sleep 5  # without sleep, 0 checks are discovered.
           gh pr checks ${{ env.SISTER_PR_ID }} --watch -R $INSTANCE_REPO_GITHUB
