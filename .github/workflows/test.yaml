@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.8", "3.10"]
+        python: ["3.9", "3.10"]
         os: [ubuntu-latest]
         # one that matches "project-name".lower().replace('-', '_'), one that doesn’t:
         package-name: [project_name, package_alt]

@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      PYTHON_VERSION: "3.9"
+      PYTHON_VERSION: "3.10"
       INSTANCE_REPO_GITHUB: scverse/cookiecutter-scverse-instance
       INSTANCE_REPO: "TEMPLATE_INSTANCE"
       # directory in which cookiecuter generates the new repository
