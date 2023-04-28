@@ -24,6 +24,29 @@ from yaml import safe_load
 
 log = getLogger(__name__)
 
+PR_BODY_TEMPLATE = """\
+`cookiecutter-scverse` released [{release.title}]({release.html_url}).
+
+## Changes
+
+{release.body}
+
+## Additional remarks
+* unsubscribe: If you don`t want to receive these PRs in the future,
+  add `skip: true` to [`template-repos.yml`][] using a PR or,
+  if you never want to sync from the template again, delete your `.cruft` file.
+* If there are **merge conflicts**,
+  they either show up inline (`>>>>>>>`) or a `.rej` file will have been created for the respective files.
+  You need to address these conflicts manually. Make sure to enable pre-commit.ci (see below) to detect such files.
+* The scverse template works best when the [pre-commit.ci][], [readthedocs][] and [codecov][] services are enabled.
+  Make sure to activate those apps if you haven't already.
+
+[template-repos.yml]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
+[pre-commit.ci]: {template_usage}#pre-commit-ci
+[readthedocs]: {template_usage}#documentation-on-readthedocs
+[codecov]: {template_usage}#coverage-tests-with-codecov
+"""
+
 
 @dataclass
 class GitHubConnection:
@@ -59,29 +82,10 @@ class PR:
 
     @property
     def body(self) -> str:
-        template_usage = "https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html"
-        return f"""\
-`cookiecutter-scverse` released [{self.release.title}]({self.release.html_url}).
-
-## Changes
-
-{self.release.body}
-
-## Additional remarks
-* unsubscribe: If you don`t want to receive these PRs in the future,
-  add `skip: true` to [`template-repos.yml`][] using a PR or,
-  if you never want to sync from the template again, delete your `.cruft` file.
-* If there are **merge conflicts**,
-  they either show up inline (`>>>>>>>`) or a `.rej` file will have been created for the respective files.
-  You need to address these conflicts manually. Make sure to enable pre-commit.ci (see below) to detect such files.
-* The scverse template works best when the [pre-commit.ci][], [readthedocs][] and [codecov][] services are enabled.
-  Make sure to activate those apps if you haven't already.
-
-[template-repos.yml]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
-[pre-commit.ci]: {template_usage}#pre-commit-ci
-[readthedocs]: {template_usage}#documentation-on-readthedocs
-[codecov]: {template_usage}#coverage-tests-with-codecov
-"""
+        return PR_BODY_TEMPLATE.format(
+            release=self.release,
+            template_usage="https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html",
+        )
 
 
 class RepoInfo(TypedDict):
