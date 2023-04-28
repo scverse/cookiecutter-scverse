@@ -27,7 +27,6 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     # CLI for bumping the version number
-    "bump2version",
     "pre-commit",
     "twine>=4.0.2"
 ]
@@ -122,9 +121,6 @@ convention = "numpy"
 "docs/*" = ["I"]
 "tests/*" = ["D"]
 "*/__init__.py" = ["F401"]
-
-[tool.jupytext]
-formats = "ipynb,md"
 
 [tool.cruft]
 skip = [

@@ -57,4 +57,5 @@ We expect developers of scverse ecosystem packages to
 [1;33m • [0m]8;id=169559;https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#writing-tests\[94mwrite unit tests[0m]8;;\
 [1;33m • [0m]8;id=20647;https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#writing-documentation\[94mprovide documentation[0m]8;;\, including tutorials where applicable
 [1;33m • [0msupport users through github and the ]8;id=496112;https://discourse.scverse.org/\[94mscverse discourse[0m]8;;\
+
 EOF
