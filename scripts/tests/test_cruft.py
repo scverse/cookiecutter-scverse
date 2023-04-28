@@ -5,6 +5,7 @@ import pytest
 from github.GitRelease import GitRelease as GHRelease
 from github.Repository import Repository as GHRepo
 from pytest_git import GitRepo
+
 from scverse_template_scripts.cruft_prs import PR, GitHubConnection, cruft_update
 
 
@@ -42,6 +43,7 @@ def pr() -> PR:
     return PR(cast(GHRelease, MockRelease()))
 
 
-def test_cruft_update(con, repo, tmp_path, pr):
+def test_cruft_update(con, repo, tmp_path, pr, monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setattr("scverse_template_scripts.cruft_prs.run_cruft", lambda p: (p / "b").write_text("b modified"))
     changed = cruft_update(con, repo, tmp_path, pr)
     assert changed

@@ -8,7 +8,7 @@ from collections.abc import Generator
 from dataclasses import dataclass, field
 from logging import basicConfig, getLogger
 from pathlib import Path
-from subprocess import run
+from subprocess import CompletedProcess, run
 from tempfile import TemporaryDirectory
 from typing import IO, NotRequired, TypedDict, cast
 
@@ -108,13 +108,17 @@ def get_repo_urls(gh: Github) -> Generator[str]:
             yield repo["url"]
 
 
+def run_cruft(cwd: Path) -> CompletedProcess:
+    args = ["cruft", "update", " --checkout=main", "--skip-apply-ask", "--project-dir=."]
+    return run(args, check=True, cwd=cwd)
+
+
 def cruft_update(con: GitHubConnection, repo: GHRepo, path: Path, pr: PR) -> bool:
     clone = Repo.clone_from(con.auth(repo.git_url), path)
     branch = clone.create_head(pr.branch, clone.active_branch)
     branch.checkout()
 
-    args = ["cruft", "update", " --checkout=main", "--skip-apply-ask", "--project-dir=."]
-    run(args, check=True)
+    run_cruft(path)
 
     if not clone.is_dirty():
         return False
