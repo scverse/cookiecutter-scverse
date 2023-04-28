@@ -5,7 +5,10 @@ Uses `template-repos.yml` from `scverse/ecosystem-packages`.
 
 import os
 from collections.abc import Generator
+from dataclasses import dataclass, field
 from logging import basicConfig, getLogger
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import IO, NotRequired, TypedDict, cast
 
 import typer
@@ -17,6 +20,60 @@ from pygit2 import RemoteCallbacks, Signature, UserPass, clone_repository
 from yaml import safe_load
 
 log = getLogger(__name__)
+
+
+@dataclass
+class GitHubConnection:
+    name: str
+    email: str
+    token: str = field(repr=False)
+    gh: Github = field(init=False)
+    sig: Signature = field(init=False)
+    cbs: RemoteCallbacks = field(init=False)
+
+    def __post_init__(self) -> None:
+        self.gh = Github(self.token)
+        self.sig = Signature(self.name, self.email)
+        self.cbs = RemoteCallbacks(UserPass(self.name, self.token))
+
+
+@dataclass
+class PR:
+    release: GHRelease
+
+    @property
+    def title(self) -> str:
+        return f"Update template to {self.release.tag_name}"
+
+    @property
+    def branch(self) -> str:
+        return f"template-update-{self.release.tag_name}"
+
+    @property
+    def body(self) -> str:
+        template_usage = "https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html"
+        return f"""\
+`cookiecutter-scverse` released [{self.release.title}]({self.release.html_url}).
+
+## Changes
+
+{self.release.body}
+
+## Additional remarks
+* unsubscribe: If you don`t want to receive these PRs in the future,
+  add `skip: true` to [`template-repos.yml`][] using a PR or,
+  if you never want to sync from the template again, delete your `.cruft` file.
+* If there are **merge conflicts**,
+  they either show up inline (`>>>>>>>`) or a `.rej` file will have been created for the respective files.
+  You need to address these conflicts manually. Make sure to enable pre-commit.ci (see below) to detect such files.
+* The scverse template works best when the [pre-commit.ci][], [readthedocs][] and [codecov][] services are enabled.
+  Make sure to activate those apps if you haven't already.
+
+[template-repos.yml]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
+[pre-commit.ci]: {template_usage}#pre-commit-ci
+[readthedocs]: {template_usage}#documentation-on-readthedocs
+[codecov]: {template_usage}#coverage-tests-with-codecov
+"""
 
 
 class Repo(TypedDict):
@@ -43,68 +100,42 @@ def get_repo_urls(gh: Github) -> Generator[str]:
             yield repo["url"]
 
 
-def cruft_update(token: str, repo: GHRepo):
-    author = committer = Signature("scverse-bot", "core-team@scverse.org")
-    callbacks = RemoteCallbacks(UserPass(author.name, token))
+def cruft_update(con: GitHubConnection, repo: GHRepo, path: Path, pr: PR) -> bool:
+    clone = clone_repository(repo.git_url, path, callbacks=con.cbs)
+    branch = clone.create_branch(pr.branch, clone.head.peel())
 
-    # TODO: path, contents, commit msg, cruft exec, …
+    # TODO run cruft
 
-    # Clone the newly created repo
-    clone = clone_repository(repo.git_url, "/path/to/clone/to", callbacks=callbacks)
+    clean = True
+    if clean:
+        return False
 
-    # put the files in the repository here
+    # Stage & Commit
+    clone.index.add_all()
+    clone.index.write()
+    tree = clone.index.write_tree()
+    oid = clone.create_commit(branch.name, con.sig, con.sig, pr.title, tree, parents=[clone.head.target])
+    clone.set_head(oid)  # not really necessary
 
-    # Commit it
+    # Push
     clone.remotes.set_url("origin", repo.clone_url)
-    index = clone.index
-    index.add_all()
-    index.write()
-    tree = index.write_tree()
-    clone.create_commit("refs/heads/master", author, committer, "init commit", tree, [clone.head.get_object().hex])
     remote = clone.remotes["origin"]
-    # remote.credentials = UserPass...
-
-    remote.push(["refs/heads/master"], callbacks=callbacks)
-
-
-def create_pr_data(release: GHRelease) -> tuple[str, str]:
-    template_usage = "https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html"
-    title = f"Update template to {release.tag_name}"
-    body = f"""\
-`cookiecutter-scverse` released [{release.title}]({release.html_url}).
-
-## Changes
-
-{release.body}
-
-## Additional remarks
-* unsubscribe: If you don`t want to receive these PRs in the future,
-  add `skip: true` to [`template-repos.yml`][] using a PR or,
-  if you never want to sync from the template again, delete your `.cruft` file.
-* If there are **merge conflicts**,
-  they either show up inline (`>>>>>>>`) or a `.rej` file will have been created for the respective files.
-  You need to address these conflicts manually. Make sure to enable pre-commit.ci (see below) to detect such files.
-* The scverse template works best when the [pre-commit.ci][], [readthedocs][] and [codecov][] services are enabled.
-  Make sure to activate those apps if you haven't already.
-
-[template-repos.yml]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
-[pre-commit.ci]: {template_usage}#pre-commit-ci
-[readthedocs]: {template_usage}#documentation-on-readthedocs
-[codecov]: {template_usage}#coverage-tests-with-codecov
-"""
-
-    return title, body
+    # remote.credentials = UserPass? or remote.connect?
+    remote.push([branch.name], callbacks=con.cbs)
+    return True
 
 
-def make_pr(gh: Github, release: GHRelease, repo_url: str) -> None:
-    title, body = create_pr_data(release)
-    log.info(f"Sending PR to {repo_url}: {title}")
+def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
+    pr = PR(release)
+    log.info(f"Sending PR to {repo_url}: {pr.title}")
 
     # create fork, populate branch, do PR from it
-    origin = gh.get_repo(repo_url.removeprefix("https://github.com/"))
+    origin = con.gh.get_repo(repo_url.removeprefix("https://github.com/"))
     repo = origin.create_fork()
-    cruft_update(repo)
-    origin.create_pull(title, body, ...)  # TODO
+    with TemporaryDirectory() as td:
+        updated = cruft_update(con, repo, Path(td), pr)
+    if updated:
+        origin.create_pull(pr.title, pr.body, ...)  # TODO
 
 
 def setup() -> None:
@@ -116,11 +147,12 @@ def setup() -> None:
 
 
 def main(tag_name: str) -> None:
-    gh = Github(os.environ["GITHUB_TOKEN"])
-    release = get_template_release(gh, tag_name)
-    repo_urls = get_repo_urls(gh)
+    token = os.environ["GITHUB_TOKEN"]
+    con = GitHubConnection("scverse-bot", "core-team@scverse.org", token)
+    release = get_template_release(con.gh, tag_name)
+    repo_urls = get_repo_urls(con.gh)
     for repo_url in repo_urls:
-        make_pr(gh, release, repo_url)
+        make_pr(con, release, repo_url)
 
 
 def cli() -> None:
