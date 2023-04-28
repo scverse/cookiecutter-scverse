@@ -68,6 +68,38 @@ git push -u origin main
 
 Your project should be now available at `https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}`. While the repository at this point can be directly used, there are few remaining steps that needs to be done in order to achieve full functionality.
 
+### The pyproject.toml file
+
+Modern Python package management uses a `pyproject.toml` that was first introduced in [PEP 518](https://peps.python.org/pep-0518/).
+This file contains build system requirements and information, which are used by pip to build the package.
+For more details please have a look at [pip's description of the pyproject.toml file](https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml/).
+
+#### Important metadata fields
+
+The `[project]` section in the `pyproject.toml` file defines several important metadata fields that might require editing.
+For example, the `name`, `description`, `authors` fields could need updates as the project evolves.
+Especially, the `version` field needs to be adapted if newer versions of the package are to be released.
+See {ref}`vcs-based-versioning` for more details.
+
+#### Dependency management
+
+Package dependencies can be added to the `dependencies` of the `[project]` section.
+The versions can also be more constraint using `>`, `<`, `==`, `<=`, `>=`, and `~=`.
+An example of this would be `twine>=4.0.2` which requires `twine` to be installed with at least version `4.0.2` or greater.
+
+Further optional dependencies are defined in the `[project.optional-dependencies]` section such as dependencies only for tests (`test`).
+All dependencies listed in such optional dependency groups can then be installed by specifying them like: `pip install <package-name>[test]`.
+
+#### Tool configurations
+
+The `pyproject.toml` file also serves as single configuration file for many tools such as many {ref}`pre-commit`.
+For example, the line length of [black](https://github.com/psf/black) can be configured as follows:
+
+```toml
+[tool.black]
+line-length = 120
+```
+
 ### Coverage tests with _Codecov_
 
 Coverage tells what fraction of the code is "covered" by unit tests, thereby encouraging contributors to
@@ -124,6 +156,8 @@ On the RTD dashboard choose "Import a Project" and follow the instructions to ad
 -   If you find the RTD builds are failing, you can disable the `fail_on_warning` option in `.readthedocs.yaml`.
 
 If your project is private, there are ways to enable docs rendering on [readthedocs.org][] but it is more cumbersome and requires a different subscription for read the docs. See a guide [here](https://docs.readthedocs.io/en/stable/guides/importing-private-repositories.html).
+
+(pre-commit)=
 
 ### Pre-commit checks
 
@@ -271,6 +305,8 @@ You may add additional submodules as appropriate. While we encourage to follow a
 there may also be good reasons to choose a different approach, e.g. using an object-oriented API.
 
 [scanpy-api]: https://scanpy.readthedocs.io/en/stable/usage-principles.html
+
+(vcs-based-versioning)=
 
 ### Using VCS-based versioning
 
