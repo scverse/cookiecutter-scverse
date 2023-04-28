@@ -77,7 +77,7 @@ For more details please have a look at [pip's description of the pyproject.toml 
 #### Important metadata fields
 
 The `[project]` section in the `pyproject.toml` file defines several important metadata fields that might require editing.
-For example, the `name`, `description`, `authors` fields might need updates as the project evolves.
+For example, the `name`, `description`, `authors` fields could need updates as the project evolves.
 Especially, the `version` field needs to be adapted if newer versions of the package are to be released.
 See {ref}`vcs-based-versioning` for more details.
 
