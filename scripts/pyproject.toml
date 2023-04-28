@@ -57,6 +57,7 @@ line-length = 120
 [tool.ruff]
 target-version = "py311"
 line-length = 120
+allowed-confusables = ["’"]
 select = [
     "A",
     "ARG",
@@ -88,6 +89,7 @@ ignore = [
     "S101",  # assert should be allowed
     "S603",  # suprocess with shell=False should be allowed
 ]
+unfixable = ["RUF001"]  # never “fix” “confusables”
 
 [tool.ruff.isort]
 known-first-party = ["scverse_template_scripts"]

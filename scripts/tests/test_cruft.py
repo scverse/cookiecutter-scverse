@@ -45,11 +45,12 @@ def pr() -> PR:
 
 
 def test_cruft_update(con, repo, tmp_path, pr, git_repo: GitRepo, monkeypatch: pytest.MonkeyPatch):
+    old_active_branch_name = git_repo.api.active_branch.name
     monkeypatch.setattr("scverse_template_scripts.cruft_prs.run_cruft", lambda p: (p / "b").write_text("b modified"))
     changed = cruft_update(con, repo, tmp_path, pr)
-    assert changed
+    assert changed  # TODO: add test for short circuit
     main_branch = git_repo.api.active_branch
-    assert main_branch.name == "main"
+    assert main_branch.name == old_active_branch_name, "Shouldn’t change active branch"
     pr_branch = next(b for b in git_repo.api.branches if b.name == pr.branch)
     commit = cast(Commit, pr_branch.commit)
     assert list(commit.parents) == [main_branch.commit]
