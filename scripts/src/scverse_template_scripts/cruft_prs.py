@@ -10,15 +10,15 @@ from logging import basicConfig, getLogger
 from pathlib import Path
 from subprocess import CompletedProcess, run
 from tempfile import TemporaryDirectory
-from typing import IO, NotRequired, TypedDict, cast
+from typing import IO, ClassVar, LiteralString, NotRequired, TypedDict, cast
 
 import typer
 from furl import furl
 from git.repo import Repo
 from git.util import Actor
-from github import Github
-from github.ContentFile import ContentFile
+from github import ContentFile, Github
 from github.GitRelease import GitRelease as GHRelease
+from github.PullRequest import PullRequest
 from github.Repository import Repository as GHRepo
 from yaml import safe_load
 
@@ -72,19 +72,28 @@ class GitHubConnection:
 class PR:
     release: GHRelease
 
+    title_prefix: ClassVar[LiteralString] = "Update template to "
+    branch_prefix: ClassVar[LiteralString] = "template-update-"
+
     @property
     def title(self) -> str:
-        return f"Update template to {self.release.tag_name}"
+        return f"{self.title_prefix}{self.release.tag_name}"
 
     @property
     def branch(self) -> str:
-        return f"template-update-{self.release.tag_name}"
+        return f"{self.branch_prefix}{self.release.tag_name}"
 
     @property
     def body(self) -> str:
         return PR_BODY_TEMPLATE.format(
             release=self.release,
             template_usage="https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html",
+        )
+
+    @classmethod
+    def matches(cls, pr: PullRequest) -> bool:
+        return (  # TODO: make this work, centralize username
+            pr.title.startswith(cls.title_prefix) and pr.branch.startswith(cls.branch) and pr.user.name == "scverse-bot"
         )
 
 
@@ -151,6 +160,8 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
     with TemporaryDirectory() as td:
         updated = cruft_update(con, repo, Path(td), pr)
     if updated:
+        if old_pr := next((p for p in origin.get_pulls("open") if pr.matches(p)), None):
+            old_pr.edit(state="closed")
         origin.create_pull(pr.title, pr.body, origin.default_branch, pr.branch)
 
 
