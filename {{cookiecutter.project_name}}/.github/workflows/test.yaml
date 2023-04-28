@@ -20,10 +20,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.8", "3.10"]
-        os: [ubuntu-latest]
-        # add one additional job to test against pre-releases on the latest Python version
         include:
+          - os: ubuntu-latest
+            python: "3.8"
+          - os: ubuntu-latest
+            python: "3.10"
           - os: ubuntu-latest
             python: "3.10"
             pip-flags: "--pre"
