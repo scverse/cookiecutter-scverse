@@ -26,8 +26,8 @@ jobs:
         # add one additional job to test against pre-releases on the latest Python version
         include:
           - os: ubuntu-latest
-          - python: "3.10"
-          - pre-release: true
+            python: "3.10"
+            pre-release: true
 
     env:
       OS: ${{ matrix.os }}
