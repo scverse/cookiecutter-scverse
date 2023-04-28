@@ -143,7 +143,7 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
     with TemporaryDirectory() as td:
         updated = cruft_update(con, repo, Path(td), pr)
     if updated:
-        origin.create_pull(pr.title, pr.body, ...)  # TODO
+        origin.create_pull(pr.title, pr.body, origin.default_branch, pr.branch)
 
 
 def setup() -> None:
