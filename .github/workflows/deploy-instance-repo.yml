@@ -46,13 +46,12 @@ jobs:
 
       - name: Install cookiecutter
         run: |
-          python -m pip install --upgrade pip wheel cruft pre-commit
+          python -m pip install --upgrade pip wheel cookiecutter pre-commit
 
       - name: Build from template
         run: |
-          cruft create --output-dir $INSTANCE_GENERATED \
-            --no-input \
-            --config-file .github/assets/cookiecutter-scverse-instance.json \
+          cookiecutter --output-dir $INSTANCE_GENERATED \
+            --replay-file .github/assets/cookiecutter-scverse-instance.json \
             .
 
       - name: Transfer changes to instance repo
