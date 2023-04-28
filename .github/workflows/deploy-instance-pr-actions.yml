@@ -26,7 +26,7 @@ jobs:
           )
           echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
 
-      - name: Close or merge sister PR
+      - name: When closing or merging also close sister PR
         if: ${{ env.SISTER_PR_ID != 'NA' }}
         run: |
           gh pr close $SISTER_PR_ID \
