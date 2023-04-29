@@ -78,6 +78,7 @@ class GitHubConnection:
 
 @dataclass
 class PR:
+    con: GitHubConnection
     release: GHRelease
 
     title_prefix: ClassVar[LiteralString] = "Update template to "
@@ -98,11 +99,9 @@ class PR:
             template_usage="https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html",
         )
 
-    @classmethod
-    def matches(cls, pr: PullRequest) -> bool:
-        return (  # TODO: make this work, centralize username
-            pr.title.startswith(cls.title_prefix) and pr.branch.startswith(cls.branch) and pr.user.name == "scverse-bot"
-        )
+    def matches(self, pr: PullRequest) -> bool:
+        # Don’t compare title prefix, people might rename PRs
+        return pr.head.startswith(self.branch_prefix) and pr.user.id == self.con.user.id
 
 
 class RepoInfo(TypedDict):
@@ -165,7 +164,7 @@ def get_fork(con: GitHubConnection, repo: GHRepo) -> GHRepo:
 
 
 def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
-    pr = PR(release)
+    pr = PR(con, release)
     log.info(f"Sending PR to {repo_url}: {pr.title}")
 
     # create fork, populate branch, do PR from it
