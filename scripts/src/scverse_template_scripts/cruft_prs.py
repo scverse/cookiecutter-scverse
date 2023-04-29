@@ -5,7 +5,7 @@ Uses `template-repos.yml` from `scverse/ecosystem-packages`.
 
 import os
 from collections.abc import Generator
-from dataclasses import dataclass, field
+from dataclasses import InitVar, dataclass, field
 from logging import basicConfig, getLogger
 from pathlib import Path
 from subprocess import CompletedProcess, run
@@ -17,7 +17,9 @@ from furl import furl
 from git.repo import Repo
 from git.util import Actor
 from github import ContentFile, Github
+from github.AuthenticatedUser import AuthenticatedUser
 from github.GitRelease import GitRelease as GHRelease
+from github.NamedUser import NamedUser
 from github.PullRequest import PullRequest
 from github.Repository import Repository as GHRepo
 from yaml import safe_load
@@ -50,15 +52,21 @@ PR_BODY_TEMPLATE = """\
 
 @dataclass
 class GitHubConnection:
-    name: str
+    name: InitVar[str]
     email: str
     token: str | None = field(repr=False, default=None)
     gh: Github = field(init=False)
+    user: NamedUser | AuthenticatedUser = field(init=False)
     sig: Actor = field(init=False)
 
-    def __post_init__(self) -> None:
+    def __post_init__(self, name: str) -> None:
         self.gh = Github(self.token)
+        self.user = self.gh.get_user(name)
         self.sig = Actor(self.name, self.email)
+
+    @property
+    def name(self) -> str:
+        return self.user.name
 
     def auth(self, url_str: str) -> str:
         url = furl(url_str)
@@ -150,13 +158,19 @@ def cruft_update(con: GitHubConnection, repo: GHRepo, path: Path, pr: PR) -> boo
     return True
 
 
+def get_fork(con: GitHubConnection, repo: GHRepo) -> GHRepo:
+    if fork := next((f for f in repo.get_forks() if f.owner.id == con.user.id), None):
+        return fork
+    return repo.create_fork()
+
+
 def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
     pr = PR(release)
     log.info(f"Sending PR to {repo_url}: {pr.title}")
 
     # create fork, populate branch, do PR from it
     origin = con.gh.get_repo(repo_url.removeprefix("https://github.com/"))
-    repo = origin.create_fork()
+    repo = get_fork(con, origin)
     with TemporaryDirectory() as td:
         updated = cruft_update(con, repo, Path(td), pr)
     if updated:
@@ -183,6 +197,7 @@ def main(tag_name: str) -> None:
 
 
 def cli() -> None:
+    setup()
     typer.run(main)
 
 
