@@ -25,7 +25,12 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-test = ["pytest", "pytest-git"]
+test = [
+    "pytest",
+    "pytest-git",
+    "pytest-network",
+    "pytest-responsemock",
+]
 
 [project.scripts]
 send-cruft-prs = "scverse_template_scripts.cruft_prs:cli"
@@ -47,6 +52,8 @@ test = "pytest"
 addopts = [
     "--import-mode=importlib",
     "-pgit",
+    "-pnetwork", "--disable-network",
+    "-presponsemock"
 ]
 filterwarnings = ["error"]
 

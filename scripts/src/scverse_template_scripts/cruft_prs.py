@@ -53,7 +53,6 @@ PR_BODY_TEMPLATE = """\
 @dataclass
 class GitHubConnection:
     name: InitVar[str]
-    email: str
     token: str | None = field(repr=False, default=None)
     gh: Github = field(init=False)
     user: NamedUser | AuthenticatedUser = field(init=False)
@@ -67,6 +66,10 @@ class GitHubConnection:
     @property
     def name(self) -> str:
         return self.user.name
+
+    @property
+    def email(self) -> str:
+        return self.user.email
 
     def auth(self, url_str: str) -> str:
         url = furl(url_str)
@@ -188,7 +191,7 @@ def setup() -> None:
 
 def main(tag_name: str) -> None:
     token = os.environ["GITHUB_TOKEN"]
-    con = GitHubConnection("scverse-bot", "core-team@scverse.org", token)
+    con = GitHubConnection("scverse-bot", token)
     release = get_template_release(con.gh, tag_name)
     repo_urls = get_repo_urls(con.gh)
     for repo_url in repo_urls:

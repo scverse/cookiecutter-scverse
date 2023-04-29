@@ -1,3 +1,4 @@
+import json
 from dataclasses import dataclass
 from typing import cast
 
@@ -25,8 +26,10 @@ class MockRelease:
 
 
 @pytest.fixture
-def con() -> GitHubConnection:
-    return GitHubConnection("testuser", "test@example.com")
+def con(response_mock) -> GitHubConnection:
+    resp = json.dumps({})  # TODO: enter info once the tests need it
+    with response_mock(f"GET https://api.github.com:443/users/scverse-bot -> 200 :{resp}"):
+        return GitHubConnection("scverse-bot")
 
 
 @pytest.fixture
@@ -40,8 +43,8 @@ def repo(git_repo: GitRepo) -> GHRepo:
 
 
 @pytest.fixture
-def pr() -> PR:
-    return PR(cast(GHRelease, MockRelease()))
+def pr(con) -> PR:
+    return PR(con, cast(GHRelease, MockRelease()))
 
 
 def test_cruft_update(con, repo, tmp_path, pr, git_repo: GitRepo, monkeypatch: pytest.MonkeyPatch):
