@@ -101,7 +101,7 @@ class PR:
 
     def matches(self, pr: PullRequest) -> bool:
         # Don’t compare title prefix, people might rename PRs
-        return pr.head.startswith(self.branch_prefix) and pr.user.id == self.con.user.id
+        return pr.head.ref.startswith(self.branch_prefix) and pr.user.id == self.con.user.id
 
 
 class RepoInfo(TypedDict):
