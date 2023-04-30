@@ -44,7 +44,7 @@ fallback-version = "0.0"
 python = "3.11"
 
 [tool.hatch.envs.test]
-dependencies = ["scverse-template-scripts[test]"]
+features = ["test"]
 [tool.hatch.envs.test.scripts]
 test = "pytest"
 
