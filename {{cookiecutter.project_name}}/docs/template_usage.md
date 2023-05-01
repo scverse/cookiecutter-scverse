@@ -84,8 +84,9 @@ See {ref}`vcs-based-versioning` for more details.
 #### Dependency management
 
 Package dependencies can be added to the `dependencies` of the `[project]` section.
-The versions can also be more constraint using `>`, `<`, `==`, `<=`, `>=`, and `~=`.
-An example of this would be `twine>=4.0.2` which requires `twine` to be installed with at least version `4.0.2` or greater.
+You can constrain versions using `>=` and other less useful operators (`>`, `<`, `<=`, `==`, `!=`, and `~=`).
+A common example would be `twine>=4.0.2` which requires `twine` to be installed with at least version `4.0.2` or greater.
+As another example, if there is a known buggy version, you could exclude it like `numpy >=3.0, !=3.0.5`.
 
 Further optional dependencies are defined in the `[project.optional-dependencies]` section such as dependencies only for tests (`test`).
 All dependencies listed in such optional dependency groups can then be installed by specifying them like: `pip install <package-name>[test]`.
