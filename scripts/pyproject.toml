@@ -94,7 +94,7 @@ select = [
 ]
 ignore = [
     "S101",  # assert should be allowed
-    "S603",  # suprocess with shell=False should be allowed
+    "S603",  # subprocess with shell=False should be allowed
 ]
 unfixable = ["RUF001"]  # never “fix” “confusables”
 
