@@ -18,7 +18,6 @@ from furl import furl
 from git.repo import Repo
 from git.util import Actor
 from github import ContentFile, Github
-from github.AuthenticatedUser import AuthenticatedUser
 from github.GitRelease import GitRelease as GHRelease
 from github.NamedUser import NamedUser
 from github.PullRequest import PullRequest
@@ -53,22 +52,20 @@ PR_BODY_TEMPLATE = """\
 
 @dataclass
 class GitHubConnection:
-    name: InitVar[str]
+    login: InitVar[str]
     token: str | None = field(repr=False, default=None)
     gh: Github = field(init=False)
-    user: NamedUser | AuthenticatedUser = field(init=False)
+    user: NamedUser = field(init=False)
     sig: Actor = field(init=False)
 
-    def __post_init__(self, name: str) -> None:
+    def __post_init__(self, login: str) -> None:
         self.gh = Github(self.token)
-        self.user = self.gh.get_user(name)
-        self.sig = Actor(self.name, self.email)
-        assert isinstance(self.name, str)
+        self.user = self.gh.get_user(login)
+        self.sig = Actor(self.login, self.email)
 
     @property
-    def name(self) -> str:
-        assert self.user.name is not None
-        return self.user.name
+    def login(self) -> str:
+        return self.user.login
 
     @property
     def email(self) -> str:
@@ -99,7 +96,7 @@ class PR:
 
     @property
     def namespaced_head(self) -> str:
-        return f"{self.con.name}:{self.branch}"
+        return f"{self.con.login}:{self.branch}"
 
     @property
     def body(self) -> str:
