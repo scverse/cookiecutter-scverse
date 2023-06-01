@@ -120,7 +120,9 @@ def get_template_release(gh: Github, tag_name: str) -> GHRelease:
 def parse_repos(f: IO[str] | str) -> list[RepoInfo]:
     repos = cast(list[RepoInfo], safe_load(f))
     log.info(f"Found {len(repos)} known repos")
-    return repos
+    # TODO: return real repos
+    fake_repos = [RepoInfo(url="https://github.com/flying-sheep/cruft-pr-test")]
+    return fake_repos
 
 
 def get_repo_urls(gh: Github) -> Generator[str]:
