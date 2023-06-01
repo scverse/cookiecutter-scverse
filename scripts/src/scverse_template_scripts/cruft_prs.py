@@ -18,7 +18,6 @@ from furl import furl
 from git.repo import Repo
 from git.util import Actor
 from github import ContentFile, Github
-from github.AuthenticatedUser import AuthenticatedUser
 from github.GitRelease import GitRelease as GHRelease
 from github.NamedUser import NamedUser
 from github.PullRequest import PullRequest
