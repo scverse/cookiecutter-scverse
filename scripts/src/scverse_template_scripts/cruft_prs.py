@@ -27,14 +27,14 @@ from yaml import safe_load
 log = getLogger(__name__)
 
 PR_BODY_TEMPLATE = """\
-`cookiecutter-scverse` released [{release.title}]({release.html_url}).
+`cookiecutter-scverse` released [{release.tag_name}]({release.html_url}).
 
 ## Changes
 
 {release.body}
 
 ## Additional remarks
-* unsubscribe: If you don`t want to receive these PRs in the future,
+* unsubscribe: If you don’t want to receive these PRs in the future,
   add `skip: true` to [`template-repos.yml`][] using a PR or,
   if you never want to sync from the template again, delete your `.cruft` file.
 * If there are **merge conflicts**,
@@ -43,7 +43,7 @@ PR_BODY_TEMPLATE = """\
 * The scverse template works best when the [pre-commit.ci][], [readthedocs][] and [codecov][] services are enabled.
   Make sure to activate those apps if you haven't already.
 
-[template-repos.yml]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
+[`template-repos.yml`]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
 [pre-commit.ci]: {template_usage}#pre-commit-ci
 [readthedocs]: {template_usage}#documentation-on-readthedocs
 [codecov]: {template_usage}#coverage-tests-with-codecov
