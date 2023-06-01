@@ -27,7 +27,7 @@ class MockRelease:
 
 @pytest.fixture
 def con(response_mock) -> GitHubConnection:
-    resp = json.dumps({})  # TODO: enter info once the tests need it
+    resp = json.dumps({"name": "scverse-bot"})
     with response_mock(f"GET https://api.github.com:443/users/scverse-bot -> 200 :{resp}"):
         return GitHubConnection("scverse-bot")
 
