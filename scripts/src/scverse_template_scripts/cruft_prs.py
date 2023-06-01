@@ -64,7 +64,7 @@ class GitHubConnection:
         self.sig = Actor(self.name, self.email)
 
     @property
-    def name(self) -> str:
+    def name(self) -> str | None:
         return self.user.name
 
     @property
@@ -74,8 +74,7 @@ class GitHubConnection:
     def auth(self, url_str: str) -> str:
         url = furl(url_str)
         if self.token:
-            url.username = self.name
-            url.password = self.token
+            url.username = self.token
         return str(url)
 
 
@@ -139,7 +138,7 @@ def run_cruft(cwd: Path) -> CompletedProcess:
 
 
 def cruft_update(con: GitHubConnection, repo: GHRepo, path: Path, pr: PR) -> bool:
-    clone = Repo.clone_from(con.auth(repo.git_url), path)
+    clone = Repo.clone_from(con.auth(repo.clone_url), path)
     branch = clone.create_head(pr.branch, clone.active_branch)
     branch.checkout()
 
