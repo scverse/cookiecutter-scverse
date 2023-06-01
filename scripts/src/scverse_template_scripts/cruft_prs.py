@@ -63,9 +63,11 @@ class GitHubConnection:
         self.gh = Github(self.token)
         self.user = self.gh.get_user(name)
         self.sig = Actor(self.name, self.email)
+        assert self.name
 
     @property
-    def name(self) -> str | None:
+    def name(self) -> str:
+        assert self.user.name is not None
         return self.user.name
 
     @property
@@ -94,6 +96,10 @@ class PR:
     @property
     def branch(self) -> str:
         return f"{self.branch_prefix}{self.release.tag_name}"
+
+    @property
+    def namespaced_head(self) -> str:
+        return f"{self.con.user.name}:{self.branch}"
 
     @property
     def body(self) -> str:
@@ -180,7 +186,7 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
     if updated:
         if old_pr := next((p for p in origin.get_pulls("open") if pr.matches(p)), None):
             old_pr.edit(state="closed")
-        origin.create_pull(pr.title, pr.body, origin.default_branch, pr.branch)
+        origin.create_pull(pr.title, pr.body, origin.default_branch, pr.namespaced_head)
 
 
 def setup() -> None:
