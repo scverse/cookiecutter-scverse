@@ -63,7 +63,7 @@ class GitHubConnection:
         self.gh = Github(self.token)
         self.user = self.gh.get_user(name)
         self.sig = Actor(self.name, self.email)
-        assert self.name
+        assert isinstance(self.name, str)
 
     @property
     def name(self) -> str:
@@ -99,7 +99,7 @@ class PR:
 
     @property
     def namespaced_head(self) -> str:
-        return f"{self.con.user.name}:{self.branch}"
+        return f"{self.con.name}:{self.branch}"
 
     @property
     def body(self) -> str:
