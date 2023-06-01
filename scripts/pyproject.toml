@@ -16,6 +16,7 @@ urls.Documentation = "https://github.com/scverse/cookiecutter-scverse#readme"
 urls.Issues = "https://github.com/scverse/cookiecutter-scverse/issues"
 urls.Source = "https://github.com/scverse/cookiecutter-scverse"
 dependencies = [
+    "cruft",
     "rich",
     "typer",
     "furl",
