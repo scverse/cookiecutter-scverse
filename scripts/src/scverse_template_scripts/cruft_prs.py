@@ -4,6 +4,7 @@ Uses `template-repos.yml` from `scverse/ecosystem-packages`.
 """
 
 import os
+import sys
 from collections.abc import Generator
 from dataclasses import InitVar, dataclass, field
 from logging import basicConfig, getLogger
@@ -133,7 +134,7 @@ def get_repo_urls(gh: Github) -> Generator[str]:
 
 
 def run_cruft(cwd: Path) -> CompletedProcess:
-    args = ["cruft", "update", " --checkout=main", "--skip-apply-ask", "--project-dir=."]
+    args = [sys.executable, "-m", "cruft", "update", " --checkout=main", "--skip-apply-ask", "--project-dir=."]
     return run(args, check=True, cwd=cwd)
 
 
