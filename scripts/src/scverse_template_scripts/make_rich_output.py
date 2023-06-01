@@ -30,7 +30,7 @@ pip install ".[test,dev,doc]"
 
 Further instructions on using this template can be found in the [dev docs included in the project][dev-docs].
 
-# Committment
+# Commitment
 
 We expect developers of scverse ecosystem packages to
 
