@@ -29,3 +29,4 @@ jobs:
           RELEASE: ${{ github.event_name == 'release' && github.event.release.tag_name || github.event.inputs.release }}
           GITHUB_TOKEN: ${{ secrets.BOT_GH_TOKEN }}
           FORCE_COLOR: "1"
+          COLUMNS: "150"
