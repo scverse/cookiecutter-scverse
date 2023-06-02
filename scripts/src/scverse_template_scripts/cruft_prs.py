@@ -5,6 +5,7 @@ Uses `template-repos.yml` from `scverse/ecosystem-packages`.
 
 import os
 import sys
+import time
 from collections.abc import Generator
 from dataclasses import InitVar, dataclass, field
 from logging import basicConfig, getLogger
@@ -17,7 +18,7 @@ import typer
 from furl import furl
 from git.repo import Repo
 from git.util import Actor
-from github import ContentFile, Github
+from github import ContentFile, Github, UnknownObjectException
 from github.GitRelease import GitRelease as GHRelease
 from github.NamedUser import NamedUser
 from github.PullRequest import PullRequest
@@ -166,7 +167,15 @@ def cruft_update(con: GitHubConnection, repo: GHRepo, path: Path, pr: PR) -> boo
 def get_fork(con: GitHubConnection, repo: GHRepo) -> GHRepo:
     if fork := next((f for f in repo.get_forks() if f.owner.id == con.user.id), None):
         return fork
-    return repo.create_fork()
+    fork = repo.create_fork()
+    while True:
+        try:
+            con.gh.get_repo(fork.id)
+        except UnknownObjectException:
+            log.info(f"Waiting for GitHub to finish creating fork: {fork.full_name}")
+            time.sleep(1)
+        else:
+            return fork
 
 
 def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
