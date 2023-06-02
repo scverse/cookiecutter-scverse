@@ -9,7 +9,7 @@ T = TypeVar("T")
 def retry_with_backoff(
     fn: Callable[[], T],
     retries: int = 5,
-    backoff_in_seconds: int = 1,
+    backoff_in_seconds: int | float = 1,
     exc_cls: type = Exception,
 ) -> T:
     exc = None
