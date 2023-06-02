@@ -138,15 +138,7 @@ def get_repo_urls(gh: Github) -> Generator[str]:
 
 
 def run_cruft(cwd: Path) -> CompletedProcess:
-    args = [
-        sys.executable,
-        "-m",
-        "cruft",
-        "update",
-        "--checkout=main",
-        "--skip-apply-ask",
-        "--project-dir=.",
-    ]
+    args = [sys.executable, "-m", "cruft", "update", "--checkout=main", "--skip-apply-ask", "--project-dir=."]
     return run(args, check=True, cwd=cwd)
 
 
