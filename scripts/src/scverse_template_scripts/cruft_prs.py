@@ -3,6 +3,7 @@
 Uses `template-repos.yml` from `scverse/ecosystem-packages`.
 """
 
+import math
 import os
 import sys
 from collections.abc import Generator
@@ -17,12 +18,14 @@ import typer
 from furl import furl
 from git.repo import Repo
 from git.util import Actor
-from github import ContentFile, Github
+from github import ContentFile, Github, UnknownObjectException
 from github.GitRelease import GitRelease as GHRelease
 from github.NamedUser import NamedUser
 from github.PullRequest import PullRequest
 from github.Repository import Repository as GHRepo
 from yaml import safe_load
+
+from .backoff import retry_with_backoff
 
 log = getLogger(__name__)
 
@@ -163,10 +166,17 @@ def cruft_update(con: GitHubConnection, repo: GHRepo, path: Path, pr: PR) -> boo
     return True
 
 
+# GitHub says that up to 5 minutes of wait are OK,
+# So we error our once we wait longer, i.e. when 2ⁿ = 5 min × 60 sec/min
+n_retries = math.ceil(math.log(5 * 60) / math.log(2))  # = ⌈~8.22⌉ = 9
+# Due to exponential backoff, we’ll maximally wait 2⁹ sec, or 8.5 min
+
+
 def get_fork(con: GitHubConnection, repo: GHRepo) -> GHRepo:
     if fork := next((f for f in repo.get_forks() if f.owner.id == con.user.id), None):
         return fork
-    return repo.create_fork()
+    fork = repo.create_fork()
+    return retry_with_backoff(lambda: con.gh.get_repo(fork.id), retries=n_retries, exc_cls=UnknownObjectException)
 
 
 def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
