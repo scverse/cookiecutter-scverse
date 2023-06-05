@@ -141,6 +141,4 @@ def setup(app):
     )
 
     # TEMP
-    from subprocess import run
-
-    app.connect("build-finished", lambda app, exc: run(["tree", app.outdir]))
+    app.connect("build-finished", lambda app, exc: print(*sorted(Path(app.outdir).glob("**/*")), sep="\n"))
