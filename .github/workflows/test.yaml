@@ -8,12 +8,13 @@ on:
   schedule:
     - cron: "0 5 1,15 * *"
 
+defaults:
+  run:
+    shell: bash -e {0} # -e to fail on error
+
 jobs:
   test:
     runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash -e {0} # -e to fail on error
 
     strategy:
       fail-fast: false
@@ -33,7 +34,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
           cache: "pip"
-          cache-dependency-path: "**/pyproject.toml"
+          cache-dependency-path: "{{cookiecutter.project_name}}/pyproject.toml"
       - name: Install Ubuntu system dependencies
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get install pandoc
@@ -69,3 +70,20 @@ jobs:
         run: |
           cd "$PROJECT_ROOT/docs"
           make html
+
+  test-scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: "**/pyproject.toml"
+      - name: Install build dependencies
+        run: python -m pip install --upgrade pip wheel
+      - name: Install package
+        run: pip install ./scripts[test]
+      - name: Run tests
+        run: pytest -v --color=yes ./scripts

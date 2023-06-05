@@ -1,0 +1,32 @@
+name: make cruft PRs for all projects using us
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      release:
+        description: "Tag of the release PRs should me made for"
+        type: string
+        required: true
+jobs:
+  cruft-prs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: "**/pyproject.toml"
+      - name: Install build dependencies
+        run: python -m pip install --upgrade pip wheel
+      - name: Install package with scripts
+        run: pip install ./scripts
+      - name: Update template repo registry
+        run: send-cruft-prs ${{ env.RELEASE }}
+        env:
+          RELEASE: ${{ github.event_name == 'release' && github.event.release.tag_name || github.event.inputs.release }}
+          GITHUB_TOKEN: ${{ secrets.BOT_GH_TOKEN }}
+          FORCE_COLOR: "1"
+          COLUMNS: "150"
