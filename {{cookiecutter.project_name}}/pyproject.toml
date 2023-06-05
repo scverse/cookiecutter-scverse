@@ -32,7 +32,7 @@ dev = [
 ]
 doc = [
     "docutils>=0.20",
-    "sphinx>=5",
+    "sphinx>=7.0.1",
     "sphinx-book-theme>=1.0.0",
     "myst-nb",
     "sphinxcontrib-bibtex>=1.0.0",
