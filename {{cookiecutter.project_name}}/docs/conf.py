@@ -141,6 +141,6 @@ def setup(app):
     )
 
     # TEMP
-    from subcommand import run
+    from subprocess import run
 
     app.connect("build-finished", lambda app, exc: run(["tree", app.outdir]))
