@@ -139,6 +139,3 @@ def setup(app):
         },
         True,
     )
-
-    # TEMP
-    app.connect("build-finished", lambda app, exc: print(*sorted(Path(app.outdir).glob("**/*")), sep="\n"))
