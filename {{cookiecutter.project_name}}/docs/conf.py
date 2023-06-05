@@ -108,7 +108,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints"]
 # a list of builtin themes.
 #
 html_theme = "sphinx_book_theme"
-html_static_path = ["_static", "_images"]
+html_static_path = ["_static"]
 html_title = project_name
 
 html_theme_options = {
@@ -139,3 +139,8 @@ def setup(app):
         },
         True,
     )
+
+    # TEMP
+    from subcommand import run
+
+    app.connect("build-finished", lambda app, exc: run(["tree", app.outdir]))
