@@ -29,10 +29,6 @@ repository_url = urls["Source"]
 # The full version, including alpha/beta/rc tags
 release = info["Version"]
 
-# Opengraph information: https://sphinxext-opengraph.readthedocs.io/
-ogp_site_url = urls["Documentation"]
-ogp_enable_meta_description = True
-
 bibtex_bibfiles = ["references.bib"]
 templates_path = ["_templates"]
 nitpicky = True  # Warn about broken links
