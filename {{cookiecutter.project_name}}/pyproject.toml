@@ -31,7 +31,7 @@ dev = [
     "twine>=4.0.2"
 ]
 doc = [
-    "docutils>=0.8,!=1.18.*,!=1.19.*",
+    "docutils>=0.8,!=0.18.*,!=0.19.*",
     "sphinx>=4",
     "sphinx-book-theme>=1.0.0",
     "myst-nb",
