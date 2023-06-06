@@ -16,6 +16,7 @@ from typing import IO, ClassVar, LiteralString, NotRequired, TypedDict, cast
 
 import typer
 from furl import furl
+from git.exc import GitCommandError
 from git.repo import Repo
 from git.util import Actor
 from github import ContentFile, Github, UnknownObjectException
@@ -142,8 +143,16 @@ def run_cruft(cwd: Path) -> CompletedProcess:
     return run(args, check=True, cwd=cwd)
 
 
+# GitHub says that up to 5 minutes of wait are OK,
+# So we error our once we wait longer, i.e. when 2ⁿ = 5 min × 60 sec/min
+n_retries = math.ceil(math.log(5 * 60) / math.log(2))  # = ⌈~8.22⌉ = 9
+# Due to exponential backoff, we’ll maximally wait 2⁹ sec, or 8.5 min
+
+
 def cruft_update(con: GitHubConnection, repo: GHRepo, path: Path, pr: PR) -> bool:
-    clone = Repo.clone_from(con.auth(repo.clone_url), path)
+    clone = retry_with_backoff(
+        lambda: Repo.clone_from(con.auth(repo.clone_url), path), retries=n_retries, exc_cls=GitCommandError
+    )
     branch = clone.create_head(pr.branch, clone.active_branch)
     branch.checkout()
 
@@ -164,12 +173,6 @@ def cruft_update(con: GitHubConnection, repo: GHRepo, path: Path, pr: PR) -> boo
     remote.set_url(con.auth(repo.clone_url))
     remote.push([branch.name])
     return True
-
-
-# GitHub says that up to 5 minutes of wait are OK,
-# So we error our once we wait longer, i.e. when 2ⁿ = 5 min × 60 sec/min
-n_retries = math.ceil(math.log(5 * 60) / math.log(2))  # = ⌈~8.22⌉ = 9
-# Due to exponential backoff, we’ll maximally wait 2⁹ sec, or 8.5 min
 
 
 def get_fork(con: GitHubConnection, repo: GHRepo) -> GHRepo:
