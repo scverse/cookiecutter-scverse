@@ -37,6 +37,7 @@ doc = [
     "myst-nb",
     "sphinxcontrib-bibtex>=1.0.0",
     "sphinx-autodoc-typehints",
+    "sphinxext-opengraph",
     # For notebooks
     "ipykernel",
     "ipython",
