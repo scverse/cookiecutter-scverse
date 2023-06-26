@@ -12,7 +12,7 @@ repos:
         # See https://github.com/scverse/cookiecutter-scverse/issues/143 and
         # https://github.com/jupyterlab/jupyterlab/issues/12675
         language_version: "17.9.1"
-        exclude: '\.toml$'  # fails to parse with jinja syntax
+        exclude: '\.toml$' # fails to parse with jinja syntax
   # scripts
   - repo: https://github.com/psf/black
     rev: "23.3.0"

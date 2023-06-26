@@ -99,6 +99,7 @@ For example, the line length of [black](https://github.com/psf/black) can be con
 ```toml
 [tool.black]
 line-length = 120
+
 ```
 
 ### Coverage tests with _Codecov_
@@ -278,6 +279,7 @@ Checks can be ignored per-file (or glob pattern) with `[tool.ruff.per-file-ignor
 "docs/*" = ["I"]
 "tests/*" = ["D"]
 "*/__init__.py" = ["F401"]
+
 ```
 
 To ignore a specific rule on a per-case basis, you can add a `# noqa: <rule>[, <rule>, …]` comment to the offending line.
