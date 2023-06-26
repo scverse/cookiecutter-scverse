@@ -9,9 +9,7 @@ description = "scripts for ecosystem package data"
 readme = "../README.md"
 requires-python = ">=3.11"
 license = "GPL-3.0"
-authors = [
-    { name = "Philipp A.", email = "flying-sheep@web.de" },
-]
+authors = [{ name = "Philipp A.", email = "flying-sheep@web.de" }]
 urls.Documentation = "https://github.com/scverse/cookiecutter-scverse#readme"
 urls.Issues = "https://github.com/scverse/cookiecutter-scverse/issues"
 urls.Source = "https://github.com/scverse/cookiecutter-scverse"
@@ -26,12 +24,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-test = [
-    "pytest",
-    "pytest-git",
-    "pytest-network",
-    "pytest-responsemock",
-]
+test = ["pytest", "pytest-git", "pytest-network", "pytest-responsemock"]
 
 [project.scripts]
 send-cruft-prs = "scverse_template_scripts.cruft_prs:cli"
@@ -46,6 +39,7 @@ python = "3.11"
 
 [tool.hatch.envs.test]
 features = ["test"]
+
 [tool.hatch.envs.test.scripts]
 test = "pytest"
 
@@ -53,13 +47,14 @@ test = "pytest"
 addopts = [
     "--import-mode=importlib",
     "-pgit",
-    "-pnetwork", "--disable-network",
+    "-pnetwork",
+    "--disable-network",
     "-presponsemock"
 ]
 filterwarnings = ["error"]
 
 [tool.black]
-target-version = ["py310"]  # py311 not supported yet
+target-version = ["py310"] # py311 not supported yet
 line-length = 120
 
 [tool.ruff]
@@ -94,17 +89,19 @@ select = [
     "YTT",
 ]
 ignore = [
-    "S101",  # assert should be allowed
-    "S603",  # subprocess with shell=False should be allowed
-    "S311",  # we don’t need cryptographically secure RNG
+    "S101", # assert should be allowed
+    "S603", # subprocess with shell=False should be allowed
+    "S311", # we don’t need cryptographically secure RNG
+
 ]
-unfixable = ["RUF001"]  # never “fix” “confusables”
+unfixable = ["RUF001"] # never “fix” “confusables”
 
 [tool.ruff.isort]
 known-first-party = ["scverse_template_scripts"]
 
 [tool.ruff.per-file-ignores]
 "tests/*.py" = [
-    "ARG001",  # pytest fixtures don’t need to be used
-    "PLR0913",  # allow as many pytest fixtures being used as one likes
+    "ARG001", # pytest fixtures don’t need to be used
+    "PLR0913", # allow as many pytest fixtures being used as one likes
+
 ]
