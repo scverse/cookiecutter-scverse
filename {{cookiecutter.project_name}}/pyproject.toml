@@ -69,12 +69,10 @@ addopts = [
 
 [tool.black]
 line-length = 120
-target-version = ["py39"]
 
 [tool.ruff]
 src = ["src"]
 line-length = 120
-target-version = "py39"
 select = [
     "F",  # Errors detected by Pyflakes
     "E",  # Error detected by Pycodestyle
