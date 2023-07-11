@@ -1,0 +1,11 @@
+name: pre-commit autoupdate for template
+on:
+  push:
+    branches:
+      - pre-commit-ci-update-config
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
