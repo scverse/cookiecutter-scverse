@@ -7,5 +7,10 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
+      - run: pipx install pre-commit
+      - run: cd '{{cookiecutter.project_name}}' && pre-commit autoupdate
+      - uses: stefanzweifel/git-auto-commit-action@v4
