@@ -8,8 +8,8 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.BOT_GH_TOKEN }}
     steps:
       - uses: actions/checkout@v3
       - run: pipx install pre-commit
