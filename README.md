@@ -21,7 +21,6 @@ Please consider making a tax-deductible [donation](https://numfocus.org/donate-t
 [badge-numfocus]: https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A
 [link-numfocus]: http://numfocus.org
 
-
 Please check out the
 
 -   [example repo](https://github.com/scverse/cookiecutter-scverse-instance) and the
