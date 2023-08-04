@@ -44,12 +44,15 @@ def repo(git_repo: GitRepo) -> GHRepo:
 
 @pytest.fixture
 def pr(con) -> PR:
-    return PR(con, cast(GHRelease, MockRelease()))
+    return PR(con, cast(GHRelease, MockRelease()), "scverse-test")
 
 
 def test_cruft_update(con, repo, tmp_path, pr, git_repo: GitRepo, monkeypatch: pytest.MonkeyPatch):
     old_active_branch_name = git_repo.api.active_branch.name
-    monkeypatch.setattr("scverse_template_scripts.cruft_prs.run_cruft", lambda p: (p / "b").write_text("b modified"))
+    monkeypatch.setattr(
+        "scverse_template_scripts.cruft_prs.run_cruft",
+        lambda p: (p / "b").write_text("b modified"),
+    )
     changed = cruft_update(con, repo, tmp_path, pr)
     assert changed  # TODO: add test for short circuit
     main_branch = git_repo.api.active_branch
