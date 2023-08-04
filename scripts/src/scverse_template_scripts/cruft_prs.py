@@ -194,7 +194,10 @@ def get_fork(con: GitHubConnection, repo: GHRepo, name: str) -> GHRepo:
         (f for f in repo.get_forks() if f.owner.id == con.user.id and f.name == name),
         None,
     ):
+        log.info(f"Using existing fork for {repo} with name {fork.name}.")
+        log.debug(fork)
         return fork
+    log.info(f"Creating fork for {repo} with name {name}")
     fork = repo.create_fork(name=name)
     return retry_with_backoff(
         lambda: con.gh.get_repo(fork.id),
@@ -206,11 +209,11 @@ def get_fork(con: GitHubConnection, repo: GHRepo, name: str) -> GHRepo:
 def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
     repo_id = repo_url.replace("https://github.com/", "").replace("/", "-")
     pr = PR(con, release, repo_id)
-    log.info(f"Sending PR to {repo_url}: {pr.title}")
+    log.info(f"Sending PR to {repo_url} : {pr.title}")
 
     # create fork, populate branch, do PR from it
     origin = con.gh.get_repo(repo_url.removeprefix("https://github.com/"))
-    repo = get_fork(con, origin, pr.repo_id)
+    repo = get_fork(con, origin, repo_id)
     with TemporaryDirectory() as td:
         updated = cruft_update(con, release.tag_name, repo, Path(td), pr)
     if updated:
@@ -234,7 +237,7 @@ def main(tag_name: str) -> None:
     repo_urls = get_repo_urls(con.gh)
     for repo_url in repo_urls:
         # TODO just use single-repo we control for testing
-        if repo_url.endswith("infercnvpy"):
+        if repo_url.endswith("icbi-lab/infercnvpy"):
             make_pr(con, release, repo_url)
 
 
