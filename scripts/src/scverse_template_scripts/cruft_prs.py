@@ -30,7 +30,7 @@ from .backoff import retry_with_backoff
 
 log = getLogger(__name__)
 log_dir = Path("./log")
-log_dir.mkdir()
+log_dir.mkdir(exist_ok=True)
 
 PR_BODY_TEMPLATE = """\
 `cookiecutter-scverse` released [{release.tag_name}]({release.html_url}).
@@ -161,7 +161,7 @@ n_retries = math.ceil(math.log(5 * 60) / math.log(2))  # = ⌈~8.22⌉ = 9
 # Due to exponential backoff, we’ll maximally wait 2⁹ sec, or 8.5 min
 
 
-def cruft_update(con: GitHubConnection, release: GHRelease, repo: GHRepo, path: Path, pr: PR) -> bool:
+def cruft_update(con: GitHubConnection, tag_name: str, repo: GHRepo, path: Path, pr: PR) -> bool:
     clone = retry_with_backoff(
         lambda: Repo.clone_from(con.auth(repo.clone_url), path),
         retries=n_retries,
@@ -170,7 +170,7 @@ def cruft_update(con: GitHubConnection, release: GHRelease, repo: GHRepo, path: 
     branch = clone.create_head(pr.branch, clone.active_branch)
     branch.checkout()
 
-    run_cruft(path, release.tag_name, pr.branch)
+    run_cruft(path, tag_name, pr.branch)
 
     if not clone.is_dirty():
         return False
@@ -209,7 +209,7 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
     origin = con.gh.get_repo(repo_url.removeprefix("https://github.com/"))
     repo = get_fork(con, origin)
     with TemporaryDirectory() as td:
-        updated = cruft_update(con, release, repo, Path(td), pr)
+        updated = cruft_update(con, release.tag_name, repo, Path(td), pr)
     if updated:
         if old_pr := next((p for p in origin.get_pulls("open") if pr.matches(p)), None):
             old_pr.edit(state="closed")
