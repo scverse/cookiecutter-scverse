@@ -13,8 +13,6 @@ Please check out the
 
 that are automatically generated and kept in sync with this template.
 
-
-
 [//]: # "numfocus-fiscal-sponsor-attribution"
 
 This template is part of the scverse project ([website](https://scverse.org), [governance](https://scverse.org/about/roles)) and is fiscally sponsored by [NumFOCUS](https://numfocus.org/).
@@ -29,8 +27,6 @@ Please consider making a tax-deductible [donation](https://numfocus.org/donate-t
 
 [badge-numfocus]: https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A
 [link-numfocus]: http://numfocus.org
-
-
 
 ## Features
 
