@@ -208,7 +208,7 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
 
     # create fork, populate branch, do PR from it
     origin = con.gh.get_repo(repo_url.removeprefix("https://github.com/"))
-    repo = get_fork(con, origin, repo_id)
+    repo = get_fork(con, origin)
     with TemporaryDirectory() as td:
         updated = cruft_update(con, release.tag_name, repo, origin, Path(td), pr)
     if updated:
