@@ -169,7 +169,7 @@ def cruft_update(  # noqa: PLR0913
         retries=n_retries,
         exc_cls=GitCommandError,
     )
-    upstream = clone.create_remote(name=pr.repo_id, url=origin.git_url)
+    upstream = clone.create_remote(name=pr.repo_id, url=origin.clone_url)
     upstream.fetch()
     branch = clone.create_head(pr.branch, f"{pr.repo_id}/{origin.default_branch}")
     branch.checkout()
