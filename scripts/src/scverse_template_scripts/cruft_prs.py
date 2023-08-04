@@ -161,13 +161,17 @@ n_retries = math.ceil(math.log(5 * 60) / math.log(2))  # = ⌈~8.22⌉ = 9
 # Due to exponential backoff, we’ll maximally wait 2⁹ sec, or 8.5 min
 
 
-def cruft_update(con: GitHubConnection, tag_name: str, repo: GHRepo, path: Path, pr: PR) -> bool:
+def cruft_update(  # noqa: PLR0913
+    con: GitHubConnection, tag_name: str, repo: GHRepo, origin: GHRepo, path: Path, pr: PR
+) -> bool:
     clone = retry_with_backoff(
         lambda: Repo.clone_from(con.auth(repo.clone_url), path),
         retries=n_retries,
         exc_cls=GitCommandError,
     )
-    branch = clone.create_head(pr.branch, clone.active_branch)
+    upstream = clone.create_remote(name=pr.repo_id, url=origin.git_url)
+    upstream.fetch()
+    branch = clone.create_head(pr.branch, f"{pr.repo_id}/{origin.default_branch}")
     branch.checkout()
 
     run_cruft(path, tag_name, pr.branch)
@@ -189,21 +193,12 @@ def cruft_update(con: GitHubConnection, tag_name: str, repo: GHRepo, path: Path,
     return True
 
 
-def get_fork(con: GitHubConnection, repo: GHRepo, name: str) -> GHRepo:
-    if fork := next(
-        (f for f in repo.get_forks() if f.owner.id == con.user.id and f.name == name),
-        None,
-    ):
-        log.info(f"Using existing fork for {repo} with name {fork.name}.")
-        log.debug(fork)
-        return fork
-    log.info(f"Creating fork for {repo} with name {name}")
-    fork = repo.create_fork(name=name)
-    return retry_with_backoff(
-        lambda: con.gh.get_repo(fork.id),
-        retries=n_retries,
-        exc_cls=UnknownObjectException,
-    )
+def get_fork(con: GitHubConnection, repo: GHRepo) -> GHRepo:
+    """Fork target repo into the scverse-bot namespace and wait until the fork has been created.
+    If the fork already exists it is reused.
+    """
+    fork = repo.create_fork()
+    return retry_with_backoff(lambda: con.gh.get_repo(fork.id), retries=n_retries, exc_cls=UnknownObjectException)
 
 
 def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
@@ -215,7 +210,7 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
     origin = con.gh.get_repo(repo_url.removeprefix("https://github.com/"))
     repo = get_fork(con, origin, repo_id)
     with TemporaryDirectory() as td:
-        updated = cruft_update(con, release.tag_name, repo, Path(td), pr)
+        updated = cruft_update(con, release.tag_name, repo, origin, Path(td), pr)
     if updated:
         if old_pr := next((p for p in origin.get_pulls("open") if pr.matches(p)), None):
             old_pr.edit(state="closed")

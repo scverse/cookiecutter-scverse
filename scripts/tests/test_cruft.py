@@ -15,6 +15,7 @@ from scverse_template_scripts.cruft_prs import PR, GitHubConnection, cruft_updat
 class MockGHRepo:
     git_url: str  # git://github.com/foo/bar.git
     clone_url: str  # https://github.com/foo/bar.git
+    default_branch: str  # main
 
 
 @dataclass
@@ -39,7 +40,7 @@ def repo(git_repo: GitRepo) -> GHRepo:
     (git_repo.workspace / "b").write_text("b content")
     git_repo.api.index.add(["a", "b"])
     git_repo.api.index.commit("initial commit")
-    return cast(GHRepo, MockGHRepo(git_repo.uri, git_repo.uri))
+    return cast(GHRepo, MockGHRepo(git_repo.uri, git_repo.uri, "main"))
 
 
 @pytest.fixture
@@ -53,7 +54,7 @@ def test_cruft_update(con, repo, tmp_path, pr, git_repo: GitRepo, monkeypatch: p
         "scverse_template_scripts.cruft_prs.run_cruft",
         lambda p, _, __: (p / "b").write_text("b modified"),
     )
-    changed = cruft_update(con, "main", repo, tmp_path, pr)
+    changed = cruft_update(con, "main", repo, repo, tmp_path, pr)
     assert changed  # TODO: add test for short circuit
     main_branch = git_repo.api.active_branch
     assert main_branch.name == old_active_branch_name, "Shouldn’t change active branch"
