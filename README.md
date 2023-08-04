@@ -1,6 +1,7 @@
 # Scverse Cookiecutter Template
 
 [![Test](https://github.com/scverse/cookiecutter-scverse/actions/workflows/test.yaml/badge.svg)](https://github.com/scverse/cookiecutter-scverse/actions/workflows/test.yaml)
+[![Powered by NumFOCUS][badge-numfocus]][link-numfocus]
 
 The purpose of this template is to get you started quickly building a best-practice python library for a [scverse][] ecosystem package.
 Ecosystem packages are independent software libraries that interact with scverse core packages and depend on [anndata][] and [mudata][] data structures.
@@ -11,6 +12,21 @@ Please check out the
 -   [example documentation](https://cookiecutter-scverse-instance.readthedocs.io/en/latest/)
 
 that are automatically generated and kept in sync with this template.
+
+[//]: # "numfocus-fiscal-sponsor-attribution"
+
+This template is part of the scverse project ([website](https://scverse.org), [governance](https://scverse.org/about/roles)) and is fiscally sponsored by [NumFOCUS](https://numfocus.org/).
+Please consider making a tax-deductible [donation](https://numfocus.org/donate-to-scverse) to help the project pay for developer time, professional services, travel, workshops, and a variety of other needs.
+
+<a href="https://numfocus.org/project/scverse">
+  <img
+    src="https://raw.githubusercontent.com/numfocus/templates/master/images/numfocus-logo.png"
+    width="200"
+  >
+</a>
+
+[badge-numfocus]: https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A
+[link-numfocus]: http://numfocus.org
 
 ## Features
 
@@ -30,7 +46,7 @@ and how to customize it for your needs.
 
 ### Install dependencies
 
-You need `git >=2.28` and `python >=3.8`. In addition you need to install the following Python dependencies:
+You need `git >=2.28` and `python >=3.9`. In addition you need to install the following Python dependencies:
 
 ```bash
 pip install cruft pre-commit

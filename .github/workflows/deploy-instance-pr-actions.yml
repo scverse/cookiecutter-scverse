@@ -1,0 +1,39 @@
+name: sync instance PR
+on:
+  pull_request:
+    branches: [main]
+    types: [closed, reopened]
+jobs:
+  sync_pr_status:
+    runs-on: ubuntu-latest
+
+    env:
+      INSTANCE_REPO_GITHUB: scverse/cookiecutter-scverse-instance
+      GH_TOKEN: ${{ secrets.BOT_GH_TOKEN }} # for gh cli
+
+    steps:
+      - name: Define sister PR branch name
+        run: |
+          echo "SISTER_PR_BRANCH=pr-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+
+      - name: Check if "sister PR" exists and find its ID
+        run: |
+          PR_ID=$( \
+              gh pr view $SISTER_PR_BRANCH \
+              -R $INSTANCE_REPO_GITHUB \
+              --json number --jq '.number' \
+              || echo "NA"
+          )
+          echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
+
+      - name: When closing or merging also close sister PR
+        if: ${{ env.SISTER_PR_ID != 'NA' }}
+        run: |
+          gh pr close $SISTER_PR_ID \
+              -R $INSTANCE_REPO_GITHUB
+
+      - name: Reopen sister PR
+        if: ${{ env.SISTER_PR_ID != 'NA' && github.event.action == 'reopened' }}
+        run: |
+          gh pr reopen $SISTER_PR_ID \
+              -R $INSTANCE_REPO_GITHUB
