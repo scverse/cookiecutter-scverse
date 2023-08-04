@@ -30,3 +30,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.BOT_GH_TOKEN }}
           FORCE_COLOR: "1"
           COLUMNS: "150"
+      - uses: actions/upload-artifact@v3
+        with:
+          name: cruft-logs
+          path: logs
