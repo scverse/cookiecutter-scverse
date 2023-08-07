@@ -149,7 +149,7 @@ def run_cruft(cwd: Path, *, tag_name: str, log_name: str) -> CompletedProcess:
         "--skip-apply-ask",
         "--project-dir=.",
     ]
-    
+
     log_path = Path(f"./log/{log_name}.txt")
     log_path.parent.mkdir(exist_ok=True)
 
