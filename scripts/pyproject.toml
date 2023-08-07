@@ -23,7 +23,7 @@ dependencies = [
     "GitPython",
     "PyGitHub",
     "PyYAML",
-    "pre-commit",
+    "pre-commit", # is ran by cruft
 ]
 
 [project.optional-dependencies]
