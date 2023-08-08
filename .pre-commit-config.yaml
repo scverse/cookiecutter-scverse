@@ -1,4 +1,5 @@
 repos:
+  # Hooks run everywhere
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v3.0.1 # Only update together with the pre-commit yaml in the tempalate!
     hooks:
@@ -9,7 +10,7 @@ repos:
         # See https://github.com/scverse/cookiecutter-scverse/issues/143 and
         # https://github.com/jupyterlab/jupyterlab/issues/12675
         language_version: "17.9.1"
-  # scripts
+  # Hooks run for scripts
   - repo: https://github.com/psf/black
     rev: "23.7.0"
     hooks:
