@@ -110,9 +110,14 @@ class PR:
             template_usage="https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html",
         )
 
-    def matches(self, pr: PullRequest) -> bool:
+    def matches_prefix(self, pr: PullRequest) -> bool:
+        """Check if `pr` is either a current or previous template update PR by matching the branch name"""
         # Don’t compare title prefix, people might rename PRs
         return pr.head.ref.startswith(self.branch_prefix) and pr.user.id == self.con.user.id
+
+    def matches_current_version(self, pr: PullRequest) -> bool:
+        """Check if `pr` is a template update PR for the current version"""
+        return pr.head.ref == self.branch and pr.user.id == self.con.user.id
 
 
 class RepoInfo(TypedDict):
@@ -217,6 +222,11 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
     # create fork, populate branch, do PR from it
     origin = con.gh.get_repo(repo_url.removeprefix("https://github.com/"))
     repo = get_fork(con, origin)
+
+    if old_pr := next((p for p in origin.get_pulls("open") if pr.matches_current_version(p)), None):
+        log.info(f"PR for current version already exists: #{pr.number} with branch name `{pr.head.ref}`. Skipping.")
+        return
+
     with TemporaryDirectory() as td:
         updated = cruft_update(
             con,
@@ -227,7 +237,8 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
             path=Path(td),
         )
     if updated:
-        if old_pr := next((p for p in origin.get_pulls("open") if pr.matches(p)), None):
+        if old_pr := next((p for p in origin.get_pulls("open") if pr.matches_prefix(p)), None):
+            log.info(f"Closing old PR #{old_pr.number} with branch name `{pr.head.ref}`.")
             old_pr.edit(state="closed")
         origin.create_pull(pr.title, pr.body, origin.default_branch, pr.namespaced_head)
 
