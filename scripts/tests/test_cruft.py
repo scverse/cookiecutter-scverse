@@ -53,7 +53,7 @@ def test_cruft_update(con, repo, tmp_path, pr, git_repo: GitRepo, monkeypatch: p
     old_active_branch_name = git_repo.api.active_branch.name
 
     def _mock_run_cruft(cwd: Path, *, tag_name, log_name):
-        (cwd / "b").write_text("b modified")
+        return (cwd / "b").write_text("b modified")
 
     monkeypatch.setattr("scverse_template_scripts.cruft_prs.run_cruft", _mock_run_cruft)
     changed = cruft_update(con, pr, tag_name="main", repo=repo, origin=repo, path=tmp_path)
