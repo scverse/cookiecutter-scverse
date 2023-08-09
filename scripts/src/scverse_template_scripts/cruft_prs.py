@@ -230,10 +230,17 @@ def main(tag_name: str) -> None:
     con = GitHubConnection("scverse-bot", token)
     release = get_template_release(con.gh, tag_name)
     repo_urls = get_repo_urls(con.gh)
+    failed = 0
     for repo_url in repo_urls:
-        # TODO just use single-repo we control for testing
-        if repo_url.endswith("icbi-lab/infercnvpy"):
-            make_pr(con, release, repo_url)
+        try:
+            # TODO just use single-repo we control for testing
+            if repo_url.endswith("icbi-lab/infercnvpy"):
+                make_pr(con, release, repo_url)
+        except Exception as e:
+            failed += 1
+            log.error(f"Error updating {repo_url}.", e)
+
+    sys.exit(failed > 0)
 
 
 def cli() -> None:
