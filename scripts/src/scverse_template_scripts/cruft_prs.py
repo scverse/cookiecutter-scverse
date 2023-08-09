@@ -224,7 +224,9 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
     repo = get_fork(con, origin)
 
     if old_pr := next((p for p in origin.get_pulls("open") if pr.matches_current_version(p)), None):
-        log.info(f"PR for current version already exists: #{pr.number} with branch name `{pr.head.ref}`. Skipping.")
+        log.info(
+            f"PR for current version already exists: #{old_pr.number} with branch name `{old_pr.head.ref}`. Skipping."
+        )
         return
 
     with TemporaryDirectory() as td:
@@ -238,7 +240,7 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
         )
     if updated:
         if old_pr := next((p for p in origin.get_pulls("open") if pr.matches_prefix(p)), None):
-            log.info(f"Closing old PR #{old_pr.number} with branch name `{pr.head.ref}`.")
+            log.info(f"Closing old PR #{old_pr.number} with branch name `{old_pr.head.ref}`.")
             old_pr.edit(state="closed")
         origin.create_pull(pr.title, pr.body, origin.default_branch, pr.namespaced_head)
 
