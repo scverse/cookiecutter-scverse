@@ -265,7 +265,7 @@ def main(tag_name: str) -> None:
             make_pr(con, release, repo_url)
         except Exception as e:
             failed += 1
-            log.exception(f"Error updating {repo_url}.", e)
+            log.exception(f"Error updating {repo_url}: %s", e)
 
     sys.exit(failed > 0)
 
