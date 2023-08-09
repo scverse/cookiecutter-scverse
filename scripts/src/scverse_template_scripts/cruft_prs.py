@@ -262,9 +262,7 @@ def main(tag_name: str) -> None:
     failed = 0
     for repo_url in repo_urls:
         try:
-            # TODO just use single-repo we control for testing
-            if repo_url.endswith("icbi-lab/infercnvpy"):
-                make_pr(con, release, repo_url)
+            make_pr(con, release, repo_url)
         except Exception as e:
             failed += 1
             log.error(f"Error updating {repo_url}.", e)
