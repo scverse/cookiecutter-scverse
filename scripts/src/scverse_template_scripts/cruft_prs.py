@@ -29,8 +29,6 @@ from yaml import safe_load
 from .backoff import retry_with_backoff
 
 log = getLogger(__name__)
-log_dir = Path("./log")
-log_dir.mkdir(exist_ok=True)
 
 PR_BODY_TEMPLATE = """\
 `cookiecutter-scverse` released [{release.tag_name}]({release.html_url}).
@@ -141,17 +139,21 @@ def get_repo_urls(gh: Github) -> Generator[str]:
             yield repo["url"]
 
 
-def run_cruft(cwd: Path, git_tag: str, log_name: str) -> CompletedProcess:
+def run_cruft(cwd: Path, *, tag_name: str, log_name: str) -> CompletedProcess:
     args = [
         sys.executable,
         "-m",
         "cruft",
         "update",
-        f"--checkout={git_tag}",
+        f"--checkout={tag_name}",
         "--skip-apply-ask",
         "--project-dir=.",
     ]
-    with open(log_dir / f"{log_name}.txt", "w") as log_file:
+
+    log_path = Path(f"./log/{log_name}.txt")
+    log_path.parent.mkdir(exist_ok=True)
+
+    with log_path.open("w") as log_file:
         return run(args, check=True, cwd=cwd, stdout=log_file, stderr=log_file)
 
 
@@ -162,7 +164,13 @@ n_retries = math.ceil(math.log(5 * 60) / math.log(2))  # = ⌈~8.22⌉ = 9
 
 
 def cruft_update(  # noqa: PLR0913
-    con: GitHubConnection, tag_name: str, repo: GHRepo, origin: GHRepo, path: Path, pr: PR
+    con: GitHubConnection,
+    pr: PR,
+    *,
+    tag_name: str,
+    repo: GHRepo,
+    origin: GHRepo,
+    path: Path,
 ) -> bool:
     clone = retry_with_backoff(
         lambda: Repo.clone_from(con.auth(repo.clone_url), path),
@@ -174,7 +182,7 @@ def cruft_update(  # noqa: PLR0913
     branch = clone.create_head(pr.branch, f"{pr.repo_id}/{origin.default_branch}")
     branch.checkout()
 
-    run_cruft(path, tag_name, pr.branch)
+    run_cruft(path, tag_name=tag_name, log_name=pr.branch)
 
     if not clone.is_dirty():
         return False
@@ -210,7 +218,14 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
     origin = con.gh.get_repo(repo_url.removeprefix("https://github.com/"))
     repo = get_fork(con, origin)
     with TemporaryDirectory() as td:
-        updated = cruft_update(con, release.tag_name, repo, origin, Path(td), pr)
+        updated = cruft_update(
+            con,
+            pr,
+            tag_name=release.tag_name,
+            repo=repo,
+            origin=origin,
+            path=Path(td),
+        )
     if updated:
         if old_pr := next((p for p in origin.get_pulls("open") if pr.matches(p)), None):
             old_pr.edit(state="closed")
