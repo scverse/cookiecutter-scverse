@@ -1,5 +1,6 @@
 import json
 from dataclasses import dataclass
+from pathlib import Path
 from typing import cast
 
 import pytest
@@ -50,11 +51,12 @@ def pr(con) -> PR:
 
 def test_cruft_update(con, repo, tmp_path, pr, git_repo: GitRepo, monkeypatch: pytest.MonkeyPatch):
     old_active_branch_name = git_repo.api.active_branch.name
-    monkeypatch.setattr(
-        "scverse_template_scripts.cruft_prs.run_cruft",
-        lambda p, _, __: (p / "b").write_text("b modified"),
-    )
-    changed = cruft_update(con, "main", repo, repo, tmp_path, pr)
+
+    def _mock_run_cruft(cwd: Path, *, tag_name, log_name):
+        (cwd / "b").write_text("b modified")
+
+    monkeypatch.setattr("scverse_template_scripts.cruft_prs.run_cruft", _mock_run_cruft)
+    changed = cruft_update(con, pr, tag_name="main", repo=repo, origin=repo, path=tmp_path)
     assert changed  # TODO: add test for short circuit
     main_branch = git_repo.api.active_branch
     assert main_branch.name == old_active_branch_name, "Shouldn’t change active branch"
