@@ -8,13 +8,9 @@ version = "0.0.1"
 description = "{{ cookiecutter.project_description }}"
 readme = "README.md"
 requires-python = ">=3.9"
-license = {file = "LICENSE"}
-authors = [
-    {name = "{{ cookiecutter.author_full_name }}"},
-]
-maintainers = [
-    {name = "{{ cookiecutter.author_full_name }}", email = "{{ cookiecutter.author_email }}"},
-]
+license = { file = "LICENSE" }
+authors = [{ name = "{{ cookiecutter.author_full_name }}"}]
+maintainers = [{ name = "{{ cookiecutter.author_full_name }}", email = "{{ cookiecutter.author_email }}" }]
 urls.Documentation = "https://{{ cookiecutter.project_name }}.readthedocs.io/"
 urls.Source = "{{ cookiecutter.project_repo }}"
 urls.Home-page = "{{ cookiecutter.project_repo }}"
@@ -43,10 +39,7 @@ doc = [
     "ipython",
     "sphinx-copybutton",
 ]
-test = [
-    "pytest",
-    "pytest-cov",
-]
+test = ["pytest", "pytest-cov"]
 
 {% if cookiecutter.project_name.lower().replace('-', '_') != cookiecutter.package_name -%}
 [tool.hatch.build.targets.wheel]
@@ -56,15 +49,13 @@ packages = ['src/{{ cookiecutter.package_name }}']
 
 [tool.coverage.run]
 source = ["{{ cookiecutter.package_name }}"]
-omit = [
-    "**/test_*.py",
-]
+omit = ["**/test_*.py"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 xfail_strict = true
 addopts = [
-    "--import-mode=importlib",  # allow using test files with same name
+    "--import-mode=importlib", # allow using test files with same name
 ]
 
 [tool.black]
@@ -74,17 +65,17 @@ line-length = 120
 src = ["src"]
 line-length = 120
 select = [
-    "F",  # Errors detected by Pyflakes
-    "E",  # Error detected by Pycodestyle
-    "W",  # Warning detected by Pycodestyle
-    "I",  # isort
-    "D",  # pydocstyle
-    "B",  # flake8-bugbear
-    "TID",  # flake8-tidy-imports
-    "C4",  # flake8-comprehensions
-    "BLE",  # flake8-blind-except
-    "UP",  # pyupgrade
-    "RUF100",  # Report unused noqa directives
+    "F",      # Errors detected by Pyflakes
+    "E",      # Error detected by Pycodestyle
+    "W",      # Warning detected by Pycodestyle
+    "I",      # isort
+    "D",      # pydocstyle
+    "B",      # flake8-bugbear
+    "TID",    # flake8-tidy-imports
+    "C4",     # flake8-comprehensions
+    "BLE",    # flake8-blind-except
+    "UP",     # pyupgrade
+    "RUF100", # Report unused noqa directives
 ]
 ignore = [
     # line too long -> we accept long comment lines; black gets rid of long code lines
@@ -131,5 +122,5 @@ skip = [
     "docs/changelog.md",
     "docs/references.bib",
     "docs/references.md",
-    "docs/notebooks/example.ipynb"
+    "docs/notebooks/example.ipynb",
 ]
