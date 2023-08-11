@@ -22,3 +22,8 @@ repos:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
         files: ^scripts/
+  - repo: https://github.com/ComPWA/mirrors-taplo
+    rev: v0.8.1
+    hooks:
+      - id: taplo-docker
+        files: ^scripts/
