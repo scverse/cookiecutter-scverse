@@ -223,7 +223,7 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
     origin = con.gh.get_repo(repo_url.removeprefix("https://github.com/"))
     repo = get_fork(con, origin)
 
-    if any(True for p in origin.get_pulls("open") if pr.matches_current_version(p)):
+    if old_pr := next((p for p in origin.get_pulls("open") if pr.matches_current_version(p)), None):
         log.info(
             f"PR for current version already exists: #{old_pr.number} with branch name `{old_pr.head.ref}`. Skipping."
         )
