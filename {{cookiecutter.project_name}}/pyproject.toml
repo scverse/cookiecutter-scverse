@@ -26,7 +26,6 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    # CLI for bumping the version number
     "pre-commit",
     "twine>=4.0.2"
 ]
