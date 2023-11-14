@@ -1,6 +1,7 @@
 import json
 from dataclasses import dataclass
 from typing import cast
+from warnings import catch_warnings, filterwarnings
 
 import pytest
 from git import Commit, Diff
@@ -28,8 +29,11 @@ class MockRelease:
 @pytest.fixture
 def con(response_mock) -> GitHubConnection:
     resp = json.dumps({"login": "scverse-bot"})
-    with response_mock(f"GET https://api.github.com:443/users/scverse-bot -> 200 :{resp}"):
-        return GitHubConnection("scverse-bot")
+    with catch_warnings():
+        # https://github.com/idlesign/pytest-responsemock/issues/7
+        filterwarnings("ignore", category=ResourceWarning)
+        with response_mock(f"GET https://api.github.com:443/users/scverse-bot -> 200 :{resp}"):
+            return GitHubConnection("scverse-bot")
 
 
 @pytest.fixture
