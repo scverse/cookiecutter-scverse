@@ -49,8 +49,8 @@ You'll notice that the command `git commit` installed a bunch of packages and tr
 There is a chance that `git commit -m "first commit"` fails due to the `prettier` pre-commit formatting the file `.cruft.json`. No problem, you have just experienced what pre-commit checks do in action. Just go ahead and re-add the modified file and try to commit again:
 
 ```bash
- git add -u # update all tracked file
- git commit -m "first commit"
+git add -u # update all tracked file
+git commit -m "first commit"
 ```
 
 :::
@@ -247,14 +247,14 @@ Rule categories are selectively enabled by including them under the `select` key
 
 ```toml
 [tool.ruff]
-...
+# ...
 
 select = [
     "F",  # Errors detected by Pyflakes
     "E",  # Error detected by Pycodestyle
     "W",  # Warning detected by Pycodestyle
     "I",  # isort
-    ...
+    # ...
 ]
 ```
 
@@ -264,10 +264,10 @@ You can find a long list of checks that this template disables by default sittin
 
 ```toml
 ignore = [
-    ...
+    # ...
     # __magic__ methods are are often self-explanatory, allow missing docstrings
     "D105",
-    ...
+    # ...
 ]
 ```
 
