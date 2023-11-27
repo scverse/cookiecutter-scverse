@@ -1,6 +1,6 @@
 # Scverse Cookiecutter Template
 
-[![Test](https://github.com/scverse/cookiecutter-scverse/actions/workflows/test.yaml/badge.svg)](https://github.com/scverse/cookiecutter-scverse/actions/workflows/test.yaml)
+[![Test][badge-test]][link-test]
 [![Powered by NumFOCUS][badge-numfocus]][link-numfocus]
 
 The purpose of this template is to get you started quickly building a best-practice python library for a [scverse][] ecosystem package.
@@ -25,6 +25,8 @@ Please consider making a tax-deductible [donation](https://numfocus.org/donate-t
   >
 </a>
 
+[badge-test]: https://github.com/scverse/cookiecutter-scverse/actions/workflows/test.yaml/badge.svg
+[link-test]: https://github.com/scverse/cookiecutter-scverse/actions/workflows/test.yaml
 [badge-numfocus]: https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A
 [link-numfocus]: http://numfocus.org
 
@@ -94,12 +96,11 @@ We expect developers of scverse ecosystem packages to
 
 ## Changelog
 
-See the [release section](https://github.com/scverse/cookiecutter-scverse/releases).
+See the [release page][].
 
 ## Releasing a new template version
 
-To release a new version of the template, create a new release
-on the [GitHub release page](https://github.com/scverse/cookiecutter-scverse/releases).
+To release a new version of the template, create a new release on the GitHub [release page][].
 Choose a tag name of the format `vX.X.X` that adheres to [semantic versioning](https://semver.org/).
 
 Note that when creating a new release, changes will be propagated to packages using this template.
@@ -131,3 +132,4 @@ You can cite the scverse publication as follows:
 [codecov]: https://about.codecov.io/
 [scverse discourse]: https://discourse.scverse.org/
 [pytest]: https://docs.pytest.org
+[release page]: https://github.com/scverse/cookiecutter-scverse/releases
