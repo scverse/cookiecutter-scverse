@@ -123,7 +123,7 @@ While [codecov docs][] has a very extensive documentation on how to get started,
 To set it up, simply go to the [codecov app][] page and follow the instructions to activate it for your repository.
 Once the activation is completed, go back to the `Actions` tab and re-run the failing workflows.
 
-The workflows should now succeed and you will be able to find the code coverage at this link: `https://app.codecov.io/gh/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}`. You might have to wait couple of minutes and the coverage of this repository should be ~60%.
+The workflows should now succeed, and you will be able to find the code coverage at this link: `https://app.codecov.io/gh/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}`. You might have to wait a couple of minutes and the coverage of this repository should be ~60%.
 
 If your repository is private, you will have to specify an additional token in the repository secrets. In brief, you need to:
 
@@ -150,7 +150,7 @@ On the RTD dashboard choose "Import a Project" and follow the instructions to ad
 
 -   Make sure to choose the correct name of the default branch. On GitHub, the name of the default branch should be `main` (it has
     recently changed from `master` to `main`).
--   We recommend to enable documentation builds for pull requests (PRs). This ensures that a PR doesn't introduce changes
+-   We recommend enabling documentation builds for pull requests (PRs). This ensures that a PR doesn't introduce changes
     that break the documentation. To do so, got to `Admin -> Advanced Settings`, check the
     `Build pull requests for this projects` option, and click `Save`. For more information, please refer to
     the [official RTD documentation](https://docs.readthedocs.io/en/stable/pull-requests.html).
@@ -373,7 +373,7 @@ The following hints may be useful to work with the template sync:
 ## Moving forward
 
 You have reached the end of this document. Congratulations! You have successfully set up your project and are ready to start.
-For everything else related to documentation, code style, testing and publishing your project ot pypi, please refer to the [contributing docs](contributing.md#contributing-guide).
+For everything else related to documentation, code style, testing and publishing your project to pypi, please refer to the [contributing docs](contributing.md#contributing-guide).
 
 <!-- Links -->
 
