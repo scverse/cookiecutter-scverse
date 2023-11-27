@@ -373,7 +373,7 @@ The following hints may be useful to work with the template sync:
 ## Moving forward
 
 You have reached the end of this document. Congratulations! You have successfully set up your project and are ready to start.
-For everything else related to documentation, code style, testing and publishing your project ot pypi, please refer to the [contributing docs](contributing.md#contributing-guide).
+For everything else related to documentation, code style, testing and publishing your project to pypi, please refer to the [contributing docs](contributing.md#contributing-guide).
 
 <!-- Links -->
 
