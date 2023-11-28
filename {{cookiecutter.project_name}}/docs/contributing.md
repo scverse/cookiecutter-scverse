@@ -93,13 +93,8 @@ Before making a release, you need to update the version number in the `pyproject
 >
 > Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
 
-Once you are done, run
-
-```
-git push --tags
-```
-
-to publish the created tag on GitHub. Alternatively, it is possible to create a tag through the Github web interface. For more information, see [managing Github releases][]. This will automatically trigger a Github workflow that creates a release on PyPI.
+Once you are done, navigate to the "Releases" page of this project on GitHub.
+Specify `vX.X.X` as a tag name and create a release. For more information, see [managing Github releases][]. This will automatically create a git tag and trigger a Github workflow that creates a release on PyPI.
 
 ## Writing documentation
 
