@@ -19,9 +19,11 @@ pip install -e ".[dev,test,doc]"
 
 ## Code-style
 
-This template uses [pre-commit][] to enforce consistent code-styles. On every commit, pre-commit checks will either
-automatically fix issues with the code, or raise an error message. See [pre-commit checks](template_usage.md#pre-commit-checks) for
-a full list of checks enabled for this repository.
+This template uses [pre-commit][] to enforce consistent code-styles.
+On every commit, pre-commit checks will either automatically fix issues with the code, or raise an error message.
+{% if cookiecutter._render_devdocs -%}
+See [pre-commit checks](template_usage.md#pre-commit-checks) for a full list of checks enabled for this repository.
+{%- endif %}
 
 To enable pre-commit locally, simply run
 
