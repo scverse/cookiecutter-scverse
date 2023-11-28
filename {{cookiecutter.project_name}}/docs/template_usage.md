@@ -158,14 +158,17 @@ On the RTD dashboard choose "Import a Project" and follow the instructions to ad
 
 If your project is private, there are ways to enable docs rendering on [readthedocs.org][] but it is more cumbersome and requires a different subscription for read the docs. See a guide [here](https://docs.readthedocs.io/en/stable/guides/importing-private-repositories.html).
 
-### The release Github workflow
+### Automating PyPI released using GitHub actions
 
 #### Configuring the Github workflow
 
 Tags adhering to `"*.*.*"` that are pushed to the `main` branch will trigger the release Github workflow that automatically builds and uploads the Python package to [PyPI][].
-For this to work, the `PYPI_API_TOKEN` Github secret needs to be set to the value of the [PyPI][] token.
-See [Creating PyPI tokens][] for instructions on how to create a [PyPI][] token.
-Finally, set your `PYPI_API_TOKEN` Github secret equal to the value of the just created [PyPI][] token by following [creating Github secrets][].
+
+For this to work, you'll need to setup GitHub as a [trusted publisher][] on PyPI. To set this up, login to
+[PyPI][], and navigate to your project. In the left sidebar, choose "Publishing", and add the repository details.
+The "Workflow name" needs to bet set to `release.yaml`. In most cases, you can leave the "Environment name" empty.
+For more details, please refer to the official [PyPI guide for setting up trusted publishing][pypi-trusted-publishing-guide].
+
 
 #### Behind the scenes
 
@@ -194,6 +197,8 @@ Provide your username and password when requested and then go check out your pac
 
 For more information, follow the [Python packaging tutorial][].
 
+[pypi-trusted-publishing-guide]: https://docs.pypi.org/trusted-publishers/adding-a-publisher/
+[trusted publisher]: https://docs.pypi.org/trusted-publishers/
 [creating github secrets]: https://docs.github.com/en/actions/security-guides/encrypted-secrets
 [creating pypi tokens]: https://pypi.org/help/#apitoken
 [managing github releases]: https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository
