@@ -8,9 +8,9 @@
 
 api.md
 changelog.md
-{% if cookiecutter._render_devdocs -%}
+{% if cookiecutter._render_devdocs %}
 template_usage.md
-{%- endif %}
+{% endif %}
 contributing.md
 references.md
 
