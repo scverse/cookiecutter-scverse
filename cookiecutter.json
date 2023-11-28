@@ -19,5 +19,5 @@
         "docs/_templates/autosummary/**.rst"
     ],
     "_render_devdocs": false,
-    "_jinja2_env_vars": {"lstrip_blocks": true, "trim_blocks": true}
+    "_jinja2_env_vars": { "lstrip_blocks": true, "trim_blocks": true }
 }
