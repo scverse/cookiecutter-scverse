@@ -32,7 +32,7 @@ jobs:
             pip-flags: "--pre"
             name: PRE-RELEASE DEPENDENCIES
 
-    name: ${{ matrix.name }} test (Python ${{ matrix.python }})
+    name: ${{ matrix.name }} Python ${{ matrix.python }}
 
     env:
       OS: ${{ matrix.os }}
