@@ -21,7 +21,7 @@ dependencies = [
     "typer",
     "furl",
     "GitPython",
-    "PyGitHub",
+    "PyGitHub >= 2",
     "PyYAML",
     "pre-commit", # is ran by cruft
 ]

@@ -243,7 +243,11 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
             log.info(f"Closing old PR #{old_pr.number} with branch name `{old_pr.head.ref}`.")
             old_pr.edit(state="closed")
         new_pr = origin.create_pull(
-            pr.title, pr.body, origin.default_branch, pr.namespaced_head, maintainer_can_modify=True
+            title=pr.title,
+            body=pr.body,
+            base=origin.default_branch,
+            head=pr.namespaced_head,
+            maintainer_can_modify=True,
         )
         log.info(f"Created PR #{new_pr.number} with branch name `{new_pr.head.ref}`.")
 
