@@ -1,5 +1,11 @@
 #!/bin/env python3
 from subprocess import run
+from pathlib import Path
+
+# Post processing
+{% if not cookiecutter._render_devdocs %}
+Path("docs/template_usage.md").unlink()
+{% endif %}
 
 # Update pre commit hooks
 run("pre-commit autoupdate -c .pre-commit-config.yaml".split(), check=True)
