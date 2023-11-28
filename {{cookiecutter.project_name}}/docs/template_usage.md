@@ -169,7 +169,6 @@ For this to work, you'll need to setup GitHub as a [trusted publisher][] on PyPI
 The "Workflow name" needs to bet set to `release.yaml`. In most cases, you can leave the "Environment name" empty.
 For more details, please refer to the official [PyPI guide for setting up trusted publishing][pypi-trusted-publishing-guide].
 
-
 #### Behind the scenes
 
 This section explains how releases can be created manually purely for educational purposes. Experienced developers may skip this section.
