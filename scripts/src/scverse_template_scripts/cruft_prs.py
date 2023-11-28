@@ -211,7 +211,11 @@ def get_fork(con: GitHubConnection, repo: GHRepo) -> GHRepo:
     If the fork already exists it is reused.
     """
     fork = repo.create_fork()
-    return retry_with_backoff(lambda: con.gh.get_repo(fork.id), retries=n_retries, exc_cls=UnknownObjectException)
+    return retry_with_backoff(
+        lambda: con.gh.get_repo(fork.id),
+        retries=n_retries,
+        exc_cls=UnknownObjectException,
+    )
 
 
 def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
@@ -243,7 +247,11 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
             log.info(f"Closing old PR #{old_pr.number} with branch name `{old_pr.head.ref}`.")
             old_pr.edit(state="closed")
         new_pr = origin.create_pull(
-            pr.title, pr.body, origin.default_branch, pr.namespaced_head, maintainer_can_modify=True
+            pr.title,
+            pr.body,
+            origin.default_branch,
+            pr.namespaced_head,
+            maintainer_can_modify=True,
         )
         log.info(f"Created PR #{new_pr.number} with branch name `{new_pr.head.ref}`.")
 
