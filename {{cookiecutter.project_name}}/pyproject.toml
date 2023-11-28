@@ -44,7 +44,7 @@ doc = [
 ]
 test = [
     "pytest",
-    "pytest-cov",
+    "coverage",
 ]
 
 {% if cookiecutter.project_name.lower().replace('-', '_') != cookiecutter.package_name -%}
