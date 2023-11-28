@@ -1,5 +1,6 @@
 import json
 from dataclasses import dataclass
+from pathlib import Path
 from typing import cast
 from warnings import catch_warnings, filterwarnings
 
@@ -16,6 +17,7 @@ from scverse_template_scripts.cruft_prs import PR, GitHubConnection, cruft_updat
 class MockGHRepo:
     git_url: str  # git://github.com/foo/bar.git
     clone_url: str  # https://github.com/foo/bar.git
+    default_branch: str  # main
 
 
 @dataclass
@@ -43,18 +45,22 @@ def repo(git_repo: GitRepo) -> GHRepo:
     (git_repo.workspace / "b").write_text("b content")
     git_repo.api.index.add(["a", "b"])
     git_repo.api.index.commit("initial commit")
-    return cast(GHRepo, MockGHRepo(git_repo.uri, git_repo.uri))
+    return cast(GHRepo, MockGHRepo(git_repo.uri, git_repo.uri, "main"))
 
 
 @pytest.fixture
 def pr(con) -> PR:
-    return PR(con, cast(GHRelease, MockRelease()))
+    return PR(con, cast(GHRelease, MockRelease()), "scverse-test")
 
 
 def test_cruft_update(con, repo, tmp_path, pr, git_repo: GitRepo, monkeypatch: pytest.MonkeyPatch):
     old_active_branch_name = git_repo.api.active_branch.name
-    monkeypatch.setattr("scverse_template_scripts.cruft_prs.run_cruft", lambda p: (p / "b").write_text("b modified"))
-    changed = cruft_update(con, repo, tmp_path, pr)
+
+    def _mock_run_cruft(cwd: Path, *, tag_name, log_name):
+        return (cwd / "b").write_text("b modified")
+
+    monkeypatch.setattr("scverse_template_scripts.cruft_prs.run_cruft", _mock_run_cruft)
+    changed = cruft_update(con, pr, tag_name="main", repo=repo, origin=repo, path=tmp_path)
     assert changed  # TODO: add test for short circuit
     main_branch = git_repo.api.active_branch
     assert main_branch.name == old_active_branch_name, "Shouldn’t change active branch"
