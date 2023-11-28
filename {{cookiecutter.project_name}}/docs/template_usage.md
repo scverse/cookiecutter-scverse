@@ -158,6 +158,49 @@ On the RTD dashboard choose "Import a Project" and follow the instructions to ad
 
 If your project is private, there are ways to enable docs rendering on [readthedocs.org][] but it is more cumbersome and requires a different subscription for read the docs. See a guide [here](https://docs.readthedocs.io/en/stable/guides/importing-private-repositories.html).
 
+### The release Github workflow
+
+#### Configuring the Github workflow
+
+Tags adhering to `"*.*.*"` that are pushed to the `main` branch will trigger the release Github workflow that automatically builds and uploads the Python package to [PyPI][].
+For this to work, the `PYPI_API_TOKEN` Github secret needs to be set to the value of the [PyPI][] token.
+See [Creating PyPI tokens][] for instructions on how to create a [PyPI][] token.
+Finally, set your `PYPI_API_TOKEN` Github secret equal to the value of the just created [PyPI][] token by following [creating Github secrets][].
+
+#### Behind the scenes
+
+This section explains how releases can be created manually purely for educational purposes. Experienced developers may skip this section.
+Python packages are not distributed as source code, but as _distributions_. The most common distribution format is the so-called _wheel_. To build a _wheel_, run
+
+```bash
+python -m build
+```
+
+This command creates a _source archive_ and a _wheel_, which are required for publishing your package to [PyPI][]. These files are created directly in the root of the repository.
+
+Before uploading them to [PyPI][] you can check that your _distribution_ is valid by running:
+
+```bash
+twine check dist/*
+```
+
+and finally publishing it with:
+
+```bash
+twine upload dist/*
+```
+
+Provide your username and password when requested and then go check out your package on [PyPI][]!
+
+For more information, follow the [Python packaging tutorial][].
+
+[creating github secrets]: https://docs.github.com/en/actions/security-guides/encrypted-secrets
+[creating pypi tokens]: https://pypi.org/help/#apitoken
+[managing github releases]: https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository
+[python packaging tutorial]: https://packaging.python.org/en/latest/tutorials/packaging-projects/#generating-distribution-archives
+
+[pypi-feature-request]: https://github.com/scverse/cookiecutter-scverse/issues/88
+
 (pre-commit)=
 
 ### Pre-commit checks
