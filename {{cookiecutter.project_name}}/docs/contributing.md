@@ -68,6 +68,7 @@ pytest
 in the root of the repository.
 
 ### Continuous integration
+
 Continuous integration will automatically run the tests on all pull requests and test
 against the minimum and maximum supported Python version.
 
@@ -99,8 +100,6 @@ git push --tags
 ```
 
 to publish the created tag on GitHub. Alternatively, it is possible to create a tag through the Github web interface. For more information, see [managing Github releases][]. This will automatically trigger a Github workflow that creates a release on PyPI.
-
-
 
 ## Writing documentation
 

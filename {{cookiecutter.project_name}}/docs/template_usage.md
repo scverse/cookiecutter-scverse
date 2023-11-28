@@ -158,7 +158,6 @@ On the RTD dashboard choose "Import a Project" and follow the instructions to ad
 
 If your project is private, there are ways to enable docs rendering on [readthedocs.org][] but it is more cumbersome and requires a different subscription for read the docs. See a guide [here](https://docs.readthedocs.io/en/stable/guides/importing-private-repositories.html).
 
-
 ### The release Github workflow
 
 #### Configuring the Github workflow
@@ -195,12 +194,11 @@ Provide your username and password when requested and then go check out your pac
 
 For more information, follow the [Python packaging tutorial][].
 
-
-
 [creating github secrets]: https://docs.github.com/en/actions/security-guides/encrypted-secrets
 [creating pypi tokens]: https://pypi.org/help/#apitoken
 [managing github releases]: https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository
 [python packaging tutorial]: https://packaging.python.org/en/latest/tutorials/packaging-projects/#generating-distribution-archives
+
 [pypi-feature-request]: https://github.com/scverse/cookiecutter-scverse/issues/88
 
 (pre-commit)=
