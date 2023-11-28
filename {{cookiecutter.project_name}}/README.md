@@ -33,7 +33,7 @@ pip install {{ cookiecutter.project_name }}
 1. Install the latest development version:
 
 ```bash
-pip install git+https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.project_name }}.git@main
+pip install git+{{ cookiecutter.project_repo }}.git@main
 ```
 
 ## Release notes
