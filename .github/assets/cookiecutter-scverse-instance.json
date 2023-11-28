@@ -11,6 +11,8 @@
         "_copy_without_render": [
             ".github/workflows/**.yaml",
             "docs/_templates/autosummary/**.rst"
-        ]
+        ],
+        "_render_devdocs": true,
+        "_jinja2_env_vars": { "lstrip_blocks": true, "trim_blocks": true }
     }
 }
