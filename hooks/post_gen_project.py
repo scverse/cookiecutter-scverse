@@ -1,15 +1,15 @@
-#!/bin/sh
+#!/bin/env python
+from subprocess import run
 
 # Update pre commit hooks
-pre-commit autoupdate -c .pre-commit-config.yaml
-pre-commit install
+run("pre-commit autoupdate -c .pre-commit-config.yaml".split(), check=True)
+run("pre-commit install".split(), check=True)
 
 # The following output was generated using rich
 # The formatted output is included here directly, because I don't want
 # rich as another dependency for initalizing the repo.
 # See .make_rich_output.py for more details.
-
-cat << EOF
+print("""
 
 
 
@@ -58,4 +58,4 @@ We expect developers of scverse ecosystem packages to
 [1;33m • [0m]8;id=20647;https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html#writing-documentation\[94mprovide documentation[0m]8;;\, including tutorials where applicable
 [1;33m • [0msupport users through github and the ]8;id=496112;https://discourse.scverse.org/\[94mscverse discourse[0m]8;;\
 
-EOF
+""")
