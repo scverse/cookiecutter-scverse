@@ -21,13 +21,13 @@ urls.Home-page = "{{ cookiecutter.project_repo }}"
 dependencies = [
     "anndata",
     # for debug logging (referenced from the issue template)
-    "session-info"
+    "session-info",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pre-commit",
-    "twine>=4.0.2"
+    "twine>=4.0.2",
 ]
 doc = [
     "docutils>=0.8,!=0.18.*,!=0.19.*",
@@ -113,6 +113,7 @@ ignore = [
     # We want docstrings to start immediately after the opening triple quote
     "D213",
 ]
+extend-include = ["*.ipynb"]
 
 [tool.ruff.pydocstyle]
 convention = "numpy"
@@ -131,5 +132,5 @@ skip = [
     "docs/changelog.md",
     "docs/references.bib",
     "docs/references.md",
-    "docs/notebooks/example.ipynb"
+    "docs/notebooks/example.ipynb",
 ]
