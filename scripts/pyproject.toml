@@ -99,6 +99,9 @@ ignore = [
 ]
 unfixable = ["RUF001"]  # never “fix” “confusables”
 
+[tool.ruff.format]
+docstring-code-format = true
+
 [tool.ruff.isort]
 known-first-party = ["scverse_template_scripts"]
 
