@@ -94,10 +94,10 @@ All dependencies listed in such optional dependency groups can then be installed
 #### Tool configurations
 
 The `pyproject.toml` file also serves as single configuration file for many tools such as many {ref}`pre-commit`.
-For example, the line length of [black](https://github.com/psf/black) can be configured as follows:
+For example, the line length for auto-formatting can be configured as follows:
 
 ```toml
-[tool.black]
+[tool.ruff]
 line-length = 120
 ```
 
@@ -230,12 +230,9 @@ Once authorized, pre-commit.ci should automatically be activated.
 
 The following pre-commit hooks are for code style and format:
 
--   [black](https://black.readthedocs.io/en/stable/):
-    standard code formatter in Python.
--   [blacken-docs](https://github.com/asottile/blacken-docs):
-    black on Python code in docs.
 -   [prettier](https://prettier.io/docs/en/index.html):
     standard code formatter for non-Python files (e.g. YAML).
+-   [ruff][] formatting (`ruff-format`)
 -   [ruff][] based checks:
     -   [isort](https://beta.ruff.rs/docs/rules/#isort-i) (rule category: `I`):
         sort module imports into sections and types.
@@ -281,7 +278,7 @@ This section shows you where these checks are defined, and how to enable/ disabl
 ##### pre-commit
 
 You can add or remove pre-commit checks by simply deleting relevant lines in the `.pre-commit-config.yaml` file under the repository root.
-Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` (for `ruff` and `black`) or tool-specific
+Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` (for `ruff`) or tool-specific
 config files, such as `.prettierrc.yml` for **prettier**.
 
 ##### Ruff
