@@ -59,9 +59,6 @@ addopts = [
 ]
 filterwarnings = ["error"]
 
-[tool.black]
-line-length = 120
-
 [tool.ruff]
 line-length = 120
 allowed-confusables = ["’", "×"]
@@ -98,6 +95,9 @@ ignore = [
     "S311",  # we don’t need cryptographically secure RNG
 ]
 unfixable = ["RUF001"]  # never “fix” “confusables”
+
+[tool.ruff.format]
+docstring-code-format = true
 
 [tool.ruff.isort]
 known-first-party = ["scverse_template_scripts"]

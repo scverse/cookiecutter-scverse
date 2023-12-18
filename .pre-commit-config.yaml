@@ -5,14 +5,11 @@ repos:
     hooks:
       - id: prettier
   # Hooks that are run for scripts
-  - repo: https://github.com/psf/black
-    rev: "23.11.0"
-    hooks:
-      - id: black
-        files: ^scripts/
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.1.8
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
+        files: ^scripts/
+      - id: ruff-format
         files: ^scripts/
