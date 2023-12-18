@@ -1,12 +1,12 @@
 repos:
   # Hooks that are run everywhere
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v4.0.0-alpha.5 # Only update together with the pre-commit yaml in the tempalate!
+    rev: v4.0.0-alpha.7 # Only update together with the pre-commit yaml in the tempalate!
     hooks:
       - id: prettier
   # Hooks that are run for scripts
   - repo: https://github.com/psf/black
-    rev: "23.11.0"
+    rev: "23.12.0"
     hooks:
       - id: black
         files: ^scripts/
