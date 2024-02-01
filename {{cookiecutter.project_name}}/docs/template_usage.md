@@ -49,8 +49,8 @@ You'll notice that the command `git commit` installed a bunch of packages and tr
 There is a chance that `git commit -m "first commit"` fails due to the `prettier` pre-commit formatting the file `.cruft.json`. No problem, you have just experienced what pre-commit checks do in action. Just go ahead and re-add the modified file and try to commit again:
 
 ```bash
- git add -u # update all tracked file
- git commit -m "first commit"
+git add -u # update all tracked file
+git commit -m "first commit"
 ```
 
 :::
@@ -94,10 +94,10 @@ All dependencies listed in such optional dependency groups can then be installed
 #### Tool configurations
 
 The `pyproject.toml` file also serves as single configuration file for many tools such as many {ref}`pre-commit`.
-For example, the line length of [black](https://github.com/psf/black) can be configured as follows:
+For example, the line length for auto-formatting can be configured as follows:
 
 ```toml
-[tool.black]
+[tool.ruff]
 line-length = 120
 ```
 
@@ -123,7 +123,7 @@ While [codecov docs][] has a very extensive documentation on how to get started,
 To set it up, simply go to the [codecov app][] page and follow the instructions to activate it for your repository.
 Once the activation is completed, go back to the `Actions` tab and re-run the failing workflows.
 
-The workflows should now succeed and you will be able to find the code coverage at this link: `https://app.codecov.io/gh/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}`. You might have to wait couple of minutes and the coverage of this repository should be ~60%.
+The workflows should now succeed, and you will be able to find the code coverage at this link: `https://app.codecov.io/gh/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}`. You might have to wait a couple of minutes and the coverage of this repository should be ~60%.
 
 If your repository is private, you will have to specify an additional token in the repository secrets. In brief, you need to:
 
@@ -150,13 +150,60 @@ On the RTD dashboard choose "Import a Project" and follow the instructions to ad
 
 -   Make sure to choose the correct name of the default branch. On GitHub, the name of the default branch should be `main` (it has
     recently changed from `master` to `main`).
--   We recommend to enable documentation builds for pull requests (PRs). This ensures that a PR doesn't introduce changes
+-   We recommend enabling documentation builds for pull requests (PRs). This ensures that a PR doesn't introduce changes
     that break the documentation. To do so, got to `Admin -> Advanced Settings`, check the
     `Build pull requests for this projects` option, and click `Save`. For more information, please refer to
     the [official RTD documentation](https://docs.readthedocs.io/en/stable/pull-requests.html).
 -   If you find the RTD builds are failing, you can disable the `fail_on_warning` option in `.readthedocs.yaml`.
 
 If your project is private, there are ways to enable docs rendering on [readthedocs.org][] but it is more cumbersome and requires a different subscription for read the docs. See a guide [here](https://docs.readthedocs.io/en/stable/guides/importing-private-repositories.html).
+
+### Automating PyPI released using GitHub actions
+
+#### Configuring the Github workflow
+
+Tags adhering to `"*.*.*"` that are pushed to the `main` branch will trigger the release Github workflow that automatically builds and uploads the Python package to [PyPI][].
+
+For this to work, you'll need to setup GitHub as a [trusted publisher][] on PyPI. To set this up, login to
+[PyPI][], and navigate to your project. In the left sidebar, choose "Publishing", and add the repository details.
+The "Workflow name" needs to bet set to `release.yaml`. In most cases, you can leave the "Environment name" empty.
+For more details, please refer to the official [PyPI guide for setting up trusted publishing][pypi-trusted-publishing-guide].
+
+#### Behind the scenes
+
+This section explains how releases can be created manually purely for educational purposes. Experienced developers may skip this section.
+Python packages are not distributed as source code, but as _distributions_. The most common distribution format is the so-called _wheel_. To build a _wheel_, run
+
+```bash
+python -m build
+```
+
+This command creates a _source archive_ and a _wheel_, which are required for publishing your package to [PyPI][]. These files are created directly in the root of the repository.
+
+Before uploading them to [PyPI][] you can check that your _distribution_ is valid by running:
+
+```bash
+twine check dist/*
+```
+
+and finally publishing it with:
+
+```bash
+twine upload dist/*
+```
+
+Provide your username and password when requested and then go check out your package on [PyPI][]!
+
+For more information, follow the [Python packaging tutorial][].
+
+[pypi-trusted-publishing-guide]: https://docs.pypi.org/trusted-publishers/adding-a-publisher/
+[trusted publisher]: https://docs.pypi.org/trusted-publishers/
+[creating github secrets]: https://docs.github.com/en/actions/security-guides/encrypted-secrets
+[creating pypi tokens]: https://pypi.org/help/#apitoken
+[managing github releases]: https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository
+[python packaging tutorial]: https://packaging.python.org/en/latest/tutorials/packaging-projects/#generating-distribution-archives
+
+[pypi-feature-request]: https://github.com/scverse/cookiecutter-scverse/issues/88
 
 (pre-commit)=
 
@@ -183,12 +230,9 @@ Once authorized, pre-commit.ci should automatically be activated.
 
 The following pre-commit hooks are for code style and format:
 
--   [black](https://black.readthedocs.io/en/stable/):
-    standard code formatter in Python.
--   [blacken-docs](https://github.com/asottile/blacken-docs):
-    black on Python code in docs.
 -   [prettier](https://prettier.io/docs/en/index.html):
     standard code formatter for non-Python files (e.g. YAML).
+-   [ruff][] formatting (`ruff-format`)
 -   [ruff][] based checks:
     -   [isort](https://beta.ruff.rs/docs/rules/#isort-i) (rule category: `I`):
         sort module imports into sections and types.
@@ -234,7 +278,7 @@ This section shows you where these checks are defined, and how to enable/ disabl
 ##### pre-commit
 
 You can add or remove pre-commit checks by simply deleting relevant lines in the `.pre-commit-config.yaml` file under the repository root.
-Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` (for `ruff` and `black`) or tool-specific
+Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` (for `ruff`) or tool-specific
 config files, such as `.prettierrc.yml` for **prettier**.
 
 ##### Ruff
@@ -247,14 +291,14 @@ Rule categories are selectively enabled by including them under the `select` key
 
 ```toml
 [tool.ruff]
-...
+# ...
 
 select = [
     "F",  # Errors detected by Pyflakes
     "E",  # Error detected by Pycodestyle
     "W",  # Warning detected by Pycodestyle
     "I",  # isort
-    ...
+    # ...
 ]
 ```
 
@@ -264,10 +308,10 @@ You can find a long list of checks that this template disables by default sittin
 
 ```toml
 ignore = [
-    ...
+    # ...
     # __magic__ methods are are often self-explanatory, allow missing docstrings
     "D105",
-    ...
+    # ...
 ]
 ```
 
@@ -373,7 +417,7 @@ The following hints may be useful to work with the template sync:
 ## Moving forward
 
 You have reached the end of this document. Congratulations! You have successfully set up your project and are ready to start.
-For everything else related to documentation, code style, testing and publishing your project ot pypi, please refer to the [contributing docs](contributing.md#contributing-guide).
+For everything else related to documentation, code style, testing and publishing your project to pypi, please refer to the [contributing docs](contributing.md#contributing-guide).
 
 <!-- Links -->
 

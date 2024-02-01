@@ -19,8 +19,9 @@ dependencies = [
     "typer",
     "furl",
     "GitPython",
-    "PyGitHub",
+    "PyGitHub >= 2",
     "PyYAML",
+    "pre-commit", # is ran by cruft
 ]
 
 [project.optional-dependencies]
@@ -40,7 +41,7 @@ python = "3.11"
 [tool.hatch.envs.test]
 features = ["test"]
 [tool.hatch.envs.test.scripts]
-test = "pytest"
+run = "pytest -v {args}"
 
 [tool.pytest.ini_options]
 addopts = [
@@ -52,12 +53,7 @@ addopts = [
 ]
 filterwarnings = ["error"]
 
-[tool.black]
-target-version = ["py310"] # py311 not supported yet
-line-length = 120
-
 [tool.ruff]
-target-version = "py311"
 line-length = 120
 allowed-confusables = ["’", "×"]
 select = [
@@ -93,6 +89,9 @@ ignore = [
     "S311", # we don’t need cryptographically secure RNG
 ]
 unfixable = ["RUF001"] # never “fix” “confusables”
+
+[tool.ruff.format]
+docstring-code-format = true
 
 [tool.ruff.isort]
 known-first-party = ["scverse_template_scripts"]

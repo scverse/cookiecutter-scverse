@@ -15,7 +15,10 @@
         "Unlicense"
     ],
     "_copy_without_render": [
-        ".github/workflows/**.yaml",
+        ".github/workflows/build.yaml",
+        ".github/workflows/test.yaml",
         "docs/_templates/autosummary/**.rst"
-    ]
+    ],
+    "_render_devdocs": false,
+    "_jinja2_env_vars": { "lstrip_blocks": true, "trim_blocks": true }
 }

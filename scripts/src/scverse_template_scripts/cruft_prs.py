@@ -86,6 +86,7 @@ class GitHubConnection:
 class PR:
     con: GitHubConnection
     release: GHRelease
+    repo_id: str  # something like grst-infercnvpy
 
     title_prefix: ClassVar[LiteralString] = "Update template to "
     branch_prefix: ClassVar[LiteralString] = "template-update-"
@@ -96,7 +97,7 @@ class PR:
 
     @property
     def branch(self) -> str:
-        return f"{self.branch_prefix}{self.release.tag_name}"
+        return f"{self.branch_prefix}{self.repo_id}-{self.release.tag_name}"
 
     @property
     def namespaced_head(self) -> str:
@@ -109,9 +110,14 @@ class PR:
             template_usage="https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html",
         )
 
-    def matches(self, pr: PullRequest) -> bool:
+    def matches_prefix(self, pr: PullRequest) -> bool:
+        """Check if `pr` is either a current or previous template update PR by matching the branch name"""
         # Don’t compare title prefix, people might rename PRs
         return pr.head.ref.startswith(self.branch_prefix) and pr.user.id == self.con.user.id
+
+    def matches_current_version(self, pr: PullRequest) -> bool:
+        """Check if `pr` is a template update PR for the current version"""
+        return pr.head.ref == self.branch and pr.user.id == self.con.user.id
 
 
 class RepoInfo(TypedDict):
@@ -138,9 +144,22 @@ def get_repo_urls(gh: Github) -> Generator[str]:
             yield repo["url"]
 
 
-def run_cruft(cwd: Path) -> CompletedProcess:
-    args = [sys.executable, "-m", "cruft", "update", "--checkout=main", "--skip-apply-ask", "--project-dir=."]
-    return run(args, check=True, cwd=cwd)
+def run_cruft(cwd: Path, *, tag_name: str, log_name: str) -> CompletedProcess:
+    args = [
+        sys.executable,
+        "-m",
+        "cruft",
+        "update",
+        f"--checkout={tag_name}",
+        "--skip-apply-ask",
+        "--project-dir=.",
+    ]
+
+    log_path = Path(f"./log/{log_name}.txt")
+    log_path.parent.mkdir(exist_ok=True)
+
+    with log_path.open("w") as log_file:
+        return run(args, check=True, cwd=cwd, stdout=log_file, stderr=log_file)
 
 
 # GitHub says that up to 5 minutes of wait are OK,
@@ -149,14 +168,26 @@ n_retries = math.ceil(math.log(5 * 60) / math.log(2))  # = ⌈~8.22⌉ = 9
 # Due to exponential backoff, we’ll maximally wait 2⁹ sec, or 8.5 min
 
 
-def cruft_update(con: GitHubConnection, repo: GHRepo, path: Path, pr: PR) -> bool:
+def cruft_update(  # noqa: PLR0913
+    con: GitHubConnection,
+    pr: PR,
+    *,
+    tag_name: str,
+    repo: GHRepo,
+    origin: GHRepo,
+    path: Path,
+) -> bool:
     clone = retry_with_backoff(
-        lambda: Repo.clone_from(con.auth(repo.clone_url), path), retries=n_retries, exc_cls=GitCommandError
+        lambda: Repo.clone_from(con.auth(repo.clone_url), path),
+        retries=n_retries,
+        exc_cls=GitCommandError,
     )
-    branch = clone.create_head(pr.branch, clone.active_branch)
+    upstream = clone.create_remote(name=pr.repo_id, url=origin.clone_url)
+    upstream.fetch()
+    branch = clone.create_head(pr.branch, f"{pr.repo_id}/{origin.default_branch}")
     branch.checkout()
 
-    run_cruft(path)
+    run_cruft(path, tag_name=tag_name, log_name=pr.branch)
 
     if not clone.is_dirty():
         return False
@@ -176,25 +207,49 @@ def cruft_update(con: GitHubConnection, repo: GHRepo, path: Path, pr: PR) -> boo
 
 
 def get_fork(con: GitHubConnection, repo: GHRepo) -> GHRepo:
-    if fork := next((f for f in repo.get_forks() if f.owner.id == con.user.id), None):
-        return fork
+    """Fork target repo into the scverse-bot namespace and wait until the fork has been created.
+    If the fork already exists it is reused.
+    """
     fork = repo.create_fork()
     return retry_with_backoff(lambda: con.gh.get_repo(fork.id), retries=n_retries, exc_cls=UnknownObjectException)
 
 
 def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
-    pr = PR(con, release)
-    log.info(f"Sending PR to {repo_url}: {pr.title}")
+    repo_id = repo_url.replace("https://github.com/", "").replace("/", "-")
+    pr = PR(con, release, repo_id)
+    log.info(f"Sending PR to {repo_url} : {pr.title}")
 
     # create fork, populate branch, do PR from it
     origin = con.gh.get_repo(repo_url.removeprefix("https://github.com/"))
     repo = get_fork(con, origin)
+
+    if old_pr := next((p for p in origin.get_pulls("open") if pr.matches_current_version(p)), None):
+        log.info(
+            f"PR for current version already exists: #{old_pr.number} with branch name `{old_pr.head.ref}`. Skipping."
+        )
+        return
+
     with TemporaryDirectory() as td:
-        updated = cruft_update(con, repo, Path(td), pr)
+        updated = cruft_update(
+            con,
+            pr,
+            tag_name=release.tag_name,
+            repo=repo,
+            origin=origin,
+            path=Path(td),
+        )
     if updated:
-        if old_pr := next((p for p in origin.get_pulls("open") if pr.matches(p)), None):
+        if old_pr := next((p for p in origin.get_pulls("open") if pr.matches_prefix(p)), None):
+            log.info(f"Closing old PR #{old_pr.number} with branch name `{old_pr.head.ref}`.")
             old_pr.edit(state="closed")
-        origin.create_pull(pr.title, pr.body, origin.default_branch, pr.namespaced_head)
+        new_pr = origin.create_pull(
+            title=pr.title,
+            body=pr.body,
+            base=origin.default_branch,
+            head=pr.namespaced_head,
+            maintainer_can_modify=True,
+        )
+        log.info(f"Created PR #{new_pr.number} with branch name `{new_pr.head.ref}`.")
 
 
 def setup() -> None:
@@ -210,8 +265,15 @@ def main(tag_name: str) -> None:
     con = GitHubConnection("scverse-bot", token)
     release = get_template_release(con.gh, tag_name)
     repo_urls = get_repo_urls(con.gh)
+    failed = 0
     for repo_url in repo_urls:
-        make_pr(con, release, repo_url)
+        try:
+            make_pr(con, release, repo_url)
+        except Exception as e:
+            failed += 1
+            log.exception(f"Error updating {repo_url}: %s", e)
+
+    sys.exit(failed > 0)
 
 
 def cli() -> None:
