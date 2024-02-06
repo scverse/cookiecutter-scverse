@@ -68,9 +68,12 @@ addopts = [
 ]
 
 [tool.ruff]
-src = ["src"]
 line-length = 120
+src = ["src"]
 extend-include = ["*.ipynb"]
+
+[tool.ruff.format]
+docstring-code-format = true
 
 [tool.ruff.lint]
 select = [
@@ -113,9 +116,6 @@ ignore = [
     # We want docstrings to start immediately after the opening triple quote
     "D213",
 ]
-
-[tool.ruff.format]
-docstring-code-format = true
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
