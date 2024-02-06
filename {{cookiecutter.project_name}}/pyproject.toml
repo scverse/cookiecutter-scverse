@@ -21,10 +21,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = [
-    "pre-commit",
-    "twine>=4.0.2",
-]
+dev = ["pre-commit", "twine>=4.0.2"]
 doc = [
     "docutils>=0.8,!=0.18.*,!=0.19.*",
     "sphinx>=4",
@@ -39,10 +36,7 @@ doc = [
     "sphinx-copybutton",
     "pandas",
 ]
-test = [
-    "pytest",
-    "coverage",
-]
+test = ["pytest", "coverage"]
 
 {% if cookiecutter.project_name.lower().replace('-', '_') != cookiecutter.package_name -%}
 [tool.hatch.build.targets.wheel]
