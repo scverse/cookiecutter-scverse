@@ -21,7 +21,7 @@ dependencies = [
     "GitPython",
     "PyGitHub >= 2",
     "PyYAML",
-    "pre-commit", # is ran by cruft
+    "pre-commit",    # is ran by cruft
 ]
 
 [project.optional-dependencies]
