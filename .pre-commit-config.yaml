@@ -12,8 +12,8 @@ repos:
         args: [--fix, --exit-non-zero-on-fix]
         files: ^scripts/
       - id: ruff-format
-  - repo: https://github.com/ComPWA/mirrors-taplo
-    rev: v0.9.0
+  - repo: https://github.com/redeboer/taplo-pre-commit
+    rev: v0.9.1rc1
     hooks:
       - id: taplo
         files: ^scripts/
