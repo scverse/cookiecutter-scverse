@@ -13,3 +13,8 @@ repos:
         files: ^scripts/
       - id: ruff-format
         files: ^scripts/
+  - repo: https://github.com/redeboer/taplo-pre-commit
+    rev: v0.9.1rc1
+    hooks:
+      - id: taplo
+        files: ^scripts/
