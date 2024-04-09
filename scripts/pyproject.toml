@@ -57,7 +57,11 @@ addopts = [
     "-pnetwork", "--disable-network",
     "-presponsemock"
 ]
-filterwarnings = ["error"]
+filterwarnings = [
+    "error",
+    # https://github.com/man-group/pytest-plugins/issues/224
+    "ignore::DeprecationWarning:pytest_shutil",
+]
 
 [tool.ruff]
 line-length = 120
