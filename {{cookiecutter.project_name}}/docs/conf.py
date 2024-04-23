@@ -39,7 +39,7 @@ html_context = {
     "github_user": "{{cookiecutter.github_user}}",
     "github_repo": "{{cookiecutter.project_repo}}",
     "github_version": "main",
-    "conf_py_path": "/docs/",  # Path in the checkout to the docs root
+    "conf_py_path": "/docs/",
 }
 
 # -- General configuration ---------------------------------------------------
