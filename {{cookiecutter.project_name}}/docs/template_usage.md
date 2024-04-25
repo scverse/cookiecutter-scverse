@@ -309,7 +309,7 @@ You can find a long list of checks that this template disables by default sittin
 ```toml
 ignore = [
     # ...
-    # __magic__ methods are are often self-explanatory, allow missing docstrings
+    # __magic__ methods are often self-explanatory, allow missing docstrings
     "D105",
     # ...
 ]
