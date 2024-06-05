@@ -457,8 +457,6 @@ tooling and automated template updates. This requires some manual work though. H
 
 7. Commit your changes. Merge the `cookiecutteriz` branch into the main branch, e.g. by making a pull request.
 
-
-
 <!-- Links -->
 
 [scanpy developer guide]: https://scanpy.readthedocs.io/en/latest/dev/index.html
