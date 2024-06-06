@@ -455,7 +455,7 @@ tooling and automated template updates. This requires some manual work though. H
 6. Migrate your project: Move over files from `$REPO` to `${REPO}_cookiecutterized`. Omit files that are not
    needed anymore and manually merge files where required.
 
-7. Commit your changes. Merge the `cookiecutteriz` branch into the main branch, e.g. by making a pull request.
+7. Commit your changes. Merge the `cookiecutterize` branch into the main branch, e.g. by making a pull request.
 
 <!-- Links -->
 
