@@ -430,7 +430,7 @@ tooling and automated template updates. This requires some manual work though. H
 
     ```bash
     mkdir template && cd template
-    cruft create cruft create https://github.com/scverse/cookiecutter-scverse
+    cruft create https://github.com/scverse/cookiecutter-scverse
     ```
 
 4. remove everything from the existing repo
