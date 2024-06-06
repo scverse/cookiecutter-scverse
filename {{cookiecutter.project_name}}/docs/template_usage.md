@@ -437,7 +437,7 @@ tooling and automated template updates. This requires some manual work though. H
 
     ```bash
     cd ${REPO}_cookiecutterized
-    git co -b cookiecutterize
+    git switch -c cookiecutterize
     git rm -r "*"
     git add -A
     git commit -m "clean repo"
