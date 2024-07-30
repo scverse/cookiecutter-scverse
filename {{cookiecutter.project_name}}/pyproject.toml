@@ -72,17 +72,17 @@ extend-include = [
 format.docstring-code-format = true
 
 lint.select = [
-  "B",  # flake8-bugbear
-  "BLE",  # flake8-blind-except
-  "C4",  # flake8-comprehensions
-  "D",  # pydocstyle
-  "E",  # Error detected by Pycodestyle
-  "F",  # Errors detected by Pyflakes
-  "I",  # isort
-  "RUF100",  # Report unused noqa directives
-  "TID",  # flake8-tidy-imports
-  "UP",  # pyupgrade
-  "W",  # Warning detected by Pycodestyle
+  "B",      # flake8-bugbear
+  "BLE",    # flake8-blind-except
+  "C4",     # flake8-comprehensions
+  "D",      # pydocstyle
+  "E",      # Error detected by Pycodestyle
+  "F",      # Errors detected by Pyflakes
+  "I",      # isort
+  "RUF100", # Report unused noqa directives
+  "TID",    # flake8-tidy-imports
+  "UP",     # pyupgrade
+  "W",      # Warning detected by Pycodestyle
 ]
 lint.ignore = [
   # Errors from function calls in argument defaults. These are fine when the result is immutable.
@@ -126,7 +126,7 @@ lint.pydocstyle.convention = "numpy"
 testpaths = [ "tests" ]
 xfail_strict = true
 addopts = [
-  "--import-mode=importlib",  # allow using test files with same name
+  "--import-mode=importlib", # allow using test files with same name
 ]
 
 [tool.coverage.run]
