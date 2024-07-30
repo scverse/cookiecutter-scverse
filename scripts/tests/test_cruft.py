@@ -1,16 +1,21 @@
+from __future__ import annotations
+
 import json
 from dataclasses import dataclass
-from pathlib import Path
-from typing import cast
-from warnings import catch_warnings, filterwarnings
+from typing import TYPE_CHECKING, cast
+from warnings import catch_warnings
 
 import pytest
 from git import Commit, Diff
 from github.GitRelease import GitRelease as GHRelease
 from github.Repository import Repository as GHRepo
-from pytest_git import GitRepo
 
 from scverse_template_scripts.cruft_prs import PR, GitHubConnection, cruft_update
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from testing.scverse_template_scripts import GitRepo
 
 
 @dataclass
@@ -32,8 +37,6 @@ class MockRelease:
 def con(response_mock) -> GitHubConnection:
     resp = json.dumps({"login": "scverse-bot"})
     with catch_warnings():
-        # https://github.com/idlesign/pytest-responsemock/issues/7
-        filterwarnings("ignore", category=ResourceWarning)
         with response_mock(f"GET https://api.github.com:443/users/scverse-bot -> 200 :{resp}"):
             return GitHubConnection("scverse-bot")
 

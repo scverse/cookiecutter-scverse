@@ -9,7 +9,7 @@
 {% block attributes %}
 {% if attributes %}
 Attributes table
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
 
 .. autosummary::
 {% for item in attributes %}
@@ -35,7 +35,7 @@ Methods table
 {% block attributes_documentation %}
 {% if attributes %}
 Attributes
-~~~~~~~~~~~
+~~~~~~~~~~
 
 {% for item in attributes %}
 

@@ -3,16 +3,17 @@
 Uses `template-repos.yml` from `scverse/ecosystem-packages`.
 """
 
+from __future__ import annotations
+
 import math
 import os
 import sys
-from collections.abc import Generator
 from dataclasses import InitVar, dataclass, field
 from logging import basicConfig, getLogger
 from pathlib import Path
-from subprocess import CompletedProcess, run
+from subprocess import run
 from tempfile import TemporaryDirectory
-from typing import IO, ClassVar, LiteralString, NotRequired, TypedDict, cast
+from typing import TYPE_CHECKING, ClassVar, TypedDict, cast
 
 import typer
 from furl import furl
@@ -20,13 +21,19 @@ from git.exc import GitCommandError
 from git.repo import Repo
 from git.util import Actor
 from github import ContentFile, Github, UnknownObjectException
-from github.GitRelease import GitRelease as GHRelease
-from github.NamedUser import NamedUser
-from github.PullRequest import PullRequest
-from github.Repository import Repository as GHRepo
 from yaml import safe_load
 
 from .backoff import retry_with_backoff
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
+    from subprocess import CompletedProcess
+    from typing import IO, LiteralString, NotRequired
+
+    from github.GitRelease import GitRelease as GHRelease
+    from github.NamedUser import NamedUser
+    from github.PullRequest import PullRequest
+    from github.Repository import Repository as GHRepo
 
 log = getLogger(__name__)
 
@@ -211,7 +218,11 @@ def get_fork(con: GitHubConnection, repo: GHRepo) -> GHRepo:
     If the fork already exists it is reused.
     """
     fork = repo.create_fork()
-    return retry_with_backoff(lambda: con.gh.get_repo(fork.id), retries=n_retries, exc_cls=UnknownObjectException)
+    return retry_with_backoff(
+        lambda: con.gh.get_repo(fork.id),
+        retries=n_retries,
+        exc_cls=UnknownObjectException,
+    )
 
 
 def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
