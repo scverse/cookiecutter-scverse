@@ -1,44 +1,50 @@
 [build-system]
-requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
+requires = [
+  "hatch-vcs",
+  "hatchling",
+]
 
 [project]
 name = "scverse-template-scripts"
-dynamic = ["version"]
 description = "scripts for ecosystem package data"
 readme = "../README.md"
-requires-python = ">=3.11"
 license = "GPL-3.0"
 authors = [
-    { name = "Philipp A.", email = "flying-sheep@web.de" },
+  { name = "Philipp A.", email = "flying-sheep@web.de" },
+]
+requires-python = ">=3.11"
+classifiers = [
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+dynamic = [
+  "version",
+]
+dependencies = [
+  "cruft",
+  "furl",
+  "gitpython",
+  "pre-commit",  # is ran by cruft
+  "pygithub>=2",
+  "pyyaml",
+  "rich",
+  "typer",
+]
+optional-dependencies.test = [
+  "pytest",
+  "pytest-responsemock",
+  "pytest-socket",
 ]
 urls.Documentation = "https://github.com/scverse/cookiecutter-scverse#readme"
 urls.Issues = "https://github.com/scverse/cookiecutter-scverse/issues"
 urls.Source = "https://github.com/scverse/cookiecutter-scverse"
-dependencies = [
-    "cruft",
-    "rich",
-    "typer",
-    "furl",
-    "GitPython",
-    "PyGitHub >= 2",
-    "PyYAML",
-    "pre-commit", # is ran by cruft
-]
-
-[project.optional-dependencies]
-test = [
-    "pytest",
-    "pytest-socket",
-    "pytest-responsemock",
-]
-
-[project.scripts]
-send-cruft-prs = "scverse_template_scripts.cruft_prs:cli"
-make-rich-output = "scverse_template_scripts.make_rich_output:main"
+scripts.make-rich-output = "scverse_template_scripts.make_rich_output:main"
+scripts.send-cruft-prs = "scverse_template_scripts.cruft_prs:cli"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/testing", "src/scverse_template_scripts"]
+packages = [ "src/testing", "src/scverse_template_scripts" ]
 
 [tool.hatch.version]
 source = "vcs"
@@ -48,75 +54,75 @@ fallback-version = "0.0"
 python = "3.11"
 
 [tool.hatch.envs.hatch-test]
-features = ["test"]
-
-[tool.pytest.ini_options]
-addopts = [
-    "--import-mode=importlib",
-    "--disable-socket",
-    "-presponsemock",
-    "-ptesting.scverse_template_scripts._pytest"
-]
-filterwarnings = [
-    "error",
-    # https://github.com/man-group/pytest-plugins/issues/224
-    "ignore::DeprecationWarning:pytest_shutil",
-]
+features = [ "test" ]
 
 [tool.ruff]
 line-length = 120
 
-[tool.ruff.format]
-docstring-code-format = true
+format.docstring-code-format = true
 
-[tool.ruff.lint]
-allowed-confusables = ["’", "×"]
-select = [
-    "A",
-    "ARG",
-    "B",
-    "C",
-    "DTZ",
-    "E",
-    "EM",
-    "F",
-    "FBT",
-    "I",
-    "ICN",
-    "ISC",
-    "N",
-    "PLC",
-    "PLE",
-    "PLR",
-    "PLW",
-    "Q",
-    "RUF",
-    "S",
-    "T",
-    "TCH",
-    "TID",
-    "UP",
-    "W",
-    "YTT",
+lint.select = [
+  "A",
+  "ARG",
+  "B",
+  "C",
+  "DTZ",
+  "E",
+  "EM",
+  "F",
+  "FBT",
+  "I",
+  "ICN",
+  "ISC",
+  "N",
+  "PLC",
+  "PLE",
+  "PLR",
+  "PLW",
+  "Q",
+  "RUF",
+  "S",
+  "T",
+  "TCH",
+  "TID",
+  "UP",
+  "W",
+  "YTT",
 ]
-ignore = [
-    "S101",   # assert should be allowed
-    "S603",   # subprocess with shell=False should be allowed
-    "S311",   # we don’t need cryptographically secure RNG
-    "ISC001", # conflicts with formatter
+lint.ignore = [
+  "ISC001", # conflicts with formatter
+  "S101",   # assert should be allowed
+  "S311",   # we don’t need cryptographically secure RNG
+  "S603",   # subprocess with shell=False should be allowed
 ]
-unfixable = ["RUF001"]  # never “fix” “confusables”
+lint.per-file-ignores."tests/*.py" = [
+  "ARG001",  # pytest fixtures don’t need to be used
+  "PLR0913", # allow as many pytest fixtures being used as one likes
+]
+lint.unfixable = [
+  "RUF001", # never “fix” “confusables”
+]
+lint.allowed-confusables = [
+  "×",
+  "’",
+]
+lint.flake8-type-checking.exempt-modules = [
+]
+lint.flake8-type-checking.strict = true
+lint.isort.known-first-party = [ "scverse_template_scripts", "testing.scverse_template_scripts" ]
+lint.isort.required-imports = [
+  "from __future__ import annotations",
+]
 
-[tool.ruff.lint.isort]
-known-first-party = ["scverse_template_scripts", "testing.scverse_template_scripts"]
-required-imports = ["from __future__ import annotations"]
-
-[tool.ruff.lint.flake8-type-checking]
-exempt-modules = []
-strict = true
-
-[tool.ruff.lint.per-file-ignores]
-"tests/*.py" = [
-    "ARG001",  # pytest fixtures don’t need to be used
-    "PLR0913",  # allow as many pytest fixtures being used as one likes
+[tool.pytest.ini_options]
+addopts = [
+  "--import-mode=importlib",
+  "--disable-socket",
+  "-presponsemock",
+  "-ptesting.scverse_template_scripts._pytest",
+]
+filterwarnings = [
+  "error",
+  # https://github.com/man-group/pytest-plugins/issues/224
+  "ignore::DeprecationWarning:pytest_shutil",
 ]

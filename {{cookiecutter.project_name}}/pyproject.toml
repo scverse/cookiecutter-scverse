@@ -10,39 +10,39 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {file = "LICENSE"}
 authors = [
-    {name = "{{ cookiecutter.author_full_name }}"},
+  {name = "{{ cookiecutter.author_full_name }}"},
 ]
 maintainers = [
-    {name = "{{ cookiecutter.author_full_name }}", email = "{{ cookiecutter.author_email }}"},
+  {name = "{{ cookiecutter.author_full_name }}", email = "{{ cookiecutter.author_email }}"},
 ]
 urls.Documentation = "https://{{ cookiecutter.project_name }}.readthedocs.io/"
 urls.Source = "{{ cookiecutter.project_repo }}"
 urls.Home-page = "{{ cookiecutter.project_repo }}"
 dependencies = [
-    "anndata",
-    # for debug logging (referenced from the issue template)
-    "session-info",
+  "anndata",
+  # for debug logging (referenced from the issue template)
+  "session-info",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pre-commit",
-    "twine>=4.0.2",
+  "pre-commit",
+  "twine>=4.0.2",
 ]
 doc = [
-    "docutils>=0.8,!=0.18.*,!=0.19.*",
-    "sphinx>=4",
-    "sphinx-book-theme>=1.0.0",
-    "myst-nb>=1.1.0",
-    "sphinxcontrib-bibtex>=1.0.0",
-    "setuptools",  # Until pybtex >0.23.0 releases: https://bitbucket.org/pybtex-devs/pybtex/issues/169/
-    "sphinx-autodoc-typehints",
-    "sphinxext-opengraph",
-    # For notebooks
-    "ipykernel",
-    "ipython",
-    "sphinx-copybutton",
-    "pandas",
+  "docutils>=0.8,!=0.18.*,!=0.19.*",
+  "sphinx>=4",
+  "sphinx-book-theme>=1.0.0",
+  "myst-nb>=1.1.0",
+  "sphinxcontrib-bibtex>=1.0.0",
+  "setuptools",  # Until pybtex >0.23.0 releases: https://bitbucket.org/pybtex-devs/pybtex/issues/169/
+  "sphinx-autodoc-typehints",
+  "sphinxext-opengraph",
+  # For notebooks
+  "ipykernel",
+  "ipython",
+  "sphinx-copybutton",
+  "pandas",
 ]
 test = [
     "pytest",
@@ -78,44 +78,44 @@ docstring-code-format = true
 
 [tool.ruff.lint]
 select = [
-    "F",  # Errors detected by Pyflakes
-    "E",  # Error detected by Pycodestyle
-    "W",  # Warning detected by Pycodestyle
-    "I",  # isort
-    "D",  # pydocstyle
-    "B",  # flake8-bugbear
-    "TID",  # flake8-tidy-imports
-    "C4",  # flake8-comprehensions
-    "BLE",  # flake8-blind-except
-    "UP",  # pyupgrade
-    "RUF100",  # Report unused noqa directives
+  "F",  # Errors detected by Pyflakes
+  "E",  # Error detected by Pycodestyle
+  "W",  # Warning detected by Pycodestyle
+  "I",  # isort
+  "D",  # pydocstyle
+  "B",  # flake8-bugbear
+  "TID",  # flake8-tidy-imports
+  "C4",  # flake8-comprehensions
+  "BLE",  # flake8-blind-except
+  "UP",  # pyupgrade
+  "RUF100",  # Report unused noqa directives
 ]
 ignore = [
-    # line too long -> we accept long comment lines; formatter gets rid of long code lines
-    "E501",
-    # Do not assign a lambda expression, use a def -> lambda expression assignments are convenient
-    "E731",
-    # allow I, O, l as variable names -> I is the identity matrix
-    "E741",
-    # Missing docstring in public package
-    "D104",
-    # Missing docstring in public module
-    "D100",
-    # Missing docstring in __init__
-    "D107",
-    # Errors from function calls in argument defaults. These are fine when the result is immutable.
-    "B008",
-    # __magic__ methods are often self-explanatory, allow missing docstrings
-    "D105",
-    # first line should end with a period [Bug: doesn't work with single-line docstrings]
-    "D400",
-    # First line should be in imperative mood; try rephrasing
-    "D401",
-    ## Disable one in each pair of mutually incompatible rules
-    # We don’t want a blank line before a class docstring
-    "D203",
-    # We want docstrings to start immediately after the opening triple quote
-    "D213",
+  # line too long -> we accept long comment lines; formatter gets rid of long code lines
+  "E501",
+  # Do not assign a lambda expression, use a def -> lambda expression assignments are convenient
+  "E731",
+  # allow I, O, l as variable names -> I is the identity matrix
+  "E741",
+  # Missing docstring in public package
+  "D104",
+  # Missing docstring in public module
+  "D100",
+  # Missing docstring in __init__
+  "D107",
+  # Errors from function calls in argument defaults. These are fine when the result is immutable.
+  "B008",
+  # __magic__ methods are often self-explanatory, allow missing docstrings
+  "D105",
+  # first line should end with a period [Bug: doesn't work with single-line docstrings]
+  "D400",
+  # First line should be in imperative mood; try rephrasing
+  "D401",
+  ## Disable one in each pair of mutually incompatible rules
+  # We don’t want a blank line before a class docstring
+  "D203",
+  # We want docstrings to start immediately after the opening triple quote
+  "D213",
 ]
 
 [tool.ruff.lint.pydocstyle]
@@ -128,12 +128,12 @@ convention = "numpy"
 
 [tool.cruft]
 skip = [
-    "tests",
-    "src/**/__init__.py",
-    "src/**/basic.py",
-    "docs/api.md",
-    "docs/changelog.md",
-    "docs/references.bib",
-    "docs/references.md",
-    "docs/notebooks/example.ipynb",
+  "tests",
+  "src/**/__init__.py",
+  "src/**/basic.py",
+  "docs/api.md",
+  "docs/changelog.md",
+  "docs/references.bib",
+  "docs/references.md",
+  "docs/notebooks/example.ipynb",
 ]

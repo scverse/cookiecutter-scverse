@@ -6,6 +6,11 @@ repos:
       - id: biome-format
         additional_dependencies: ["@biomejs/biome@1.8.3"]
   # Hooks that are run for scripts
+  - repo: https://github.com/tox-dev/pyproject-fmt
+    rev: "2.1.4"
+    hooks:
+      - id: pyproject-fmt
+        files: ^scripts/
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.5.5
     hooks:
