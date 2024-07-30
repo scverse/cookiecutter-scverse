@@ -1,35 +1,38 @@
 [build-system]
 build-backend = "hatchling.build"
-requires = ["hatchling"]
+requires = [
+  "hatchling",
+]
 
 [project]
 name = "{{ cookiecutter.project_name }}"
 version = "0.0.1"
 description = "{{ cookiecutter.project_description }}"
 readme = "README.md"
-requires-python = ">=3.10"
 license = {file = "LICENSE"}
-authors = [
-  {name = "{{ cookiecutter.author_full_name }}"},
-]
 maintainers = [
-  {name = "{{ cookiecutter.author_full_name }}", email = "{{ cookiecutter.author_email }}"},
+  { name = "{{ cookiecutter.author_full_name }}", email = "{{ cookiecutter.author_email }}" },
 ]
-urls.Documentation = "https://{{ cookiecutter.project_name }}.readthedocs.io/"
-urls.Source = "{{ cookiecutter.project_repo }}"
-urls.Home-page = "{{ cookiecutter.project_repo }}"
+authors = [
+  { name = "{{ cookiecutter.author_full_name }}" },
+]
+requires-python = ">=3.10"
+classifiers = [
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
 dependencies = [
   "anndata",
   # for debug logging (referenced from the issue template)
   "session-info",
 ]
-
-[project.optional-dependencies]
-dev = [
+optional-dependencies.dev = [
   "pre-commit",
   "twine>=4.0.2",
 ]
-doc = [
+optional-dependencies.doc = [
   "docutils>=0.8,!=0.18.*,!=0.19.*",
   "sphinx>=4",
   "sphinx-book-theme>=1.0.0",
@@ -44,10 +47,13 @@ doc = [
   "sphinx-copybutton",
   "pandas",
 ]
-test = [
-    "pytest",
-    "coverage",
+optional-dependencies.test = [
+  "pytest",
+  "coverage",
 ]
+urls.Documentation = "https://{{ cookiecutter.project_name }}.readthedocs.io/"
+urls.Home-page = "{{ cookiecutter.project_repo }}"
+urls.Source = "{{ cookiecutter.project_repo }}"
 
 {% if cookiecutter.project_name.lower().replace('-', '_') != cookiecutter.package_name -%}
 [tool.hatch.build.targets.wheel]
@@ -55,29 +61,18 @@ packages = ['src/{{ cookiecutter.package_name }}']
 
 {% endif -%}
 
-[tool.coverage.run]
-source = ["{{ cookiecutter.package_name }}"]
-omit = [
-    "**/test_*.py",
-]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-xfail_strict = true
-addopts = [
-    "--import-mode=importlib",  # allow using test files with same name
-]
-
 [tool.ruff]
 line-length = 120
-src = ["src"]
-extend-include = ["*.ipynb"]
+src = [
+  "src",
+]
+extend-include = [
+  "*.ipynb",
+]
 
-[tool.ruff.format]
-docstring-code-format = true
+format.docstring-code-format = true
 
-[tool.ruff.lint]
-select = [
+lint.select = [
   "F",  # Errors detected by Pyflakes
   "E",  # Error detected by Pycodestyle
   "W",  # Warning detected by Pycodestyle
@@ -90,7 +85,7 @@ select = [
   "UP",  # pyupgrade
   "RUF100",  # Report unused noqa directives
 ]
-ignore = [
+lint.ignore = [
   # line too long -> we accept long comment lines; formatter gets rid of long code lines
   "E501",
   # Do not assign a lambda expression, use a def -> lambda expression assignments are convenient
@@ -117,14 +112,29 @@ ignore = [
   # We want docstrings to start immediately after the opening triple quote
   "D213",
 ]
+lint.per-file-ignores."*/__init__.py" = [
+  "F401",
+]
+lint.per-file-ignores."docs/*" = [
+  "I",
+]
+lint.per-file-ignores."tests/*" = [
+  "D",
+]
+lint.pydocstyle.convention = "numpy"
 
-[tool.ruff.lint.pydocstyle]
-convention = "numpy"
+[tool.pytest.ini_options]
+testpaths = [ "tests" ]
+xfail_strict = true
+addopts = [
+    "--import-mode=importlib",  # allow using test files with same name
+]
 
-[tool.ruff.lint.per-file-ignores]
-"docs/*" = ["I"]
-"tests/*" = ["D"]
-"*/__init__.py" = ["F401"]
+[tool.coverage.run]
+source = [ "{{ cookiecutter.package_name }}" ]
+omit = [
+  "**/test_*.py",
+]
 
 [tool.cruft]
 skip = [
