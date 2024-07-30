@@ -55,9 +55,9 @@ urls.Documentation = "https://{{ cookiecutter.project_name }}.readthedocs.io/"
 urls.Home-page = "{{ cookiecutter.project_repo }}"
 urls.Source = "{{ cookiecutter.project_repo }}"
 
-{% if cookiecutter.project_name.lower().replace('-', '_') != cookiecutter.package_name -%}
+{% if cookiecutter.project_name.lower().replace("-", "_") != cookiecutter.package_name -%}
 [tool.hatch.build.targets.wheel]
-packages = ['src/{{ cookiecutter.package_name }}']
+packages = [ "src/{{ cookiecutter.package_name }}" ]
 
 {% endif -%}
 
@@ -101,7 +101,7 @@ lint.ignore = [
   "D203",
   # <> We want docstrings to start immediately after the opening triple quote
   "D213",
-  # first line should end with a period [Bug: doesn't work with single-line docstrings]
+  # first line should end with a period [Bug: doesn’t work with single-line docstrings]
   "D400",
   # First line should be in imperative mood; try rephrasing
   "D401",
