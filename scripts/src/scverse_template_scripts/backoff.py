@@ -1,9 +1,14 @@
+from __future__ import annotations
+
 import random
 import time
-from collections.abc import Callable
-from typing import TypeVar
+from typing import TYPE_CHECKING
 
-T = TypeVar("T")
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    from typing import TypeVar
+
+    T = TypeVar("T")
 
 
 def retry_with_backoff(
