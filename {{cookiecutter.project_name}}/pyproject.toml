@@ -9,7 +9,7 @@ name = "{{ cookiecutter.project_name }}"
 version = "0.0.1"
 description = "{{ cookiecutter.project_description }}"
 readme = "README.md"
-license = {file = "LICENSE"}
+license = { file = "LICENSE" }
 maintainers = [
   { name = "{{ cookiecutter.author_full_name }}", email = "{{ cookiecutter.author_email }}" },
 ]
@@ -34,22 +34,21 @@ optional-dependencies.dev = [
 ]
 optional-dependencies.doc = [
   "docutils>=0.8,!=0.18.*,!=0.19.*",
-  "sphinx>=4",
-  "sphinx-book-theme>=1.0.0",
-  "myst-nb>=1.1.0",
-  "sphinxcontrib-bibtex>=1.0.0",
-  "setuptools",  # Until pybtex >0.23.0 releases: https://bitbucket.org/pybtex-devs/pybtex/issues/169/
-  "sphinx-autodoc-typehints",
-  "sphinxext-opengraph",
-  # For notebooks
   "ipykernel",
   "ipython",
-  "sphinx-copybutton",
+  "myst-nb>=1.1.0",
   "pandas",
+  "setuptools",                  # Until pybtex >0.23.0 releases: https://bitbucket.org/pybtex-devs/pybtex/issues/169/
+  "sphinx>=4",
+  "sphinx-autodoc-typehints",
+  "sphinx-book-theme>=1.0.0",
+  "sphinx-copybutton",
+  "sphinxcontrib-bibtex>=1.0.0",
+  "sphinxext-opengraph",
 ]
 optional-dependencies.test = [
-  "pytest",
   "coverage",
+  "pytest",
 ]
 urls.Documentation = "https://{{ cookiecutter.project_name }}.readthedocs.io/"
 urls.Home-page = "{{ cookiecutter.project_repo }}"
@@ -73,44 +72,44 @@ extend-include = [
 format.docstring-code-format = true
 
 lint.select = [
-  "F",  # Errors detected by Pyflakes
-  "E",  # Error detected by Pycodestyle
-  "W",  # Warning detected by Pycodestyle
-  "I",  # isort
-  "D",  # pydocstyle
   "B",  # flake8-bugbear
-  "TID",  # flake8-tidy-imports
-  "C4",  # flake8-comprehensions
   "BLE",  # flake8-blind-except
-  "UP",  # pyupgrade
+  "C4",  # flake8-comprehensions
+  "D",  # pydocstyle
+  "E",  # Error detected by Pycodestyle
+  "F",  # Errors detected by Pyflakes
+  "I",  # isort
   "RUF100",  # Report unused noqa directives
+  "TID",  # flake8-tidy-imports
+  "UP",  # pyupgrade
+  "W",  # Warning detected by Pycodestyle
 ]
 lint.ignore = [
+  # Errors from function calls in argument defaults. These are fine when the result is immutable.
+  "B008",
+  # Missing docstring in public module
+  "D100",
+  # Missing docstring in public package
+  "D104",
+  # __magic__ methods are often self-explanatory, allow missing docstrings
+  "D105",
+  # Missing docstring in __init__
+  "D107",
+  # <>: Disable one in each pair of mutually incompatible rules
+  # <> We don’t want a blank line before a class docstring
+  "D203",
+  # <> We want docstrings to start immediately after the opening triple quote
+  "D213",
+  # first line should end with a period [Bug: doesn't work with single-line docstrings]
+  "D400",
+  # First line should be in imperative mood; try rephrasing
+  "D401",
   # line too long -> we accept long comment lines; formatter gets rid of long code lines
   "E501",
   # Do not assign a lambda expression, use a def -> lambda expression assignments are convenient
   "E731",
   # allow I, O, l as variable names -> I is the identity matrix
   "E741",
-  # Missing docstring in public package
-  "D104",
-  # Missing docstring in public module
-  "D100",
-  # Missing docstring in __init__
-  "D107",
-  # Errors from function calls in argument defaults. These are fine when the result is immutable.
-  "B008",
-  # __magic__ methods are often self-explanatory, allow missing docstrings
-  "D105",
-  # first line should end with a period [Bug: doesn't work with single-line docstrings]
-  "D400",
-  # First line should be in imperative mood; try rephrasing
-  "D401",
-  ## Disable one in each pair of mutually incompatible rules
-  # We don’t want a blank line before a class docstring
-  "D203",
-  # We want docstrings to start immediately after the opening triple quote
-  "D213",
 ]
 lint.per-file-ignores."*/__init__.py" = [
   "F401",
@@ -127,7 +126,7 @@ lint.pydocstyle.convention = "numpy"
 testpaths = [ "tests" ]
 xfail_strict = true
 addopts = [
-    "--import-mode=importlib",  # allow using test files with same name
+  "--import-mode=importlib",  # allow using test files with same name
 ]
 
 [tool.coverage.run]
