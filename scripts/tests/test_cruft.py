@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, cast
-from warnings import catch_warnings, filterwarnings
+from warnings import catch_warnings
 
 import pytest
 from git import Commit, Diff
@@ -37,8 +37,6 @@ class MockRelease:
 def con(response_mock) -> GitHubConnection:
     resp = json.dumps({"login": "scverse-bot"})
     with catch_warnings():
-        # https://github.com/idlesign/pytest-responsemock/issues/7
-        filterwarnings("ignore", category=ResourceWarning)
         with response_mock(f"GET https://api.github.com:443/users/scverse-bot -> 200 :{resp}"):
             return GitHubConnection("scverse-bot")
 

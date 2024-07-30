@@ -29,7 +29,7 @@ dependencies = [
 [project.optional-dependencies]
 test = [
     "pytest",
-    "pytest-network",
+    "pytest-socket",
     "pytest-responsemock",
 ]
 
@@ -53,8 +53,7 @@ features = ["test"]
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib",
-    "-pgit",
-    "-pnetwork", "--disable-network",
+    "--disable-socket",
     "-presponsemock",
     "-ptesting.scverse_template_scripts._pytest"
 ]
