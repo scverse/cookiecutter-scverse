@@ -36,14 +36,15 @@ optional-dependencies.doc = [
   "docutils>=0.8,!=0.18.*,!=0.19.*",
   "ipykernel",
   "ipython",
-  "myst-nb>=1.1.0",
+  "myst-nb>=1.1",
   "pandas",
-  "setuptools",                  # Until pybtex >0.23.0 releases: https://bitbucket.org/pybtex-devs/pybtex/issues/169/
+  # Until pybtex >0.23.0 releases: https://bitbucket.org/pybtex-devs/pybtex/issues/169/
+  "setuptools",
   "sphinx>=4",
   "sphinx-autodoc-typehints",
-  "sphinx-book-theme>=1.0.0",
+  "sphinx-book-theme>=1",
   "sphinx-copybutton",
-  "sphinxcontrib-bibtex>=1.0.0",
+  "sphinxcontrib-bibtex>=1",
   "sphinxext-opengraph",
 ]
 optional-dependencies.test = [
