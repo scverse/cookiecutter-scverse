@@ -1,16 +1,21 @@
+from __future__ import annotations
+
 import json
 from dataclasses import dataclass
-from pathlib import Path
-from typing import cast
+from typing import TYPE_CHECKING, cast
 from warnings import catch_warnings, filterwarnings
 
 import pytest
 from git import Commit, Diff
 from github.GitRelease import GitRelease as GHRelease
 from github.Repository import Repository as GHRepo
-from pytest_git import GitRepo
 
 from scverse_template_scripts.cruft_prs import PR, GitHubConnection, cruft_update
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from testing.scverse_template_scripts import GitRepo
 
 
 @dataclass
