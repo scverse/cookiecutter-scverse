@@ -12,7 +12,7 @@ repos:
       - id: biome-format
         additional_dependencies: ["@biomejs/biome@1.8.3"]
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: "2.1.4"
+    rev: "2.2.1"
     hooks:
       - id: pyproject-fmt
   - repo: https://github.com/astral-sh/ruff-pre-commit

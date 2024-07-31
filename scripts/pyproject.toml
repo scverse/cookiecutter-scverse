@@ -1,9 +1,6 @@
 [build-system]
 build-backend = "hatchling.build"
-requires = [
-  "hatch-vcs",
-  "hatchling",
-]
+requires = [ "hatch-vcs", "hatchling" ]
 
 [project]
 name = "scverse-template-scripts"
@@ -19,9 +16,7 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
 ]
-dynamic = [
-  "version",
-]
+dynamic = [ "version" ]
 dependencies = [
   "cruft",
   "furl",
@@ -102,17 +97,14 @@ lint.per-file-ignores."tests/*.py" = [
 lint.unfixable = [
   "RUF001", # never “fix” “confusables”
 ]
-lint.allowed-confusables = [
-  "×",
-  "’",
-]
-lint.flake8-type-checking.exempt-modules = [
-]
+lint.allowed-confusables = [ "×", "’" ]
+lint.flake8-type-checking.exempt-modules = []
 lint.flake8-type-checking.strict = true
 lint.isort.known-first-party = [ "scverse_template_scripts", "testing.scverse_template_scripts" ]
-lint.isort.required-imports = [
-  "from __future__ import annotations",
-]
+lint.isort.required-imports = [ "from __future__ import annotations" ]
+
+[tool.pyproject-fmt]
+column_width = 120
 
 [tool.pytest.ini_options]
 addopts = [
