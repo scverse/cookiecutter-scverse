@@ -25,12 +25,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-test = [
-    "pytest",
-    "pytest-git",
-    "pytest-socket",
-    "pytest-responsemock",
-]
+test = ["pytest", "pytest-git", "pytest-socket", "pytest-responsemock"]
 
 [project.scripts]
 send-cruft-prs = "scverse_template_scripts.cruft_prs:cli"
@@ -107,7 +102,10 @@ ignore = [
 unfixable = ["RUF001"] # never “fix” “confusables”
 
 [tool.ruff.lint.isort]
-known-first-party = ["scverse_template_scripts", "testing.scverse_template_scripts"]
+known-first-party = [
+    "scverse_template_scripts",
+    "testing.scverse_template_scripts",
+]
 required-imports = ["from __future__ import annotations"]
 
 [tool.ruff.lint.flake8-type-checking]
