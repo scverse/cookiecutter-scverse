@@ -17,13 +17,13 @@ Please refer to the [documentation][link-docs]. In particular, the
 
 ## Installation
 
-You need to have Python 3.9 or newer installed on your system. If you don't have
+You need to have Python 3.10 or newer installed on your system. If you don't have
 Python installed, we recommend installing [Mambaforge](https://github.com/conda-forge/miniforge#mambaforge).
 
 There are several alternative options to install {{ cookiecutter.project_name }}:
 
 <!--
-1) Install the latest release of `{{ cookiecutter.project_name }}` from `PyPI <https://pypi.org/project/{{ cookiecutter.project_name }}/>`_:
+1) Install the latest release of `{{ cookiecutter.project_name }}` from [PyPI][link-pypi]:
 
 ```bash
 pip install {{ cookiecutter.project_name }}
@@ -54,3 +54,4 @@ If you found a bug, please use the [issue tracker][issue-tracker].
 [changelog]: https://{{ cookiecutter.project_name }}.readthedocs.io/latest/changelog.html
 [link-docs]: https://{{ cookiecutter.project_name }}.readthedocs.io
 [link-api]: https://{{ cookiecutter.project_name }}.readthedocs.io/latest/api.html
+[link-pypi]: https://pypi.org/project/{{ cookiecutter.project_name }}

@@ -7,10 +7,14 @@ name = "{{ cookiecutter.project_name }}"
 version = "0.0.1"
 description = "{{ cookiecutter.project_description }}"
 readme = "README.md"
-requires-python = ">=3.9"
-license = { file = "LICENSE" }
-authors = [{ name = "{{ cookiecutter.author_full_name }}" }]
-maintainers = [{ name = "{{ cookiecutter.author_full_name }}", email = "{{ cookiecutter.author_email }}" }]
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+authors = [
+    {name = "{{ cookiecutter.author_full_name }}"},
+]
+maintainers = [
+    {name = "{{ cookiecutter.author_full_name }}", email = "{{ cookiecutter.author_email }}"},
+]
 urls.Documentation = "https://{{ cookiecutter.project_name }}.readthedocs.io/"
 urls.Source = "{{ cookiecutter.project_repo }}"
 urls.Home-page = "{{ cookiecutter.project_repo }}"
@@ -26,8 +30,9 @@ doc = [
     "docutils>=0.8,!=0.18.*,!=0.19.*",
     "sphinx>=4",
     "sphinx-book-theme>=1.0.0",
-    "myst-nb",
+    "myst-nb>=1.1.0",
     "sphinxcontrib-bibtex>=1.0.0",
+    "setuptools",  # Until pybtex >0.23.0 releases: https://bitbucket.org/pybtex-devs/pybtex/issues/169/
     "sphinx-autodoc-typehints",
     "sphinxext-opengraph",
     # For notebooks
@@ -92,7 +97,7 @@ ignore = [
     "D107",
     # Errors from function calls in argument defaults. These are fine when the result is immutable.
     "B008",
-    # __magic__ methods are are often self-explanatory, allow missing docstrings
+    # __magic__ methods are often self-explanatory, allow missing docstrings
     "D105",
     # first line should end with a period [Bug: doesn't work with single-line docstrings]
     "D400",

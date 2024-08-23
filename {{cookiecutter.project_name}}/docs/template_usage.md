@@ -309,7 +309,7 @@ You can find a long list of checks that this template disables by default sittin
 ```toml
 ignore = [
     # ...
-    # __magic__ methods are are often self-explanatory, allow missing docstrings
+    # __magic__ methods are often self-explanatory, allow missing docstrings
     "D105",
     # ...
 ]
@@ -418,6 +418,44 @@ The following hints may be useful to work with the template sync:
 
 You have reached the end of this document. Congratulations! You have successfully set up your project and are ready to start.
 For everything else related to documentation, code style, testing and publishing your project to pypi, please refer to the [contributing docs](contributing.md#contributing-guide).
+
+## Migrate existing projects to using this template
+
+You can also update existing projects to make use of this template to benefit from the latest-greatest
+tooling and automated template updates. This requires some manual work though. Here's one way how to do it
+
+1. Let's assume your repository is checked out to `$REPO`
+2. Clone your repository a second time to `${REPO}_cookiecutterized`
+3. Initialize an empty repository from this cookiecutter template:
+
+    ```bash
+    mkdir template && cd template
+    cruft create https://github.com/scverse/cookiecutter-scverse
+    ```
+
+4. remove everything from the existing repo
+
+    ```bash
+    cd ${REPO}_cookiecutterized
+    git switch -c cookiecutterize
+    git rm -r "*"
+    git add -A
+    git commit -m "clean repo"
+    ```
+
+5. move template over from generated folder
+
+    ```bash
+    # move everything, including hidden folders, excluding `.git`.
+    rsync -av --exclude='.git' ./template/ ./${REPO}_cookiecutterized/
+    git add -A
+    git commit -m "init from template"
+    ```
+
+6. Migrate your project: Move over files from `$REPO` to `${REPO}_cookiecutterized`. Omit files that are not
+   needed anymore and manually merge files where required.
+
+7. Commit your changes. Merge the `cookiecutterize` branch into the main branch, e.g. by making a pull request.
 
 <!-- Links -->
 

@@ -25,11 +25,19 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-test = ["pytest", "pytest-git", "pytest-network", "pytest-responsemock"]
+test = [
+    "pytest",
+    "pytest-git",
+    "pytest-socket",
+    "pytest-responsemock",
+]
 
 [project.scripts]
 send-cruft-prs = "scverse_template_scripts.cruft_prs:cli"
 make-rich-output = "scverse_template_scripts.make_rich_output:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/testing", "src/scverse_template_scripts"]
 
 [tool.hatch.version]
 source = "vcs"
@@ -38,20 +46,21 @@ fallback-version = "0.0"
 [tool.hatch.envs.default]
 python = "3.11"
 
-[tool.hatch.envs.test]
+[tool.hatch.envs.hatch-test]
 features = ["test"]
-[tool.hatch.envs.test.scripts]
-run = "pytest -v {args}"
 
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib",
-    "-pgit",
-    "-pnetwork",
-    "--disable-network",
+    "--disable-socket",
     "-presponsemock",
+    "-ptesting.scverse_template_scripts._pytest",
 ]
-filterwarnings = ["error"]
+filterwarnings = [
+    "error",
+    # https://github.com/man-group/pytest-plugins/issues/224
+    "ignore::DeprecationWarning:pytest_shutil",
+]
 
 [tool.ruff]
 line-length = 120
@@ -83,20 +92,27 @@ select = [
     "RUF",
     "S",
     "T",
+    "TCH",
     "TID",
     "UP",
     "W",
     "YTT",
 ]
 ignore = [
-    "S101", # assert should be allowed
-    "S603", # subprocess with shell=False should be allowed
-    "S311", # we don’t need cryptographically secure RNG
+    "S101",   # assert should be allowed
+    "S603",   # subprocess with shell=False should be allowed
+    "S311",   # we don’t need cryptographically secure RNG
+    "ISC001", # conflicts with formatter
 ]
 unfixable = ["RUF001"] # never “fix” “confusables”
 
 [tool.ruff.lint.isort]
-known-first-party = ["scverse_template_scripts"]
+known-first-party = ["scverse_template_scripts", "testing.scverse_template_scripts"]
+required-imports = ["from __future__ import annotations"]
+
+[tool.ruff.lint.flake8-type-checking]
+exempt-modules = []
+strict = true
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*.py" = [
