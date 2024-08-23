@@ -70,8 +70,8 @@ def main() -> None:
         msg = "Error: Unexpected triple-quotes in rich output"
         raise AssertionError(msg)
     string_literal = string_literal[1:-1].replace(r"\n", "\n")
-    string_literal = re.sub(r"\s+$", "", string_literal, flags=re.MULTILINE)
-    string_literal = f'"""\n\n\n\n\n{string_literal}\n"""'
+    string_literal = re.sub(r"[ ]+$", "", string_literal, flags=re.MULTILINE)
+    string_literal = f'"""\n\n\n\n\n{string_literal}"""'
 
     print(string_literal)  # noqa: T201
 
