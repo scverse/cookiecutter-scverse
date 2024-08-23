@@ -1,8 +1,9 @@
 #!/bin/env python3
 from subprocess import run
+{% if not cookiecutter._render_devdocs %}
+from pathlib import Path
 
 # Post processing
-{% if not cookiecutter._render_devdocs %}
 Path("docs/template_usage.md").unlink()
 {% endif %}
 
