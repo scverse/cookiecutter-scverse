@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import io
+import re
+
 from rich.console import Console
 from rich.markdown import Markdown
 
@@ -51,14 +54,26 @@ We expect developers of scverse ecosystem packages to
 
 
 def main() -> None:
-    with open("report.txt", "w") as report_file:
-        console = Console(
-            file=report_file,
-            width=72,
-            force_terminal=True,
-            color_system="standard",
-        )
-        console.print(Markdown(message))
+    file = io.StringIO()
+    console = Console(
+        file=file,
+        width=72,
+        force_terminal=True,
+        color_system="standard",
+    )
+    console.print(Markdown(message))
+
+    string_literal = repr(file.getvalue())
+
+    # make single line string literal into multiline string literal
+    if '"""' in string_literal:
+        msg = "Error: Unexpected triple-quotes in rich output"
+        raise AssertionError(msg)
+    string_literal = string_literal[1:-1].replace(r"\n", "\n")
+    string_literal = re.sub(r"\s+$", "", string_literal, flags=re.MULTILINE)
+    string_literal = f'"""\n\n\n\n\n{string_literal}\n"""'
+
+    print(string_literal)  # noqa: T201
 
 
 if __name__ == "__main__":
