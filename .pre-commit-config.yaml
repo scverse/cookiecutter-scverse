@@ -13,8 +13,8 @@ repos:
         files: ^scripts/
       - id: ruff-format
         files: ^scripts/
-  - repo: https://github.com/redeboer/taplo-pre-commit
-    rev: v0.9.1rc1
+  - repo: https://github.com/ComPWA/mirrors-taplo
+    rev: v0.9.3
     hooks:
-      - id: taplo
+      - id: taplo-format
         files: ^scripts/
