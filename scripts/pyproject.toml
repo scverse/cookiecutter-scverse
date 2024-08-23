@@ -25,7 +25,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-test = ["pytest", "pytest-git", "pytest-socket", "pytest-responsemock"]
+test = ["pytest", "pytest-socket", "pytest-responsemock"]
 
 [project.scripts]
 send-cruft-prs = "scverse_template_scripts.cruft_prs:cli"
