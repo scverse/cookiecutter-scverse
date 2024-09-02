@@ -2,9 +2,10 @@
 
 Welcome to the developer guidelines! This document is split into two parts:
 
-1.  The [repository setup](#setting-up-the-repository). This section is relevant primarily for the repository maintainer and shows how to connect
-    continuous integration services and documents initial set-up of the repository.
-2.  The [contributor guide](contributing.md#contributing-guide). It contains information relevant to all developers who want to make a contribution.
+1. The [repository setup](#setting-up-the-repository).
+   This section is relevant primarily for the repository maintainer and shows how to connect continuous integration services and documents initial set-up of the repository.
+2. The [contributor guide](contributing.md#contributing-guide).
+   It contains information relevant to all developers who want to make a contribution.
 
 ## Setting up the repository
 
@@ -22,17 +23,22 @@ and you should have
 cd {{cookiecutter.project_name}}
 ```
 
-into the new project directory. Now that you have created a new repository locally, the first step is to push it to github. To do this, you'd have to create a **new repository** on github.
+into the new project directory.
+Now that you have created a new repository locally, the first step is to push it to GitHub.
+To do this, you'd have to create a **new repository** on GitHub.
 You can follow the instructions directly on [github quickstart guide][].
-Since `cruft` already populated the local repository of your project with all the necessary files, we suggest to _NOT_ initialize the repository with a `README.md` file or `.gitignore`, because you might encounter git conflicts on your first push.
+Since `cruft` already populated the local repository of your project with all the necessary files,
+we suggest to _NOT_ initialize the repository with a `README.md` file or `.gitignore`, because you might encounter git conflicts on your first push.
 If you are familiar with git and knows how to handle git conflicts, you can go ahead with your preferred choice.
 
 :::{note}
-If you are looking at this document in the [cookiecutter-scverse-instance][] repository documentation, throughout this document the name of the project is `cookiecutter-scverse-instance`. Otherwise it should be replaced by your new project name: `{{cookiecutter.project_name}}`.
+If you are looking at this document in the [cookiecutter-scverse-instance][] repository documentation,
+throughout this document the name of the project is `cookiecutter-scverse-instance`.
+Otherwise it should be replaced by your new project name: `{{cookiecutter.project_name}}`.
 :::
 
-Now that your new project repository has been created on github at `https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}` you can push your first commit to github.
-To do this, simply follow the instructions on your github repository page or a more verbose walkthrough here:
+Now that your new project repository has been created on GitHub at `https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}` you can push your first commit to GitHub.
+To do this, simply follow the instructions on your GitHub repository page or a more verbose walkthrough here:
 
 Assuming you are in `/your/path/to/{{cookiecutter.project_name}}`. Add all files and commit.
 
@@ -43,10 +49,12 @@ git add --all
 git commit -m "first commit"
 ```
 
-You'll notice that the command `git commit` installed a bunch of packages and triggered their execution: those are pre-commit! To read more about what they are and what they do, you can go to the related section [Pre-commit checks](#pre-commit-checks) in this document.
+You'll notice that the command `git commit` installed a bunch of packages and triggered their execution: those are [pre-commit][]!
+To read more about what they are and what they do, you can go to the related section [Pre-commit checks](#pre-commit-checks) in this document.
 
 :::{note}
-There is a chance that `git commit -m "first commit"` fails due to the `prettier` pre-commit formatting the file `.cruft.json`. No problem, you have just experienced what pre-commit checks do in action. Just go ahead and re-add the modified file and try to commit again:
+There is a chance that `git commit -m "first commit"` fails due to the `prettier` pre-commit formatting the file `.cruft.json`.
+No problem, you have just experienced what pre-commit checks do in action. Just go ahead and re-add the modified file and try to commit again:
 
 ```bash
 git add -u # update all tracked file
@@ -58,7 +66,7 @@ git commit -m "first commit"
 Now that all the files of the newly created project have been committed, go ahead with the remaining steps:
 
 ```bash
-# update the `origin` of your local repo with the remote github link
+# update the `origin` of your local repo with the remote GitHub link
 git remote add origin https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}.git
 # rename the default branch to main
 git branch -M main
@@ -66,7 +74,11 @@ git branch -M main
 git push -u origin main
 ```
 
-Your project should be now available at `https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}`. While the repository at this point can be directly used, there are few remaining steps that needs to be done in order to achieve full functionality.
+Your project should be now available at `https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}`.
+While the repository at this point can be directly used, there are few remaining steps that needs to be done in order to achieve full functionality.
+
+[github quickstart guide]: https://docs.github.com/en/get-started/quickstart/create-a-repo?tool=webui
+[cookiecutter-scverse-instance]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html
 
 ### The pyproject.toml file
 
@@ -103,12 +115,12 @@ line-length = 120
 
 ### Coverage tests with _Codecov_
 
-Coverage tells what fraction of the code is "covered" by unit tests, thereby encouraging contributors to
-[write tests](contributing.md#writing-tests).
+Coverage tells what fraction of the code is "covered" by unit tests, thereby encouraging contributors to [write tests](contributing.md#writing-tests).
 To enable coverage checks, head over to [codecov][] and sign in with your GitHub account.
 You'll find more information in "getting started" section of the [codecov docs][].
 
-In the `Actions` tab of your projects' github repository, you can see that the workflows are failing due to the **Upload coverage** step. The error message in the workflow should display something like:
+In the `Actions` tab of your projects' GitHub repository, you can see that the workflows are failing due to the **Upload coverage** step.
+The error message in the workflow should display something like:
 
 ```
 ...
@@ -118,14 +130,18 @@ Error: 404 Client Error: Not Found for url:
 ...
 ```
 
-While [codecov docs][] has a very extensive documentation on how to get started, _if_ you are using the default settings of this template we can assume that you are using [codecov][] in a github action workflow and hence you can make use of the [codecov bot][].
+While [codecov docs][] has a very extensive documentation on how to get started,
+_if_ you are using the default settings of this template we can assume that you are using [codecov][] in a GitHub action workflow and hence you can make use of the [codecov bot][].
 
 To set it up, simply go to the [codecov app][] page and follow the instructions to activate it for your repository.
 Once the activation is completed, go back to the `Actions` tab and re-run the failing workflows.
 
-The workflows should now succeed, and you will be able to find the code coverage at this link: `https://app.codecov.io/gh/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}`. You might have to wait a couple of minutes and the coverage of this repository should be ~60%.
+The workflows should now succeed, and you will be able to find the code coverage at this link:
+`https://app.codecov.io/gh/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}`.
+You might have to wait a couple of minutes and the coverage of this repository should be ~60%.
 
-If your repository is private, you will have to specify an additional token in the repository secrets. In brief, you need to:
+If your repository is private, you will have to specify an additional token in the repository secrets.
+In brief, you need to:
 
 1. Generate a Codecov Token by clicking _setup repo_ in the codecov dashboard.
     - If you have already set up codecov in the repository by following the previous steps, you can directly go to the codecov repo webpage.
@@ -140,7 +156,12 @@ If your repository is private, you will have to specify an additional token in t
       with:
           token: {% raw %}${{ secrets.CODECOV_TOKEN }}{% endraw %}
     ```
-7. Go back to github `Actions` page an re-run previously failed jobs.
+7. Go back to GitHub `Actions` page an re-run previously failed jobs.
+
+[codecov]: https://about.codecov.io/sign-up/
+[codecov docs]: https://docs.codecov.com/docs
+[codecov bot]: https://docs.codecov.com/docs/team-bot
+[codecov app]: https://github.com/apps/codecov
 
 ### Documentation on _readthedocs_
 
@@ -148,15 +169,19 @@ We recommend using [readthedocs.org][] (RTD) to build and host the documentation
 To enable readthedocs, head over to [their website][readthedocs.org] and sign in with your GitHub account.
 On the RTD dashboard choose "Import a Project" and follow the instructions to add your repository.
 
--   Make sure to choose the correct name of the default branch. On GitHub, the name of the default branch should be `main` (it has
-    recently changed from `master` to `main`).
--   We recommend enabling documentation builds for pull requests (PRs). This ensures that a PR doesn't introduce changes
-    that break the documentation. To do so, got to `Admin -> Advanced Settings`, check the
-    `Build pull requests for this projects` option, and click `Save`. For more information, please refer to
-    the [official RTD documentation](https://docs.readthedocs.io/en/stable/pull-requests.html).
+-   Make sure to choose the correct name of the default branch.
+    On GitHub, the name of the default branch should be `main` (it has recently changed from `master` to `main`).
+-   We recommend enabling documentation builds for pull requests (PRs).
+    This ensures that a PR doesn't introduce changes that break the documentation.
+    To do so, got to `Admin -> Advanced Settings`, check the `Build pull requests for this projects` option, and click `Save`.
+    For more information, please refer to the [official RTD documentation][rtd-prs].
 -   If you find the RTD builds are failing, you can disable the `fail_on_warning` option in `.readthedocs.yaml`.
 
-If your project is private, there are ways to enable docs rendering on [readthedocs.org][] but it is more cumbersome and requires a different subscription for read the docs. See a guide [here](https://docs.readthedocs.io/en/stable/guides/importing-private-repositories.html).
+If your project is private, there are ways to enable docs rendering on [readthedocs.org][] but it is more cumbersome and requires a different subscription for read the docs.
+See a guide [here](https://docs.readthedocs.io/en/stable/guides/importing-private-repositories.html).
+
+[readthedocs.org]: https://readthedocs.org/
+[rtd-prs]: https://docs.readthedocs.io/en/stable/pull-requests.html
 
 ### Automating PyPI released using GitHub actions
 
@@ -164,21 +189,27 @@ If your project is private, there are ways to enable docs rendering on [readthed
 
 Tags adhering to `"*.*.*"` that are pushed to the `main` branch will trigger the release Github workflow that automatically builds and uploads the Python package to [PyPI][].
 
-For this to work, you'll need to setup GitHub as a [trusted publisher][] on PyPI. To set this up, login to
-[PyPI][], and navigate to your project. In the left sidebar, choose "Publishing", and add the repository details.
-The "Workflow name" needs to bet set to `release.yaml`. In most cases, you can leave the "Environment name" empty.
+For this to work, you'll need to setup GitHub as a [trusted publisher][] on PyPI.
+To set this up, login to [PyPI][], and navigate to your project.
+In the left sidebar, choose "Publishing", and add the repository details.
+The "Workflow name" needs to bet set to `release.yaml`.
+In most cases, you can leave the "Environment name" empty.
 For more details, please refer to the official [PyPI guide for setting up trusted publishing][pypi-trusted-publishing-guide].
 
 #### Behind the scenes
 
-This section explains how releases can be created manually purely for educational purposes. Experienced developers may skip this section.
-Python packages are not distributed as source code, but as _distributions_. The most common distribution format is the so-called _wheel_. To build a _wheel_, run
+This section explains how releases can be created manually purely for educational purposes.
+Experienced developers may skip this section.
+Python packages are not distributed as source code, but as _distributions_.
+The most common distribution format is the so-called _wheel_.
+To build a _wheel_, run
 
 ```bash
 python -m build
 ```
 
-This command creates a _source archive_ and a _wheel_, which are required for publishing your package to [PyPI][]. These files are created directly in the root of the repository.
+This command creates a _source archive_ and a _wheel_, which are required for publishing your package to [PyPI][].
+These files are created directly in the root of the repository.
 
 Before uploading them to [PyPI][] you can check that your _distribution_ is valid by running:
 
@@ -196,35 +227,34 @@ Provide your username and password when requested and then go check out your pac
 
 For more information, follow the [Python packaging tutorial][].
 
+[pypi]: https://pypi.org/
 [pypi-trusted-publishing-guide]: https://docs.pypi.org/trusted-publishers/adding-a-publisher/
 [trusted publisher]: https://docs.pypi.org/trusted-publishers/
-[creating github secrets]: https://docs.github.com/en/actions/security-guides/encrypted-secrets
-[creating pypi tokens]: https://pypi.org/help/#apitoken
-[managing github releases]: https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository
-[python packaging tutorial]: https://packaging.python.org/en/latest/tutorials/packaging-projects/#generating-distribution-archives
 
-[pypi-feature-request]: https://github.com/scverse/cookiecutter-scverse/issues/88
+[python packaging tutorial]: https://packaging.python.org/en/latest/tutorials/packaging-projects/#generating-distribution-archives
 
 (pre-commit)=
 
 ### Pre-commit checks
 
-[Pre-commit][] checks are fast programs that
-check code for errors, inconsistencies and code styles, before the code
-is committed.
+[Pre-commit][] checks are fast programs that check code for errors, inconsistencies and code styles, before the code is committed.
 
-This template uses a number of pre-commit checks. In this section we'll detail what is used, where they're defined, and how to modify these checks.
+This template uses a number of pre-commit checks.
+In this section we'll detail what is used, where they're defined, and how to modify these checks.
+
+[pre-commit]: https://pre-commit.com/
 
 #### Pre-commit CI
 
-We recommend setting up [pre-commit.ci][] to enforce consistency checks on every commit
-and pull-request.
+We recommend setting up [pre-commit.ci][] to enforce consistency checks on every commit and pull-request.
 
-To do so, head over to [pre-commit.ci][] and click "Sign In With GitHub". Follow
-the instructions to enable pre-commit.ci for your account or your organization. You
-may choose to enable the service for an entire organization or on a per-repository basis.
+To do so, head over to [pre-commit.ci][] and click "Sign In With GitHub".
+Follow the instructions to enable pre-commit.ci for your account or your organization.
+You may choose to enable the service for an entire organization or on a per-repository basis.
 
 Once authorized, pre-commit.ci should automatically be activated.
+
+[pre-commit.ci]: https://pre-commit.ci/
 
 #### Overview of pre-commit hooks used by the template
 
@@ -278,13 +308,13 @@ This section shows you where these checks are defined, and how to enable/ disabl
 ##### pre-commit
 
 You can add or remove pre-commit checks by simply deleting relevant lines in the `.pre-commit-config.yaml` file under the repository root.
-Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` (for `ruff`) or tool-specific
-config files, such as `.prettierrc.yml` for **prettier**.
+Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` (for `ruff`) or tool-specific config files,
+such as `.prettierrc.yml` for **prettier**.
 
 ##### Ruff
 
 This template configures `ruff` through the `[tool.ruff]` entry in the `pyproject.toml`.
-For further information `ruff` configuration, see [the docs](https://beta.ruff.rs/docs/configuration/).
+For further information `ruff` configuration, see [the docs][ruff-config].
 
 Ruff assigns code to the rules it checks (e.g. `E401`) and groups them under a rule category (e.g. `E`).
 Rule categories are selectively enabled by including them under the `select` key:
@@ -325,16 +355,19 @@ Checks can be ignored per-file (or glob pattern) with `[tool.ruff.per-file-ignor
 ```
 
 To ignore a specific rule on a per-case basis, you can add a `# noqa: <rule>[, <rule>, …]` comment to the offending line.
-Specify the rule code(s) to ignore, with e.g. `# noqa: E731`. Check the [Ruff guide][] for reference.
+Specify the rule code(s) to ignore, with e.g. `# noqa: E731`.
+Check the [Ruff guide][ruff-error-suppression] for reference.
 
 ```{note}
 The `RUF100` check will remove rule codes that are no longer necessary from `noqa` comments.
 If you want to add a code that comes from a tool other than Ruff,
-add it to Ruff’s [`external = [...]`](https://beta.ruff.rs/docs/settings/#external) setting to prevent `RUF100` from removing it.
+add it to Ruff’s [`external = [...]`][ruff-external] setting to prevent `RUF100` from removing it.
 ```
 
-[ruff]: https://beta.ruff.rs/docs/
-[ruff guide]: https://beta.ruff.rs/docs/configuration/#suppressing-errors
+[ruff]: https://docs.astral.sh/ruff/
+[ruff-error-suppression]: https://docs.astral.sh/ruff/linter/#error-suppression
+[ruff-config]: https://docs.astral.sh/ruff/configuration/
+[ruff-external]: https://docs.astral.sh/ruff/settings/#external
 
 ### API design
 
@@ -342,12 +375,15 @@ Scverse ecosystem packages should operate on [AnnData][] and/or [MuData][] data 
 as originally [introduced by scanpy][scanpy-api] with the following submodules:
 
 -   `pp` for preprocessing
--   `tl` for tools (that, compared to `pp` generate interpretable output, often associated with a corresponding plotting
-    function)
+-   `tl` for tools (that, compared to `pp` generate interpretable output, often associated with a corresponding plotting function)
 -   `pl` for plotting functions
 
-You may add additional submodules as appropriate. While we encourage to follow a scanpy-like API for ecosystem packages,
+You may add additional submodules as appropriate.
+While we encourage to follow a scanpy-like API for ecosystem packages,
 there may also be good reasons to choose a different approach, e.g. using an object-oriented API.
+
+[anndata]: https://github.com/scverse/anndata
+[mudata]: https://github.com/scverse/mudata
 
 [scanpy-api]: https://scanpy.readthedocs.io/en/stable/usage-principles.html
 
@@ -355,8 +391,9 @@ there may also be good reasons to choose a different approach, e.g. using an obj
 
 ### Using VCS-based versioning
 
-By default, the template uses hard-coded version numbers that are set in `pyproject.toml`. If you prefer to have your project automatically infer version numbers from git
-tags, it is straightforward to switch to vcs-based versioning using [hatch-vcs][].
+By default, the template uses hard-coded version numbers that are set in `pyproject.toml`.
+If you prefer to have your project automatically infer version numbers from git tags,
+it is straightforward to switch to vcs-based versioning using [hatch-vcs][].
 
 In `pyproject.toml` add the following changes, and you are good to go!
 
@@ -390,13 +427,14 @@ Don't forget to update the [Making a release section](contributing.md#publishing
 
 ### Automated template sync
 
-Automated template sync is enabled by default. This means that every night, a GitHub action runs [cruft][] to check
-if a new version of the `scverse-cookiecutter` template got released. If there are any new changes, a pull request
-proposing these changes is created automatically. This helps keeping the repository up-to-date with the latest
-coding standards.
+Automated template sync is enabled by default.
+This means that every night, a GitHub action runs [cruft][] to check if a new version of the `scverse-cookiecutter` template got released.
+If there are any new changes, a pull request proposing these changes is created automatically.
+This helps keeping the repository up-to-date with the latest coding standards.
 
-It may happen that a template sync results in a merge conflict. If this is the case a `*.ref` file with the
-diff is created. You need to manually address these changes and remove the `.rej` file when you are done.
+It may happen that a template sync results in a merge conflict.
+If this is the case a `*.ref` file with the diff is created.
+You need to manually address these changes and remove the `.rej` file when you are done.
 The pull request can only be merged after all `*.rej` files have been removed.
 
 :::{tip}
@@ -404,9 +442,9 @@ The following hints may be useful to work with the template sync:
 
 -   GitHub automatically disables scheduled actions if there has been not activity to the repository for 60 days.
     You can re-enable or manually trigger the sync by navigating to `Actions` -> `Sync Template` in your GitHub repository.
--   If you want to ignore certain files from the template update, you can add them to the `[tool.cruft]` section in the
-    `pyproject.toml` file in the root of your repository. More details are described in the
-    [cruft documentation][cruft-update-project].
+-   If you want to ignore certain files from the template update,
+    you can add them to the `[tool.cruft]` section in the `pyproject.toml` file in the root of your repository.
+    More details are described in the [cruft documentation][cruft-update-project].
 -   To disable the sync entirely, simply remove the file `.github/workflows/sync.yaml`.
 
 :::
@@ -416,13 +454,16 @@ The following hints may be useful to work with the template sync:
 
 ## Moving forward
 
-You have reached the end of this document. Congratulations! You have successfully set up your project and are ready to start.
+You have reached the end of this document.
+Congratulations!
+You have successfully set up your project and are ready to start.
 For everything else related to documentation, code style, testing and publishing your project to pypi, please refer to the [contributing docs](contributing.md#contributing-guide).
 
 ## Migrate existing projects to using this template
 
-You can also update existing projects to make use of this template to benefit from the latest-greatest
-tooling and automated template updates. This requires some manual work though. Here's one way how to do it
+You can also update existing projects to make use of this template to benefit from the latest-greatest tooling and automated template updates.
+This requires some manual work though.
+Here's one way how to do it:
 
 1. Let's assume your repository is checked out to `$REPO`
 2. Clone your repository a second time to `${REPO}_cookiecutterized`
@@ -452,20 +493,8 @@ tooling and automated template updates. This requires some manual work though. H
     git commit -m "init from template"
     ```
 
-6. Migrate your project: Move over files from `$REPO` to `${REPO}_cookiecutterized`. Omit files that are not
-   needed anymore and manually merge files where required.
+6. Migrate your project: Move over files from `$REPO` to `${REPO}_cookiecutterized`.
+   Omit files that are not needed anymore and manually merge files where required.
 
-7. Commit your changes. Merge the `cookiecutterize` branch into the main branch, e.g. by making a pull request.
-
-<!-- Links -->
-
-[cookiecutter-scverse-instance]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html
-[github quickstart guide]: https://docs.github.com/en/get-started/quickstart/create-a-repo?tool=webui
-[codecov]: https://about.codecov.io/sign-up/
-[codecov docs]: https://docs.codecov.com/docs
-[codecov app]: https://github.com/apps/codecov
-[pre-commit]: https://pre-commit.com/
-[pre-commit.ci]: https://pre-commit.ci/
-[readthedocs.org]: https://readthedocs.org/
-[anndata]: https://github.com/scverse/anndata
-[mudata]: https://github.com/scverse/mudata
+7. Commit your changes.
+   Merge the `cookiecutterize` branch into the main branch, e.g. by making a pull request.
