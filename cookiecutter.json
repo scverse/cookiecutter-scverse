@@ -6,7 +6,6 @@
     "author_email": "yourname@example.com",
     "github_user": "your_github_username",
     "github_repo": "{{ cookiecutter.project_name }}",
-    "project_repo": "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}",
     "license": [
         "MIT License",
         "BSD 2-Clause License",

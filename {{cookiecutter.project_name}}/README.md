@@ -4,7 +4,7 @@
 [![Documentation][badge-docs]][link-docs]
 
 [badge-tests]: https://img.shields.io/github/actions/workflow/status/{{ cookiecutter.github_user }}/{{ cookiecutter.project_name }}/test.yaml?branch=main
-[link-tests]: {{ cookiecutter.project_repo }}/actions/workflows/test.yml
+[link-tests]: https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}/actions/workflows/test.yml
 [badge-docs]: https://img.shields.io/readthedocs/{{ cookiecutter.project_name }}
 
 {{ cookiecutter.project_description }}
@@ -33,7 +33,7 @@ pip install {{ cookiecutter.project_name }}
 1. Install the latest development version:
 
 ```bash
-pip install git+{{ cookiecutter.project_repo }}.git@main
+pip install git+https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}.git@main
 ```
 
 ## Release notes
