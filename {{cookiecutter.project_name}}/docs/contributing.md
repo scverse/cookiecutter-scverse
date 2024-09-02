@@ -16,16 +16,14 @@ you need additional python packages to [run tests](#writing-tests) and [build th
 The easiest way is to get familiar with [hatch environments][], with which these tasks are simply:
 
 ```bash
-hatch test
-hatch run docs:build
+hatch test  # defined in the table [tool.hatch.envs.hatch-test] in pyproject.toml
+hatch run docs:build  # defined in the table [tool.hatch.envs.docs]
 ```
 
 If you prefer managing environments manually, you can use `pip`:
 
 ```bash
 cd {{ cookiecutter.project_name }}
-python -m venv .venv
-source .venv/bin/activate
 pip install -e ".[dev,test,doc]"
 ```
 
@@ -73,7 +71,7 @@ Consider enabling this option for [ruff][ruff-editors] and [prettier][prettier-e
 
 ## Writing tests
 
-This package uses the [pytest][] for automated testing.
+This package uses [pytest][] for automated testing.
 Please write {doc}`scanpy:dev/testing` for every function added to the package.
 
 Most IDEs integrate with pytest and provide a GUI to run tests.
