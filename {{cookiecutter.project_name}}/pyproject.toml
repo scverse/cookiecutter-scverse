@@ -49,9 +49,10 @@ optional-dependencies.test = [
   "coverage",
   "pytest",
 ]
+# https://docs.pypi.org/project_metadata/#project-urls
 urls.Documentation = "https://{{ cookiecutter.project_name }}.readthedocs.io/"
-urls.Home-page = "{{ cookiecutter.project_repo }}"
-urls.Source = "{{ cookiecutter.project_repo }}"
+urls.Source = "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}"
+urls.Homepage = "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}"
 
 {% if cookiecutter.project_name.lower().replace("-", "_") != cookiecutter.package_name -%}
 [tool.hatch.build.targets.wheel]
