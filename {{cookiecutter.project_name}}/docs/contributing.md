@@ -9,11 +9,21 @@ to the [scanpy developer guide][].
 
 ## Installing dev dependencies
 
-In addition to the packages needed to _use_ this package, you need additional python packages to _run tests_ and _build
-the documentation_. It's easy to install them using `pip`:
+In addition to the packages needed to _use_ this package,
+you need additional python packages to [run tests](#writing-tests) and [build the documentation](#docs-building).
+The easiest way is to get familiar with [hatch environments][], with which these tasks are simply:
+
+```bash
+hatch test
+hatch run docs:build
+```
+
+If you prefer managing environments manually, you can use `pip`:
 
 ```bash
 cd {{ cookiecutter.project_name }}
+python -m venv .venv
+source .venv/bin/activate
 pip install -e ".[dev,test,doc]"
 ```
 
@@ -48,23 +58,27 @@ While the [pre-commit.ci][] is useful, we strongly encourage installing and runn
 Finally, most editors have an _autoformat on save_ feature. Consider enabling this option for [ruff][ruff-editors]
 and [prettier][prettier-editors].
 
-[ruff-editors]: https://docs.astral.sh/ruff/integrations/
-[prettier-editors]: https://prettier.io/docs/en/editors.html
+(writing-tests)=
 
 ## Writing tests
 
-```{note}
-Remember to first install the package with `pip install -e '.[dev,test]'`
-```
-
-This package uses the [pytest][] for automated testing. Please [write tests][scanpy-test-docs] for every function added
+This package uses the [pytest][] for automated testing. Please {doc}`scanpy:dev/testing` for every function added
 to the package.
 
-Most IDEs integrate with pytest and provide a GUI to run tests. Alternatively, you can run all tests from the
-command line by executing
+Most IDEs integrate with pytest and provide a GUI to run tests.
+Just point yours to one of the environments returned by
 
 ```bash
-pytest
+hatch env create hatch-test  # create test environments for all supported versions
+hatch env find hatch-test  # list all possible test environment paths
+```
+
+Alternatively, you can run all tests from the command line by executing
+
+```bash
+hatch test  # test with the highest supported Python version
+# or
+hatch test --all  # test with all supported Python versions
 ```
 
 in the root of the repository.
@@ -78,8 +92,6 @@ Additionally, there's a CI job that tests against pre-releases of all dependenci
 (if there are any). The purpose of this check is to detect incompatibilities
 of new package versions early on and gives you time to fix the issue or reach
 out to the developers of the dependency before the package is released to a wider audience.
-
-[scanpy-test-docs]: https://scanpy.readthedocs.io/en/latest/dev/testing.html#writing-tests
 
 ## Publishing a release
 
@@ -96,7 +108,8 @@ Before making a release, you need to update the version number in the `pyproject
 > Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
 
 Once you are done, commit and push your changes and navigate to the "Releases" page of this project on GitHub.
-Specify `vX.X.X` as a tag name and create a release. For more information, see [managing GitHub releases][]. This will automatically create a git tag and trigger a Github workflow that creates a release on PyPI.
+Specify `vX.X.X` as a tag name and create a release. For more information, see [managing GitHub releases][].
+This will automatically create a git tag and trigger a Github workflow that creates a release on [PyPI][].
 
 ## Writing documentation
 
@@ -128,34 +141,32 @@ repository.
 -   If building the documentation fails because of a missing link that is outside your control, you can add an entry to
     the `nitpick_ignore` list in `docs/conf.py`
 
+(docs-building)=
+
 #### Building the docs locally
 
 ```bash
-cd docs
-make html
-open _build/html/index.html
+hatch docs:build
 ```
 
 <!-- Links -->
 
 [scanpy developer guide]: https://scanpy.readthedocs.io/en/latest/dev/index.html
+[hatch environments]: https://hatch.pypa.io/latest/tutorials/environment/basic-usage/
 [cookiecutter-scverse-instance]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html
 [github quickstart guide]: https://docs.github.com/en/get-started/quickstart/create-a-repo?tool=webui
 [codecov]: https://about.codecov.io/sign-up/
-[codecov docs]: https://docs.codecov.com/docs
-[codecov bot]: https://docs.codecov.com/docs/team-bot
 [codecov app]: https://github.com/apps/codecov
 [pre-commit.ci]: https://pre-commit.ci/
-[readthedocs.org]: https://readthedocs.org/
-[myst-nb]: https://myst-nb.readthedocs.io/en/latest/
-[jupytext]: https://jupytext.readthedocs.io/en/latest/
 [pre-commit]: https://pre-commit.com/
-[anndata]: https://github.com/scverse/anndata
-[mudata]: https://github.com/scverse/mudata
+[ruff-editors]: https://docs.astral.sh/ruff/integrations/
+[prettier-editors]: https://prettier.io/docs/en/editors.html
 [pytest]: https://docs.pytest.org/
 [semver]: https://semver.org/
+[readthedocs.org]: https://readthedocs.org/
 [sphinx]: https://www.sphinx-doc.org/en/master/
 [myst]: https://myst-parser.readthedocs.io/en/latest/intro.html
+[myst-nb]: https://myst-nb.readthedocs.io/en/latest/
 [numpydoc-napoleon]: https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html
 [numpydoc]: https://numpydoc.readthedocs.io/en/latest/format.html
 [sphinx autodoc typehints]: https://github.com/tox-dev/sphinx-autodoc-typehints
