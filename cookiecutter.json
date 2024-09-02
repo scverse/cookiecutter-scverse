@@ -5,7 +5,7 @@
     "author_full_name": "Your Name",
     "author_email": "yourname@example.com",
     "github_user": "your_github_username",
-    "project_repo": "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.project_name }}",
+    "github_repo": "{{ cookiecutter.project_name }}",
     "license": [
         "MIT License",
         "BSD 2-Clause License",
