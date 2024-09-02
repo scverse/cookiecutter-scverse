@@ -37,7 +37,7 @@ needs_sphinx = "4.0"
 html_context = {
     "display_github": True,  # Integrate GitHub
     "github_user": "{{cookiecutter.github_user}}",
-    "github_repo": "{{cookiecutter.project_name}}",
+    "github_repo": {% if cookiecutter.project_name == cookiecutter.github_repo %}project_name{% else %}"{{cookiecutter.github_repo}}"{% endif %},
     "github_version": "main",
     "conf_py_path": "/docs/",
 }
