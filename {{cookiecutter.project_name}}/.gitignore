@@ -9,7 +9,6 @@ __pycache__/
 .*cache/
 
 # Distribution / packaging
-/build/
 /dist/
 
 # Tests and coverage

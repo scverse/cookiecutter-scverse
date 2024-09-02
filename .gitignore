@@ -2,14 +2,14 @@
 .DS_Store
 *~
 
-# Distribution / packaging
-/build/
-/dist/
-/*.egg-info/
-
-# Tests and coverage
+# Caches
 __pycache__/
 .*cache/
+
+# Distribution / packaging
+/dist/
+
+# Tests and coverage
 /data/
 /node_modules/
 
