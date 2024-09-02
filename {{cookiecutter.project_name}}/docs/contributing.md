@@ -13,14 +13,7 @@ If not, please refer to the [scanpy developer guide][].
 
 In addition to the packages needed to _use_ this package,
 you need additional python packages to [run tests](#writing-tests) and [build the documentation](#docs-building).
-The easiest way is to get familiar with [hatch environments][], with which these tasks are simply:
-
-```bash
-hatch test
-hatch run docs:build
-```
-
-If you prefer managing environments manually, you can use `pip`:
+It's easy to install them using `pip`:
 
 ```bash
 cd {{ cookiecutter.project_name }}
@@ -28,8 +21,6 @@ python -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev,test,doc]"
 ```
-
-[hatch environments]: https://hatch.pypa.io/latest/tutorials/environment/basic-usage/
 
 ## Code-style
 
@@ -77,19 +68,10 @@ This package uses the [pytest][] for automated testing.
 Please {doc}`scanpy:dev/testing` for every function added to the package.
 
 Most IDEs integrate with pytest and provide a GUI to run tests.
-Just point yours to one of the environments returned by
-
-```bash
-hatch env create hatch-test  # create test environments for all supported versions
-hatch env find hatch-test  # list all possible test environment paths
-```
-
 Alternatively, you can run all tests from the command line by executing
 
 ```bash
-hatch test  # test with the highest supported Python version
-# or
-hatch test --all  # test with all supported Python versions
+pytest
 ```
 
 in the root of the repository.
@@ -172,6 +154,7 @@ please check out [this feature request][issue-render-notebooks] in the `cookiecu
 #### Building the docs locally
 
 ```bash
-hatch docs:build
-hatch docs:open
+cd docs
+make html
+open _build/html/index.html
 ```
