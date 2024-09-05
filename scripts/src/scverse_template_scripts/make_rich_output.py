@@ -24,11 +24,13 @@ All CI checks should pass, you are ready to start developing your new tool!
 
 # Install the package
 
-To run tests or build the documentation locally, you need to install your package and its dependencies.
-You can do so with
+To run tests or build the documentation locally, get familiar with [hatch environments][hatch-envs],
+and see `[tool.hatch.envs.*]` in `pyproject.toml`:
 
 ```bash
-pip install ".[test,dev,doc]"
+hatch run pre-commit run --all-files  # tool.hatch.envs.default
+hatch test                            # tool.hatch.envs.hatch-test
+hatch run docs:build                  # tool.hatch.envs.docs
 ```
 
 # Customizations
@@ -47,6 +49,7 @@ We expect developers of scverse ecosystem packages to
 [setup-pre-commit]: {dev_docs_url}#pre-commit-checks
 [setup-rtd]: {dev_docs_url}#documentation-on-readthedocs
 [setup-codecov]: {dev_docs_url}#coverage-tests-with-codecov
+[hatch-envs]: https://hatch.pypa.io/latest/tutorials/environment/basic-usage/
 [write-tests]: {dev_docs_url}#writing-tests
 [write-docs]: {dev_docs_url}#writing-documentation
 [scverse discourse]: https://discourse.scverse.org/

@@ -42,11 +42,13 @@ tool!
 ┃                         \x1b[1mInstall the package\x1b[0m                          ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-To run tests or build the documentation locally, you need to install
-your package and its dependencies. You can do so with
+To run tests or build the documentation locally, get familiar with \x1b]8;id=707150;https://hatch.pypa.io/latest/tutorials/environment/basic-usage/\x1b\\\x1b[4;34mhatch\x1b[0m\x1b]8;;\x1b\\
+\x1b]8;id=707150;https://hatch.pypa.io/latest/tutorials/environment/basic-usage/\x1b\\\x1b[4;34menvironments\x1b[0m\x1b]8;;\x1b\\, and see \x1b[1;36;40m[tool.hatch.envs.*]\x1b[0m in \x1b[1;36;40mpyproject.toml\x1b[0m:
 
 \x1b[40m                                                                        \x1b[0m
-\x1b[40m \x1b[0m\x1b[97;40mpip\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40minstall\x1b[0m\x1b[97;40m \x1b[0m\x1b[93;40m".[test,dev,doc]"\x1b[0m\x1b[40m                                         \x1b[0m\x1b[40m \x1b[0m
+\x1b[40m \x1b[0m\x1b[97;40mhatch\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40mrun\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40mpre-commit\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40mrun\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40m--all-files\x1b[0m\x1b[97;40m  \x1b[0m\x1b[37;40m# tool.hatch.envs.default\x1b[0m\x1b[40m       \x1b[0m\x1b[40m \x1b[0m
+\x1b[40m \x1b[0m\x1b[97;40mhatch\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40mtest\x1b[0m\x1b[97;40m                            \x1b[0m\x1b[37;40m# tool.hatch.envs.hatch-test\x1b[0m\x1b[40m    \x1b[0m\x1b[40m \x1b[0m
+\x1b[40m \x1b[0m\x1b[97;40mhatch\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40mrun\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40mdocs:build\x1b[0m\x1b[97;40m                  \x1b[0m\x1b[37;40m# tool.hatch.envs.docs\x1b[0m\x1b[40m          \x1b[0m\x1b[40m \x1b[0m
 \x1b[40m                                                                        \x1b[0m
 
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
