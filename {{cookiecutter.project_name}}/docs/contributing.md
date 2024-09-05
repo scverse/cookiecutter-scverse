@@ -13,14 +13,32 @@ If not, please refer to the [scanpy developer guide][].
 
 In addition to the packages needed to _use_ this package,
 you need additional python packages to [run tests](#writing-tests) and [build the documentation](#docs-building).
-It's easy to install them using `pip`:
+
+:::::{tabs}
+::::{group-tab} Hatch
+The easiest way is to get familiar with [hatch environments][], with which these tasks are simply:
+
+```bash
+hatch test  # defined in the table [tool.hatch.envs.hatch-test] in pyproject.toml
+hatch run docs:build  # defined in the table [tool.hatch.envs.docs]
+```
+
+::::
+
+::::{group-tab} Pip
+If you prefer managing environments manually, you can use `pip`:
 
 ```bash
 cd {{ cookiecutter.project_name }}
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev,test,doc]"
 ```
+
+::::
+:::::
+
+[hatch environments]: https://hatch.pypa.io/latest/tutorials/environment/basic-usage/
 
 ## Code-style
 
@@ -64,15 +82,39 @@ Consider enabling this option for [ruff][ruff-editors] and [prettier][prettier-e
 
 ## Writing tests
 
-This package uses the [pytest][] for automated testing.
+This package uses [pytest][] for automated testing.
 Please write {doc}`scanpy:dev/testing` for every function added to the package.
 
 Most IDEs integrate with pytest and provide a GUI to run tests.
-Alternatively, you can run all tests from the command line by executing
+Just point yours to one of the environments returned by
 
 ```bash
+hatch env create hatch-test  # create test environments for all supported versions
+hatch env find hatch-test  # list all possible test environment paths
+```
+
+Alternatively, you can run all tests from the command line by executing
+
+:::::{tabs}
+::::{group-tab} Hatch
+
+```bash
+hatch test  # test with the highest supported Python version
+# or
+hatch test --all  # test with all supported Python versions
+```
+
+::::
+
+::::{group-tab} Pip
+
+```bash
+source .venv/bin/activate
 pytest
 ```
+
+::::
+:::::
 
 in the root of the repository.
 
@@ -122,7 +164,7 @@ This project uses [sphinx][] with the following features:
 -   [sphinx-autodoc-typehints][], to automatically reference annotated input and output types
 -   Citations (like {cite:p}`Virshup_2023`) can be included with [sphinxcontrib-bibtex](https://sphinxcontrib-bibtex.readthedocs.io/)
 
-See the scanpy’s {doc}`scanpy:dev/documentation` for more information on how to write your own.
+See scanpy’s {doc}`scanpy:dev/documentation` for more information on how to write your own.
 
 [sphinx]: https://www.sphinx-doc.org/en/master/
 [myst]: https://myst-parser.readthedocs.io/en/latest/intro.html
@@ -153,8 +195,24 @@ please check out [this feature request][issue-render-notebooks] in the `cookiecu
 
 #### Building the docs locally
 
+:::::{tabs}
+::::{group-tab} Hatch
+
 ```bash
+hatch docs:build
+hatch docs:open
+```
+
+::::
+
+::::{group-tab} Pip
+
+```bash
+source .venv/bin/activate
 cd docs
 make html
-open _build/html/index.html
+(xdg-)open _build/html/index.html
 ```
+
+::::
+:::::
