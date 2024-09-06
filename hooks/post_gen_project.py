@@ -1,11 +1,26 @@
 #!/bin/env python3
+import shutil
 from subprocess import run
-{% if not cookiecutter._render_devdocs %}
 from pathlib import Path
 
+{% if not cookiecutter._render_devdocs %}
 # Post processing
 Path("docs/template_usage.md").unlink()
 {% endif %}
+
+# Skip directories marked for skipping
+def skipped_dirs():
+    for toplevel in Path().iterdir():
+        if toplevel.name == ".git":
+            continue
+        if toplevel.name == "DELETE-ME":
+            yield toplevel
+        else:
+            yield from toplevel.rglob("DELETE-ME")
+
+for path in skipped_dirs():
+    assert path.is_dir(), path
+    shutil.rmtree(path)
 
 # Update pre commit hooks
 run("pre-commit autoupdate -c .pre-commit-config.yaml".split(), check=True)

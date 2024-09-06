@@ -18,3 +18,10 @@ __pycache__/
 # docs
 /docs/generated/
 /docs/_build/
+
+{%- if not cookiecutter.ide_integration %}
+
+# IDEs
+/.idea/
+/.vscode/
+{% endif -%}

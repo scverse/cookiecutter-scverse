@@ -14,6 +14,7 @@
         "GNU General Public License Version 3",
         "Unlicense"
     ],
+    "ide_integration": true,
     "_copy_without_render": [
         ".github/workflows/build.yaml",
         ".github/workflows/test.yaml",
