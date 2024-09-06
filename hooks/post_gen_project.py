@@ -39,7 +39,7 @@ All CI checks should pass, you are ready to start developing your new
 tool!
 
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃                         \x1b[1mInstall the package\x1b[0m                          ┃
+┃                          \x1b[1mLocal development\x1b[0m                           ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
 To run tests or build the documentation locally, get familiar with \x1b]8;id=707150;https://hatch.pypa.io/latest/tutorials/environment/basic-usage/\x1b\\\x1b[4;34mhatch\x1b[0m\x1b]8;;\x1b\\

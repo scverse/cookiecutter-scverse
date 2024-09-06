@@ -22,7 +22,7 @@ The developer documentation is also shipped as part of the template in docs/deve
 
 All CI checks should pass, you are ready to start developing your new tool!
 
-# Install the package
+# Local development
 
 To run tests or build the documentation locally, get familiar with [hatch environments][hatch-envs],
 and see `[tool.hatch.envs.*]` in `pyproject.toml`:
