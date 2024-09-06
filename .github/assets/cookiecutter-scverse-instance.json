@@ -8,6 +8,7 @@
         "github_user": "scverse",
         "github_repo": "cookiecutter-scverse-instance",
         "license": "BSD 3-Clause License",
+        "ide_integration": true,
         "_copy_without_render": [
             ".github/workflows/**.yaml",
             "docs/_templates/autosummary/**.rst"
