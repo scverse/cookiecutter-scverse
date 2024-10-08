@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      PYTHON_VERSION: "3.10"
+      PYTHON_VERSION: "3.11"
       INSTANCE_REPO_GITHUB: scverse/cookiecutter-scverse-instance
       INSTANCE_REPO: "TEMPLATE_INSTANCE"
       # directory in which cookiecuter generates the new repository
@@ -20,10 +20,10 @@ jobs:
 
     steps:
       - name: Checkout template repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Checkout instance repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: ${{ env.INSTANCE_REPO_GITHUB }}
           token: ${{ secrets.BOT_GH_TOKEN }}
@@ -31,7 +31,7 @@ jobs:
           persist-credentials: true
 
       - name: Set up Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
