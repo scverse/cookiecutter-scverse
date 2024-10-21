@@ -199,8 +199,8 @@ please check out [this feature request][issue-render-notebooks] in the `cookiecu
 ::::{group-tab} Hatch
 
 ```bash
-hatch docs:build
-hatch docs:open
+hatch run docs:build
+hatch run docs:open
 ```
 
 ::::
