@@ -11,11 +11,11 @@ repos:
     hooks:
       - id: prettier
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: "2.2.4"
+    rev: "v2.4.3"
     hooks:
       - id: pyproject-fmt
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.9
+    rev: v0.7.1
     hooks:
       - id: ruff
         types_or: [python, pyi, jupyter]
