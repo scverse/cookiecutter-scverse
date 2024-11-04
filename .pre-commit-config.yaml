@@ -6,10 +6,10 @@ repos:
       - id: prettier
   # Hooks that are run for scripts
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: "v2.5.0"
+    rev: v2.5.0
     hooks:
       - id: pyproject-fmt
-        files: ^scripts/
+        files: ^scripts/pyproject\.toml$
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.7.2
     hooks:
