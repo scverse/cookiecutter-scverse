@@ -8,8 +8,8 @@ Ecosystem packages are independent software libraries that interact with scverse
 
 Please check out the
 
--   [example repo](https://github.com/scverse/cookiecutter-scverse-instance) and the
--   [example documentation](https://cookiecutter-scverse-instance.readthedocs.io/en/latest/)
+- [example repo](https://github.com/scverse/cookiecutter-scverse-instance) and the
+- [example documentation](https://cookiecutter-scverse-instance.readthedocs.io/en/latest/)
 
 that are automatically generated and kept in sync with this template.
 
@@ -32,14 +32,14 @@ Please consider making a tax-deductible [donation](https://numfocus.org/donate-t
 
 ## Features
 
--   automated testing with [pytest][]
--   continuous integration using GitHub actions.
--   documentation hosted by [readthedocs][]
--   coverage tests with [codecov][]
--   [pre-commit][] checks for code style and consistency
--   tutorials with [myst-nb][] and jupyter notebooks
--   issue templates for better bug reports and feature requests
--   [bump2version][] for managing releases
+- automated testing with [pytest][]
+- continuous integration using GitHub actions.
+- documentation hosted by [readthedocs][]
+- coverage tests with [codecov][]
+- [pre-commit][] checks for code style and consistency
+- tutorials with [myst-nb][] and jupyter notebooks
+- issue templates for better bug reports and feature requests
+- [bump2version][] for managing releases
 
 ## Getting started
 
@@ -90,9 +90,9 @@ Further instructions on using this template can be found in the [dev docs includ
 
 We expect developers of scverse ecosystem packages to
 
--   [write unit tests][write-tests]
--   [provide documentation][write-docs], including tutorials where applicable
--   support users through github and the [scverse discourse][]
+- [write unit tests][write-tests]
+- [provide documentation][write-docs], including tutorials where applicable
+- support users through github and the [scverse discourse][]
 
 ## Changelog
 
