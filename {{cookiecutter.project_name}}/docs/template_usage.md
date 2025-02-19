@@ -53,7 +53,7 @@ You'll notice that the command `git commit` installed a bunch of packages and tr
 To read more about what they are and what they do, you can go to the related section [Pre-commit checks](#pre-commit-checks) in this document.
 
 :::{note}
-There is a chance that `git commit -m "first commit"` fails due to the `prettier` pre-commit formatting the file `.cruft.json`.
+There is a chance that `git commit -m "first commit"` fails due to the `biome` pre-commit formatting of the file `.cruft.json`.
 No problem, you have just experienced what pre-commit checks do in action. Just go ahead and re-add the modified file and try to commit again:
 
 ```bash
@@ -260,8 +260,8 @@ Once authorized, pre-commit.ci should automatically be activated.
 
 The following pre-commit hooks are for code style and format:
 
--   [prettier](https://prettier.io/docs/en/index.html):
-    standard code formatter for non-Python files (e.g. YAML).
+-   [biome](https://biomejs.dev/):
+    code formatter for non-Python files (e.g. JSON).
 -   [ruff][] formatting (`ruff-format`)
 -   [ruff][] based checks:
     -   [isort](https://beta.ruff.rs/docs/rules/#isort-i) (rule category: `I`):
@@ -308,8 +308,8 @@ This section shows you where these checks are defined, and how to enable/ disabl
 ##### pre-commit
 
 You can add or remove pre-commit checks by simply deleting relevant lines in the `.pre-commit-config.yaml` file under the repository root.
-Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` (for `ruff`) or tool-specific config files,
-such as `.prettierrc.yml` for **prettier**.
+Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` (for [ruff][]) or tool-specific config files,
+such as `biome.jsonc` for [biome][].
 
 ##### Ruff
 

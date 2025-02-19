@@ -3,7 +3,7 @@
     "formatter": { "useEditorconfig": true },
     "overrides": [
         {
-            "include": ["**/*.vscode*/*.json", "**/*.jsonc"],
+            "include": ["./.vscode/*.json", "**/*.jsonc"],
             "json": {
                 "formatter": { "trailingCommas": "all" },
                 "parser": {
