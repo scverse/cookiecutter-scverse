@@ -1,0 +1,18 @@
+{
+    "[python][jsonc][yaml]": {
+        "editor.formatOnSave": true,
+    },
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "always",
+            "source.organizeImports": "always",
+        },
+    },
+    "[jsonc][yaml]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+    },
+    "python.analysis.typeCheckingMode": "basic",
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": ["-vv", "--color=yes"],
+}

@@ -37,7 +37,7 @@ needs_sphinx = "4.0"
 html_context = {
     "display_github": True,  # Integrate GitHub
     "github_user": "{{cookiecutter.github_user}}",
-    "github_repo": "{{cookiecutter.project_repo}}",
+    "github_repo": {% if cookiecutter.project_name == cookiecutter.github_repo %}project_name{% else %}"{{cookiecutter.github_repo}}"{% endif %},
     "github_version": "main",
     "conf_py_path": "/docs/",
 }
@@ -55,6 +55,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinxcontrib.bibtex",
     "sphinx_autodoc_typehints",
+    "sphinx_tabs.tabs",
     "sphinx.ext.mathjax",
     "IPython.sphinxext.ipython_console_highlighting",
     "sphinxext.opengraph",
@@ -93,6 +94,7 @@ source_suffix = {
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "anndata": ("https://anndata.readthedocs.io/en/stable/", None),
+    "scanpy": ("https://scanpy.readthedocs.io/en/stable/", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
 }
 

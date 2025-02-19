@@ -5,7 +5,7 @@
     "author_full_name": "Your Name",
     "author_email": "yourname@example.com",
     "github_user": "your_github_username",
-    "project_repo": "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.project_name }}",
+    "github_repo": "{{ cookiecutter.project_name }}",
     "license": [
         "MIT License",
         "BSD 2-Clause License",
@@ -14,11 +14,22 @@
         "GNU General Public License Version 3",
         "Unlicense"
     ],
+    "ide_integration": true,
     "_copy_without_render": [
         ".github/workflows/build.yaml",
         ".github/workflows/test.yaml",
         "docs/_templates/autosummary/**.rst"
     ],
     "_render_devdocs": false,
-    "_jinja2_env_vars": { "lstrip_blocks": true, "trim_blocks": true }
+    "_jinja2_env_vars": { "lstrip_blocks": true, "trim_blocks": true },
+    "__prompts__": {
+        "project_name": "Your project’s name",
+        "package_name": "If the Python package name differs from the project name, edit it now",
+        "project_description": "A short one-line description of what your project does",
+        "author_full_name": "Your complete name",
+        "author_email": "The e-mail address your package’s users can contact you under",
+        "github_user": "The GitHub username or org the project is to be published under",
+        "github_repo": "If the repo name should differ from the project name, edit it now",
+        "ide_integration": "Whether to generate IDE configuration files"
+    }
 }
