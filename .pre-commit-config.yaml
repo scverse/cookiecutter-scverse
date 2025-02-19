@@ -1,13 +1,12 @@
 repos:
   # Hooks that are run everywhere
   - repo: https://github.com/biomejs/pre-commit
-    rev: v0.4.0
+    rev: v1.9.4
     hooks:
       - id: biome-format
-        additional_dependencies: ["@biomejs/biome@1.8.3"]
   # Hooks that are run for scripts
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.1
+    rev: v0.9.6
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
