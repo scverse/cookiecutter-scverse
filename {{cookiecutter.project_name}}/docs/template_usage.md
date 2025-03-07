@@ -193,6 +193,7 @@ For this to work, you'll need to setup GitHub as a [trusted publisher][] on PyPI
 To set this up, login to [PyPI][], and proceed depending on whether you already have your project on there or not:
 - If yes, navigate to the project. In the left sidebar, choose "Publishing", then proceed to add the repository details.
 - If not, go to your [PyPI publishing settings][] and fill out the “Add a new pending publisher” form.
+
 The "Workflow name" needs to bet set to `release.yaml`.
 In most cases, you can leave the "Environment name" empty.
 For more details, please refer to the official [PyPI guide for setting up trusted publishing][pypi-trusted-publishing-guide].
