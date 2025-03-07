@@ -190,8 +190,10 @@ See a guide [here](https://docs.readthedocs.io/en/stable/guides/importing-privat
 Tags adhering to `"*.*.*"` that are pushed to the `main` branch will trigger the release Github workflow that automatically builds and uploads the Python package to [PyPI][].
 
 For this to work, you'll need to setup GitHub as a [trusted publisher][] on PyPI.
-To set this up, login to [PyPI][], and navigate to your project.
-In the left sidebar, choose "Publishing", and add the repository details.
+To set this up, login to [PyPI][], and proceed depending on whether you already have your project on there or not:
+- If yes, navigate to the project. In the left sidebar, choose "Publishing", then proceed to add the repository details.
+- If not, go to your [PyPI publishing settings][] and fill out the “Add a new pending publisher” form.
+
 The "Workflow name" needs to bet set to `release.yaml`.
 In most cases, you can leave the "Environment name" empty.
 For more details, please refer to the official [PyPI guide for setting up trusted publishing][pypi-trusted-publishing-guide].
@@ -228,6 +230,7 @@ Provide your username and password when requested and then go check out your pac
 For more information, follow the [Python packaging tutorial][].
 
 [pypi]: https://pypi.org/
+[pypi publishing settings]: https://pypi.org/manage/account/publishing/
 [pypi-trusted-publishing-guide]: https://docs.pypi.org/trusted-publishers/adding-a-publisher/
 [trusted publisher]: https://docs.pypi.org/trusted-publishers/
 
