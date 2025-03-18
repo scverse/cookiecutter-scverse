@@ -14,7 +14,8 @@ def test_example():
 
 @pytest.mark.skip(reason="This decorator should be removed when test passes.")
 @pytest.mark.parametrize(
-    "transform,layer_key,max_items,expected_len,expected_substring", [
+    "transform,layer_key,max_items,expected_len,expected_substring",
+     [
         # Test default parameters
         (lambda vals: f"mean={vals.mean():.2f}", None, 100, 1, "mean="),
         
@@ -23,21 +24,18 @@ def test_example():
         
         # Test with max_items limit (won't affect single item)
         (lambda vals: f"max={vals.max():.2f}", None, 1, 1, "max=6.70"),
-    ]
+    ],
 )
 def test_elaborate_example_adata_only_simple(
     adata,  # this tests uses the adata object from the fixture in the conftest.py
     transform,
-    layer_key, 
-    max_items, 
+    layer_key,
+    max_items,
     expected_len,
-    expected_substring
+    expected_substring,
 ):
     result = {{cookiecutter.package_name}}.pp.elaborate_example(
-        items=[adata],
-        transform=transform,
-        layer_key=layer_key,
-        max_items=max_items
+        items=[adata], transform=transform, layer_key=layer_key, max_items=max_items
     )
     
     assert len(result) == expected_len
