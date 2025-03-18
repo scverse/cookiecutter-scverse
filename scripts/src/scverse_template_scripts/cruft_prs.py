@@ -5,6 +5,7 @@ Uses `template-repos.yml` from `scverse/ecosystem-packages`.
 
 from __future__ import annotations
 
+import json
 import math
 import os
 import sys
@@ -27,7 +28,6 @@ from .backoff import retry_with_backoff
 
 if TYPE_CHECKING:
     from collections.abc import Generator
-    from subprocess import CompletedProcess
     from typing import IO, LiteralString, NotRequired
 
     from github import ContentFile
@@ -74,19 +74,18 @@ class GitHubConnection:
     gh: Github = field(init=False)
     user: NamedUser = field(init=False)
     sig: Actor = field(init=False)
+    email: str = field(default=None)
 
     def __post_init__(self, login: str) -> None:
         self.gh = Github(self.token)
         self.user = self.gh.get_user(login)
+        if self.email is None:
+            self.email = self.user.email
         self.sig = Actor(self.login, self.email)
 
     @property
     def login(self) -> str:
         return self.user.login
-
-    @property
-    def email(self) -> str:
-        return self.user.email
 
     def auth(self, url_str: str) -> str:
         url = furl(url_str)
@@ -171,27 +170,32 @@ def get_repo_urls(gh: Github) -> Generator[str]:
             yield repo["url"]
 
 
-def run_cruft(cwd: Path, *, tag_name: str, log_name: str) -> CompletedProcess:
-    args = [
-        sys.executable,
-        "-m",
-        "cruft",
-        "update",
-        f"--checkout={tag_name}",
-        "--skip-apply-ask",
-        "--project-dir=.",
-    ]
-
-    log_path = Path(f"./log/{log_name}.txt")
-    log_path.parent.mkdir(exist_ok=True)
-
-    with log_path.open("w") as log_file:
-        return run(args, check=True, cwd=cwd, stdout=log_file, stderr=log_file)
-
-
-def template_update(con: GitHubConnection, *, forked_repo: GHRepo, original_repo: GHRepo, workdir: Path) -> bool:
+def template_update(
+    con: GitHubConnection,
+    *,
+    forked_repo: GHRepo,
+    original_repo: GHRepo,
+    workdir: Path,
+    tag_name: str,
+    cruft_log_file: Path,
+) -> bool:
     """
     Create or update a template branch in the forked repo
+
+    This is a replacement for `cruft update` that implements all the template update logic from
+    scratch. This is done because using this function, conflicts will show up as actual merge
+    conflicts on github, rather than creating `.rej` files.
+
+    Here's a rough description of the approach:
+    1) fork the repo to update into the scverse-bot namespace
+    2) If no `template-update` branch exists in the fork, create one from the initial commit of the repo
+    3) check out the `template-update` branch
+    3) Remove everything from the template-branch.
+    4) Use `cruft create` to instantiate the template into a separate directory
+    5) sync the changes from the separate directory into the `template-branch`
+    6) commit
+
+    --> From this commit, we can make a pull-request to the original repo including the latest template-changes.
 
     Parameters
     ----------
@@ -203,11 +207,16 @@ def template_update(con: GitHubConnection, *, forked_repo: GHRepo, original_repo
         The original (upstream) repo
     workdir
         A (temporary) path that is used as a working directory to clone and update the repo
+    tag_name
+        tag name of cookiecutter template to use
+    cruft_log_file
+        Filename to write cruft logs to
 
     """
     # Clone the repo with blob filtering for better performance
+    clone_dir = workdir / "clone"
     clone = retry_with_backoff(
-        lambda: Repo.clone_from(con.auth(forked_repo.clone_url), workdir, filter="blob:none"),
+        lambda: Repo.clone_from(con.auth(forked_repo.clone_url), clone_dir, filter="blob:none"),
         retries=n_retries,
         exc_cls=GitCommandError,
     )
@@ -219,11 +228,22 @@ def template_update(con: GitHubConnection, *, forked_repo: GHRepo, original_repo
     # Get the default branch
     default_branch = original_repo.default_branch
 
+    # Get cruft config from the default branch in the upstream repo
+    try:
+        # Try to get .cruft.json from the latest commit in upstream's default branch
+        cruft_content = clone.git.show(f"upstream/{default_branch}:.cruft.json")
+        cruft_config = json.loads(cruft_content)
+        log.info(f"Successfully read .cruft.json from upstream/{default_branch}")
+    except GitCommandError:
+        msg = "No .cruft.json found in repository"
+        raise FileNotFoundError(msg) from None
+
     # Check if the branch already exists in the forked repo
     remote_refs = [ref.name for ref in clone.remote().refs]
     branch_name = "scverse-bot/template-update"
     full_branch_name = f"refs/heads/{branch_name}"
 
+    # create and/or checkout template-update branch
     if full_branch_name not in remote_refs:
         log.info(f"Branch {branch_name} does not exists yet, creating it from initial commit")
         # Get the initial commit on the default branch
@@ -237,41 +257,59 @@ def template_update(con: GitHubConnection, *, forked_repo: GHRepo, original_repo
         branch = clone.create_head(branch_name, f"origin/{branch_name}")
         branch.checkout()
 
+    # Remove everything from the repo (except the `.git` directoroy)
+    run(["/usr/bin/find", ".", "-not", "-path", "./.git*", "-delete"], check=True, cwd=clone_dir)
 
-def cruft_update(  # noqa: PLR0913
-    con: GitHubConnection,
-    pr: PR,
-    *,
-    tag_name: str,
-    repo: GHRepo,
-    origin: GHRepo,
-    path: Path,
-) -> bool:
-    clone = retry_with_backoff(
-        lambda: Repo.clone_from(con.auth(repo.clone_url), path),
-        retries=n_retries,
-        exc_cls=GitCommandError,
+    # Initalize a new repo off the current template version, using the configuration from .cruft.json
+    template_dir = workdir / "template"
+    cookiecutter_config = template_dir / "cookiecutter.json"
+    with cookiecutter_config.open("w") as f:
+        # need to put the cookiecutter-related info from .cruft.json into separate file
+        json.dump(cruft_config["context"]["cookiecutter"], f)
+    # run in a subprocess, otherwise not possible to catpure output of post-run hooks
+    with cruft_log_file.open("w") as log_f:
+        run(
+            [
+                sys.executable,
+                "-m",
+                "cruft",
+                "create",
+                "https://github.com/scverse/cookiecutter-scverse",
+                f"--checkout={tag_name}",
+                "--no-input",
+                f"--extra-context-file={cookiecutter_config}",
+            ],
+            stdout=log_f,
+            stderr=log_f,
+            check=True,
+            cwd=template_dir,
+        )
+    template_dir = template_dir / cruft_config["context"]["cookiecutter"]["project_name"]
+
+    # move over the contents from the new directory into the emptied git repo
+    run(
+        ["/usr/bin/rsync", "-Pva", "--exclude", ".git", f"{template_dir}/", f"{clone_dir}/"],
+        check=True,
+        cwd=workdir,
+        capture_output=True,
     )
-    upstream = clone.create_remote(name=pr.repo_id, url=origin.clone_url)
-    upstream.fetch()
-    branch = clone.create_head(pr.branch, f"{pr.repo_id}/{origin.default_branch}")
-    branch.checkout()
 
-    run_cruft(path, tag_name=tag_name, log_name=pr.branch)
-
+    # Check if something has changed at all
     if not clone.is_dirty():
         return False
 
-    # Stage & Commit
-    # Maybe clean? changed_files = [diff.b_path or diff.a_path for diff in cast(list[Diff], clone.index.diff(None))]
-    # and then: clone.index.add([*clone.untracked_files, changed_files])
-    clone.git.add(all=True)
-    commit = clone.index.commit(pr.title, parent_commits=[branch.commit], author=con.sig, committer=con.sig)
-    branch.commit = commit
+    # Stage and commit (no_verify to don't run pre-commit)
+    clone.git.add(A=True)
+    clone.git.commit(
+        m=f"Automated template update to {tag_name}",
+        no_verify=True,
+        author=f"{con.sig.name} <{con.sig.email}>",
+        no_gpg_sign=True,
+    )
 
     # Push
     remote = clone.remote()
-    remote.set_url(con.auth(repo.clone_url))
+    remote.set_url(con.auth(forked_repo.clone_url))
     remote.push([branch.name])
     return True
 
@@ -357,7 +395,7 @@ def main(tag_name: str, repo_urls: list[str] | None = None, *, all_repos: bool =
     setup_logging()
 
     token = os.environ["GITHUB_TOKEN"]
-    con = GitHubConnection("scverse-bot", token)
+    con = GitHubConnection("scverse-bot", token, email="108668866+scverse-bot@users.noreply.github.com")
 
     if all_repos:
         repo_urls = get_repo_urls(con.gh)
