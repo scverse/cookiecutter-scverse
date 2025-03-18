@@ -29,7 +29,6 @@ def basic_preproc(adata: AnnData) -> int:
 def elaborate_example(
     items: Iterable[ScverseDataStructures],
     transform: Callable[[Any], str],
-    /,  # indicates the end of positional only arguments
     *,  # functions after the asterix are key word only arguments
     layer_key: str | None = None,
     mudata_mod: str | None = "rna",  # Only specify defaults in the signature, not the docstring!
