@@ -34,7 +34,7 @@ def elaborate_example(
     mudata_mod: str | None = "rna",  # Only specify defaults in the signature, not the docstring!
     sdata_table_key: str | None = "table1",
     max_items: int = 100,
-) -> list[Any]:
+) -> list[str]:
     """A method with a more complex docstring.
 
     This is where you add more details.
