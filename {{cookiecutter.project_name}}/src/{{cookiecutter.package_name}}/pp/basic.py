@@ -25,6 +25,7 @@ def basic_preproc(adata: AnnData) -> int:
     print("Implement a preprocessing function here.")
     return 0
 
+
 def elaborate_example(
     items: Iterable[ScverseDataStructures],
     transform: Callable[[Any], str],

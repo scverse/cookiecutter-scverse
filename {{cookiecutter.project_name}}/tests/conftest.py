@@ -2,6 +2,7 @@ import anndata as ad
 import numpy as np
 import pytest
 
+
 @pytest.fixture
 def adata():
     adata = ad.AnnData(X=np.array([[1.2, 2.3], [3.4, 4.5], [5.6, 6.7]]).astype(np.float32))
