@@ -214,6 +214,7 @@ def template_update(
 
     """
     # Clone the repo with blob filtering for better performance
+    log.info(f"Cloning {forked_repo.clone_url} into {clone_dir}")
     clone_dir = workdir / "clone"
     clone = retry_with_backoff(
         lambda: Repo.clone_from(con.auth(forked_repo.clone_url), clone_dir, filter="blob:none"),
@@ -229,6 +230,7 @@ def template_update(
     default_branch = original_repo.default_branch
 
     # Get cruft config from the default branch in the upstream repo
+    log.info(f"Getting .cruft.json from the {default_branch} in {original_repo.clone_url}")
     try:
         # Try to get .cruft.json from the latest commit in upstream's default branch
         cruft_content = clone.git.show(f"upstream/{default_branch}:.cruft.json")
@@ -258,7 +260,9 @@ def template_update(
         branch.checkout()
 
     # Remove everything from the repo (except the `.git` directoroy)
-    run(["/usr/bin/find", ".", "-not", "-path", "./.git*", "-delete"], check=True, cwd=clone_dir)
+    cmd = ["/usr/bin/find", ".", "-not", "-path", "./.git*", "-delete"]
+    log.info("Running " + " ".join(cmd) + " in ", clone_dir)
+    run(cmd, check=True, cwd=clone_dir)
 
     # Initalize a new repo off the current template version, using the configuration from .cruft.json
     template_dir = workdir / "template"
@@ -268,17 +272,19 @@ def template_update(
         json.dump(cruft_config["context"]["cookiecutter"], f)
     # run in a subprocess, otherwise not possible to catpure output of post-run hooks
     with cruft_log_file.open("w") as log_f:
+        cmd = [
+            sys.executable,
+            "-m",
+            "cruft",
+            "create",
+            "https://github.com/scverse/cookiecutter-scverse",
+            f"--checkout={tag_name}",
+            "--no-input",
+            f"--extra-context-file={cookiecutter_config}",
+        ]
+        log.info("Running " + " ".join(cmd))
         run(
-            [
-                sys.executable,
-                "-m",
-                "cruft",
-                "create",
-                "https://github.com/scverse/cookiecutter-scverse",
-                f"--checkout={tag_name}",
-                "--no-input",
-                f"--extra-context-file={cookiecutter_config}",
-            ],
+            cmd,
             stdout=log_f,
             stderr=log_f,
             check=True,
@@ -287,18 +293,17 @@ def template_update(
     template_dir = template_dir / cruft_config["context"]["cookiecutter"]["project_name"]
 
     # move over the contents from the new directory into the emptied git repo
-    run(
-        ["/usr/bin/rsync", "-Pva", "--exclude", ".git", f"{template_dir}/", f"{clone_dir}/"],
-        check=True,
-        cwd=workdir,
-        capture_output=True,
-    )
+    cmd = ["/usr/bin/rsync", "-Pva", "--exclude", ".git", f"{template_dir}/", f"{clone_dir}/"]
+    log.info("Running " + " ".join(cmd) + " in ", workdir)
+    run(cmd, check=True, cwd=workdir, capture_output=True)
 
     # Check if something has changed at all
     if not clone.is_dirty():
+        log.info("Nothing has changed, aborting")
         return False
 
     # Stage and commit (no_verify to don't run pre-commit)
+    log.info("Changes detected. Staging and committing changes.")
     clone.git.add(A=True)
     clone.git.commit(
         m=f"Automated template update to {tag_name}",
@@ -308,6 +313,7 @@ def template_update(
     )
 
     # Push
+    log.info(f"Pushing changes to {forked_repo.clone_url}")
     remote = clone.remote()
     remote.set_url(con.auth(forked_repo.clone_url))
     remote.push([branch.name])
