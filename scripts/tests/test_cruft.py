@@ -7,7 +7,7 @@ from warnings import catch_warnings
 
 import pytest
 
-from scverse_template_scripts.cruft_prs import PR, GitHubConnection, cruft_update
+from scverse_template_scripts.cruft_prs import GitHubConnection, TemplateUpdatePR, cruft_update
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -52,8 +52,8 @@ def repo(git_repo: GitRepo) -> GHRepo:
 
 
 @pytest.fixture
-def pr(con) -> PR:
-    return PR(con, cast("GHRelease", MockRelease()), "scverse-test")
+def pr(con) -> TemplateUpdatePR:
+    return TemplateUpdatePR(con, cast("GHRelease", MockRelease()), "scverse-test")
 
 
 def test_cruft_update(con, repo, tmp_path, pr, git_repo: GitRepo, monkeypatch: pytest.MonkeyPatch):

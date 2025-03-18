@@ -10,7 +10,7 @@ import math
 import os
 import sys
 from dataclasses import InitVar, dataclass, field
-from pathlib import Path
+from pathlib import Path  # noqa
 from subprocess import run
 from tempfile import TemporaryDirectory
 from typing import TYPE_CHECKING, ClassVar, TypedDict, cast
@@ -95,7 +95,7 @@ class GitHubConnection:
 
 
 @dataclass
-class PR:
+class TemplateUpdatePR:
     """A template-update pull request to a repository using the cookiecutter template"""
 
     con: GitHubConnection
@@ -214,8 +214,8 @@ def template_update(
 
     """
     # Clone the repo with blob filtering for better performance
-    log.info(f"Cloning {forked_repo.clone_url} into {clone_dir}")
     clone_dir = workdir / "clone"
+    log.info(f"Cloning {forked_repo.clone_url} into {clone_dir}")
     clone = retry_with_backoff(
         lambda: Repo.clone_from(con.auth(forked_repo.clone_url), clone_dir, filter="blob:none"),
         retries=n_retries,
@@ -342,34 +342,55 @@ def get_fork(con: GitHubConnection, repo: GHRepo) -> GHRepo:
     )
 
 
-def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
-    repo_id = repo_url.replace("https://github.com/", "").replace("/", "-")
-    pr = PR(con, release, repo_id)
-    log.info(f"Sending PR to {repo_url} : {pr.title}")
+def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir: Path, dry_run: bool = False) -> None:
+    """
+    Make a pull request with the template update to the original repo
 
+    Parameters
+    ----------
+    con
+        A connection to the github API, authenticated against scverse-bot
+    release
+        A github release object, pointing to the release of cookiecutter-scverse to be used
+    repo_url
+        git URL of the repo to update
+    log_dir
+        Path in which cruft logs will be stored
+    dry_run
+        If True, skip making the actual pull request but perform all other actions up to this point
+
+    """
+    repo_id = repo_url.replace("https://github.com/", "").replace("/", "-")
+    log.info(f"Working on template update for {repo_id}")
+
+    pr = TemplateUpdatePR(con, release, repo_id)
     # create fork, populate branch, do PR from it
     original_repo = con.gh.get_repo(repo_url.removeprefix("https://github.com/"))
-    forked_repo = get_fork(con, original_repo)
-
     if old_pr := next((p for p in original_repo.get_pulls("open") if pr.matches_current_version(p)), None):
         log.info(
             f"PR for current version already exists: #{old_pr.number} with branch name `{old_pr.head.ref}`. Skipping."
         )
         return
 
+    forked_repo = get_fork(con, original_repo)
+
     with TemporaryDirectory() as td:
-        updated = cruft_update(
+        updated = template_update(
             con,
-            pr,
+            forked_repo=forked_repo,
+            original_repo=original_repo,
+            workdir=td,
             tag_name=release.tag_name,
-            repo=forked_repo,
-            origin=original_repo,
-            path=Path(td),
+            cruft_log_file=log_dir / f"{pr.branch}.log",
         )
     if updated:
         if old_pr := next((p for p in original_repo.get_pulls("open") if pr.matches_prefix(p)), None):
             log.info(f"Closing old PR #{old_pr.number} with branch name `{old_pr.head.ref}`.")
             old_pr.edit(state="closed")
+        if dry_run:
+            log.info("Skipping PR because in dry-run mode")
+            return
+        log.info(f"Creating PR of {pr.namespace_heat} against {original_repo.default_branch}")
         new_pr = original_repo.create_pull(
             title=pr.title,
             body=pr.body,
@@ -384,7 +405,14 @@ cli = App()
 
 
 @cli.default
-def main(tag_name: str, repo_urls: list[str] | None = None, *, all_repos: bool = False) -> None:
+def main(
+    tag_name: str,
+    repo_urls: list[str] | None = None,
+    *,
+    all_repos: bool = False,
+    log_dir: Path = "cruft_logs",
+    dry_run: bool = False,
+) -> None:
     """
     Make PRs to github repos.
 
@@ -397,6 +425,11 @@ def main(tag_name: str, repo_urls: list[str] | None = None, *, all_repos: bool =
         Must be full github URLs, e.g. https://github.com/scverse/scirpy.
     all
         With this flag, get the list of all repos that use the template from https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml.
+    log_dir
+        Directory to which cruft logs are written
+    dry_run
+        Skip making actual pull requests. All other actions up to this point are performed
+        (forking the repo, updating the template branch etc.).
     """
     setup_logging()
 
@@ -414,7 +447,7 @@ def main(tag_name: str, repo_urls: list[str] | None = None, *, all_repos: bool =
     failed = 0
     for repo_url in repo_urls:
         try:
-            make_pr(con, release, repo_url)
+            make_pr(con, release, repo_url, log_dir=log_dir, dry_run=dry_run)
         except Exception as e:
             failed += 1
             log.exception(f"Error updating {repo_url}: %s", e)
