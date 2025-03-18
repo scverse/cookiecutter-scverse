@@ -18,10 +18,8 @@ def test_example():
     [
         # Test default parameters
         (lambda vals: f"mean={vals.mean():.2f}", None, 100, 1, "mean="),
-
         # Test with layer_key
         (lambda vals: f"mean={vals.mean():.2f}", "scaled", 100, 1, "mean=0."),
-
         # Test with max_items limit (won't affect single item)
         (lambda vals: f"max={vals.max():.2f}", None, 1, 1, "max=6.70"),
     ],
