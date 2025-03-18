@@ -187,11 +187,14 @@ See a guide [here](https://docs.readthedocs.io/en/stable/guides/importing-privat
 It uses YAML-based configuration files to define jobs and steps, which can be triggered by events like pushes, pull requests, or scheduled runs.
 This project comes with several pre-configured workflows that can be found in the `.github/workflows` folder:
 
-1. **Build workflow**: Checks that your package builds correctly by creating distribution packages and validating them with [twine][]. This helps catch packaging issues early.
+1. **Build workflow**: Checks that your package builds correctly by creating distribution packages and validating them with [twine][].
+   This helps catch packaging issues early.
 
-2. **Test workflow**: Runs your test suite on multiple Python versions and operating systems to ensure cross-platform compatibility. It automatically runs when you push to the main branch or create a pull request.
+2. **Test workflow**: Runs your test suite on multiple Python versions and operating systems to ensure cross-platform compatibility.
+   It automatically runs when you push to the main branch or create a pull request.
 
-3. **Release workflow**: Automatically publishes your package to PyPI when you create a new release on GitHub. This workflow uses trusted publishing for secure deployment.
+3. **Release workflow**: Automatically publishes your package to PyPI when you create a new release on GitHub.
+   This workflow uses trusted publishing for secure deployment.
 
 To check the status of these workflows, go to the "Actions" tab in your GitHub repository.
 There you can see the execution history, logs, and (re-)trigger workflows manually if needed.
