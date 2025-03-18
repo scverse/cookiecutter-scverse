@@ -32,7 +32,7 @@ def elaborate_example(
     /,  # indicates the end of positional only arguments
     *,  # functions after the asterix are key word only arguments
     layer_key: str | None = None,
-    mudata_mod: str | None = "rna",
+    mudata_mod: str | None = "rna",  # Only specify defaults in the signature, not the docstring!
     sdata_table_key: str | None = "table1",
     max_items: int = 100,
 ) -> list[Any]:
@@ -45,7 +45,7 @@ def elaborate_example(
     Parameters
     ----------
     items
-        Sequence of AnnData, MuData, or SpatialData objects to process.
+        AnnData, MuData, or SpatialData objects to process.
     transform
         Function to transform each item to string.
     layer_key
