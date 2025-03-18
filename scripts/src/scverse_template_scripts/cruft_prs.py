@@ -20,7 +20,7 @@ from furl import furl
 from git.exc import GitCommandError
 from git.repo import Repo
 from git.util import Actor
-from github import ContentFile, Github, UnknownObjectException
+from github import Github, UnknownObjectException
 from yaml import safe_load
 
 from .backoff import retry_with_backoff
@@ -30,6 +30,7 @@ if TYPE_CHECKING:
     from subprocess import CompletedProcess
     from typing import IO, LiteralString, NotRequired
 
+    from github import ContentFile
     from github.GitRelease import GitRelease as GHRelease
     from github.NamedUser import NamedUser
     from github.PullRequest import PullRequest
@@ -138,14 +139,14 @@ def get_template_release(gh: Github, tag_name: str) -> GHRelease:
 
 
 def parse_repos(f: IO[str] | str) -> list[RepoInfo]:
-    repos = cast(list[RepoInfo], safe_load(f))
+    repos = cast("list[RepoInfo]", safe_load(f))
     log.info(f"Found {len(repos)} known repos")
     return repos
 
 
 def get_repo_urls(gh: Github) -> Generator[str]:
     repo = gh.get_repo("scverse/ecosystem-packages")
-    file = cast(ContentFile, repo.get_contents("template-repos.yml"))
+    file = cast("ContentFile", repo.get_contents("template-repos.yml"))
     for repo in parse_repos(file.decoded_content):
         if not repo.get("skip"):
             yield repo["url"]
