@@ -92,5 +92,3 @@ body:
         Python	3.13.2 | packaged by conda-forge | (main, Feb 17 2025, 14:10:22) [GCC 13.3.0]
         OS	Linux-6.11.0-109019-tuxedo-x86_64-with-glibc2.39
         Updated	2025-03-18 15:47
-    validations:
-      required: true
