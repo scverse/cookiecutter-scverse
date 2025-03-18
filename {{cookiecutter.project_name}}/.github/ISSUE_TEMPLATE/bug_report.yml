@@ -31,7 +31,7 @@ body:
         click the “Copy as Markdown” button, then paste the results into the text box below.
 
         ```python
-        In[1]: import anndata, session_info2; session_info2.session_info(dependencies=True)
+        In[1]: import session_info2; session_info2.session_info(dependencies=True)
         ```
 
         Alternatively, run this in a console:
