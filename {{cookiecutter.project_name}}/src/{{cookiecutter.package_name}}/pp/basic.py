@@ -64,7 +64,7 @@ def elaborate_example(
     >>> elaborate_example(
     ...     [adata, mudata, spatial_data],
     ...     lambda vals: f"Statistics: mean={vals.mean():.2f}, max={vals.max():.2f}",
-    ...     {"var_key": "CD45", "modality": "rna", "min_value": 0.1}
+    ...     {"var_key": "CD45", "modality": "rna", "min_value": 0.1},
     ... )
     ['Statistics: mean=1.24, max=8.75', 'Statistics: mean=0.86, max=5.42']
     """
