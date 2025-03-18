@@ -1,6 +1,7 @@
 # Temp files
 .DS_Store
 *~
+test.ipynb
 
 # Caches
 __pycache__/

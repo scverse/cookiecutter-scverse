@@ -189,7 +189,7 @@ def run_cruft(cwd: Path, *, tag_name: str, log_name: str) -> CompletedProcess:
         return run(args, check=True, cwd=cwd, stdout=log_file, stderr=log_file)
 
 
-def template_update(con: GitHubConnection, *, repo: GHRepo) -> bool:
+def template_update(con: GitHubConnection, *, forked_repo: GHRepo, original_repo: GHRepo, workdir: Path) -> bool:
     """
     Create or update a template branch in the forked repo
 
@@ -197,13 +197,45 @@ def template_update(con: GitHubConnection, *, repo: GHRepo) -> bool:
     ----------
     con
         A connection to the github API, authenticated against scverse-bot
-    repo
+    forked_repo
+        The repo forked in scverse-bot namespace
+    original_repo
+        The original (upstream) repo
+    workdir
+        A (temporary) path that is used as a working directory to clone and update the repo
 
     """
-    pass
+    # Clone the repo with blob filtering for better performance
     clone = retry_with_backoff(
-        lambda: Repo.clone_from(con.auth(repo.clone_url), path), retries=n_retries, exc_cls=GitCommandError
+        lambda: Repo.clone_from(con.auth(forked_repo.clone_url), workdir, filter="blob:none"),
+        retries=n_retries,
+        exc_cls=GitCommandError,
     )
+
+    # Add original repo as remote
+    upstream = clone.create_remote(name="upstream", url=original_repo.clone_url)
+    upstream.fetch()
+
+    # Get the default branch
+    default_branch = original_repo.default_branch
+
+    # Check if the branch already exists in the forked repo
+    remote_refs = [ref.name for ref in clone.remote().refs]
+    branch_name = "scverse-bot/template-update"
+    full_branch_name = f"refs/heads/{branch_name}"
+
+    if full_branch_name not in remote_refs:
+        log.info(f"Branch {branch_name} does not exists yet, creating it from initial commit")
+        # Get the initial commit on the default branch
+        initial_commit = next(clone.iter_commits(default_branch, reverse=True))
+
+        # Create and checkout a new branch from the initial commit
+        branch = clone.create_head(branch_name, initial_commit)
+        branch.checkout()
+    else:
+        log.info(f"Branch {branch_name} already exists, checking it out")
+        branch = clone.create_head(branch_name, f"origin/{branch_name}")
+        branch.checkout()
 
 
 def cruft_update(  # noqa: PLR0913
