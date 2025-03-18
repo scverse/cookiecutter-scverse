@@ -39,7 +39,6 @@ Please consider making a tax-deductible [donation](https://numfocus.org/donate-t
 - [pre-commit][] checks for code style and consistency
 - tutorials with [myst-nb][] and jupyter notebooks
 - issue templates for better bug reports and feature requests
-- [bump2version][] for managing releases
 
 ## Getting started
 
@@ -125,7 +124,6 @@ You can cite the scverse publication as follows:
 [readthedocs]: https://readthedocs.org/
 [myst-nb]: https://myst-nb.readthedocs.io/
 [pre-commit]: https://pre-commit.com/
-[bump2version]: https://github.com/c4urself/bump2version/
 [scverse]: https://scverse.org/
 [anndata]: https://anndata.readthedocs.io/en/latest/
 [mudata]: https://muon.readthedocs.io/en/latest/notebooks/quickstart_mudata.html
