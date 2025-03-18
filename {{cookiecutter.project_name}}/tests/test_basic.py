@@ -15,7 +15,7 @@ def test_example():
 @pytest.mark.skip(reason="This decorator should be removed when test passes.")
 @pytest.mark.parametrize(
     "transform,layer_key,max_items,expected_len,expected_substring",
-     [
+    [
         # Test default parameters
         (lambda vals: f"mean={vals.mean():.2f}", None, 100, 1, "mean="),
         
@@ -37,6 +37,6 @@ def test_elaborate_example_adata_only_simple(
     result = {{cookiecutter.package_name}}.pp.elaborate_example(
         items=[adata], transform=transform, layer_key=layer_key, max_items=max_items
     )
-    
+
     assert len(result) == expected_len
     assert expected_substring in result[0]
