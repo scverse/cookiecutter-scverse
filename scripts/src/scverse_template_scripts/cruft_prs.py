@@ -15,7 +15,7 @@ from subprocess import run
 from tempfile import TemporaryDirectory
 from typing import TYPE_CHECKING, ClassVar, TypedDict, cast
 
-import typer
+from cyclopts import App
 from furl import furl
 from git.exc import GitCommandError
 from git.repo import Repo
@@ -272,11 +272,37 @@ def setup() -> None:
     install(show_locals=True)
 
 
-def main(tag_name: str) -> None:
+cli = App()
+
+
+@cli.default
+def main(tag_name: str, repo_urls: list[str] | None = None, *, all_repos: bool = False) -> None:
+    """
+    Make PRs to github repos.
+
+    Parameters
+    ----------
+    tag_name
+        Identifier of the release of cookiecutter-scverse
+    repo_urls
+        One or more repo URLs to make PRs to (e.g. for testing purposes).
+        Must be full github URLs, e.g. https://github.com/scverse/scirpy.
+    all
+        With this flag, get the list of all repos that use the template from https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml.
+    """
+    setup()
+
     token = os.environ["GITHUB_TOKEN"]
     con = GitHubConnection("scverse-bot", token)
+
+    if all_repos:
+        repo_urls = get_repo_urls(con.gh)
+
+    if repo_urls is None:
+        msg = "Need to either specify `--all` or one or more repo URLs."
+        raise ValueError(msg)
+
     release = get_template_release(con.gh, tag_name)
-    repo_urls = get_repo_urls(con.gh)
     failed = 0
     for repo_url in repo_urls:
         try:
@@ -286,11 +312,6 @@ def main(tag_name: str) -> None:
             log.exception(f"Error updating {repo_url}: %s", e)
 
     sys.exit(failed > 0)
-
-
-def cli() -> None:
-    setup()
-    typer.run(main)
 
 
 if __name__ == "__main__":

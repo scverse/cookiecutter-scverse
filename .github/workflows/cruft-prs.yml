@@ -24,7 +24,7 @@ jobs:
       - name: Install package with scripts
         run: pip install ./scripts
       - name: Update template repo registry
-        run: send-cruft-prs ${{ env.RELEASE }}
+        run: send-cruft-prs ${{ env.RELEASE }} --all_repos
         env:
           RELEASE: ${{ github.event_name == 'release' && github.event.release.tag_name || github.event.inputs.release }}
           GITHUB_TOKEN: ${{ secrets.BOT_GH_TOKEN }}

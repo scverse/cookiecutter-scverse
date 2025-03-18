@@ -20,13 +20,13 @@ classifiers = [
 dynamic = [ "version" ]
 dependencies = [
   "cruft",
+  "cyclopts>=3.10",
   "furl",
   "gitpython",
-  "pre-commit",  # is ran by cruft
+  "pre-commit",     # is ran by cruft
   "pygithub>=2",
   "pyyaml",
   "rich",
-  "typer",
 ]
 optional-dependencies.test = [
   "pytest",
