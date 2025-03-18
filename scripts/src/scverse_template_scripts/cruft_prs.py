@@ -9,7 +9,6 @@ import math
 import os
 import sys
 from dataclasses import InitVar, dataclass, field
-from logging import basicConfig, getLogger
 from pathlib import Path
 from subprocess import run
 from tempfile import TemporaryDirectory
@@ -23,6 +22,7 @@ from git.util import Actor
 from github import Github, UnknownObjectException
 from yaml import safe_load
 
+from ._log import log, setup_logging
 from .backoff import retry_with_backoff
 
 if TYPE_CHECKING:
@@ -35,8 +35,6 @@ if TYPE_CHECKING:
     from github.NamedUser import NamedUser
     from github.PullRequest import PullRequest
     from github.Repository import Repository as GHRepo
-
-log = getLogger(__name__)
 
 PR_BODY_TEMPLATE = """\
 `cookiecutter-scverse` released [{release.tag_name}]({release.html_url}).
@@ -61,9 +59,16 @@ PR_BODY_TEMPLATE = """\
 [codecov]: {template_usage}#coverage-tests-with-codecov
 """
 
+# GitHub says that up to 5 minutes of wait are OK,
+# So we error our once we wait longer, i.e. when 2ⁿ = 5 min × 60 sec/min
+n_retries = math.ceil(math.log(5 * 60) / math.log(2))  # = ⌈~8.22⌉ = 9
+# Due to exponential backoff, we’ll maximally wait 2⁹ sec, or 8.5 min
+
 
 @dataclass
 class GitHubConnection:
+    """API connection to a github user (e.g. scverse-bot)"""
+
     login: InitVar[str]
     token: str | None = field(repr=False, default=None)
     gh: Github = field(init=False)
@@ -92,6 +97,8 @@ class GitHubConnection:
 
 @dataclass
 class PR:
+    """A template-update pull request to a repository using the cookiecutter template"""
+
     con: GitHubConnection
     release: GHRelease
     repo_id: str  # something like grst-infercnvpy
@@ -129,25 +136,37 @@ class PR:
 
 
 class RepoInfo(TypedDict):
+    """Info about a repository using the cookiecutter-scverse template"""
+
     url: str
     skip: NotRequired[bool]
 
 
 def get_template_release(gh: Github, tag_name: str) -> GHRelease:
+    """
+    Get a release by tag from the cookiecutter-scverse repo
+
+    `gh` represents the github API, authenticated against scverse-bot.
+    """
     template_repo = gh.get_repo("scverse/cookiecutter-scverse")
     return template_repo.get_release(tag_name)
 
 
-def parse_repos(f: IO[str] | str) -> list[RepoInfo]:
+def _parse_repos(f: IO[str] | str) -> list[RepoInfo]:
     repos = cast("list[RepoInfo]", safe_load(f))
     log.info(f"Found {len(repos)} known repos")
     return repos
 
 
 def get_repo_urls(gh: Github) -> Generator[str]:
+    """
+    Get a list of all repos using the cookiecutter-scverse template (based on a YML file in scverse/ecosystem-packages)
+
+    `gh` represents the github API, authenticated against scverse-bot.
+    """
     repo = gh.get_repo("scverse/ecosystem-packages")
     file = cast("ContentFile", repo.get_contents("template-repos.yml"))
-    for repo in parse_repos(file.decoded_content):
+    for repo in _parse_repos(file.decoded_content):
         if not repo.get("skip"):
             yield repo["url"]
 
@@ -170,10 +189,21 @@ def run_cruft(cwd: Path, *, tag_name: str, log_name: str) -> CompletedProcess:
         return run(args, check=True, cwd=cwd, stdout=log_file, stderr=log_file)
 
 
-# GitHub says that up to 5 minutes of wait are OK,
-# So we error our once we wait longer, i.e. when 2ⁿ = 5 min × 60 sec/min
-n_retries = math.ceil(math.log(5 * 60) / math.log(2))  # = ⌈~8.22⌉ = 9
-# Due to exponential backoff, we’ll maximally wait 2⁹ sec, or 8.5 min
+def template_update(con: GitHubConnection, *, repo: GHRepo) -> bool:
+    """
+    Create or update a template branch in the forked repo
+
+    Parameters
+    ----------
+    con
+        A connection to the github API, authenticated against scverse-bot
+    repo
+
+    """
+    pass
+    clone = retry_with_backoff(
+        lambda: Repo.clone_from(con.auth(repo.clone_url), path), retries=n_retries, exc_cls=GitCommandError
+    )
 
 
 def cruft_update(  # noqa: PLR0913
@@ -215,9 +245,19 @@ def cruft_update(  # noqa: PLR0913
 
 
 def get_fork(con: GitHubConnection, repo: GHRepo) -> GHRepo:
-    """Fork target repo into the scverse-bot namespace and wait until the fork has been created.
-    If the fork already exists it is reused.
     """
+    Fork target repo into the scverse-bot namespace and wait until the fork has been created.
+
+    If the fork already exists, it is reused.
+
+    Parameters
+    ----------
+    con
+        Github API connection, authenticated against scverse-bot
+    repo
+        Reference to the *original* github repo that uses the template (i.e. not the fork)
+    """
+    log.info(f"Creating fork for {repo.url}")
     fork = repo.create_fork()
     return retry_with_backoff(
         lambda: con.gh.get_repo(fork.id),
@@ -232,10 +272,10 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
     log.info(f"Sending PR to {repo_url} : {pr.title}")
 
     # create fork, populate branch, do PR from it
-    origin = con.gh.get_repo(repo_url.removeprefix("https://github.com/"))
-    repo = get_fork(con, origin)
+    original_repo = con.gh.get_repo(repo_url.removeprefix("https://github.com/"))
+    forked_repo = get_fork(con, original_repo)
 
-    if old_pr := next((p for p in origin.get_pulls("open") if pr.matches_current_version(p)), None):
+    if old_pr := next((p for p in original_repo.get_pulls("open") if pr.matches_current_version(p)), None):
         log.info(
             f"PR for current version already exists: #{old_pr.number} with branch name `{old_pr.head.ref}`. Skipping."
         )
@@ -246,30 +286,22 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str) -> None:
             con,
             pr,
             tag_name=release.tag_name,
-            repo=repo,
-            origin=origin,
+            repo=forked_repo,
+            origin=original_repo,
             path=Path(td),
         )
     if updated:
-        if old_pr := next((p for p in origin.get_pulls("open") if pr.matches_prefix(p)), None):
+        if old_pr := next((p for p in original_repo.get_pulls("open") if pr.matches_prefix(p)), None):
             log.info(f"Closing old PR #{old_pr.number} with branch name `{old_pr.head.ref}`.")
             old_pr.edit(state="closed")
-        new_pr = origin.create_pull(
+        new_pr = original_repo.create_pull(
             title=pr.title,
             body=pr.body,
-            base=origin.default_branch,
+            base=original_repo.default_branch,
             head=pr.namespaced_head,
             maintainer_can_modify=True,
         )
         log.info(f"Created PR #{new_pr.number} with branch name `{new_pr.head.ref}`.")
-
-
-def setup() -> None:
-    from rich.logging import RichHandler
-    from rich.traceback import install
-
-    basicConfig(level="INFO", handlers=[RichHandler()])
-    install(show_locals=True)
 
 
 cli = App()
@@ -290,7 +322,7 @@ def main(tag_name: str, repo_urls: list[str] | None = None, *, all_repos: bool =
     all
         With this flag, get the list of all repos that use the template from https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml.
     """
-    setup()
+    setup_logging()
 
     token = os.environ["GITHUB_TOKEN"]
     con = GitHubConnection("scverse-bot", token)

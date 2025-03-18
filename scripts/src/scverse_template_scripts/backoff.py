@@ -4,6 +4,8 @@ import random
 import time
 from typing import TYPE_CHECKING
 
+from ._log import log
+
 if TYPE_CHECKING:
     from collections.abc import Callable
     from typing import TypeVar
@@ -24,5 +26,6 @@ def retry_with_backoff(
         except exc_cls as _exc:
             exc = _exc
             sleep = backoff_in_seconds * 2**x + random.uniform(0, 1)
+            log.info(f"Action failed. Retrying in {sleep}s.")
             time.sleep(sleep)
     raise exc
