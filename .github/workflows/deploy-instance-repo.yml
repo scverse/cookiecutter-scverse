@@ -30,10 +30,8 @@ jobs:
           path: ${{ env.INSTANCE_REPO }}
           persist-credentials: true
 
-      - name: Set up Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v5
 
       - name: define sister PR branch name for pull request
         if: github.event_name == 'pull_request'
@@ -44,14 +42,12 @@ jobs:
         run: |
           echo "SISTER_PR_BRANCH=main" >> $GITHUB_ENV
 
-      - name: Install cookiecutter
-        run: |
-          python -m pip install --upgrade pip wheel cookiecutter pre-commit
-
       - name: Build from template
         run: |
-          cookiecutter --output-dir $INSTANCE_GENERATED \
-            --replay-file .github/assets/cookiecutter-scverse-instance.json \
+          uv tool run --with pre-commit cruft create \
+            --no-input \
+            --output-dir $INSTANCE_GENERATED \
+            --extra-context-file .github/assets/cookiecutter-scverse-instance.json \
             .
 
       - name: Transfer changes to instance repo
