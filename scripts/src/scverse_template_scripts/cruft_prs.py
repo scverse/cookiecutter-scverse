@@ -44,7 +44,7 @@ PR_BODY_TEMPLATE = """\
 {release.body}
 
 ## Additional remarks
-* **unsubscribe**: If you don’t want to receive these PRs in the future,
+* **unsubscribe**: If you don't want to receive these PRs in the future,
   add `skip: true` to [`template-repos.yml`][] using a PR or,
   if you never want to sync from the template again, delete the `.cruft.json` file in the root of your repository.
 * If there are **merge conflicts**, you need to resolve them manually.
@@ -65,7 +65,7 @@ n_retries = math.ceil(math.log(5 * 60) / math.log(2))  # = ⌈~8.22⌉ = 9
 
 @dataclass
 class GitHubConnection:
-    """API connection to a github user (e.g. scverse-bot)"""
+    """API connection to a GitHub user (e.g. scverse-bot)"""
 
     login: InitVar[str]
     token: str | None = field(repr=False, default=None)
@@ -94,11 +94,11 @@ class GitHubConnection:
 
 @dataclass
 class TemplateUpdatePR:
-    """A template-update pull request to a repository using the cookiecutter template"""
+    """A template update pull request to a repository using the cookiecutter-scverse template"""
 
     con: GitHubConnection
     release: GHRelease
-    repo_id: str  # something like grst-infercnvpy
+    repo_id: str  # something like scverse-scirpy
 
     title_prefix: ClassVar[LiteralString] = "Update template to "
     branch_prefix: ClassVar[LiteralString] = "template-update-"
@@ -157,7 +157,7 @@ def _parse_repos(f: IO[str] | str) -> list[RepoInfo]:
 
 def get_repo_urls(gh: Github) -> Generator[str]:
     """
-    Get a list of all repos using the cookiecutter-scverse template (based on a YML file in scverse/ecosystem-packages)
+    Get a list of all repos using the cookiecutter-scverse template (based on a YML file in scverse/ecosystem-packages).
 
     `gh` represents the github API, authenticated against scverse-bot.
     """
@@ -179,17 +179,16 @@ def template_update(
     cruft_log_file: Path,
 ) -> bool:
     """
-    Create or update a template branch in the forked repo
+    Create or update a template branch in the forked repo.
 
-    This is a replacement for `cruft update` that implements all the template update logic from
-    scratch. This is done because using this function, conflicts will show up as actual merge
-    conflicts on github, rather than creating `.rej` files.
+    Replacement for `cruft update` that implements all the template update logic from scratch.
+    Using this function, conflicts will show up as actual merge conflicts on Github, rather than creating `.rej` files.
 
     Here's a rough description of the approach:
     1) fork the repo to update into the scverse-bot namespace
     2) If no `template-update` branch exists in the fork, create one from the initial commit of the repo
     3) check out the `template-update` branch
-    3) Remove everything from the template-branch.
+    3) Remove everything from the template-branch
     4) Use `cruft create` to instantiate the template into a separate directory
     5) sync the changes from the separate directory into the `template-branch`
     6) commit
@@ -303,7 +302,7 @@ def template_update(
         log.info("Nothing has changed, aborting")
         return False
 
-    # Stage and commit (no_verify to don't run pre-commit)
+    # Stage and commit (no_verify to avoid running pre-commit)
     log.info("Changes detected. Staging and committing changes.")
     clone.git.add(A=True)
     clone.git.commit(
@@ -416,7 +415,7 @@ def main(
     dry_run: bool = False,
 ) -> None:
     """
-    Make PRs to github repos.
+    Make PRs to GitHub repos.
 
     Parameters
     ----------
@@ -424,7 +423,7 @@ def main(
         Identifier of the release of cookiecutter-scverse
     repo_urls
         One or more repo URLs to make PRs to (e.g. for testing purposes).
-        Must be full github URLs, e.g. https://github.com/scverse/scirpy.
+        Must be full GitHub URLs, e.g. https://github.com/scverse/scirpy.
     all
         With this flag, get the list of all repos that use the template from https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml.
     log_dir
