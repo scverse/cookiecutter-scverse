@@ -45,6 +45,7 @@ jobs:
       - name: Build from template
         run: |
           uv tool run --with pre-commit cruft create \
+            --no-input \
             --output-dir $INSTANCE_GENERATED \
             --extra-context-file .github/assets/cookiecutter-scverse-instance.json \
             .
