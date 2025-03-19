@@ -22,7 +22,15 @@ for path in skipped_dirs():
     assert path.is_dir(), path
     shutil.rmtree(path)
 
+# Make initial commit
+# This will make template updates smoother, because like this we can rely on the first commit in the repo
+# being just the template without additional changes.
+print("Making initial commit")
+run(["git", "add", "-A"], check=True)
+run(["git", "commit", "--no-verify", "-m", "Initialize project from cookiecutter-scverse"], check=True)
+
 # Update pre commit hooks
+print("Updating pre-commit hooks")
 run("pre-commit autoupdate -c .pre-commit-config.yaml".split(), check=True)
 run("pre-commit install".split(), check=True)
 
