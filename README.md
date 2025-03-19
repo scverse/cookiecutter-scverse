@@ -47,11 +47,9 @@ and how to customize it for your needs.
 
 ### Install dependencies
 
-You need `git >=2.28` and `python >=3.10`. In addition you need to install the following Python dependencies:
+You need `git >=2.28` and [`uv`](https://docs.astral.sh/uv/getting-started/installation/) to be installed on your system.
+All other dependencies will be managed through `uv`.
 
-```bash
-pip install cruft pre-commit
-```
 
 ### Create the project
 
@@ -62,12 +60,25 @@ updates to your project whenever a new template version is released.
 To create the project, run the following command and follow the prompts:
 
 ```bash
-cruft create https://github.com/scverse/cookiecutter-scverse
+# uv will download all dependencies on-the-fly
+uv tool run --with pre-commit cruft create https://github.com/scverse/cookiecutter-scverse
 ```
 
 This will create a git repository generated from the template.
 Now `cd` into the newly created directory and make the initial commit!
 Don't forget to create a repository on GitHub and upload your project.
+
+<details>
+<summary>Working without `uv`</summary>
+If you prefer to manage the dependencies yourself, you can run
+
+```bash
+pip install cruft pre-commit
+cruft create https://github.com/scverse/cookiecutter-scverse
+```
+
+</details>
+
 
 ### Set up online services
 
