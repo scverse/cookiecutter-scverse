@@ -10,7 +10,7 @@ import math
 import os
 import sys
 from dataclasses import InitVar, dataclass, field
-from pathlib import Path  # noqa
+from pathlib import Path
 from subprocess import run
 from tempfile import TemporaryDirectory
 from typing import TYPE_CHECKING, ClassVar, TypedDict, cast
@@ -44,12 +44,10 @@ PR_BODY_TEMPLATE = """\
 {release.body}
 
 ## Additional remarks
-* unsubscribe: If you don’t want to receive these PRs in the future,
+* **unsubscribe**: If you don’t want to receive these PRs in the future,
   add `skip: true` to [`template-repos.yml`][] using a PR or,
-  if you never want to sync from the template again, delete your `.cruft` file.
-* If there are **merge conflicts**,
-  they either show up inline (`>>>>>>>`) or a `.rej` file will have been created for the respective files.
-  You need to address these conflicts manually. Make sure to enable pre-commit.ci (see below) to detect such files.
+  if you never want to sync from the template again, delete the `.cruft.json` file in the root of your repository.
+* If there are **merge conflicts**, you need to resolve them manually.
 * The scverse template works best when the [pre-commit.ci][], [readthedocs][] and [codecov][] services are enabled.
   Make sure to activate those apps if you haven't already.
 
@@ -174,6 +172,7 @@ def template_update(
     con: GitHubConnection,
     *,
     forked_repo: GHRepo,
+    template_branch_name: str,
     original_repo: GHRepo,
     workdir: Path,
     tag_name: str,
@@ -203,6 +202,8 @@ def template_update(
         A connection to the github API, authenticated against scverse-bot
     forked_repo
         The repo forked in scverse-bot namespace
+    template_branch_name
+        branch name to use for the template in the forked repo
     original_repo
         The original (upstream) repo
     workdir
@@ -242,30 +243,30 @@ def template_update(
 
     # Check if the branch already exists in the forked repo
     remote_refs = [ref.name for ref in clone.remote().refs]
-    branch_name = "scverse-bot/template-update"
-    full_branch_name = f"refs/heads/{branch_name}"
+    full_branch_name = f"refs/heads/{template_branch_name}"
 
     # create and/or checkout template-update branch
     if full_branch_name not in remote_refs:
-        log.info(f"Branch {branch_name} does not exists yet, creating it from initial commit")
+        log.info(f"Branch {template_branch_name} does not exists yet, creating it from initial commit")
         # Get the initial commit on the default branch
         initial_commit = next(clone.iter_commits(default_branch, reverse=True))
 
         # Create and checkout a new branch from the initial commit
-        branch = clone.create_head(branch_name, initial_commit)
+        branch = clone.create_head(template_branch_name, initial_commit)
         branch.checkout()
     else:
-        log.info(f"Branch {branch_name} already exists, checking it out")
-        branch = clone.create_head(branch_name, f"origin/{branch_name}")
+        log.info(f"Branch {template_branch_name} already exists, checking it out")
+        branch = clone.create_head(template_branch_name, f"origin/{template_branch_name}")
         branch.checkout()
 
     # Remove everything from the repo (except the `.git` directoroy)
     cmd = ["/usr/bin/find", ".", "-not", "-path", "./.git*", "-delete"]
-    log.info("Running " + " ".join(cmd) + " in ", clone_dir)
+    log.info("Running " + " ".join(cmd) + f" in {clone_dir}")
     run(cmd, check=True, cwd=clone_dir)
 
     # Initalize a new repo off the current template version, using the configuration from .cruft.json
     template_dir = workdir / "template"
+    template_dir.mkdir()
     cookiecutter_config = template_dir / "cookiecutter.json"
     with cookiecutter_config.open("w") as f:
         # need to put the cookiecutter-related info from .cruft.json into separate file
@@ -294,11 +295,11 @@ def template_update(
 
     # move over the contents from the new directory into the emptied git repo
     cmd = ["/usr/bin/rsync", "-Pva", "--exclude", ".git", f"{template_dir}/", f"{clone_dir}/"]
-    log.info("Running " + " ".join(cmd) + " in ", workdir)
+    log.info("Running " + " ".join(cmd) + f" in {workdir}")
     run(cmd, check=True, cwd=workdir, capture_output=True)
 
     # Check if something has changed at all
-    if not clone.is_dirty():
+    if not clone.is_dirty() and not clone.untracked_files:
         log.info("Nothing has changed, aborting")
         return False
 
@@ -378,8 +379,9 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir
         updated = template_update(
             con,
             forked_repo=forked_repo,
+            template_branch_name=pr.branch,
             original_repo=original_repo,
-            workdir=td,
+            workdir=Path(td),
             tag_name=release.tag_name,
             cruft_log_file=log_dir / f"{pr.branch}.log",
         )
@@ -390,7 +392,7 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir
         if dry_run:
             log.info("Skipping PR because in dry-run mode")
             return
-        log.info(f"Creating PR of {pr.namespace_heat} against {original_repo.default_branch}")
+        log.info(f"Creating PR of {pr.namespaced_head} against {original_repo.default_branch}")
         new_pr = original_repo.create_pull(
             title=pr.title,
             body=pr.body,
@@ -432,6 +434,7 @@ def main(
         (forking the repo, updating the template branch etc.).
     """
     setup_logging()
+    log_dir.mkdir(exist_ok=True, parents=True)
 
     token = os.environ["GITHUB_TOKEN"]
     con = GitHubConnection("scverse-bot", token, email="108668866+scverse-bot@users.noreply.github.com")
@@ -450,7 +453,8 @@ def main(
             make_pr(con, release, repo_url, log_dir=log_dir, dry_run=dry_run)
         except Exception as e:
             failed += 1
-            log.exception(f"Error updating {repo_url}: %s", e)
+            log.error(f"Error while updating {repo_url}")
+            log.exception(e)
 
     sys.exit(failed > 0)
 
