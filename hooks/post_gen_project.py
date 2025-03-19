@@ -27,7 +27,7 @@ for path in skipped_dirs():
 # being just the template without additional changes.
 print("Making initial commit")
 run(["git", "add", "-A"], check=True)
-run(["git", "commit", "--no-verify", "-m", "Initialize project from cookiecutter-scverse"], check=True)
+run(["git", "commit", "--no-verify", "--no-gpg-sign", "-m", "Initialize project from cookiecutter-scverse"], check=True)
 
 # Update pre commit hooks
 print("Updating pre-commit hooks")

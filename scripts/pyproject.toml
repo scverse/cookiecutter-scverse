@@ -30,8 +30,6 @@ dependencies = [
 ]
 optional-dependencies.test = [
   "pytest",
-  "pytest-responsemock",
-  "pytest-socket",
 ]
 urls.Documentation = "https://github.com/scverse/cookiecutter-scverse#readme"
 urls.Issues = "https://github.com/scverse/cookiecutter-scverse/issues"
@@ -111,8 +109,6 @@ column_width = 120
 [tool.pytest.ini_options]
 addopts = [
   "--import-mode=importlib",
-  "--disable-socket",
-  "-presponsemock",
   "-ptesting.scverse_template_scripts._pytest",
 ]
 filterwarnings = [

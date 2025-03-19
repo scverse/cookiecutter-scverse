@@ -1,75 +1,89 @@
 from __future__ import annotations
 
-import json
-from dataclasses import dataclass
-from typing import TYPE_CHECKING, cast
-from warnings import catch_warnings
+import os
+import uuid
 
+import git
 import pytest
 
-from scverse_template_scripts.cruft_prs import GitHubConnection, TemplateUpdatePR, cruft_update
-
-if TYPE_CHECKING:
-    from pathlib import Path
-
-    from git import Commit, Diff
-    from github.GitRelease import GitRelease as GHRelease
-    from github.Repository import Repository as GHRepo
-
-    from testing.scverse_template_scripts import GitRepo
-
-
-@dataclass
-class MockGHRepo:
-    git_url: str  # git://github.com/foo/bar.git
-    clone_url: str  # https://github.com/foo/bar.git
-    default_branch: str  # main
-
-
-@dataclass
-class MockRelease:
-    tag_name: str = "test-tag"
-    title: str = "A test release"
-    body: str = "* Some changelog entry"
-    html_url: str = "https://example.com"
+from scverse_template_scripts.cruft_prs import (
+    GitHubConnection,
+    get_fork,
+    get_repo_urls,
+    get_template_release,
+    template_update,
+)
 
 
 @pytest.fixture
-def con(response_mock) -> GitHubConnection:
-    resp = json.dumps({"login": "scverse-bot"})
-    with catch_warnings(), response_mock(f"GET https://api.github.com:443/users/scverse-bot -> 200 :{resp}"):
-        return GitHubConnection("scverse-bot")
+def cookiecutter_scverse_instance_repo(con):
+    return con.gh.get_repo("scverse/cookiecutter-scverse-instance")
 
 
 @pytest.fixture
-def repo(git_repo: GitRepo) -> GHRepo:
-    assert not git_repo.api.bare
-    (git_repo.workspace / "a").write_text("a content")
-    (git_repo.workspace / "b").write_text("b content")
-    git_repo.api.index.add(["a", "b"])
-    git_repo.api.index.commit("initial commit")
-    return cast("GHRepo", MockGHRepo(git_repo.uri, git_repo.uri, "main"))
+def cookiecutter_scverse_instance_repo_fork(con, cookiecutter_scverse_instance_repo):
+    return get_fork(con, cookiecutter_scverse_instance_repo)
 
 
 @pytest.fixture
-def pr(con) -> TemplateUpdatePR:
-    return TemplateUpdatePR(con, cast("GHRelease", MockRelease()), "scverse-test")
+def template_update_branch_name(cookiecutter_scverse_instance_repo_fork):
+    branch_name = f"scverse-bot-ci-test:template-update-{uuid.uuid4()}"
+
+    yield branch_name
+
+    # Try to delete the branch if it exists
+    try:
+        ref = cookiecutter_scverse_instance_repo_fork.get_git_ref(f"heads/{branch_name}")
+        ref.delete()
+    except Exception:  # noqa
+        # Branch doesn't exist yet, which is fine
+        pass
 
 
-def test_cruft_update(con, repo, tmp_path, pr, git_repo: GitRepo, monkeypatch: pytest.MonkeyPatch):
-    old_active_branch_name = git_repo.api.active_branch.name
+@pytest.fixture
+def con() -> GitHubConnection:
+    token = os.environ["GITHUB_TOKEN"]
+    return GitHubConnection("scverse-bot", token, email="108668866+scverse-bot@users.noreply.github.com")
 
-    def _mock_run_cruft(cwd: Path, *, tag_name, log_name):
-        return (cwd / "b").write_text("b modified")
 
-    monkeypatch.setattr("scverse_template_scripts.cruft_prs.run_cruft", _mock_run_cruft)
-    changed = cruft_update(con, pr, tag_name="main", repo=repo, origin=repo, path=tmp_path)
-    assert changed  # TODO: add test for short circuit
-    main_branch = git_repo.api.active_branch
-    assert main_branch.name == old_active_branch_name, "Shouldn’t change active branch"
-    pr_branch = next(b for b in git_repo.api.branches if b.name == pr.branch)
-    commit = cast("Commit", pr_branch.commit)
-    assert list(commit.parents) == [main_branch.commit]
-    assert [
-        (diff.change_type, diff.a_path, diff.b_path) for diff in cast("list[Diff]", main_branch.commit.diff(commit))
-    ] == [("M", "b", "b")]
+@pytest.mark.parametrize("tag_name", ["v0.4.0", "v0.2.17"])
+def test_get_template_release(con, tag_name):
+    """Test if reference to release can be obtained"""
+    release = get_template_release(con.gh, tag_name)
+    assert release.tag_name == tag_name
+
+
+def test_get_repo_urls(con):
+    """Test if lits of repos using template can be obtained from scverse/ecosystem-packages"""
+    repo_urls = get_repo_urls(con.gh)
+    assert any("scverse/scirpy" in url for url in repo_urls)
+
+
+@pytest.mark.parametrize("repo_name", ["scverse/cookiecutter-scverse-instance"])
+def test_get_fork(con, repo_name):
+    """Test if a public repo can be forked into the scverse-bot namespace"""
+    repo = con.gh.get_repo(repo_name)
+    # try getting fork (create if not exist)
+    get_fork(con, repo)
+
+
+def test_update_template(
+    con,
+    cookiecutter_scverse_instance_repo,
+    cookiecutter_scverse_instance_repo_fork,
+    tmp_path,
+    template_update_branch_name,
+):
+    # Get latest commit from local git repository using GitPython
+    repo = git.Repo(os.getcwd())
+    latest_commit = repo.head.commit.hexsha
+
+    template_update(
+        con,
+        forked_repo=cookiecutter_scverse_instance_repo_fork,
+        template_branch_name=template_update_branch_name,
+        original_repo=cookiecutter_scverse_instance_repo,
+        workdir=tmp_path,
+        tag_name=latest_commit,
+        cruft_log_file=tmp_path / "cruft_log.txt",
+    )

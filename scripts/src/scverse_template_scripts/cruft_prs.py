@@ -20,7 +20,7 @@ from furl import furl
 from git.exc import GitCommandError
 from git.repo import Repo
 from git.util import Actor
-from github import Github, UnknownObjectException
+from github import Auth, Github, UnknownObjectException
 from yaml import safe_load
 
 from ._log import log, setup_logging
@@ -75,7 +75,7 @@ class GitHubConnection:
     email: str = field(default=None)
 
     def __post_init__(self, login: str) -> None:
-        self.gh = Github(self.token)
+        self.gh = Github(auth=Auth.Token(self.token))
         self.user = self.gh.get_user(login)
         if self.email is None:
             self.email = self.user.email
@@ -166,6 +166,28 @@ def get_repo_urls(gh: Github) -> Generator[str]:
     for repo in _parse_repos(file.decoded_content):
         if not repo.get("skip"):
             yield repo["url"]
+
+
+def get_fork(con: GitHubConnection, repo: GHRepo) -> GHRepo:
+    """
+    Fork target repo into the scverse-bot namespace and wait until the fork has been created.
+
+    If the fork already exists, it is reused.
+
+    Parameters
+    ----------
+    con
+        Github API connection, authenticated against scverse-bot
+    repo
+        Reference to the *original* github repo that uses the template (i.e. not the fork)
+    """
+    log.info(f"Creating fork for {repo.url}")
+    fork = repo.create_fork()
+    return retry_with_backoff(
+        lambda: con.gh.get_repo(fork.id),
+        retries=n_retries,
+        exc_cls=UnknownObjectException,
+    )
 
 
 def template_update(
@@ -304,7 +326,16 @@ def template_update(
 
     # Stage and commit (no_verify to avoid running pre-commit)
     log.info("Changes detected. Staging and committing changes.")
+
+    # Load .cruft.json file of the current version of the template (includes `_exclude_on_template_update` key)
+    with (clone_dir / ".cruft.json").open() as f:
+        tmp_config = json.load(f)
+        exclude_files = tmp_config["context"]["cookiecutter"].get("_exclude_on_template_update", [])
+
     clone.git.add(A=True)
+    # unstage the files that we want to exclude from the template update
+    if len(exclude_files):
+        clone.git.restore(*exclude_files, staged=True)
     clone.git.commit(
         m=f"Automated template update to {tag_name}",
         no_verify=True,
@@ -318,28 +349,6 @@ def template_update(
     remote.set_url(con.auth(forked_repo.clone_url))
     remote.push([branch.name])
     return True
-
-
-def get_fork(con: GitHubConnection, repo: GHRepo) -> GHRepo:
-    """
-    Fork target repo into the scverse-bot namespace and wait until the fork has been created.
-
-    If the fork already exists, it is reused.
-
-    Parameters
-    ----------
-    con
-        Github API connection, authenticated against scverse-bot
-    repo
-        Reference to the *original* github repo that uses the template (i.e. not the fork)
-    """
-    log.info(f"Creating fork for {repo.url}")
-    fork = repo.create_fork()
-    return retry_with_backoff(
-        lambda: con.gh.get_repo(fork.id),
-        retries=n_retries,
-        exc_cls=UnknownObjectException,
-    )
 
 
 def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir: Path, dry_run: bool = False) -> None:
