@@ -10,4 +10,3 @@ def setup_logging() -> None:
     from rich.traceback import install
 
     basicConfig(level="INFO", handlers=[RichHandler()])
-    install(show_locals=True)
