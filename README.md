@@ -70,10 +70,10 @@ Don't forget to create a repository on GitHub and upload your project.
 
 <details>
 <summary>Working without `uv`</summary>
-If you prefer to manage the dependencies yourself, you can run
+If you want to permanently install the tools, you can run
 
 ```bash
-pip install cruft pre-commit
+pipx install cruft pre-commit # or for each: uv tool install $pkg
 cruft create https://github.com/scverse/cookiecutter-scverse
 ```
 
