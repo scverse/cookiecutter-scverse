@@ -1,16 +1,17 @@
 from __future__ import annotations
 
 import os
-import uuid
+from pathlib import Path
 
-import git
 import pytest
 
 from scverse_template_scripts.cruft_prs import (
     GitHubConnection,
+    _apply_update,
+    _clone_and_prepare_repo,
+    _get_cruft_config_from_upstream,
     get_repo_urls,
     get_template_release,
-    template_update,
 )
 
 
@@ -25,18 +26,34 @@ def cookiecutter_scverse_instance_repo_fork(scverse_bot_github_con, cookiecutter
 
 
 @pytest.fixture
-def template_update_branch_name(cookiecutter_scverse_instance_repo_fork):
-    branch_name = f"scverse-bot-ci-test:template-update-{uuid.uuid4()}"
+def cookiecutter_scverse_instance_cloned_repo(
+    tmp_path, scverse_bot_github_con, cookiecutter_scverse_instance_repo, cookiecutter_scverse_instance_repo_fork
+):
+    clone_dir = tmp_path / "clone"
+    repo = _clone_and_prepare_repo(
+        scverse_bot_github_con,
+        clone_dir,
+        cookiecutter_scverse_instance_repo_fork,
+        cookiecutter_scverse_instance_repo,
+        "test-template-update-branch",
+    )
+    return repo
 
-    yield branch_name
 
-    # Try to delete the branch if it exists
-    try:
-        ref = cookiecutter_scverse_instance_repo_fork.get_git_ref(f"heads/{branch_name}")
-        ref.delete()
-    except Exception:  # noqa
-        # Branch doesn't exist yet, which is fine
-        pass
+@pytest.fixture
+def current_repo_path():
+    """Get the currently checked out commit hash of this repository"""
+    repo_path = Path(__file__).resolve()
+    while True:
+        git_dir = repo_path / ".git"
+        if git_dir.exists():
+            break
+        if repo_path == repo_path.parent:
+            msg = "Could not find .git directory"
+            raise ValueError(msg)
+        repo_path = repo_path.parent
+
+    return repo_path
 
 
 @pytest.fixture
@@ -59,23 +76,26 @@ def test_get_repo_urls(scverse_bot_github_con):
     assert any("scverse/scirpy" in url for url in repo_urls)
 
 
-def test_update_template(
-    scverse_bot_github_con,
-    cookiecutter_scverse_instance_repo,
-    cookiecutter_scverse_instance_repo_fork,
-    tmp_path,
-    template_update_branch_name,
-):
-    # Get latest commit from local git repository using GitPython
-    repo = git.Repo(os.getcwd())
-    latest_commit = repo.head.commit.hexsha
+def test_clone_and_prepare_repo(cookiecutter_scverse_instance_cloned_repo):
+    """Test that example repo can be cloned an all branches setup correctly"""
+    repo = cookiecutter_scverse_instance_cloned_repo
+    assert (Path(repo.working_dir) / "pyproject.toml").exists()
+    assert repo.active_branch.name == "test-template-update-branch"
+    assert repo.remote("upstream").url.endswith("github.com/scverse/cookiecutter-scverse-instance.git")
+    assert repo.remote().url.endswith("github.com/scverse-bot/cookiecutter-scverse-instance.git")
 
-    template_update(
-        scverse_bot_github_con,
-        forked_repo=cookiecutter_scverse_instance_repo_fork,
-        template_branch_name=template_update_branch_name,
-        original_repo=cookiecutter_scverse_instance_repo,
-        workdir=tmp_path,
-        tag_name=latest_commit,
-        cruft_log_file=tmp_path / "cruft_log.txt",
+
+def test_get_cruft_config_from_upstream(cookiecutter_scverse_instance_cloned_repo):
+    config = _get_cruft_config_from_upstream(cookiecutter_scverse_instance_cloned_repo, "main")
+    assert config["context"]["cookiecutter"]["project_name"] == "cookiecutter-scverse-instance"
+
+
+def test_apply_update(cookiecutter_scverse_instance_cloned_repo, current_repo_path, tmp_path):
+    log_file = tmp_path / "cruft_log.txt"
+    _apply_update(
+        cookiecutter_scverse_instance_cloned_repo,
+        template_tag_name="main",
+        cruft_log_file=log_file,
+        cookiecutter_config={"project_name": "cookiecutter-scverse-instance"},
+        template_url=str(current_repo_path),
     )

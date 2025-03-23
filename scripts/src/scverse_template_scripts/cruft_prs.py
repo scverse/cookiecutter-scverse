@@ -10,6 +10,7 @@ import math
 import os
 import sys
 from dataclasses import InitVar, dataclass, field
+from pathlib import Path
 from subprocess import run
 from tempfile import TemporaryDirectory
 from typing import TYPE_CHECKING, ClassVar, TypedDict, cast
@@ -27,7 +28,6 @@ from .backoff import retry_with_backoff
 
 if TYPE_CHECKING:
     from collections.abc import Generator
-    from pathlib import Path
     from typing import IO, LiteralString, NotRequired
 
     from github import ContentFile
@@ -264,7 +264,14 @@ def _get_cruft_config_from_upstream(repo: Repo, default_branch: str):
     return cruft_config
 
 
-def _apply_update(clone_dir: Path, template_tag_name: str, cruft_log_file: Path, cookiecutter_config: dict):
+def _apply_update(
+    clone: Repo,
+    *,
+    template_tag_name: str | None = None,
+    cruft_log_file: Path,
+    cookiecutter_config: dict,
+    template_url: str = "https://github.com/scverse/cookiecutter-scverse",
+):
     """
     Apply the changes from the template to the original repo
 
@@ -274,10 +281,12 @@ def _apply_update(clone_dir: Path, template_tag_name: str, cruft_log_file: Path,
     The outcome is a branch in the original repo that contains the updated template that can be merged
     into the default branch by the user.
     """
-    with TemporaryDirectory() as template_dir:
+    clone_dir = Path(clone.working_dir)
+    with TemporaryDirectory() as td:
+        template_dir = Path(td)
         # Initalize a new repo off the current template version, using the configuration from .cruft.json
-        cookiecutter_config = template_dir / "cookiecutter.json"
-        with cookiecutter_config.open("w") as f:
+        cookiecutter_config_file = template_dir / "cookiecutter.json"
+        with cookiecutter_config_file.open("w") as f:
             # need to put the cookiecutter-related info from .cruft.json into separate file
             json.dump(cookiecutter_config, f)
 
@@ -288,10 +297,10 @@ def _apply_update(clone_dir: Path, template_tag_name: str, cruft_log_file: Path,
                 "-m",
                 "cruft",
                 "create",
-                "https://github.com/scverse/cookiecutter-scverse",
-                f"--checkout={template_tag_name}",
+                template_url,
+                *([f"--checkout={template_tag_name}"] if template_tag_name is not None else []),
                 "--no-input",
-                f"--extra-context-file={cookiecutter_config}",
+                f"--extra-context-file={cookiecutter_config_file}",
             ]
             log.info("Running " + " ".join(cmd))
             run(
@@ -404,7 +413,12 @@ def template_update(  # noqa: PLR0913, (= too many function arguments)
 
         cruft_config = _get_cruft_config_from_upstream(clone, default_branch)
         cookiecutter_config = cruft_config["context"]["cookiecutter"]
-        _apply_update(clone_dir, tag_name, cruft_log_file, cookiecutter_config)
+        _apply_update(
+            clone,
+            template_tag_name=tag_name,
+            cruft_log_file=cruft_log_file,
+            cookiecutter_config=cookiecutter_config,
+        )
 
         # Load .cruft.json file of the current version of the template (includes `_exclude_on_template_update` key)
         with (clone_dir / ".cruft.json").open() as f:
