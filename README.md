@@ -39,7 +39,6 @@ Please consider making a tax-deductible [donation](https://numfocus.org/donate-t
 - [pre-commit][] checks for code style and consistency
 - tutorials with [myst-nb][] and jupyter notebooks
 - issue templates for better bug reports and feature requests
-- [bump2version][] for managing releases
 
 ## Getting started
 
@@ -48,11 +47,9 @@ and how to customize it for your needs.
 
 ### Install dependencies
 
-You need `git >=2.28` and `python >=3.10`. In addition you need to install the following Python dependencies:
+You need `git >=2.28` and [`uv`](https://docs.astral.sh/uv/getting-started/installation/) to be installed on your system.
+All other dependencies will be managed through `uv`.
 
-```bash
-pip install cruft pre-commit
-```
 
 ### Create the project
 
@@ -63,12 +60,25 @@ updates to your project whenever a new template version is released.
 To create the project, run the following command and follow the prompts:
 
 ```bash
-cruft create https://github.com/scverse/cookiecutter-scverse
+# uv will download all dependencies on-the-fly
+uv tool run --with pre-commit cruft create https://github.com/scverse/cookiecutter-scverse
 ```
 
 This will create a git repository generated from the template.
 Now `cd` into the newly created directory and make the initial commit!
 Don't forget to create a repository on GitHub and upload your project.
+
+<details>
+<summary>Working without `uv`</summary>
+If you want to permanently install the tools, you can run
+
+```bash
+pipx install cruft pre-commit # or for each: uv tool install $pkg
+cruft create https://github.com/scverse/cookiecutter-scverse
+```
+
+</details>
+
 
 ### Set up online services
 
@@ -125,7 +135,6 @@ You can cite the scverse publication as follows:
 [readthedocs]: https://readthedocs.org/
 [myst-nb]: https://myst-nb.readthedocs.io/
 [pre-commit]: https://pre-commit.com/
-[bump2version]: https://github.com/c4urself/bump2version/
 [scverse]: https://scverse.org/
 [anndata]: https://anndata.readthedocs.io/en/latest/
 [mudata]: https://muon.readthedocs.io/en/latest/notebooks/quickstart_mudata.html
