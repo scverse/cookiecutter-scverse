@@ -9,6 +9,7 @@ from scverse_template_scripts.cruft_prs import (
     GitHubConnection,
     _apply_update,
     _clone_and_prepare_repo,
+    _commit_update,
     _get_cruft_config_from_upstream,
     get_repo_urls,
     get_template_release,
@@ -98,4 +99,46 @@ def test_apply_update(cookiecutter_scverse_instance_cloned_repo, current_repo_pa
         cruft_log_file=log_file,
         cookiecutter_config={"project_name": "cookiecutter-scverse-instance"},
         template_url=str(current_repo_path),
+    )
+
+
+@pytest.mark.parametrize(
+    "exclude_files,expected_untracked",
+    [
+        ([], []),
+        (["doesntexist.txt"], []),
+        (["dir1/A.txt", "dir1/doesntexist.txt"], ["dir1/A.txt"]),
+        (["dir2/**.txt"], ["dir2/foo/A.txt", "dir2/foo/B.txt", "dir2/bar/C.txt", "dir2/D.txt"]),
+        (["dir2/*"], ["dir2/foo/A.txt", "dir2/foo/B.txt", "dir2/bar/C.txt", "dir2/D.txt"]),
+    ],
+)
+def test_commit_update(cookiecutter_scverse_instance_cloned_repo, exclude_files, expected_untracked):
+    repo_dir = Path(cookiecutter_scverse_instance_cloned_repo.working_dir)
+    (repo_dir / "dir1").mkdir()
+    (repo_dir / "dir2").mkdir()
+    (repo_dir / "dir2/foo").mkdir()
+    (repo_dir / "dir2/bar").mkdir()
+    (repo_dir / "dir1/A.txt").touch()
+    (repo_dir / "dir2/foo/A.txt").touch()
+    (repo_dir / "dir2/foo/B.txt").touch()
+    (repo_dir / "dir2/bar/C.txt").touch()
+    (repo_dir / "dir2/D.txt").touch()
+
+    status = _commit_update(
+        cookiecutter_scverse_instance_cloned_repo,
+        exclude_files=exclude_files,
+        commit_msg="foo",
+        commit_author="scverse-bot",
+    )
+
+    # some files have changed and commit has been made
+    assert status is True
+
+    assert sorted(cookiecutter_scverse_instance_cloned_repo.untracked_files) == sorted(expected_untracked)
+
+
+def test_commit_update_no_files(cookiecutter_scverse_instance_cloned_repo):
+    assert (
+        _commit_update(cookiecutter_scverse_instance_cloned_repo, commit_msg="foo", commit_author="scverse-bot")
+        is False
     )

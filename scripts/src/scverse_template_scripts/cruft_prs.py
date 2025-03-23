@@ -10,6 +10,7 @@ import math
 import os
 import sys
 from dataclasses import InitVar, dataclass, field
+from glob import glob
 from pathlib import Path
 from subprocess import run
 from tempfile import TemporaryDirectory
@@ -27,7 +28,7 @@ from ._log import log, setup_logging
 from .backoff import retry_with_backoff
 
 if TYPE_CHECKING:
-    from collections.abc import Generator
+    from collections.abc import Generator, Sequence
     from typing import IO, LiteralString, NotRequired
 
     from github import ContentFile
@@ -330,7 +331,7 @@ def _apply_update(
         run(cmd, check=True, capture_output=True)
 
 
-def _commit_update(clone: Repo, exclude_files: list, commit_msg: str, commit_author: str):
+def _commit_update(clone: Repo, *, exclude_files: Sequence = (), commit_msg: str, commit_author: str):
     """
     Check if changes were made, and if yes, commit them.
 
@@ -345,10 +346,17 @@ def _commit_update(clone: Repo, exclude_files: list, commit_msg: str, commit_aut
 
     clone.git.add(A=True)
     # unstage the files that we want to exclude from the template update
-    if len(exclude_files):
-        clone.git.restore(*exclude_files, staged=True)
+    for glob_pattern in exclude_files:
+        # need to check if pattern matches anything, because
+        if len(glob(glob_pattern, root_dir=clone.working_dir)):
+            clone.git.restore(glob_pattern, staged=True)
+
+    if not clone.is_dirty():
+        log.info("Nothing has changed after excluding files, aborting")
+        return False
+
     clone.git.commit(
-        commit_msg,
+        m=commit_msg,
         no_verify=True,
         author=commit_author,
         no_gpg_sign=True,

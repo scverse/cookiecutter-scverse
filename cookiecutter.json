@@ -29,7 +29,6 @@
         "docs/notebooks/example.ipynb",
         "docs/references.bib",
         "docs/references.md",
-        "FAKE FLIE TODO REMOVE LINE",
         "src/**",
         "tests/**"
     ],
