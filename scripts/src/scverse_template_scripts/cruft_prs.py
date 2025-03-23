@@ -102,7 +102,9 @@ class TemplateUpdatePR:
     repo_id: str  # something like scverse-scirpy
 
     title_prefix: ClassVar[LiteralString] = "Update template to "
-    branch_prefix: ClassVar[LiteralString] = "template-update-"
+    # -v2 to distinguish from branch names generated from earlier version of template sync that was using cruft
+    # (before v0.5.0 release of cookiecutter-scverse)
+    branch_prefix: ClassVar[LiteralString] = "template-update-v2-"
 
     @property
     def title(self) -> str:
@@ -110,7 +112,8 @@ class TemplateUpdatePR:
 
     @property
     def branch(self) -> str:
-        return f"{self.branch_prefix}{self.repo_id}-{self.release.tag_name}"
+        # as of v0.5.0 (new template sync), the branch name does not contain the release-tag anymore
+        return f"{self.branch_prefix}{self.repo_id}"
 
     @property
     def namespaced_head(self) -> str:
@@ -230,8 +233,8 @@ def _clone_and_prepare_repo(
     default_branch = original_repo.default_branch
 
     # Check if the branch already exists in the forked repo
-    remote_refs = [ref.name for ref in clone.remote().refs]
-    full_branch_name = f"refs/heads/{template_branch_name}"
+    remote_refs = [ref.name for ref in clone.remote("origin").refs]
+    full_branch_name = f"origin/{template_branch_name}"
 
     # create and/or checkout template-update branch
     if full_branch_name not in remote_refs:
@@ -244,7 +247,7 @@ def _clone_and_prepare_repo(
         branch.checkout()
     else:
         log.info(f"Branch {template_branch_name} already exists, checking it out")
-        branch = clone.create_head(template_branch_name, f"origin/{template_branch_name}")
+        branch = clone.create_head(template_branch_name, full_branch_name)
         branch.checkout()
 
     return clone
@@ -346,6 +349,7 @@ def _commit_update(clone: Repo, *, exclude_files: Sequence = (), commit_msg: str
 
     clone.git.add(A=True)
     # unstage the files that we want to exclude from the template update
+    log.info(f"Excluding files from patterns: {exclude_files}")
     for glob_pattern in exclude_files:
         # need to check if pattern matches anything, because
         if len(glob(glob_pattern, root_dir=clone.working_dir)):
@@ -361,15 +365,6 @@ def _commit_update(clone: Repo, *, exclude_files: Sequence = (), commit_msg: str
         author=commit_author,
         no_gpg_sign=True,
     )
-    return True
-
-
-def _push_update(repo: Repo, con: GitHubConnection, branch_name: str):
-    """Push the changes to the remote"""
-    log.info(f"Pushing changes to {repo.remote()}")
-    remote = repo.remote()
-    remote.set_url(con.auth(repo.remote()))
-    remote.push([branch_name])
     return True
 
 
@@ -429,17 +424,17 @@ def template_update(  # noqa: PLR0913, (= too many function arguments)
         )
 
         # Load .cruft.json file of the current version of the template (includes `_exclude_on_template_update` key)
-        with (clone_dir / ".cruft.json").open() as f:
+        with (Path(clone_dir) / ".cruft.json").open() as f:
             tmp_config = json.load(f)
             exclude_files = tmp_config["context"]["cookiecutter"].get("_exclude_on_template_update", [])
 
         if _commit_update(
             clone,
-            exclude_files,
+            exclude_files=exclude_files,
             commit_msg=f"Automated template update to {tag_name}",
             commit_author=f"{con.sig.name} <{con.sig.email}>",
         ):
-            _push_update(clone, con, template_branch_name)
+            clone.git.push("origin", template_branch_name)
             return True
         else:
             return False
