@@ -90,4 +90,6 @@ jobs:
       - name: Install package
         run: pip install ./scripts[test]
       - name: Run tests
+        env:
+          SCVERSE_BOT_READONLY_GITHUB_TOKEN: ${{ secrets.SCVERSE_BOT_READONLY_GITHUB_TOKEN }}
         run: pytest -v --color=yes ./scripts
