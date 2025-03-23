@@ -1,6 +1,6 @@
 #!/bin/env python3
 import shutil
-from subprocess import run
+from subprocess import run, CalledProcessError
 from pathlib import Path
 
 {% if not cookiecutter._render_devdocs %}
@@ -27,7 +27,10 @@ for path in skipped_dirs():
 # being just the template without additional changes.
 print("Making initial commit")
 run(["git", "add", "-A"], check=True)
-run(["git", "commit", "--no-verify", "--no-gpg-sign", "-m", "Initialize project from cookiecutter-scverse"], check=True)
+
+# Make initial commit
+cmd = ["git", "commit", "--no-verify", "--no-gpg-sign", "-m", "Initialize project from cookiecutter-scverse"]
+run(cmd, check=True)
 
 # Update pre commit hooks
 print("Updating pre-commit hooks")
