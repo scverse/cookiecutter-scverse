@@ -10,7 +10,6 @@ import math
 import os
 import sys
 from dataclasses import InitVar, dataclass, field
-from pathlib import Path
 from subprocess import run
 from tempfile import TemporaryDirectory
 from typing import TYPE_CHECKING, ClassVar, TypedDict, cast
@@ -28,6 +27,7 @@ from .backoff import retry_with_backoff
 
 if TYPE_CHECKING:
     from collections.abc import Generator
+    from pathlib import Path
     from typing import IO, LiteralString, NotRequired
 
     from github import ContentFile
@@ -190,13 +190,178 @@ def get_fork(con: GitHubConnection, repo: GHRepo) -> GHRepo:
     )
 
 
-def template_update(
+def _clone_and_prepare_repo(
+    con: GitHubConnection, clone_dir: Path, forked_repo: GHRepo, original_repo: GHRepo, template_branch_name: str
+) -> Repo:
+    """
+    Clone the forked repo and set up branches and remotes.
+
+    This function
+     * clones the forked repo
+     * adds the original repo as a remote named "upstream"
+     * checks out a branch called `{template_branch_name}`. If it does not exist yet,
+       it is created off the inital commit of the default branch of the original repo.
+
+    Parameters
+    ----------
+    clone_dir
+        directory into which to clone the repo
+    forked_repo
+        referece to the forked repo (to be cloned)
+    original_repo
+        reference to the original repo (to be set as upstream)
+    template_branch_name
+        branch to contain the repo template (to be added to fork)
+    """
+    # Clone the repo with blob filtering for better performance
+    log.info(f"Cloning {forked_repo.clone_url} into {clone_dir}")
+    clone = retry_with_backoff(
+        lambda: Repo.clone_from(con.auth(forked_repo.clone_url), clone_dir, filter="blob:none"),
+        retries=n_retries,
+        exc_cls=GitCommandError,
+    )
+
+    # Add original repo as remote
+    upstream = clone.create_remote(name="upstream", url=original_repo.clone_url)
+    upstream.fetch()
+
+    # Get the default branch
+    default_branch = original_repo.default_branch
+
+    # Check if the branch already exists in the forked repo
+    remote_refs = [ref.name for ref in clone.remote().refs]
+    full_branch_name = f"refs/heads/{template_branch_name}"
+
+    # create and/or checkout template-update branch
+    if full_branch_name not in remote_refs:
+        log.info(f"Branch {template_branch_name} does not exists yet, creating it from initial commit")
+        # Get the initial commit on the default branch
+        initial_commit = next(clone.iter_commits(default_branch, reverse=True))
+
+        # Create and checkout a new branch from the initial commit
+        branch = clone.create_head(template_branch_name, initial_commit)
+        branch.checkout()
+    else:
+        log.info(f"Branch {template_branch_name} already exists, checking it out")
+        branch = clone.create_head(template_branch_name, f"origin/{template_branch_name}")
+        branch.checkout()
+
+    return clone
+
+
+def _get_cruft_config_from_upstream(repo: Repo, default_branch: str):
+    """Get cruft config from the default branch in the upstream repo"""
+    log.info(f"Getting .cruft.json from the {default_branch} branch in {repo.remote('upstream').url}")
+    try:
+        # Try to get .cruft.json from the latest commit in upstream's default branch
+        cruft_content = repo.git.show(f"upstream/{default_branch}:.cruft.json")
+        cruft_config = json.loads(cruft_content)
+        log.info(f"Successfully read .cruft.json from upstream/{default_branch}")
+    except GitCommandError:
+        msg = "No .cruft.json found in repository"
+        raise FileNotFoundError(msg) from None
+
+    return cruft_config
+
+
+def _apply_update(clone_dir: Path, template_tag_name: str, cruft_log_file: Path, cookiecutter_config: dict):
+    """
+    Apply the changes from the template to the original repo
+
+    Instantiate the specified version of the cookiecutter template with the config used by the original repo.
+    Then remove everything from the original repo and copy over all template files.
+
+    The outcome is a branch in the original repo that contains the updated template that can be merged
+    into the default branch by the user.
+    """
+    with TemporaryDirectory() as template_dir:
+        # Initalize a new repo off the current template version, using the configuration from .cruft.json
+        cookiecutter_config = template_dir / "cookiecutter.json"
+        with cookiecutter_config.open("w") as f:
+            # need to put the cookiecutter-related info from .cruft.json into separate file
+            json.dump(cookiecutter_config, f)
+
+        # run in a subprocess, otherwise not possible to catpure output of post-run hooks
+        with cruft_log_file.open("w") as log_f:
+            cmd = [
+                sys.executable,
+                "-m",
+                "cruft",
+                "create",
+                "https://github.com/scverse/cookiecutter-scverse",
+                f"--checkout={template_tag_name}",
+                "--no-input",
+                f"--extra-context-file={cookiecutter_config}",
+            ]
+            log.info("Running " + " ".join(cmd))
+            run(
+                cmd,
+                stdout=log_f,
+                stderr=log_f,
+                check=True,
+                cwd=template_dir,
+            )
+        template_dir_project_name = template_dir / cookiecutter_config["project_name"]
+
+        # Remove everything from the original repo (except the `.git` directoroy)
+        cmd = ["/usr/bin/find", ".", "-not", "-path", "./.git*", "-delete"]
+        log.info("Running " + " ".join(cmd) + f" in {clone_dir}")
+        run(cmd, check=True, cwd=clone_dir)
+
+        # move over the contents from the new directory into the emptied git repo
+        cmd = [
+            "/usr/bin/rsync",
+            "-Pva",
+            "--exclude",
+            ".git",
+            f"{template_dir_project_name.absolute()}/",
+            f"{clone_dir.absolute()}/",
+        ]
+        log.info("Running " + " ".join(cmd))
+        run(cmd, check=True, capture_output=True)
+
+
+def _commit_update(clone: Repo, exclude_files: list, commit_msg: str, commit_author: str):
+    """
+    Check if changes were made, and if yes, commit them.
+
+    Glob patterns in `exclude_files` will not be staged for the commit.
+    """
+    # Stage and commit (no_verify to avoid running pre-commit)
+    log.info("Changes detected. Staging and committing changes.")
+    # Check if something has changed at all
+    if not clone.is_dirty() and not clone.untracked_files:
+        log.info("Nothing has changed, aborting")
+        return False
+
+    clone.git.add(A=True)
+    # unstage the files that we want to exclude from the template update
+    if len(exclude_files):
+        clone.git.restore(*exclude_files, staged=True)
+    clone.git.commit(
+        commit_msg,
+        no_verify=True,
+        author=commit_author,
+        no_gpg_sign=True,
+    )
+    return True
+
+
+def _push_update(repo: Repo, con: GitHubConnection, branch_name: str):
+    """Push the changes to the remote"""
+    log.info(f"Pushing changes to {repo.remote()}")
+    remote = repo.remote()
+    remote.set_url(con.auth(repo.remote()))
+    remote.push([branch_name])
+    return True
+
+
+def template_update(  # noqa: PLR0913, (= too many function arguments)
     con: GitHubConnection,
     *,
     forked_repo: GHRepo,
-    template_branch_name: str,
     original_repo: GHRepo,
-    workdir: Path,
+    template_branch_name: str,
     tag_name: str,
     cruft_log_file: Path,
 ) -> bool:
@@ -227,128 +392,35 @@ def template_update(
         branch name to use for the template in the forked repo
     original_repo
         The original (upstream) repo
-    workdir
-        A (temporary) path that is used as a working directory to clone and update the repo
     tag_name
         tag name of cookiecutter template to use
     cruft_log_file
         Filename to write cruft logs to
 
     """
-    # Clone the repo with blob filtering for better performance
-    clone_dir = workdir / "clone"
-    log.info(f"Cloning {forked_repo.clone_url} into {clone_dir}")
-    clone = retry_with_backoff(
-        lambda: Repo.clone_from(con.auth(forked_repo.clone_url), clone_dir, filter="blob:none"),
-        retries=n_retries,
-        exc_cls=GitCommandError,
-    )
+    with TemporaryDirectory() as clone_dir:
+        default_branch = original_repo.default_branch
+        clone = _clone_and_prepare_repo(con, clone_dir, forked_repo, original_repo, template_branch_name)
 
-    # Add original repo as remote
-    upstream = clone.create_remote(name="upstream", url=original_repo.clone_url)
-    upstream.fetch()
+        cruft_config = _get_cruft_config_from_upstream(clone, default_branch)
+        cookiecutter_config = cruft_config["context"]["cookiecutter"]
+        _apply_update(clone_dir, tag_name, cruft_log_file, cookiecutter_config)
 
-    # Get the default branch
-    default_branch = original_repo.default_branch
+        # Load .cruft.json file of the current version of the template (includes `_exclude_on_template_update` key)
+        with (clone_dir / ".cruft.json").open() as f:
+            tmp_config = json.load(f)
+            exclude_files = tmp_config["context"]["cookiecutter"].get("_exclude_on_template_update", [])
 
-    # Get cruft config from the default branch in the upstream repo
-    log.info(f"Getting .cruft.json from the {default_branch} in {original_repo.clone_url}")
-    try:
-        # Try to get .cruft.json from the latest commit in upstream's default branch
-        cruft_content = clone.git.show(f"upstream/{default_branch}:.cruft.json")
-        cruft_config = json.loads(cruft_content)
-        log.info(f"Successfully read .cruft.json from upstream/{default_branch}")
-    except GitCommandError:
-        msg = "No .cruft.json found in repository"
-        raise FileNotFoundError(msg) from None
-
-    # Check if the branch already exists in the forked repo
-    remote_refs = [ref.name for ref in clone.remote().refs]
-    full_branch_name = f"refs/heads/{template_branch_name}"
-
-    # create and/or checkout template-update branch
-    if full_branch_name not in remote_refs:
-        log.info(f"Branch {template_branch_name} does not exists yet, creating it from initial commit")
-        # Get the initial commit on the default branch
-        initial_commit = next(clone.iter_commits(default_branch, reverse=True))
-
-        # Create and checkout a new branch from the initial commit
-        branch = clone.create_head(template_branch_name, initial_commit)
-        branch.checkout()
-    else:
-        log.info(f"Branch {template_branch_name} already exists, checking it out")
-        branch = clone.create_head(template_branch_name, f"origin/{template_branch_name}")
-        branch.checkout()
-
-    # Remove everything from the repo (except the `.git` directoroy)
-    cmd = ["/usr/bin/find", ".", "-not", "-path", "./.git*", "-delete"]
-    log.info("Running " + " ".join(cmd) + f" in {clone_dir}")
-    run(cmd, check=True, cwd=clone_dir)
-
-    # Initalize a new repo off the current template version, using the configuration from .cruft.json
-    template_dir = workdir / "template"
-    template_dir.mkdir()
-    cookiecutter_config = template_dir / "cookiecutter.json"
-    with cookiecutter_config.open("w") as f:
-        # need to put the cookiecutter-related info from .cruft.json into separate file
-        json.dump(cruft_config["context"]["cookiecutter"], f)
-    # run in a subprocess, otherwise not possible to catpure output of post-run hooks
-    with cruft_log_file.open("w") as log_f:
-        cmd = [
-            sys.executable,
-            "-m",
-            "cruft",
-            "create",
-            "https://github.com/scverse/cookiecutter-scverse",
-            f"--checkout={tag_name}",
-            "--no-input",
-            f"--extra-context-file={cookiecutter_config}",
-        ]
-        log.info("Running " + " ".join(cmd))
-        run(
-            cmd,
-            stdout=log_f,
-            stderr=log_f,
-            check=True,
-            cwd=template_dir,
-        )
-    template_dir = template_dir / cruft_config["context"]["cookiecutter"]["project_name"]
-
-    # move over the contents from the new directory into the emptied git repo
-    cmd = ["/usr/bin/rsync", "-Pva", "--exclude", ".git", f"{template_dir}/", f"{clone_dir}/"]
-    log.info("Running " + " ".join(cmd) + f" in {workdir}")
-    run(cmd, check=True, cwd=workdir, capture_output=True)
-
-    # Check if something has changed at all
-    if not clone.is_dirty() and not clone.untracked_files:
-        log.info("Nothing has changed, aborting")
-        return False
-
-    # Stage and commit (no_verify to avoid running pre-commit)
-    log.info("Changes detected. Staging and committing changes.")
-
-    # Load .cruft.json file of the current version of the template (includes `_exclude_on_template_update` key)
-    with (clone_dir / ".cruft.json").open() as f:
-        tmp_config = json.load(f)
-        exclude_files = tmp_config["context"]["cookiecutter"].get("_exclude_on_template_update", [])
-
-    clone.git.add(A=True)
-    # unstage the files that we want to exclude from the template update
-    if len(exclude_files):
-        clone.git.restore(*exclude_files, staged=True)
-    clone.git.commit(
-        m=f"Automated template update to {tag_name}",
-        no_verify=True,
-        author=f"{con.sig.name} <{con.sig.email}>",
-        no_gpg_sign=True,
-    )
-
-    # Push
-    log.info(f"Pushing changes to {forked_repo.clone_url}")
-    remote = clone.remote()
-    remote.set_url(con.auth(forked_repo.clone_url))
-    remote.push([branch.name])
-    return True
+        if _commit_update(
+            clone,
+            exclude_files,
+            commit_msg=f"Automated template update to {tag_name}",
+            commit_author=f"{con.sig.name} <{con.sig.email}>",
+        ):
+            _push_update(clone, con, template_branch_name)
+            return True
+        else:
+            return False
 
 
 def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir: Path, dry_run: bool = False) -> None:
@@ -383,16 +455,14 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir
 
     forked_repo = get_fork(con, original_repo)
 
-    with TemporaryDirectory() as td:
-        updated = template_update(
-            con,
-            forked_repo=forked_repo,
-            template_branch_name=pr.branch,
-            original_repo=original_repo,
-            workdir=Path(td),
-            tag_name=release.tag_name,
-            cruft_log_file=log_dir / f"{pr.branch}.log",
-        )
+    updated = template_update(
+        con,
+        forked_repo=forked_repo,
+        original_repo=original_repo,
+        template_branch_name=pr.branch,
+        tag_name=release.tag_name,
+        cruft_log_file=log_dir / f"{pr.branch}.log",
+    )
     if updated:
         if old_pr := next((p for p in original_repo.get_pulls("open") if pr.matches_prefix(p)), None):
             log.info(f"Closing old PR #{old_pr.number} with branch name `{old_pr.head.ref}`.")

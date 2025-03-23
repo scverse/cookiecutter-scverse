@@ -84,12 +84,10 @@ lint.select = [
   "YTT",
 ]
 lint.ignore = [
-  "ISC001",  # conflicts with formatter
-  "PLR0913", # too many arguments in function definition
-  "PLR0915", # too many statements
-  "S101",    # assert should be allowed
-  "S311",    # we don’t need cryptographically secure RNG
-  "S603",    # subprocess with shell=False should be allowed
+  "ISC001", # conflicts with formatter
+  "S101",   # assert should be allowed
+  "S311",   # we don’t need cryptographically secure RNG
+  "S603",   # subprocess with shell=False should be allowed
 ]
 lint.per-file-ignores."tests/*.py" = [
   "ARG001", # pytest fixtures don’t need to be used

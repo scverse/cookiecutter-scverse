@@ -8,7 +8,6 @@ import pytest
 
 from scverse_template_scripts.cruft_prs import (
     GitHubConnection,
-    get_fork,
     get_repo_urls,
     get_template_release,
     template_update,
@@ -16,13 +15,13 @@ from scverse_template_scripts.cruft_prs import (
 
 
 @pytest.fixture
-def cookiecutter_scverse_instance_repo(con):
-    return con.gh.get_repo("scverse/cookiecutter-scverse-instance")
+def cookiecutter_scverse_instance_repo(scverse_bot_github_con):
+    return scverse_bot_github_con.gh.get_repo("scverse/cookiecutter-scverse-instance")
 
 
 @pytest.fixture
-def cookiecutter_scverse_instance_repo_fork(con, cookiecutter_scverse_instance_repo):
-    return get_fork(con, cookiecutter_scverse_instance_repo)
+def cookiecutter_scverse_instance_repo_fork(scverse_bot_github_con, cookiecutter_scverse_instance_repo):
+    return scverse_bot_github_con.gh.get_repo("scverse-bot/cookiecutter-scverse-instance")
 
 
 @pytest.fixture
@@ -41,34 +40,27 @@ def template_update_branch_name(cookiecutter_scverse_instance_repo_fork):
 
 
 @pytest.fixture
-def con() -> GitHubConnection:
-    token = os.environ["GITHUB_TOKEN"]
+def scverse_bot_github_con() -> GitHubConnection:
+    """Connect to the scverse-bot github account. Make sure to use only a readonly-token to not destroy anything."""
+    token = os.environ["SCVERSE_BOT_READONLY_GITHUB_TOKEN"]
     return GitHubConnection("scverse-bot", token, email="108668866+scverse-bot@users.noreply.github.com")
 
 
 @pytest.mark.parametrize("tag_name", ["v0.4.0", "v0.2.17"])
-def test_get_template_release(con, tag_name):
+def test_get_template_release(scverse_bot_github_con, tag_name):
     """Test if reference to release can be obtained"""
-    release = get_template_release(con.gh, tag_name)
+    release = get_template_release(scverse_bot_github_con.gh, tag_name)
     assert release.tag_name == tag_name
 
 
-def test_get_repo_urls(con):
+def test_get_repo_urls(scverse_bot_github_con):
     """Test if lits of repos using template can be obtained from scverse/ecosystem-packages"""
-    repo_urls = get_repo_urls(con.gh)
+    repo_urls = get_repo_urls(scverse_bot_github_con.gh)
     assert any("scverse/scirpy" in url for url in repo_urls)
 
 
-@pytest.mark.parametrize("repo_name", ["scverse/cookiecutter-scverse-instance"])
-def test_get_fork(con, repo_name):
-    """Test if a public repo can be forked into the scverse-bot namespace"""
-    repo = con.gh.get_repo(repo_name)
-    # try getting fork (create if not exist)
-    get_fork(con, repo)
-
-
 def test_update_template(
-    con,
+    scverse_bot_github_con,
     cookiecutter_scverse_instance_repo,
     cookiecutter_scverse_instance_repo_fork,
     tmp_path,
@@ -79,7 +71,7 @@ def test_update_template(
     latest_commit = repo.head.commit.hexsha
 
     template_update(
-        con,
+        scverse_bot_github_con,
         forked_repo=cookiecutter_scverse_instance_repo_fork,
         template_branch_name=template_update_branch_name,
         original_repo=cookiecutter_scverse_instance_repo,
