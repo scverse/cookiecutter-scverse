@@ -27,6 +27,10 @@ jobs:
     steps:
       # Setup
       - uses: actions/checkout@v4
+      - name: Set git identity
+        run: |
+          git config --global user.name "scverse-bot"
+          git config --global user.email "108668866+scverse-bot@users.noreply.github.com"
       - name: Set up Python ${{ matrix.python }}
         uses: actions/setup-python@v5
         with:
