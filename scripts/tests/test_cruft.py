@@ -95,7 +95,7 @@ def test_apply_update(cookiecutter_scverse_instance_cloned_repo, current_repo_pa
     log_file = tmp_path / "cruft_log.txt"
     _apply_update(
         cookiecutter_scverse_instance_cloned_repo,
-        template_tag_name="main",
+        template_tag_name=None,
         cruft_log_file=log_file,
         cookiecutter_config={"project_name": "cookiecutter-scverse-instance"},
         template_url=str(current_repo_path),
