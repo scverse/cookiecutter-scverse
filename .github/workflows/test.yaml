@@ -75,6 +75,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install Hatch
         uses: pypa/hatch@install
+      - name: set git  default branch
+        run: git config --global init.defaultBranch main
       - name: Run tests
         working-directory: ./scripts
         run: hatch test
