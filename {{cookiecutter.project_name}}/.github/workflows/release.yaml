@@ -19,11 +19,8 @@ jobs:
         with:
           filter: blob:none
           fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
-          cache: "pip"
-      - run: pip install build
-      - run: python -m build
+      - name: Install Hatch
+        uses: pypa/hatch@install
+      - run: hatch build
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
