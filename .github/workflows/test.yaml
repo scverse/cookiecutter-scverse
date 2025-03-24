@@ -76,4 +76,5 @@ jobs:
       - name: Install Hatch
         uses: pypa/hatch@install
       - name: Run tests
+        working-directory: ./scripts
         run: hatch test
