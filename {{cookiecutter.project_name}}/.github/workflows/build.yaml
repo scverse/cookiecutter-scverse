@@ -23,4 +23,4 @@ jobs:
       - name: Build package
         run: uvx --from=build pyproject-build --installer=uv --wheel
       - name: Check package
-        run: uv tool run twine check --strict dist/*.whl
+        run: uvx twine check --strict dist/*.whl
