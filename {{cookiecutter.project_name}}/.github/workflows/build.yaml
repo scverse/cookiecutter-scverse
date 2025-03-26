@@ -21,6 +21,6 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
       - name: Build package
-        run: uv tool run hatch build
+        run: uvx --from=build pyproject-build --installer=uv --wheel
       - name: Check package
         run: uv tool run twine check --strict dist/*.whl
