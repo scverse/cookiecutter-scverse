@@ -24,7 +24,7 @@ HERE = Path(__file__).parent
         pytest.param({"ide_integration": False}, ".vscode", None, id="ide_integ"),
     ],
 )
-def test_build(tmp_path: Path, params: Mapping[str, Any], path: Path | str, pattern: re.Pattern | str | None):
+def test_build(tmp_path: Path, params: Mapping[str, Any], path: Path | str, pattern: re.Pattern | str | None) -> None:
     cookiecutter(str(HERE.parent.parent), output_dir=tmp_path, no_input=True, extra_context=params)
     proj_dir = tmp_path / "project-name"
     assert proj_dir.is_dir()

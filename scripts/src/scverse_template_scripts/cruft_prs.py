@@ -29,13 +29,14 @@ from .backoff import retry_with_backoff
 
 if TYPE_CHECKING:
     from collections.abc import Generator, Sequence
-    from typing import IO, LiteralString, NotRequired
+    from typing import IO, Literal, LiteralString, NotRequired
 
     from github import ContentFile
     from github.GitRelease import GitRelease as GHRelease
     from github.NamedUser import NamedUser
     from github.PullRequest import PullRequest
     from github.Repository import Repository as GHRepo
+
 
 PR_BODY_TEMPLATE = """\
 `cookiecutter-scverse` released [{release.tag_name}]({release.html_url}).
@@ -253,13 +254,17 @@ def _clone_and_prepare_repo(
     return clone
 
 
-def _get_cruft_config_from_upstream(repo: Repo, default_branch: str):
+class CruftConfig(TypedDict):
+    context: dict[Literal["cookiecutter"], dict[str, str]]
+
+
+def _get_cruft_config_from_upstream(repo: Repo, default_branch: str) -> CruftConfig:
     """Get cruft config from the default branch in the upstream repo"""
     log.info(f"Getting .cruft.json from the {default_branch} branch in {repo.remote('upstream').url}")
     try:
         # Try to get .cruft.json from the latest commit in upstream's default branch
         cruft_content = repo.git.show(f"upstream/{default_branch}:.cruft.json")
-        cruft_config = json.loads(cruft_content)
+        cruft_config = cast("CruftConfig", json.loads(cruft_content))
         log.info(f"Successfully read .cruft.json from upstream/{default_branch}")
     except GitCommandError:
         msg = "No .cruft.json found in repository"
@@ -275,7 +280,7 @@ def _apply_update(
     cruft_log_file: Path,
     cookiecutter_config: dict,
     template_url: str = "https://github.com/scverse/cookiecutter-scverse",
-):
+) -> None:
     """
     Apply the changes from the template to the original repo
 
@@ -334,7 +339,7 @@ def _apply_update(
         run(cmd, check=True, capture_output=True)
 
 
-def _commit_update(clone: Repo, *, exclude_files: Sequence = (), commit_msg: str, commit_author: str):
+def _commit_update(clone: Repo, *, exclude_files: Sequence = (), commit_msg: str, commit_author: str) -> bool:
     """
     Check if changes were made, and if yes, commit them.
 
