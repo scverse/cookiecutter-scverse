@@ -33,7 +33,7 @@ cmd = ["git", "commit", "--no-verify", "--no-gpg-sign", "-m", "Initialize projec
 run(cmd, check=True)
 
 # Install pre-commit
-run("pre-commit install".split(), check=True)
+run(["pre-commit", "install"], check=True)
 
 # The following output was generated using rich
 # The formatted output is included here directly, because I don't want
