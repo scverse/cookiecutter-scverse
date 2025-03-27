@@ -59,9 +59,9 @@ PR_BODY_TEMPLATE = """\
 [codecov]: {template_usage}#coverage-tests-with-codecov
 """
 
-# GitHub says that up to 5 minutes of wait are OK,
+# GitHub says that up to 5 minutes of waiting for a fork are OK,
 # So we error our once we wait longer, i.e. when 2ⁿ = 5 min × 60 sec/min
-n_retries = math.ceil(math.log(5 * 60) / math.log(2))  # = ⌈~8.22⌉ = 9
+N_RETRIES_WAIT_FOR_FORK = math.ceil(math.log(5 * 60) / math.log(2))  # = ⌈~8.22⌉ = 9
 # Due to exponential backoff, we’ll maximally wait 2⁹ sec, or 8.5 min
 
 
@@ -192,7 +192,7 @@ def get_fork(con: GitHubConnection, repo: GHRepo) -> GHRepo:
     fork = repo.create_fork()
     return retry_with_backoff(
         lambda: con.gh.get_repo(fork.id),
-        retries=n_retries,
+        retries=N_RETRIES_WAIT_FOR_FORK,
         exc_cls=UnknownObjectException,
     )
 
@@ -224,7 +224,7 @@ def _clone_and_prepare_repo(
     log.info(f"Cloning {forked_repo.clone_url} into {clone_dir}")
     clone = retry_with_backoff(
         lambda: Repo.clone_from(con.auth(forked_repo.clone_url), clone_dir, filter="blob:none"),
-        retries=n_retries,
+        retries=N_RETRIES_WAIT_FOR_FORK,
         exc_cls=GitCommandError,
     )
 
