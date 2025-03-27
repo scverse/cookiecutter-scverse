@@ -76,7 +76,7 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
-          cache-dependency-glob: "**/pyproject.toml"
+          cache-dependency-glob: pyproject.toml
       - name: Install Hatch
         run: uv tool install hatch
       - name: set git default branch
