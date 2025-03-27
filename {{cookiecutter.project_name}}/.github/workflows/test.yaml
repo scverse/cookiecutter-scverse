@@ -53,4 +53,4 @@ jobs:
           DISPLAY: :42
         run: hatch test --cover --python ${{ matrix.python }}
       - name: Upload coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
