@@ -46,7 +46,7 @@ PR_BODY_TEMPLATE = """\
 {release.body}
 
 ## Additional remarks
-* **unsubscribe**: If you don't want to receive these PRs in the future,
+* **unsubscribe**: If you don’t want to receive these PRs in the future,
   add `skip: true` to [`template-repos.yml`][] using a PR or,
   if you never want to sync from the template again, delete the `.cruft.json` file in the root of your repository.
 * If there are **merge conflicts**, you need to resolve them manually.
