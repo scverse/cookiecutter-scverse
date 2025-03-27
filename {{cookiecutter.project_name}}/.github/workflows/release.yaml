@@ -4,6 +4,10 @@ on:
   release:
     types: [published]
 
+defaults:
+  run:
+    shell: bash -e {0} # -e to fail on error
+
 # Use "trusted publishing", see https://docs.pypi.org/trusted-publishers/
 jobs:
   release:

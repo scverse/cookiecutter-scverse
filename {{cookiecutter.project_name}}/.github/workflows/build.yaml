@@ -10,6 +10,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+defaults:
+  run:
+    shell: bash -e {0} # -e to fail on error
+
 jobs:
   package:
     runs-on: ubuntu-latest
