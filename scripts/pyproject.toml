@@ -99,6 +99,7 @@ lint.unfixable = [
 ]
 lint.allowed-confusables = [ "×", "’" ]
 lint.flake8-type-checking.exempt-modules = [  ]
+lint.flake8-type-checking.runtime-evaluated-decorators = [ "cyclopts.App.default" ]
 lint.flake8-type-checking.strict = true
 lint.isort.known-first-party = [ "scverse_template_scripts", "testing.scverse_template_scripts" ]
 lint.isort.required-imports = [ "from __future__ import annotations" ]

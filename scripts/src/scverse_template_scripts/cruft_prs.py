@@ -9,6 +9,7 @@ import json
 import math
 import os
 import sys
+from collections.abc import Iterable
 from dataclasses import KW_ONLY, InitVar, dataclass, field
 from glob import glob
 from pathlib import Path
@@ -31,7 +32,7 @@ if TYPE_CHECKING:
     from collections.abc import Generator, Sequence
     from typing import IO, Literal, LiteralString, NotRequired
 
-    from github import ContentFile
+    from github.ContentFile import ContentFile
     from github.GitRelease import GitRelease as GHRelease
     from github.NamedUser import NamedUser
     from github.PullRequest import PullRequest
@@ -69,18 +70,18 @@ N_RETRIES_WAIT_FOR_FORK = math.ceil(math.log(5 * 60) / math.log(2))  # = ⌈~8.2
 class GitHubConnection:
     """API connection to a GitHub user (e.g. scverse-bot)"""
 
-    login: InitVar[str]
+    _login: InitVar[str]
     token: str | None = field(repr=False, default=None)
     _: KW_ONLY
-    email: str = field(default=None)
+    email: str | None = field(default=None)
 
     gh: Github = field(init=False)
     user: NamedUser = field(init=False)
     sig: Actor = field(init=False)
 
-    def __post_init__(self, login: str) -> None:
-        self.gh = Github(auth=Auth.Token(self.token))
-        self.user = self.gh.get_user(login)
+    def __post_init__(self, _login: str) -> None:
+        self.gh = Github(auth=Auth.Token(self.token) if self.token else None)
+        self.user = cast("NamedUser", self.gh.get_user(_login))
         if self.email is None:
             self.email = self.user.email
         self.sig = Actor(self.login, self.email)
@@ -156,7 +157,7 @@ def get_template_release(gh: Github, tag_name: str) -> GHRelease:
     return template_repo.get_release(tag_name)
 
 
-def _parse_repos(f: IO[str] | str) -> list[RepoInfo]:
+def _parse_repos(f: IO[str] | str | bytes) -> list[RepoInfo]:
     repos = cast("list[RepoInfo]", safe_load(f))
     log.info(f"Found {len(repos)} known repos")
     return repos
@@ -198,7 +199,7 @@ def get_fork(con: GitHubConnection, repo: GHRepo) -> GHRepo:
 
 
 def _clone_and_prepare_repo(
-    con: GitHubConnection, clone_dir: Path, forked_repo: GHRepo, original_repo: GHRepo, template_branch_name: str
+    con: GitHubConnection, clone_dir: Path, template_branch_name: str, *, forked_repo: GHRepo, original_repo: GHRepo
 ) -> Repo:
     """
     Clone the forked repo and set up branches and remotes.
@@ -211,6 +212,8 @@ def _clone_and_prepare_repo(
 
     Parameters
     ----------
+    con
+        GitHub connection
     clone_dir
         directory into which to clone the repo
     forked_repo
@@ -246,7 +249,7 @@ def _clone_and_prepare_repo(
         initial_commit = next(clone.iter_commits(default_branch, reverse=True))
 
         # Create and checkout a new branch from the initial commit
-        branch = clone.create_head(template_branch_name, initial_commit)
+        branch = clone.create_head(template_branch_name, initial_commit.hexsha)
         branch.checkout()
     else:
         log.info(f"Branch {template_branch_name} already exists, checking it out")
@@ -314,13 +317,7 @@ def _apply_update(
                 f"--extra-context-file={cookiecutter_config_file}",
             ]
             log.info("Running " + " ".join(cmd))
-            run(
-                cmd,
-                stdout=log_f,
-                stderr=log_f,
-                check=True,
-                cwd=template_dir,
-            )
+            run(cmd, stdout=log_f, stderr=log_f, check=True, cwd=template_dir)
         template_dir_project_name = template_dir / cookiecutter_config["project_name"]
 
         # Remove everything from the original repo (except the `.git` directoroy)
@@ -337,7 +334,7 @@ def _apply_update(
             f"{template_dir_project_name.absolute()}/",
             f"{clone_dir.absolute()}/",
         ]
-        log.info("Running " + " ".join(cmd))
+        log.info("Running " + " ".join(repr(a) if " " in a else a for a in cmd))
         run(cmd, check=True, capture_output=True)
 
 
@@ -346,6 +343,8 @@ def _commit_update(clone: Repo, *, exclude_files: Sequence = (), commit_msg: str
     Check if changes were made, and if yes, commit them.
 
     Glob patterns in `exclude_files` will not be staged for the commit.
+
+    Returns a `bool` indicating whether changes have been made and committed.
     """
     # Stage and commit (no_verify to avoid running pre-commit)
     log.info("Changes detected. Staging and committing changes.")
@@ -366,12 +365,7 @@ def _commit_update(clone: Repo, *, exclude_files: Sequence = (), commit_msg: str
         log.info("Nothing has changed after excluding files, aborting")
         return False
 
-    clone.git.commit(
-        m=commit_msg,
-        no_verify=True,
-        author=commit_author,
-        no_gpg_sign=True,
-    )
+    clone.git.commit(m=commit_msg, no_verify=True, author=commit_author, no_gpg_sign=True)
     return True
 
 
@@ -417,9 +411,16 @@ def template_update(  # noqa: PLR0913, (= too many function arguments)
         Filename to write cruft logs to
 
     """
-    with TemporaryDirectory() as clone_dir:
+    with TemporaryDirectory() as cd:
+        clone_dir = Path(cd)
         default_branch = original_repo.default_branch
-        clone = _clone_and_prepare_repo(con, clone_dir, forked_repo, original_repo, template_branch_name)
+        clone = _clone_and_prepare_repo(
+            con,
+            clone_dir,
+            template_branch_name,
+            forked_repo=forked_repo,
+            original_repo=original_repo,
+        )
 
         cruft_config = _get_cruft_config_from_upstream(clone, default_branch)
         cookiecutter_config = cruft_config["context"]["cookiecutter"]
@@ -431,7 +432,7 @@ def template_update(  # noqa: PLR0913, (= too many function arguments)
         )
 
         # Load .cruft.json file of the current version of the template (includes `_exclude_on_template_update` key)
-        with (Path(clone_dir) / ".cruft.json").open() as f:
+        with (clone_dir / ".cruft.json").open() as f:
             tmp_config = json.load(f)
             exclude_files = tmp_config["context"]["cookiecutter"].get("_exclude_on_template_update", [])
 
@@ -511,10 +512,10 @@ cli = App()
 @cli.default
 def main(
     tag_name: str,
-    repo_urls: list[str] | None = None,
+    repo_urls: Iterable[str] | None = None,
     *,
     all_repos: bool = False,
-    log_dir: Path = "cruft_logs",
+    log_dir: Path = Path("cruft_logs"),
     dry_run: bool = False,
 ) -> None:
     """

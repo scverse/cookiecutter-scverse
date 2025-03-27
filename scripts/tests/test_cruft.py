@@ -46,9 +46,9 @@ def cookiecutter_scverse_instance_cloned_repo(
     repo = _clone_and_prepare_repo(
         scverse_bot_github_con,
         clone_dir,
-        cookiecutter_scverse_instance_repo_fork,
-        cookiecutter_scverse_instance_repo,
         "test-template-update-branch",
+        forked_repo=cookiecutter_scverse_instance_repo_fork,
+        original_repo=cookiecutter_scverse_instance_repo,
     )
     return repo
 
