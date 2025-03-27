@@ -9,7 +9,7 @@ import json
 import math
 import os
 import sys
-from dataclasses import InitVar, dataclass, field
+from dataclasses import KW_ONLY, InitVar, dataclass, field
 from glob import glob
 from pathlib import Path
 from subprocess import run
@@ -71,10 +71,12 @@ class GitHubConnection:
 
     login: InitVar[str]
     token: str | None = field(repr=False, default=None)
+    _: KW_ONLY
+    email: str = field(default=None)
+
     gh: Github = field(init=False)
     user: NamedUser = field(init=False)
     sig: Actor = field(init=False)
-    email: str = field(default=None)
 
     def __post_init__(self, login: str) -> None:
         self.gh = Github(auth=Auth.Token(self.token))
