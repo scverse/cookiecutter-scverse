@@ -61,7 +61,7 @@ To create the project, run the following command and follow the prompts:
 
 ```bash
 # uv will download all dependencies on-the-fly
-uv tool run --with pre-commit cruft create https://github.com/scverse/cookiecutter-scverse
+uvx --with pre-commit cruft create https://github.com/scverse/cookiecutter-scverse
 ```
 
 This will create a git repository generated from the template.

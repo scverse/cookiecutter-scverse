@@ -77,10 +77,8 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           cache-dependency-glob: pyproject.toml
-      - name: Install Hatch
-        run: uv tool install hatch
       - name: set git default branch
         run: git config --global init.defaultBranch main
       - name: Run tests
         working-directory: ./scripts
-        run: hatch test
+        run: uvx hatch test
