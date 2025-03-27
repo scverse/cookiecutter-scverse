@@ -128,12 +128,7 @@ def test_commit_update(clone: Repo, exclude_files: list[str], expected_untracked
     (repo_dir / "dir2/bar/C.txt").touch()
     (repo_dir / "dir2/D.txt").touch()
 
-    status = _commit_update(
-        clone,
-        exclude_files=exclude_files,
-        commit_msg="foo",
-        commit_author="scverse-bot",
-    )
+    status = _commit_update(clone, exclude_files=exclude_files, commit_msg="foo", commit_author="scverse-bot")
 
     # some files have changed and commit has been made
     assert status is True
