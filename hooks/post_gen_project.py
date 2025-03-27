@@ -22,8 +22,7 @@ for path in skipped_dirs():
     assert path.is_dir(), path
     shutil.rmtree(path)
 
-# Update pre commit hooks
-run("pre-commit autoupdate -c .pre-commit-config.yaml".split(), check=True)
+# Insatll pre-commit
 run("pre-commit install".split(), check=True)
 
 # The following output was generated using rich
