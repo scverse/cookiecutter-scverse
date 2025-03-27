@@ -86,7 +86,7 @@ jobs:
 
       - name: Push to instance repo
         if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@v0.8.0
         with:
           github_token: ${{ secrets.BOT_GH_TOKEN }}
           branch: ${{ env.SISTER_PR_BRANCH }}
@@ -128,7 +128,7 @@ jobs:
 
       - name: Add comment about sister PR
         if: ${{ github.event_name == 'pull_request' && env.GIT_HAS_CHANGES == 'TRUE' }}
-        uses: mshick/add-pr-comment@v1
+        uses: mshick/add-pr-comment@v2
         with:
           message: |
             A PR has been generated to the instance repo:
