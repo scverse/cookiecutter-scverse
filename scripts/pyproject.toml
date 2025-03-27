@@ -20,18 +20,16 @@ classifiers = [
 dynamic = [ "version" ]
 dependencies = [
   "cruft",
+  "cyclopts>=3.10",
   "furl",
   "gitpython",
-  "pre-commit",  # is ran by cruft
+  "pre-commit",     # is ran by cruft
   "pygithub>=2",
   "pyyaml",
   "rich",
-  "typer",
 ]
 optional-dependencies.test = [
   "pytest",
-  "pytest-responsemock",
-  "pytest-socket",
 ]
 urls.Documentation = "https://github.com/scverse/cookiecutter-scverse#readme"
 urls.Issues = "https://github.com/scverse/cookiecutter-scverse/issues"
@@ -59,6 +57,7 @@ format.docstring-code-format = true
 
 lint.select = [
   "A",
+  "ANN",
   "ARG",
   "B",
   "C",
@@ -75,11 +74,13 @@ lint.select = [
   "PLE",
   "PLR",
   "PLW",
+  "PT",
   "Q",
   "RUF",
   "S",
+  "SIM",
   "T",
-  "TCH",
+  "TC",
   "TID",
   "UP",
   "W",
@@ -91,15 +92,12 @@ lint.ignore = [
   "S311",   # we don’t need cryptographically secure RNG
   "S603",   # subprocess with shell=False should be allowed
 ]
-lint.per-file-ignores."tests/*.py" = [
-  "ARG001",  # pytest fixtures don’t need to be used
-  "PLR0913", # allow as many pytest fixtures being used as one likes
-]
 lint.unfixable = [
   "RUF001", # never “fix” “confusables”
 ]
 lint.allowed-confusables = [ "×", "’" ]
 lint.flake8-type-checking.exempt-modules = [  ]
+lint.flake8-type-checking.runtime-evaluated-decorators = [ "cyclopts.App.default" ]
 lint.flake8-type-checking.strict = true
 lint.isort.known-first-party = [ "scverse_template_scripts", "testing.scverse_template_scripts" ]
 lint.isort.required-imports = [ "from __future__ import annotations" ]
@@ -110,8 +108,6 @@ column_width = 120
 [tool.pytest.ini_options]
 addopts = [
   "--import-mode=importlib",
-  "--disable-socket",
-  "-presponsemock",
   "-ptesting.scverse_template_scripts._pytest",
 ]
 filterwarnings = [

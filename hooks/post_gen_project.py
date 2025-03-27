@@ -1,7 +1,7 @@
 #!/bin/env python3
 import shutil
-from subprocess import run
 from pathlib import Path
+from subprocess import run
 
 {% if not cookiecutter._render_devdocs %}
 # Post processing
@@ -18,12 +18,23 @@ def skipped_dirs():
         else:
             yield from toplevel.rglob("DELETE-ME")
 
+
 for path in skipped_dirs():
     assert path.is_dir(), path
     shutil.rmtree(path)
 
-# Insatll pre-commit
-run("pre-commit install".split(), check=True)
+# Make initial commit
+# This will make template updates smoother, because like this we can rely on the first commit in the repo
+# being just the template without additional changes.
+print("Making initial commit")
+run(["git", "add", "-A"], check=True)
+
+# Make initial commit
+msg = "Initialize project from cookiecutter-scverse"
+run(args=["git", "commit", "--no-verify", "--no-gpg-sign", "-m", msg], check=True)
+
+# Install pre-commit
+run(["pre-commit", "install"], check=True)
 
 # The following output was generated using rich
 # The formatted output is included here directly, because I don't want
