@@ -32,7 +32,7 @@ run(["git", "add", "-A"], check=True)
 cmd = ["git", "commit", "--no-verify", "--no-gpg-sign", "-m", "Initialize project from cookiecutter-scverse"]
 run(cmd, check=True)
 
-# Install pre commit hooks
+# Install pre-commit
 run("pre-commit install".split(), check=True)
 
 # The following output was generated using rich
