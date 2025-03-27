@@ -24,33 +24,33 @@ if TYPE_CHECKING:
 
 
 @pytest.fixture
-def cookiecutter_scverse_instance_repo(scverse_bot_github_con: GitHubConnection) -> Repository:
-    return scverse_bot_github_con.gh.get_repo("scverse/cookiecutter-scverse-instance")
+def bot_con() -> GitHubConnection:
+    """Connect to the scverse-bot github account. Make sure to use only a readonly-token to not destroy anything."""
+    token = os.environ["SCVERSE_BOT_READONLY_GITHUB_TOKEN"]
+    return GitHubConnection("scverse-bot", token, email="108668866+scverse-bot@users.noreply.github.com")
 
 
 @pytest.fixture
-def cookiecutter_scverse_instance_repo_fork(
-    scverse_bot_github_con: GitHubConnection, cookiecutter_scverse_instance_repo: Repository
-) -> Repository:
-    return scverse_bot_github_con.gh.get_repo("scverse-bot/cookiecutter-scverse-instance")
+def instance_orig(bot_con: GitHubConnection) -> Repository:
+    return bot_con.gh.get_repo("scverse/cookiecutter-scverse-instance")
 
 
 @pytest.fixture
-def cookiecutter_scverse_instance_cloned_repo(
-    tmp_path: Path,
-    scverse_bot_github_con: GitHubConnection,
-    cookiecutter_scverse_instance_repo: Repository,
-    cookiecutter_scverse_instance_repo_fork: Repository,
-) -> Repo:
+def instance_fork(bot_con: GitHubConnection, instance_orig: Repository) -> Repository:
+    del instance_orig  # included for the side effect
+    return bot_con.gh.get_repo("scverse-bot/cookiecutter-scverse-instance")
+
+
+@pytest.fixture
+def clone(tmp_path: Path, bot_con: GitHubConnection, instance_orig: Repository, instance_fork: Repository) -> Repo:
     clone_dir = tmp_path / "clone"
-    repo = _clone_and_prepare_repo(
-        scverse_bot_github_con,
+    return _clone_and_prepare_repo(
+        bot_con,
         clone_dir,
         "test-template-update-branch",
-        forked_repo=cookiecutter_scverse_instance_repo_fork,
-        original_repo=cookiecutter_scverse_instance_repo,
+        forked_repo=instance_fork,
+        original_repo=instance_orig,
     )
-    return repo
 
 
 @pytest.fixture
@@ -69,44 +69,36 @@ def current_repo_path() -> Path:
     return repo_path
 
 
-@pytest.fixture
-def scverse_bot_github_con() -> GitHubConnection:
-    """Connect to the scverse-bot github account. Make sure to use only a readonly-token to not destroy anything."""
-    token = os.environ["SCVERSE_BOT_READONLY_GITHUB_TOKEN"]
-    return GitHubConnection("scverse-bot", token, email="108668866+scverse-bot@users.noreply.github.com")
-
-
 @pytest.mark.parametrize("tag_name", ["v0.4.0", "v0.2.17"])
-def test_get_template_release(scverse_bot_github_con: GitHubConnection, tag_name: str) -> None:
+def test_get_template_release(bot_con: GitHubConnection, tag_name: str) -> None:
     """Test if reference to release can be obtained"""
-    release = get_template_release(scverse_bot_github_con.gh, tag_name)
+    release = get_template_release(bot_con.gh, tag_name)
     assert release.tag_name == tag_name
 
 
-def test_get_repo_urls(scverse_bot_github_con: GitHubConnection) -> None:
+def test_get_repo_urls(bot_con: GitHubConnection) -> None:
     """Test if lits of repos using template can be obtained from scverse/ecosystem-packages"""
-    repo_urls = get_repo_urls(scverse_bot_github_con.gh)
+    repo_urls = get_repo_urls(bot_con.gh)
     assert any("scverse/scirpy" in url for url in repo_urls)
 
 
-def test_clone_and_prepare_repo(cookiecutter_scverse_instance_cloned_repo: Repo) -> None:
+def test_clone_and_prepare_repo(clone: Repo) -> None:
     """Test that example repo can be cloned an all branches setup correctly"""
-    repo = cookiecutter_scverse_instance_cloned_repo
-    assert (Path(repo.working_dir) / "pyproject.toml").exists()
-    assert repo.active_branch.name == "test-template-update-branch"
-    assert repo.remote("upstream").url.endswith("github.com/scverse/cookiecutter-scverse-instance.git")
-    assert repo.remote().url.endswith("github.com/scverse-bot/cookiecutter-scverse-instance.git")
+    assert (Path(clone.working_dir) / "pyproject.toml").exists()
+    assert clone.active_branch.name == "test-template-update-branch"
+    assert clone.remote("upstream").url.endswith("github.com/scverse/cookiecutter-scverse-instance.git")
+    assert clone.remote().url.endswith("github.com/scverse-bot/cookiecutter-scverse-instance.git")
 
 
-def test_get_cruft_config_from_upstream(cookiecutter_scverse_instance_cloned_repo: Repo) -> None:
-    config = _get_cruft_config_from_upstream(cookiecutter_scverse_instance_cloned_repo, "main")
+def test_get_cruft_config_from_upstream(clone: Repo) -> None:
+    config = _get_cruft_config_from_upstream(clone, "main")
     assert config["context"]["cookiecutter"]["project_name"] == "cookiecutter-scverse-instance"
 
 
-def test_apply_update(cookiecutter_scverse_instance_cloned_repo: Repo, current_repo_path: Path, tmp_path: Path) -> None:
+def test_apply_update(clone: Repo, current_repo_path: Path, tmp_path: Path) -> None:
     log_file = tmp_path / "cruft_log.txt"
     _apply_update(
-        cookiecutter_scverse_instance_cloned_repo,
+        clone,
         template_tag_name=None,
         cruft_log_file=log_file,
         cookiecutter_config={"project_name": "cookiecutter-scverse-instance"},
@@ -115,7 +107,7 @@ def test_apply_update(cookiecutter_scverse_instance_cloned_repo: Repo, current_r
 
 
 @pytest.mark.parametrize(
-    "exclude_files,expected_untracked",
+    ("exclude_files", "expected_untracked"),
     [
         ([], []),
         (["doesntexist.txt"], []),
@@ -124,10 +116,8 @@ def test_apply_update(cookiecutter_scverse_instance_cloned_repo: Repo, current_r
         (["dir2/*"], ["dir2/foo/A.txt", "dir2/foo/B.txt", "dir2/bar/C.txt", "dir2/D.txt"]),
     ],
 )
-def test_commit_update(
-    cookiecutter_scverse_instance_cloned_repo: Repo, exclude_files: list[str], expected_untracked: list[str]
-) -> None:
-    repo_dir = Path(cookiecutter_scverse_instance_cloned_repo.working_dir)
+def test_commit_update(clone: Repo, exclude_files: list[str], expected_untracked: list[str]) -> None:
+    repo_dir = Path(clone.working_dir)
     (repo_dir / "dir1").mkdir()
     (repo_dir / "dir2").mkdir()
     (repo_dir / "dir2/foo").mkdir()
@@ -139,7 +129,7 @@ def test_commit_update(
     (repo_dir / "dir2/D.txt").touch()
 
     status = _commit_update(
-        cookiecutter_scverse_instance_cloned_repo,
+        clone,
         exclude_files=exclude_files,
         commit_msg="foo",
         commit_author="scverse-bot",
@@ -148,11 +138,8 @@ def test_commit_update(
     # some files have changed and commit has been made
     assert status is True
 
-    assert sorted(cookiecutter_scverse_instance_cloned_repo.untracked_files) == sorted(expected_untracked)
+    assert sorted(clone.untracked_files) == sorted(expected_untracked)
 
 
-def test_commit_update_no_files(cookiecutter_scverse_instance_cloned_repo: Repo) -> None:
-    assert (
-        _commit_update(cookiecutter_scverse_instance_cloned_repo, commit_msg="foo", commit_author="scverse-bot")
-        is False
-    )
+def test_commit_update_no_files(clone: Repo) -> None:
+    assert _commit_update(clone, commit_msg="foo", commit_author="scverse-bot") is False

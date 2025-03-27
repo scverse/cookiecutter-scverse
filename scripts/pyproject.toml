@@ -74,6 +74,7 @@ lint.select = [
   "PLE",
   "PLR",
   "PLW",
+  "PT",
   "Q",
   "RUF",
   "S",
@@ -90,9 +91,6 @@ lint.ignore = [
   "S101",   # assert should be allowed
   "S311",   # we don’t need cryptographically secure RNG
   "S603",   # subprocess with shell=False should be allowed
-]
-lint.per-file-ignores."tests/*.py" = [
-  "ARG001", # pytest fixtures don’t need to be used
 ]
 lint.unfixable = [
   "RUF001", # never “fix” “confusables”
