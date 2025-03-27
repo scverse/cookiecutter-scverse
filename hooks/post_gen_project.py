@@ -1,7 +1,7 @@
 #!/bin/env python3
 import shutil
-from subprocess import run, CalledProcessError
 from pathlib import Path
+from subprocess import run
 
 {% if not cookiecutter._render_devdocs %}
 # Post processing
@@ -18,6 +18,7 @@ def skipped_dirs():
         else:
             yield from toplevel.rglob("DELETE-ME")
 
+
 for path in skipped_dirs():
     assert path.is_dir(), path
     shutil.rmtree(path)
@@ -29,8 +30,8 @@ print("Making initial commit")
 run(["git", "add", "-A"], check=True)
 
 # Make initial commit
-cmd = ["git", "commit", "--no-verify", "--no-gpg-sign", "-m", "Initialize project from cookiecutter-scverse"]
-run(cmd, check=True)
+msg = "Initialize project from cookiecutter-scverse"
+run(args=["git", "commit", "--no-verify", "--no-gpg-sign", "-m", msg], check=True)
 
 # Install pre-commit
 run(["pre-commit", "install"], check=True)
