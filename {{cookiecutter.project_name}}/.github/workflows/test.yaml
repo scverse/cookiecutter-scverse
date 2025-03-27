@@ -44,8 +44,12 @@ jobs:
         with:
           filter: blob:none
           fetch-depth: 0
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          cache-dependency-glob: "**/pyproject.toml"
       - name: Install Hatch
-        uses: pypa/hatch@install
+        run: uv tool install hatch
       - name: run tests using hatch
         env:
           MPLBACKEND: agg
