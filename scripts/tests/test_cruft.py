@@ -96,6 +96,7 @@ def test_get_cruft_config_from_upstream(clone: Repo) -> None:
 
 
 def test_apply_update(clone: Repo, current_repo_path: Path, tmp_path: Path) -> None:
+    """Test that a template update can be applied to a cloned repo without crashing"""
     log_file = tmp_path / "cruft_log.txt"
     _apply_update(
         clone,
