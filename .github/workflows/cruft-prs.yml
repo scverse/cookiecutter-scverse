@@ -23,6 +23,7 @@ jobs:
           FORCE_COLOR: "1"
           COLUMNS: "150"
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: cruft-logs
           path: log/
