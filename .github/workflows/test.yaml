@@ -28,6 +28,10 @@ jobs:
     steps:
       # Setup
       - uses: actions/checkout@v4
+      - name: Set git identity
+        run: |
+          git config --global user.name "scverse-bot"
+          git config --global user.email "108668866+scverse-bot@users.noreply.github.com"
       - name: Set up Python ${{ matrix.python }}
         uses: actions/setup-python@v5
         with:
@@ -74,6 +78,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Set git identity
+        run: |
+          git config --global user.name "scverse-bot"
+          git config --global user.email "108668866+scverse-bot@users.noreply.github.com"
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
@@ -81,5 +89,7 @@ jobs:
       - name: set git default branch
         run: git config --global init.defaultBranch main
       - name: Run tests
+        env:
+          SCVERSE_BOT_READONLY_GITHUB_TOKEN: ${{ secrets.SCVERSE_BOT_READONLY_GITHUB_TOKEN }}
         working-directory: ./scripts
         run: uvx hatch test

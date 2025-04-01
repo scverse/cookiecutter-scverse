@@ -13,24 +13,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: "pip"
-          cache-dependency-path: "**/pyproject.toml"
-      - name: Install build dependencies
-        run: python -m pip install --upgrade pip wheel
-      - name: Install package with scripts
-        run: pip install ./scripts
+      - name: Set git identity
+        run: |
+          git config --global user.name "scverse-bot"
+          git config --global user.email "108668866+scverse-bot@users.noreply.github.com"
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v5
       - name: Update template repo registry
-        run: send-cruft-prs ${{ env.RELEASE }}
+        run: uvx --from ./scripts send-cruft-prs ${{ env.RELEASE }} --all_repos --log-dir log --dry-run
         env:
           RELEASE: ${{ github.event_name == 'release' && github.event.release.tag_name || github.event.inputs.release }}
           GITHUB_TOKEN: ${{ secrets.BOT_GH_TOKEN }}
           FORCE_COLOR: "1"
           COLUMNS: "150"
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: cruft-logs
           path: log/
