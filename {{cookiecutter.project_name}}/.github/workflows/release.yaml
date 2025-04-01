@@ -23,10 +23,6 @@ jobs:
         with:
           filter: blob:none
           fetch-depth: 0
-      - name: Set git identity
-        run: |
-          git config --global user.name "scverse-bot"
-          git config --global user.email "108668866+scverse-bot@users.noreply.github.com"
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:

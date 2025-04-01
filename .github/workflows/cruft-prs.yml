@@ -13,6 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Set git identity
+        run: |
+          git config --global user.name "scverse-bot"
+          git config --global user.email "108668866+scverse-bot@users.noreply.github.com"
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@v5
       - name: Update template repo registry
