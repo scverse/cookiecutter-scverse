@@ -65,6 +65,12 @@ PR_BODY_TEMPLATE = """\
 N_RETRIES_WAIT_FOR_FORK = math.ceil(math.log(5 * 60) / math.log(2))  # = ⌈~8.22⌉ = 9
 # Due to exponential backoff, we’ll maximally wait 2⁹ sec, or 8.5 min
 
+# Ignore the following variables when re-initializing the template from a cookiecutter.json file
+IGNORE_COOKIECUTTER_VARS = [
+    # ignored because `cruft create` fails if it contains any different value than the default, see also https://github.com/cruft/cruft/issues/166
+    "_copy_without_render",
+]
+
 
 @dataclass
 class GitHubConnection:
@@ -302,7 +308,7 @@ def _apply_update(
         cookiecutter_config_file = template_dir / "cookiecutter.json"
         with cookiecutter_config_file.open("w") as f:
             # need to put the cookiecutter-related info from .cruft.json into separate file
-            json.dump(cookiecutter_config, f)
+            json.dump({k: v for k, v in cookiecutter_config.items() if k not in IGNORE_COOKIECUTTER_VARS}, f)
 
         # run in a subprocess, otherwise not possible to catpure output of post-run hooks
         with cruft_log_file.open("w") as log_f:
