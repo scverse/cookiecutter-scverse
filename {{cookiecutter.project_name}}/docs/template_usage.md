@@ -471,7 +471,7 @@ Here's one way how to do it:
 
     ```bash
     # move everything, including hidden folders, excluding `.git`.
-    rsync -av --exclude='.git' ./template/ ./${REPO}_cookiecutterized/
+    rsync -av --exclude='.git' ../template/$REPO ./
     git add -A
     git commit -m "init from template"
     ```
