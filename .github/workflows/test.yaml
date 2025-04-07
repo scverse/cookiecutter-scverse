@@ -72,11 +72,9 @@ jobs:
           python -c "import ${{ matrix.package-name }}"
       # Docs
       - name: Build the documentation
-        env:
-          SPHINXOPTS: -W --keep-going
         run: |
-          cd "$PROJECT_ROOT/docs"
-          make html
+          cd $PROJECT_ROOT
+          hatch run docs:build -W
 
   test-scripts:
     runs-on: ubuntu-latest
