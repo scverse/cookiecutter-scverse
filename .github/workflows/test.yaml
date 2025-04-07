@@ -32,11 +32,6 @@ jobs:
         run: |
           git config --global user.name "scverse-bot"
           git config --global user.email "108668866+scverse-bot@users.noreply.github.com"
-      - name: Set up Python ${{ matrix.python }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python }}
-          cache: "pip"
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
@@ -44,15 +39,10 @@ jobs:
       - name: Install Ubuntu system dependencies
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get install pandoc
-      - name: Install build dependencies
-        run: uv pip install --system cookiecutter
       # Build
       - name: Build from template
-        shell: python
         run: |
-          from cookiecutter.main import cookiecutter
-          overrides = dict(package_name='${{ matrix.package-name }}')
-          cookiecutter('.', no_input=True, extra_context=overrides)
+          uvx cruft create  . --no-input --extra-context '{"package_name": "${{ matrix.package-name }}"}'
       # Check
       - name: Set up pre-commit cache
         uses: actions/cache@v4
@@ -66,15 +56,13 @@ jobs:
           uvx pre-commit run --verbose --color=always --show-diff-on-failure --all-files
       - name: Install the package and check if it can be imported
         run: |
-          cd $PROJECT_ROOT
-          uv venv
-          uv pip install ".[doc]"
-          python -c "import ${{ matrix.package-name }}"
+          cd "$PROJECT_ROOT"
+          uv run python -c "import ${{ matrix.package-name }}"
       # Docs
       - name: Build the documentation
         run: |
-          cd $PROJECT_ROOT
-          hatch run docs:build -W
+          cd "$PROJECT_ROOT"
+          uvx hatch run docs:build -W
 
   test-scripts:
     runs-on: ubuntu-latest
