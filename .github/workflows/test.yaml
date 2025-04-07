@@ -42,7 +42,7 @@ jobs:
       # Build
       - name: Build from template
         run: |
-          uvx cruft create  . --no-input --extra-context '{"package_name": "${{ matrix.package-name }}"}'
+          uvx --with pre-commit cruft create  . --no-input --extra-context '{"package_name": "${{ matrix.package-name }}"}'
       # Check
       - name: Set up pre-commit cache
         uses: actions/cache@v4
