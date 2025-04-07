@@ -42,7 +42,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get install pandoc
       - name: Install build & check dependencies
-        run: python -m pip install --upgrade pip wheel cookiecutter pre-commit
+        run: python -m pip install --upgrade pip wheel cookiecutter pre-commit hatch
       # Build
       - name: Build from template
         shell: python
@@ -64,13 +64,13 @@ jobs:
       - name: Install the package
         run: |
           cd $PROJECT_ROOT
-          pip install ".[doc]"
+          pip install .
           python -c "import ${{ matrix.package-name }}"
       # Docs
       - name: Build the documentation
-        env:
-          SPHINXOPTS: -W --keep-going
-        run: hatch run docs:build
+        run: |
+          cd $PROJECT_ROOT
+          hatch run docs:build -W
 
   test-scripts:
     runs-on: ubuntu-latest
