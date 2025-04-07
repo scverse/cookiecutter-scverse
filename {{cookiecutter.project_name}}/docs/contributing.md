@@ -209,7 +209,7 @@ hatch run docs:open
 ```bash
 source .venv/bin/activate
 cd docs
-make html
+sphinx-build -M html docs docs/_build -W
 (xdg-)open _build/html/index.html
 ```
 
