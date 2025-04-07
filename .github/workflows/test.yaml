@@ -52,7 +52,7 @@ jobs:
           cookiecutter('.', no_input=True, extra_context=overrides)
       # Check
       - name: Set up pre-commit cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pre-commit
           key: pre-commit-3|${{ matrix.python }}|${{ hashFiles(format('{0}/.pre-commit-config.yaml', env.PROJECT_ROOT)) }}
@@ -70,9 +70,7 @@ jobs:
       - name: Build the documentation
         env:
           SPHINXOPTS: -W --keep-going
-        run: |
-          cd "$PROJECT_ROOT/docs"
-          make html
+        run: hatch run docs:build
 
   test-scripts:
     runs-on: ubuntu-latest
