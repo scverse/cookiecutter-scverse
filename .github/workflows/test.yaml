@@ -46,8 +46,7 @@ jobs:
           uv tool install hatch
       # Build
       - name: Build from template
-        run: |
-          cruft create  . --no-input --extra-context '{"package_name": "${{ matrix.package-name }}"}'
+        run: cruft create  . --no-input --extra-context='{"package_name":"${{ matrix.package-name }}"}'
       # Check
       - name: Run pre-commit
         run: |
