@@ -77,7 +77,7 @@ features = [ "test" ]
 
 [[tool.hatch.envs.hatch-test.matrix]]
 deps = [ "stable", "pre" ]
-python = ["3.10", "3.13"]
+python = [ "3.10", "3.13" ]
 
 [tool.hatch.envs.hatch-test.overrides]
 matrix.deps.env-vars = [

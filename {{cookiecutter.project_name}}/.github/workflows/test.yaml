@@ -58,6 +58,6 @@ jobs:
           DISPLAY: :42
         run: uvx hatch test --cover --python ${{ matrix.python }} --include deps=${{ matrix.deps }}
       - name: generate coverage report
-        run: uvx hatch run hatch-test.py${{ matrix.python }}:coverage xml
+        run: uvx hatch run hatch-test.py${{ matrix.python }}-${{ matrix.deps }}:coverage xml
       - name: Upload coverage
         uses: codecov/codecov-action@v4
