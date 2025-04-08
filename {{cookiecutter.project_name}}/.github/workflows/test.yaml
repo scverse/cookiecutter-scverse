@@ -27,11 +27,13 @@ jobs:
         include:
           - os: ubuntu-latest
             python: "3.10"
+            deps: stable
           - os: ubuntu-latest
-            python: "3.12"
+            python: "3.13"
+            deps: stable
           - os: ubuntu-latest
-            python: "3.12"
-            pip-flags: "--pre"
+            python: "3.13"
+            deps: pre
             name: PRE-RELEASE DEPENDENCIES
 
     name: ${{ matrix.name }} Python ${{ matrix.python }}
@@ -54,7 +56,7 @@ jobs:
           MPLBACKEND: agg
           PLATFORM: ${{ matrix.os }}
           DISPLAY: :42
-        run: uvx hatch test --cover --python ${{ matrix.python }}
+        run: uvx hatch test --cover --python ${{ matrix.python }} --include deps=${{ matrix.deps }}
       - name: generate coverage report
         run: uvx hatch run hatch-test.py${{ matrix.python }}:coverage xml
       - name: Upload coverage

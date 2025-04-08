@@ -75,6 +75,14 @@ scripts.clean = "git clean -fdX -- {args:docs}"
 [tool.hatch.envs.hatch-test]
 features = [ "test" ]
 
+[[tool.hatch.envs.hatch-test.matrix]]
+deps = [ "stable", "pre" ]
+
+[tool.hatch.envs.hatch-test.overrides]
+matrix.deps.env-vars = [
+  { key = "UV_PRERELEASE", value = "allow", if = [ "pre" ] },
+]
+
 [tool.ruff]
 line-length = 120
 src = [ "src" ]
