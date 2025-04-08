@@ -19,6 +19,8 @@ jobs:
           git config --global user.email "108668866+scverse-bot@users.noreply.github.com"
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@v5
+        with:
+          cache-dependency-glob: scripts/pyproject.toml
       - name: Update template repo registry
         run: uvx --from ./scripts send-cruft-prs ${{ env.RELEASE }} --all_repos --log-dir log
         env:
