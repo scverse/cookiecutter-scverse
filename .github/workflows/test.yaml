@@ -39,16 +39,21 @@ jobs:
       - name: Install Ubuntu system dependencies
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get install pandoc
+      - name: Install build & check dependencies
+        run: |
+          uv tool install pre-commit --with=pre-commit-uv
+          uv tool install cruft --with=pre-commit-uv
+          uv tool install hatch
       # Build
       - name: Build from template
         run: |
-          uvx --with pre-commit cruft create  . --no-input --extra-context '{"package_name": "${{ matrix.package-name }}"}'
+          pre-commit cruft create  . --no-input --extra-context '{"package_name": "${{ matrix.package-name }}"}'
       # Check
       - name: Run pre-commit
         run: |
           cd "$PROJECT_ROOT"
           git add .
-          uvx pre-commit-uv run --verbose --color=always --show-diff-on-failure --all-files
+          pre-commit run --verbose --color=always --show-diff-on-failure --all-files
       - name: Install the package and check if it can be imported
         run: |
           cd "$PROJECT_ROOT"
@@ -57,7 +62,7 @@ jobs:
       - name: Build the documentation
         run: |
           cd "$PROJECT_ROOT"
-          uvx hatch run docs:build -W
+          hatch run docs:build -W
 
   test-scripts:
     runs-on: ubuntu-latest
