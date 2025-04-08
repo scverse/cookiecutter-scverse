@@ -44,16 +44,11 @@ jobs:
         run: |
           uvx --with pre-commit cruft create  . --no-input --extra-context '{"package_name": "${{ matrix.package-name }}"}'
       # Check
-      - name: Set up pre-commit cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pre-commit
-          key: pre-commit-3|${{ matrix.python }}|${{ hashFiles(format('{0}/.pre-commit-config.yaml', env.PROJECT_ROOT)) }}
       - name: Run pre-commit
         run: |
           cd "$PROJECT_ROOT"
           git add .
-          uvx pre-commit run --verbose --color=always --show-diff-on-failure --all-files
+          uvx pre-commit-uv run --verbose --color=always --show-diff-on-failure --all-files
       - name: Install the package and check if it can be imported
         run: |
           cd "$PROJECT_ROOT"
