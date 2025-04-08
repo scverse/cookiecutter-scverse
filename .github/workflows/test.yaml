@@ -47,7 +47,7 @@ jobs:
       # Build
       - name: Build from template
         run: |
-          pre-commit cruft create  . --no-input --extra-context '{"package_name": "${{ matrix.package-name }}"}'
+          cruft create  . --no-input --extra-context '{"package_name": "${{ matrix.package-name }}"}'
       # Check
       - name: Run pre-commit
         run: |
