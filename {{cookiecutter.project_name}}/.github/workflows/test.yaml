@@ -67,7 +67,7 @@ jobs:
           MPLBACKEND: agg
           PLATFORM: ${{ matrix.os }}
           DISPLAY: :42
-        run: uvx hatch run ${{ matrix.env}}:run-cov
+        run: uvx hatch run ${{ matrix.env_name }}:run-cov
       - name: generate coverage report
         run: uvx hatch run hatch-test.py${{ matrix.python }}:coverage xml
       - name: Upload coverage
