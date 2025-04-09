@@ -37,6 +37,8 @@ jobs:
 
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@v5
+        with:
+          cache-dependency-glob: .github/workflows/deploy-instance-repo.yml
 
       - name: define sister PR branch name for pull request
         if: github.event_name == 'pull_request'

@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.10", "3.12"]
+        python: ["3.10", "3.13"]
         os: [ubuntu-latest]
         # one that matches "project-name".lower().replace('-', '_'), one that doesn’t:
         package-name: [project_name, package_alt]
@@ -32,44 +32,35 @@ jobs:
         run: |
           git config --global user.name "scverse-bot"
           git config --global user.email "108668866+scverse-bot@users.noreply.github.com"
-      - name: Set up Python ${{ matrix.python }}
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
         with:
-          python-version: ${{ matrix.python }}
-          cache: "pip"
-          cache-dependency-path: "{{cookiecutter.project_name}}/pyproject.toml"
+          cache-dependency-glob: "{{cookiecutter.project_name}}/pyproject.toml"
       - name: Install Ubuntu system dependencies
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get install pandoc
       - name: Install build & check dependencies
-        run: python -m pip install --upgrade pip wheel cookiecutter pre-commit hatch
+        run: |
+          uv tool install pre-commit --with=pre-commit-uv
+          uv tool install cruft --with=pre-commit-uv
+          uv tool install hatch
       # Build
       - name: Build from template
-        shell: python
-        run: |
-          from cookiecutter.main import cookiecutter
-          overrides = dict(package_name='${{ matrix.package-name }}')
-          cookiecutter('.', no_input=True, extra_context=overrides)
+        run: cruft create  . --no-input --extra-context='{"package_name":"${{ matrix.package-name }}"}'
       # Check
-      - name: Set up pre-commit cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pre-commit
-          key: pre-commit-3|${{ matrix.python }}|${{ hashFiles(format('{0}/.pre-commit-config.yaml', env.PROJECT_ROOT)) }}
       - name: Run pre-commit
         run: |
           cd "$PROJECT_ROOT"
           git add .
           pre-commit run --verbose --color=always --show-diff-on-failure --all-files
-      - name: Install the package
+      - name: Install the package and check if it can be imported
         run: |
-          cd $PROJECT_ROOT
-          pip install .
-          python -c "import ${{ matrix.package-name }}"
+          cd "$PROJECT_ROOT"
+          uv run python -c "import ${{ matrix.package-name }}"
       # Docs
       - name: Build the documentation
         run: |
-          cd $PROJECT_ROOT
+          cd "$PROJECT_ROOT"
           hatch run docs:build -W
 
   test-scripts:
@@ -83,7 +74,7 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
-          cache-dependency-glob: pyproject.toml
+          cache-dependency-glob: scripts/pyproject.toml
       - name: set git default branch
         run: git config --global init.defaultBranch main
       - name: Run tests
