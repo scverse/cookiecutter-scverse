@@ -41,7 +41,7 @@ jobs:
                 name: (if ($env | contains("pre")) then $env + " (PRE-RELEASE DEPENDENCIES)" else $env end)
               }
           ]')
-          echo "matrix=${MATRIX_JSON}" >> $GITHUB_OUTPUT
+          echo "matrix=${MATRIX_JSON}" | tee $GITHUB_OUTPUT
 
   test:
     needs: get-environments
@@ -67,7 +67,7 @@ jobs:
           MPLBACKEND: agg
           PLATFORM: ${{ matrix.os }}
           DISPLAY: :42
-        run: uvx hatch run ${{ matrix.env}}:test-cov
+        run: uvx hatch run ${{ matrix.env}}:run-cov
       - name: generate coverage report
         run: uvx hatch run hatch-test.py${{ matrix.python }}:coverage xml
       - name: Upload coverage
