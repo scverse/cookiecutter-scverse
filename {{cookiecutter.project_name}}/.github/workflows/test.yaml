@@ -18,33 +18,46 @@ defaults:
     shell: bash -euo pipefail {0}
 
 jobs:
-  test:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-latest
-            python: "3.10"
-          - os: ubuntu-latest
-            python: "3.12"
-          - os: ubuntu-latest
-            python: "3.12"
-            pip-flags: "--pre"
-            name: PRE-RELEASE DEPENDENCIES
-
-    name: ${{ matrix.name }} Python ${{ matrix.python }}
-
-    env:
-      OS: ${{ matrix.os }}
-      PYTHON: ${{ matrix.python }}
-
+  get-environments:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.get-envs.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
         with:
           filter: blob:none
           fetch-depth: 0
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+      - name: Get test environments
+        id: get-envs
+        run: |
+          MATRIX_JSON=$(uvx hatch env show --json | jq -c '[
+            keys[]
+            | select(startswith("hatch-test"))
+            | . as $env
+            | {
+                env_name: $env,
+                name: (if ($env | contains("pre")) then $env + " (PRE-RELEASE DEPENDENCIES)" else $env end)
+              }
+          ]')
+          echo "matrix=${MATRIX_JSON}" >> $GITHUB_OUTPUT
+
+  test:
+    needs: get-environments
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        include: ${{ fromJson(needs.get-environments.outputs.matrix) }}
+
+    name: ${{ matrix.name }}
+
+    steps:
+      - uses: actions/checkout@v4
+
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
@@ -54,8 +67,12 @@ jobs:
           MPLBACKEND: agg
           PLATFORM: ${{ matrix.os }}
           DISPLAY: :42
-        run: uvx hatch test --cover --python ${{ matrix.python }}
+        run: uvx hatch run ${{ matrix.env}}:test-cov
       - name: generate coverage report
         run: uvx hatch run hatch-test.py${{ matrix.python }}:coverage xml
       - name: Upload coverage
         uses: codecov/codecov-action@v4
+
+
+
+
