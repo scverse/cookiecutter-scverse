@@ -38,7 +38,8 @@ jobs:
             | . as $env
             | {
                 env_name: $env,
-                name: (if ($env | contains("pre")) then $env + " (PRE-RELEASE DEPENDENCIES)" else $env end)
+                name: (if ($env | contains("pre")) then $env + " (PRE-RELEASE DEPENDENCIES)" else $env end),
+                python: .[$env].python
               }
           ]')
           echo "matrix=${MATRIX_JSON}" | tee $GITHUB_OUTPUT
@@ -62,7 +63,9 @@ jobs:
         with:
           cache-dependency-glob: pyproject.toml
       - name: create hatch environment
-        run: uvx hatch env create ${{ matrix.env_name }}
+        run: |
+          uvx hatch python install ${{ matrix.python }}
+          uvx hatch env create ${{ matrix.env_name }}
       - name: run tests using hatch
         env:
           MPLBACKEND: agg
