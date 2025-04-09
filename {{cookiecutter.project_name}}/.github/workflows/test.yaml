@@ -32,16 +32,15 @@ jobs:
       - name: Get test environments
         id: get-envs
         run: |
-          MATRIX_JSON=$(uvx hatch env show --json | jq -c '[
-            keys[]
-            | select(startswith("hatch-test"))
-            | . as $env
-            | {
-                env_name: $env,
-                name: (if ($env | contains("pre")) then $env + " (PRE-RELEASE DEPENDENCIES)" else $env end),
-                python: .[$env].python
-              }
-          ]')
+          MATRIX_JSON=$(uvx hatch env show --json | jq -c 'to_entries
+            | map(
+                select(.key | startswith("hatch-test"))
+                | {
+                    env_name: .key,
+                    name: (if (.key | contains("pre")) then .key + " (PRE-RELEASE DEPENDENCIES)" else .key end),
+                    python: .value.python
+                  }
+              )')
           echo "matrix=${MATRIX_JSON}" | tee $GITHUB_OUTPUT
 
   test:
