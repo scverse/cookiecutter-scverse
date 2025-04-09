@@ -62,6 +62,8 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           cache-dependency-glob: pyproject.toml
+      - name: create hatch environment
+        run: uvx env create ${{ matrix.env_name }}
       - name: run tests using hatch
         env:
           MPLBACKEND: agg
@@ -69,7 +71,8 @@ jobs:
           DISPLAY: :42
         run: uvx hatch run ${{ matrix.env_name }}:run-cov
       - name: generate coverage report
-        run: uvx hatch run hatch-test.py${{ matrix.python }}:coverage xml
+        run: |
+          uvx hatch run ${{ matrix.env_name }}:coverage xml
       - name: Upload coverage
         uses: codecov/codecov-action@v4
 
