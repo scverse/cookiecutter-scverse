@@ -45,12 +45,11 @@ jobs:
 
   test:
     needs: get-environments
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
         include: ${{ fromJSON(needs.get-environments.outputs.matrix) }}
 
     name: ${{ matrix.name }}
@@ -70,7 +69,7 @@ jobs:
       - name: run tests using hatch
         env:
           MPLBACKEND: agg
-          PLATFORM: ${{ matrix.os }}
+          PLATFORM: ubuntu-latest
           DISPLAY: :42
         run: uvx hatch run ${{ matrix.env_name }}:run-cov
       - name: generate coverage report
