@@ -31,17 +31,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
       - name: Get test environments
         id: get-envs
-        run: |
-          MATRIX_JSON=$(uvx hatch env show --json | jq -c 'to_entries
-            | map(
-                select(.key | startswith("hatch-test"))
-                | {
-                    env_name: .key,
-                    name: (if (.key | contains("pre")) then .key + " (PRE-RELEASE DEPENDENCIES)" else .key end),
-                    python: .value.python
-                  }
-              )')
-          echo "matrix=${MATRIX_JSON}" | tee $GITHUB_OUTPUT
+        run: echo "matrix=$(uv run .workflows/envs-matrix.py)" | tee $GITHUB_OUTPUT
 
   test:
     needs: get-environments
@@ -49,8 +39,7 @@ jobs:
 
     strategy:
       fail-fast: false
-      matrix:
-        include: ${{ fromJSON(needs.get-environments.outputs.matrix) }}
+      matrix: ${{ fromJSON(needs.get-environments.outputs.matrix) }}
 
     name: ${{ matrix.name }}
 
