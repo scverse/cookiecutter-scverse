@@ -8,7 +8,9 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    if: ${{ github.triggering_actor == 'pre-commit[bot]' }}
     steps:
+      - run: echo ${{ github.triggering_actor }}  # TODO: remove this debug line
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.BOT_GH_TOKEN }}
