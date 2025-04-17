@@ -32,7 +32,7 @@ jobs:
       - name: Get test environments
         id: get-envs
         run: |
-          MATRIX_JSON=$(uvx hatch env show --json | jq -c 'to_entries
+          ENVS_JSON=$(uvx hatch env show --json | jq -c 'to_entries
             | map(
                 select(.key | startswith("hatch-test"))
                 | {
@@ -41,11 +41,10 @@ jobs:
                     python: .value.python
                   }
               )')
-          echo "envs=${MATRIX_JSON}" | tee $GITHUB_OUTPUT
+          echo "envs=${ENVS_JSON}" | tee $GITHUB_OUTPUT
 
   test:
     needs: get-environments
-    runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
@@ -54,6 +53,7 @@ jobs:
         env: ${{ fromJSON(needs.get-environments.outputs.envs) }}
 
     name: ${{ matrix.env.label }}
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v4
@@ -77,3 +77,14 @@ jobs:
         run: uvx hatch run ${{ matrix.env.name }}:coverage xml
       - name: Upload coverage
         uses: codecov/codecov-action@v4
+
+  check: # https://github.com/re-actors/alls-green#why
+    if: always()
+    needs:
+      - get-environments
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
