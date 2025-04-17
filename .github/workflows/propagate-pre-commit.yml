@@ -8,13 +8,11 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    # if: ${{ github.triggering_actor == 'pre-commit[bot]' }}
+    if: ${{ github.actor == 'pre-commit[bot]' }}
     steps:
-      - run: 'echo orig: ${{ github.actor }}'
-      - run: 'echo push: ${{ github.triggering_actor }}'
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.BOT_GH_TOKEN }}
       - run: pipx install pre-commit
-      #- run: cd '{{cookiecutter.project_name}}' && pre-commit autoupdate
-      #- uses: stefanzweifel/git-auto-commit-action@v5
+      - run: cd '{{cookiecutter.project_name}}' && pre-commit autoupdate
+      - uses: stefanzweifel/git-auto-commit-action@v5
