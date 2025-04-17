@@ -21,7 +21,7 @@ jobs:
   get-environments:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.get-envs.outputs.matrix }}
+      envs: ${{ steps.get-envs.outputs.envs }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,23 +36,24 @@ jobs:
             | map(
                 select(.key | startswith("hatch-test"))
                 | {
-                    env_name: .key,
-                    name: (if (.key | contains("pre")) then .key + " (PRE-RELEASE DEPENDENCIES)" else .key end),
+                    name: .key,
+                    label: (if (.key | contains("pre")) then .key + " (PRE-RELEASE DEPENDENCIES)" else .key end),
                     python: .value.python
                   }
               )')
-          echo "matrix=${MATRIX_JSON}" | tee $GITHUB_OUTPUT
+          echo "envs=${MATRIX_JSON}" | tee $GITHUB_OUTPUT
 
   test:
     needs: get-environments
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
       matrix:
-        include: ${{ fromJSON(needs.get-environments.outputs.matrix) }}
+        os: [ubuntu-latest]
+        env: ${{ fromJSON(needs.get-environments.outputs.envs) }}
 
-    name: ${{ matrix.name }}
+    name: ${{ matrix.env.label }}
 
     steps:
       - uses: actions/checkout@v4
@@ -62,17 +63,17 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
-          python-version: ${{ matrix.python }}
+          python-version: ${{ matrix.env.python }}
           cache-dependency-glob: pyproject.toml
       - name: create hatch environment
-        run: uvx hatch env create ${{ matrix.env_name }}
+        run: uvx hatch env create ${{ matrix.env.name }}
       - name: run tests using hatch
         env:
           MPLBACKEND: agg
-          PLATFORM: ubuntu-latest
+          PLATFORM: ${{ matrix.os }}
           DISPLAY: :42
-        run: uvx hatch run ${{ matrix.env_name }}:run-cov
+        run: uvx hatch run ${{ matrix.env.name }}:run-cov
       - name: generate coverage report
-        run: uvx hatch run ${{ matrix.env_name }}:coverage xml
+        run: uvx hatch run ${{ matrix.env.name }}:coverage xml
       - name: Upload coverage
         uses: codecov/codecov-action@v4
