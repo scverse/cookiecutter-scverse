@@ -73,12 +73,12 @@ scripts.open = "python -m webbrowser -t docs/_build/html/index.html"
 scripts.clean = "git clean -fdX -- {args:docs}"
 
 [[tool.hatch.envs.hatch-test.matrix]]
-deps = ["stable"]
-python = ["3.10", "3.13"]
+deps = [ "stable" ]
+python = [ "3.10", "3.13" ]
 
 [[tool.hatch.envs.hatch-test.matrix]]
-deps = ["stable", "pre"]
-python = ["3.13"]
+deps = [ "stable", "pre" ]
+python = [ "3.13" ]
 
 [tool.hatch.envs.hatch-test]
 features = [ "test" ]
