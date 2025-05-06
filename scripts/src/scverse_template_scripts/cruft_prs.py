@@ -121,13 +121,19 @@ class TemplateUpdatePR:
         return f"{self.title_prefix}{self.release.tag_name}"
 
     @property
-    def branch(self) -> str:
+    def template_branch(self) -> str:
+        """Branch name in the forked repo that tracks template updates (stay the same across versions)"""
         # as of v0.5.0 (new template sync), the branch name does not contain the release-tag anymore
         return f"{self.branch_prefix}{self.repo_id}"
 
     @property
+    def pr_branch(self) -> str:
+        """Name of the branch that is used to create the pull-request. A new branch is created for each version."""
+        return f"{self.template_branch}-{self.release.tag_name}"
+
+    @property
     def namespaced_head(self) -> str:
-        return f"{self.con.login}:{self.branch}"
+        return f"{self.con.login}:{self.template_branch}"
 
     @property
     def body(self) -> str:
@@ -141,9 +147,9 @@ class TemplateUpdatePR:
         # Don’t compare title prefix, people might rename PRs
         return pr.head.ref.startswith(self.branch_prefix) and pr.user.id == self.con.user.id
 
-    def matches_exact_branch_name(self, pr: PullRequest) -> bool:
+    def matches_current_version(self, pr: PullRequest) -> bool:
         """Check if `pr` is a template update PR for the current version"""
-        return pr.head.ref == self.branch and pr.user.id == self.con.user.id
+        return pr.head.ref == self.pr_branch and pr.user.id == self.con.user.id
 
 
 class RepoInfo(TypedDict):
@@ -490,16 +496,16 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir
         con,
         forked_repo=forked_repo,
         original_repo=original_repo,
-        template_branch_name=pr.branch,
+        template_branch_name=pr.template_branch,
         tag_name=release.tag_name,
-        cruft_log_file=log_dir / f"{pr.branch}.log",
+        cruft_log_file=log_dir / f"{pr.template_branch}.log",
         dry_run=dry_run,
     )
     if dry_run:
         log.info("Skipping PR because in dry-run mode")
         return
     if updated:
-        if old_pr := next((p for p in original_repo.get_pulls("open") if pr.matches_exact_branch_name(p)), None):
+        if old_pr := next((p for p in original_repo.get_pulls("open") if pr.matches_template_branch(p)), None):
             log.info(f"PR already exists: #{old_pr.number} with branch name `{old_pr.head.ref}`. Skipping PR creation.")
         else:
             log.info(f"Creating PR of {pr.namespaced_head} against {original_repo.default_branch}")
