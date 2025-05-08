@@ -388,6 +388,7 @@ def template_update(  # noqa: PLR0913, (= too many function arguments)
     forked_repo: GHRepo,
     original_repo: GHRepo,
     template_branch_name: str,
+    versioned_branch_name: str,
     tag_name: str,
     cruft_log_file: Path,
     dry_run: bool,
@@ -406,6 +407,8 @@ def template_update(  # noqa: PLR0913, (= too many function arguments)
     4) Use `cruft create` to instantiate the template into a separate directory
     5) sync the changes from the separate directory into the `template-branch`
     6) commit
+    7) check out commit into a version-specific branch used for making the pull request. See #396 for why this is
+       necessary.
 
     --> From this commit, we can make a pull-request to the original repo including the latest template-changes.
 
@@ -417,6 +420,8 @@ def template_update(  # noqa: PLR0913, (= too many function arguments)
         The repo forked in scverse-bot namespace
     template_branch_name
         branch name to use for the template in the forked repo
+    versioned_branch_name
+        version-specific branch name (will be created off the template branch)
     original_repo
         The original (upstream) repo
     tag_name
@@ -452,17 +457,19 @@ def template_update(  # noqa: PLR0913, (= too many function arguments)
             tmp_config = json.load(f)
             exclude_files = tmp_config["context"]["cookiecutter"].get("_exclude_on_template_update", [])
 
-        if _commit_update(
-            clone,
-            exclude_files=exclude_files,
-            commit_msg=f"Automated template update to {tag_name}",
-            commit_author=f"{con.sig.name} <{con.sig.email}>",
-        ):
-            if not dry_run:
-                clone.git.push("origin", template_branch_name)
-            return True
-        else:
-            return False
+        if (
+            updated := _commit_update(
+                clone,
+                exclude_files=exclude_files,
+                commit_msg=f"Automated template update to {tag_name}",
+                commit_author=f"{con.sig.name} <{con.sig.email}>",
+            )
+        ) and not dry_run:
+            clone.git.switch(versioned_branch_name, template_branch_name, C=True)
+            clone.git.push("origin", template_branch_name)
+            clone.git.push("origin", versioned_branch_name)
+
+        return updated
 
 
 def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir: Path, dry_run: bool = False) -> None:
@@ -497,6 +504,7 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir
         forked_repo=forked_repo,
         original_repo=original_repo,
         template_branch_name=pr.template_branch,
+        versioned_branch_name=pr.pr_branch,
         tag_name=release.tag_name,
         cruft_log_file=log_dir / f"{pr.template_branch}.log",
         dry_run=dry_run,
@@ -505,18 +513,25 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir
         log.info("Skipping PR because in dry-run mode")
         return
     if updated:
-        if old_pr := next((p for p in original_repo.get_pulls("open") if pr.matches_template_branch(p)), None):
+        if old_pr := next((p for p in original_repo.get_pulls("open") if pr.matches_current_version(p)), None):
             log.info(f"PR already exists: #{old_pr.number} with branch name `{old_pr.head.ref}`. Skipping PR creation.")
-        else:
-            log.info(f"Creating PR of {pr.namespaced_head} against {original_repo.default_branch}")
-            new_pr = original_repo.create_pull(
-                title=pr.title,
-                body=pr.body,
-                base=original_repo.default_branch,
-                head=pr.namespaced_head,
-                maintainer_can_modify=True,
-            )
-            log.info(f"Created PR #{new_pr.number} with branch name `{new_pr.head.ref}`.")
+            return
+
+        if old_pr := next((p for p in original_repo.get_pulls("open") if pr.matches_prefix(p)), None):
+            log.info(f"Closing old PR #{old_pr.number} with branch name `{old_pr.head.ref}`.")
+            old_pr.edit(state="closed")
+
+        log.info(f"Checking out latest commit on template branch to `{pr.pr_branch}`")
+
+        log.info(f"Creating PR of {pr.namespaced_head} against {original_repo.default_branch}")
+        new_pr = original_repo.create_pull(
+            title=pr.title,
+            body=pr.body,
+            base=original_repo.default_branch,
+            head=pr.namespaced_head,
+            maintainer_can_modify=True,
+        )
+        log.info(f"Created PR #{new_pr.number} with branch name `{new_pr.head.ref}`.")
 
 
 cli = App()
