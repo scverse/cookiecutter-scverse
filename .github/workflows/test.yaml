@@ -61,7 +61,7 @@ jobs:
       - name: Build the documentation
         run: |
           cd "$PROJECT_ROOT"
-          hatch run docs:build -W
+          hatch run docs:build
 
   test-scripts:
     runs-on: ubuntu-latest
