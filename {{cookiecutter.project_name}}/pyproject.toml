@@ -14,7 +14,7 @@ maintainers = [
 authors = [
   { name = "{{ cookiecutter.author_full_name }}" },
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.10",
