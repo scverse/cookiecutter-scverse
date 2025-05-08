@@ -133,7 +133,8 @@ class TemplateUpdatePR:
 
     @property
     def namespaced_head(self) -> str:
-        return f"{self.con.login}:{self.template_branch}"
+        """Branch used to crate the pull request, including repo namespace"""
+        return f"{self.con.login}:{self.pr_branch}"
 
     @property
     def body(self) -> str:
@@ -520,8 +521,6 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir
         if old_pr := next((p for p in original_repo.get_pulls("open") if pr.matches_prefix(p)), None):
             log.info(f"Closing old PR #{old_pr.number} with branch name `{old_pr.head.ref}`.")
             old_pr.edit(state="closed")
-
-        log.info(f"Checking out latest commit on template branch to `{pr.pr_branch}`")
 
         log.info(f"Creating PR of {pr.namespaced_head} against {original_repo.default_branch}")
         new_pr = original_repo.create_pull(
