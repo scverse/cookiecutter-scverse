@@ -171,7 +171,6 @@ On the RTD dashboard choose "Import a Project" and follow the instructions to ad
   This ensures that a PR doesn't introduce changes that break the documentation.
   To do so, got to `Admin -> Advanced Settings`, check the `Build pull requests for this projects` option, and click `Save`.
   For more information, please refer to the [official RTD documentation][rtd-prs].
-- If you find the RTD builds are failing, you can disable the `fail_on_warning` option in `.readthedocs.yaml`.
 
 If your project is private, there are ways to enable docs rendering on [readthedocs.org][] but it is more cumbersome and requires a different RTD subscription.
 See a guide [here](https://docs.readthedocs.io/en/stable/guides/importing-private-repositories.html).
@@ -417,20 +416,16 @@ This means that every night, a GitHub action runs [cruft][] to check if a new ve
 If there are any new changes, a pull request proposing these changes is created automatically.
 This helps keeping the repository up-to-date with the latest coding standards.
 
-It may happen that a template sync results in a merge conflict.
-If this is the case a `*.ref` file with the diff is created.
-You need to manually address these changes and remove the `.rej` file when you are done.
-The pull request can only be merged after all `*.rej` files have been removed.
+It may happen that a template sync results in a merge conflict. In that case, you
+need to resolve the merge conflicts manually, either using the GitHub UI, or in your favorite editor.
 
 :::{tip}
 The following hints may be useful to work with the template sync:
 
-- GitHub automatically disables scheduled actions if there has been not activity to the repository for 60 days.
-  You can re-enable or manually trigger the sync by navigating to `Actions` -> `Sync Template` in your GitHub repository.
 - If you want to ignore certain files from the template update,
   you can add them to the `[tool.cruft]` section in the `pyproject.toml` file in the root of your repository.
   More details are described in the [cruft documentation][cruft-update-project].
-- To disable the sync entirely, simply remove the file `.github/workflows/sync.yaml`.
+- To disable the sync entirely, simply remove the file `.cruft.json`.
 
 :::
 
