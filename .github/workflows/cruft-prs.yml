@@ -22,7 +22,7 @@ jobs:
         with:
           cache-dependency-glob: scripts/pyproject.toml
       - name: Update template repo registry
-        run: uvx --from ./scripts send-cruft-prs ${{ env.RELEASE }} --all_repos --log-dir log --dry-run
+        run: uvx --from ./scripts send-cruft-prs ${{ env.RELEASE }} --all_repos --log-dir log
         env:
           RELEASE: ${{ github.event_name == 'release' && github.event.release.tag_name || github.event.inputs.release }}
           GITHUB_TOKEN: ${{ secrets.BOT_GH_TOKEN }}
