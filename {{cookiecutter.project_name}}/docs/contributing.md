@@ -9,7 +9,8 @@ If not, please refer to the [scanpy developer guide][].
 
 [scanpy developer guide]: https://scanpy.readthedocs.io/en/latest/dev/index.html
 
-:::{tip} The *hatch* project manager
+:::{admonition} The *hatch* project manager
+:class: tip
 
 We highly recommend to familiarize yourself with [hatch][]. Hatch is
 a Python project manager that
@@ -32,7 +33,6 @@ you need additional python packages to [run tests](#writing-tests) and [build th
 
 :::::{tabs}
 ::::{group-tab} Hatch
-The easiest way is to get familiar with [hatch environments][], with which these tasks are simply:
 
 ```bash
 hatch test  # defined in the table [tool.hatch.envs.hatch-test] in pyproject.toml
