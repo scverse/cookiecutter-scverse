@@ -50,7 +50,8 @@ While the repository at this point can be directly used, there are few remaining
 
 Modern Python package management uses a `pyproject.toml` that was first introduced in [PEP 518](https://peps.python.org/pep-0518/).
 This file contains build system requirements and information, which are used by pip to build the package, and tool configurations.
-For more details please have a look at [pip's description of the pyproject.toml file](https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml/).
+For more details please have a look at [pip's description of the pyproject.toml file](https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml/). It also serves as a single point of truth to define test environments and how docs are built by leveraging
+the [hatch][] project manager, but more about that in the [contributing guide](contributing.md).
 
 #### Important metadata fields
 
@@ -176,7 +177,7 @@ To set this up, login to [PyPI][], and proceed depending on whether you already 
 
 The "Workflow name" needs to bet set to `release.yaml`.
 In most cases, you can leave the "Environment name" empty.
-For more details, please refer to the official [PyPI guide for setting up trusted publishing][pypi-trusted-publishing-guide].
+For more details, please refer to the official [PyPI guide for setting up trusted publishing][trusted publisher].
 
 (pre-commit)=
 
@@ -449,3 +450,7 @@ Here's one way how to do it:
 [rtd-prs]: https://docs.readthedocs.io/en/stable/pull-requests.html
 [Github Actions]: https://github.com/features/actions
 [twine]: https://github.com/pypa/twine
+[hatch]: https://hatch.pypa.io/latest/
+[PyPI]: https://pypi.org/
+[trusted-publisher]: https://docs.pypi.org/trusted-publishers/
+[PyPI publishing settings]: https://pypi.org/manage/account/publishing/
