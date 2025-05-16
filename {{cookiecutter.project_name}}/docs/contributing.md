@@ -9,6 +9,22 @@ If not, please refer to the [scanpy developer guide][].
 
 [scanpy developer guide]: https://scanpy.readthedocs.io/en/latest/dev/index.html
 
+:::{tip} The *hatch* project manager
+
+We highly recommend to familiarize yourself with [hatch][]. Hatch is
+a Python project manager that
+
+ * manages virtual environments, separately for development, testing and building the documentation
+ * allows to run tests locally in different environments (e.g. different python versions)
+ * allows to run tasks defined in `pyproject.toml`, e.g. to build documentation.
+
+While the project is setup with `hatch` in mind, it is still possible to use different tools
+to manage dependencies, such as `uv` or `pip`.
+
+:::
+
+[hatch]: https://hatch.pypa.io/latest/
+
 ## Installing dev dependencies
 
 In addition to the packages needed to _use_ this package,
