@@ -73,8 +73,6 @@ git push -u origin main
 Your project should be now available at `https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}`.
 While the repository at this point can be directly used, there are few remaining steps that needs to be done in order to achieve full functionality.
 
-[github quickstart guide]: https://docs.github.com/en/get-started/quickstart/create-a-repo?tool=webui
-[cookiecutter-scverse-instance]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html
 
 ### The pyproject.toml file
 
@@ -476,3 +474,7 @@ Here's one way how to do it:
 
 7. Commit your changes.
    Merge the `cookiecutterize` branch into the main branch, e.g. by making a pull request.
+
+
+[github quickstart guide]: https://docs.github.com/en/get-started/quickstart/create-a-repo?tool=webui
+[cookiecutter-scverse-instance]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html
