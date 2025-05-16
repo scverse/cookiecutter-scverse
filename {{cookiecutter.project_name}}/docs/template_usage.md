@@ -218,6 +218,7 @@ The following pre-commit hooks are for code style and format:
       write better list/set/dict comprehensions.
     - [pyupgrade](https://beta.ruff.rs/docs/rules/#pyupgrade-up) (rule category: `UP`):
       upgrade syntax for newer versions of the language.
+- [pyproject-fmt][] formats the `pyproject.toml` file in a consistent way.
 
 The following pre-commit hooks are for errors and inconsistencies:
 
@@ -228,9 +229,6 @@ The following pre-commit hooks are for errors and inconsistencies:
     - **mixed-line-ending**: checks mixed line ending.
     - **trailing-whitespace**: trims trailing whitespace.
     - **check-case-conflict**: check files that would conflict with case-insensitive file systems.
-    - **forbid-to-commit**: Make sure that `*.rej` files cannot be commited.
-      These files are created by the [automated template sync](#automated-template-sync)
-      if there's a merge conflict and need to be addressed manually.
 - [ruff][] based checks:
     - [pyflakes](https://beta.ruff.rs/docs/rules/#pyflakes-f) (rule category: `F`):
       various checks for errors.
@@ -357,15 +355,15 @@ In `pyproject.toml` add the following changes, and you are good to go!
  omit = [
 ```
 
-Don't forget to update the [Making a release section](contributing.md#publishing-a-release) in this document accordingly, after you are done!
+Don't forget to update the [Making a release section](contributing.md#publishing-a-release) in the "Contributing" guide of your repository.
 
 
 ### Automated template sync
 
-Automated template sync is enabled by default.
-This means that every night, a GitHub action runs [cruft][] to check if a new version of the `scverse-cookiecutter` template got released.
-If there are any new changes, a pull request proposing these changes is created automatically.
-This helps keeping the repository up-to-date with the latest coding standards.
+Automated template sync is enabled by default for public repositories.
+Our [scverse-bot][] automatically crawls GitHub for repositories that are based on this template
+and adds them to the [list of template repositories][]. Whenever a new release of the template is made, a pull request is
+opened in every repository listed there. This helps keeping the repository up-to-date with the latest coding standards.
 
 It may happen that a template sync results in a merge conflict. In that case, you
 need to resolve the merge conflicts manually, either using the GitHub UI, or in your favorite editor.
@@ -375,8 +373,7 @@ The following hints may be useful to work with the template sync:
 
 - If you want to ignore certain files from the template update,
   you can add them to the `[tool.cruft]` section in the `pyproject.toml` file in the root of your repository.
-  More details are described in the [cruft documentation][cruft-update-project].
-- To disable the sync entirely, simply remove the file `.cruft.json`.
+- To disable the sync entirely, remove your package from the [list of template repositories][] via pull request, or simply remove the file `.cruft.json` from the root of your repository.
 
 :::
 
@@ -384,7 +381,7 @@ The following hints may be useful to work with the template sync:
 ## Moving forward
 
 You have successfully set up your project and are ready to start.
-For everything else related to documentation, code style, testing and publishing your project to pypi, please refer to the [contributing docs](contributing.md#contributing-guide).
+For everything else related to documentation, code style, testing and publishing your project to pypi, please refer to the [contributing docs](contributing.md#contributing-guide), which is also contained in your repository.
 
 ## Migrate existing projects to using this template
 
@@ -427,30 +424,33 @@ Here's one way how to do it:
    Merge the `cookiecutterize` branch into the main branch, e.g. by making a pull request.
 
 
-[github quickstart guide]: https://docs.github.com/en/get-started/quickstart/create-a-repo?tool=webui
-[cookiecutter-scverse-instance]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html
+[anndata]: https://github.com/scverse/anndata
+[biome]: https://biomejs.dev/
 [codecov]: https://about.codecov.io/sign-up/
-[codecov docs]: https://docs.codecov.com/docs
-[codecov bot]: https://docs.codecov.com/docs/team-bot
 [codecov app]: https://github.com/apps/codecov
+[codecov bot]: https://docs.codecov.com/docs/team-bot
+[codecov docs]: https://docs.codecov.com/docs
 [cruft]: https://cruft.github.io/cruft/
 [cruft-update-project]: https://cruft.github.io/cruft/#updating-a-project
+[github quickstart guide]: https://docs.github.com/en/get-started/quickstart/create-a-repo?tool=webui
+[Github Actions]: https://github.com/features/actions
+[hatch]: https://hatch.pypa.io/latest/
 [hatch-vcs]: https://pypi.org/project/hatch-vcs/
-[anndata]: https://github.com/scverse/anndata
 [mudata]: https://github.com/scverse/mudata
-[spatialdata]: https://github.com/scverse/spatialdata
-[scanpy-api]: https://scanpy.readthedocs.io/en/stable/usage-principles.html
-[ruff]: https://docs.astral.sh/ruff/
-[ruff-error-suppression]: https://docs.astral.sh/ruff/linter/#error-suppression
-[ruff-config]: https://docs.astral.sh/ruff/configuration/
-[ruff-external]: https://docs.astral.sh/ruff/settings/#external
 [pre-commit]: https://pre-commit.com/
 [pre-commit.ci]: https://pre-commit.ci/
+[PyPI]: https://pypi.org/
+[PyPI publishing settings]: https://pypi.org/manage/account/publishing/
+[pyproject-fmt]: https://pyproject-fmt.readthedocs.io/en/latest/index.html
 [readthedocs.org]: https://readthedocs.org/
 [rtd-prs]: https://docs.readthedocs.io/en/stable/pull-requests.html
-[Github Actions]: https://github.com/features/actions
+[ruff]: https://docs.astral.sh/ruff/
+[ruff-config]: https://docs.astral.sh/ruff/configuration/
+[ruff-error-suppression]: https://docs.astral.sh/ruff/linter/#error-suppression
+[ruff-external]: https://docs.astral.sh/ruff/settings/#external
+[scanpy-api]: https://scanpy.readthedocs.io/en/stable/usage-principles.html
+[scverse-bot]: https://github.com/scverse-bot
+[spatialdata]: https://github.com/scverse/spatialdata
+[trusted publisher]: https://docs.pypi.org/trusted-publishers/
 [twine]: https://github.com/pypa/twine
-[hatch]: https://hatch.pypa.io/latest/
-[PyPI]: https://pypi.org/
-[trusted-publisher]: https://docs.pypi.org/trusted-publishers/
-[PyPI publishing settings]: https://pypi.org/manage/account/publishing/
+[lits of template repositories]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
