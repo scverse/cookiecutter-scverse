@@ -20,7 +20,7 @@ cruft create https://github.com/scverse/cookiecutter-scverse
 and you should have
 
 ```
-cd {{cookiecutter.project_name}}
+cd <your-project>
 ```
 
 into the new project directory.
@@ -30,47 +30,19 @@ You can follow the instructions directly on [github quickstart guide][].
 Since `cruft` already populated the local repository of your project with all the necessary files,
 we suggest to _NOT_ initialize the repository with a `README.md` file or `.gitignore`, because you might encounter git conflicts on your first push.
 
-:::{note}
-If you are looking at this document in the [cookiecutter-scverse-instance][] repository documentation,
-throughout this document the name of the project is `cookiecutter-scverse-instance`.
-Otherwise it should be replaced by your new project name: `{{cookiecutter.project_name}}`.
-:::
 
-Now that your new project repository has been created on GitHub at `https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}`,
-you can push your first commit to GitHub:
+Now that your new project repository has been created on GitHub at `https://github.com/<your-github-username>/<your-project>`,
+you can push it to GitHub. A first commit should already have been created by `cruft` when you created the project.
 
-Assuming you are in `/your/path/to/{{cookiecutter.project_name}}`.
-Add all files and commit.
-
-```bash
-# stage all files of your new repo
-git add --all
-# commit
-git commit -m "first commit"
-```
-
-You'll notice that the command `git commit` installed a bunch of packages and triggered their execution: those are [pre-commit][]!
-To read more about what they are and what they do, you can go to the related section [Pre-commit checks](#pre-commit-checks) in this document.
-
-```bash
-git add -u # update all tracked file
-git commit -m "first commit"
-```
-
-:::
-
-Now that all the files of the newly created project have been committed, go ahead with the remaining steps:
 
 ```bash
 # update the `origin` of your local repo with the remote GitHub link
-git remote add origin https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}.git
-# rename the default branch to main
-git branch -M main
+git remote add origin https://github.com/<your-github-username>/<your-project>.git
 # push all your files to remote
 git push -u origin main
 ```
 
-Your project should be now available at `https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}`.
+Your project should be now available at `https://github.com/<your-github-username>/<your-project>`.
 While the repository at this point can be directly used, there are few remaining steps that needs to be done in order to achieve full functionality.
 
 
@@ -152,10 +124,6 @@ In brief, you need to:
     ```
 7. Go back to GitHub `Actions` page an re-run previously failed jobs.
 
-[codecov]: https://about.codecov.io/sign-up/
-[codecov docs]: https://docs.codecov.com/docs
-[codecov bot]: https://docs.codecov.com/docs/team-bot
-[codecov app]: https://github.com/apps/codecov
 
 ### Documentation on _readthedocs_
 
@@ -173,8 +141,6 @@ On the RTD dashboard choose "Import a Project" and follow the instructions to ad
 If your project is private, there are ways to enable docs rendering on [readthedocs.org][] but it is more cumbersome and requires a different RTD subscription.
 See a guide [here](https://docs.readthedocs.io/en/stable/guides/importing-private-repositories.html).
 
-[readthedocs.org]: https://readthedocs.org/
-[rtd-prs]: https://docs.readthedocs.io/en/stable/pull-requests.html
 
 (github-actions)=
 
@@ -196,8 +162,6 @@ This project comes with several pre-configured workflows that can be found in th
 To check the status of these workflows, go to the "Actions" tab in your GitHub repository.
 There you can see the execution history, logs, and (re-)trigger workflows manually if needed.
 
-[Github Actions]: https://github.com/features/actions
-[twine]: https://github.com/pypa/twine
 
 ### Automating PyPI released using GitHub actions
 
@@ -223,7 +187,6 @@ For more details, please refer to the official [PyPI guide for setting up truste
 This template uses a number of pre-commit checks.
 In this section we'll detail what is used, where they're defined, and how to modify these checks.
 
-[pre-commit]: https://pre-commit.com/
 
 #### Pre-commit CI
 
@@ -235,7 +198,6 @@ You may choose to enable the service for an entire organization or on a per-repo
 
 Once authorized, pre-commit.ci should automatically be activated.
 
-[pre-commit.ci]: https://pre-commit.ci/
 
 #### Overview of pre-commit hooks used by the template
 
@@ -345,10 +307,6 @@ If you want to add a code that comes from a tool other than Ruff,
 add it to Ruff’s [`external = [...]`][ruff-external] setting to prevent `RUF100` from removing it.
 ```
 
-[ruff]: https://docs.astral.sh/ruff/
-[ruff-error-suppression]: https://docs.astral.sh/ruff/linter/#error-suppression
-[ruff-config]: https://docs.astral.sh/ruff/configuration/
-[ruff-external]: https://docs.astral.sh/ruff/settings/#external
 
 ### API design
 
@@ -363,11 +321,6 @@ You may add additional submodules as appropriate.
 While we encourage to follow a scanpy-like API for ecosystem packages,
 there may also be good reasons to choose a different approach, e.g. using an object-oriented API.
 
-[anndata]: https://github.com/scverse/anndata
-[mudata]: https://github.com/scverse/mudata
-[spatialdata]: https://github.com/scverse/spatialdata
-
-[scanpy-api]: https://scanpy.readthedocs.io/en/stable/usage-principles.html
 
 (vcs-based-versioning)=
 
@@ -405,7 +358,6 @@ In `pyproject.toml` add the following changes, and you are good to go!
 
 Don't forget to update the [Making a release section](contributing.md#publishing-a-release) in this document accordingly, after you are done!
 
-[hatch-vcs]: https://pypi.org/project/hatch-vcs/
 
 ### Automated template sync
 
@@ -427,8 +379,6 @@ The following hints may be useful to work with the template sync:
 
 :::
 
-[cruft]: https://cruft.github.io/cruft/
-[cruft-update-project]: https://cruft.github.io/cruft/#updating-a-project
 
 ## Moving forward
 
@@ -478,3 +428,24 @@ Here's one way how to do it:
 
 [github quickstart guide]: https://docs.github.com/en/get-started/quickstart/create-a-repo?tool=webui
 [cookiecutter-scverse-instance]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html
+[codecov]: https://about.codecov.io/sign-up/
+[codecov docs]: https://docs.codecov.com/docs
+[codecov bot]: https://docs.codecov.com/docs/team-bot
+[codecov app]: https://github.com/apps/codecov
+[cruft]: https://cruft.github.io/cruft/
+[cruft-update-project]: https://cruft.github.io/cruft/#updating-a-project
+[hatch-vcs]: https://pypi.org/project/hatch-vcs/
+[anndata]: https://github.com/scverse/anndata
+[mudata]: https://github.com/scverse/mudata
+[spatialdata]: https://github.com/scverse/spatialdata
+[scanpy-api]: https://scanpy.readthedocs.io/en/stable/usage-principles.html
+[ruff]: https://docs.astral.sh/ruff/
+[ruff-error-suppression]: https://docs.astral.sh/ruff/linter/#error-suppression
+[ruff-config]: https://docs.astral.sh/ruff/configuration/
+[ruff-external]: https://docs.astral.sh/ruff/settings/#external
+[pre-commit]: https://pre-commit.com/
+[pre-commit.ci]: https://pre-commit.ci/
+[readthedocs.org]: https://readthedocs.org/
+[rtd-prs]: https://docs.readthedocs.io/en/stable/pull-requests.html
+[Github Actions]: https://github.com/features/actions
+[twine]: https://github.com/pypa/twine
