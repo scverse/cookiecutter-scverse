@@ -1,7 +1,7 @@
 repos:
   # Hooks that are run everywhere
   - repo: https://github.com/biomejs/pre-commit
-    rev: v2.0.6
+    rev: v2.1.1
     hooks:
       - id: biome-format
   # Hooks that are run for scripts
