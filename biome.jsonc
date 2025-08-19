@@ -1,9 +1,10 @@
 {
-    "$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
+    "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+    "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
     "formatter": { "useEditorconfig": true },
     "files": {
         // don’t descend into ./{{cookiecutter.project_name}}/
-        "includes": ["**", "!\\{*/**"],
+        "includes": ["**", "!\\{*"],
     },
     "overrides": [
         {
