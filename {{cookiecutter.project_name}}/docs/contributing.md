@@ -1,12 +1,13 @@
 # Contributing guide
 
-Scanpy provides extensive [developer documentation][scanpy developer guide], most of which applies to this project, too.
-This document will not reproduce the entire content from there.
-Instead, it aims at summarizing the most important information to get you started on contributing.
-
+This document aims at summarizing the most important information for getting you started on contributin to this project.
 We assume that you are already familiar with git and with making pull requests on GitHub.
-If not, please refer to the [scanpy developer guide][].
 
+For more extensive tutorials, that also cover the absolute basics, please refer to other resources such as
+the [pyopensci tutorials][], the [scientific Python tutorials][], or the [scanpy developer guide][].
+
+[pyopensci tutorials]: https://www.pyopensci.org/learn.html
+[scientific Python tutorials]: https://learn.scientific-python.org/development/tutorials/
 [scanpy developer guide]: https://scanpy.readthedocs.io/en/latest/dev/index.html
 
 :::{admonition} The *hatch* project manager

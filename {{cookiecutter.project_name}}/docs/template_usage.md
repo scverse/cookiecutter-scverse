@@ -179,7 +179,6 @@ The "Workflow name" needs to bet set to `release.yaml`.
 In most cases, you can leave the "Environment name" empty.
 For more details, please refer to the official [PyPI guide for setting up trusted publishing][trusted publisher].
 
-[pypi]: https://pypi.org/
 [pypi-trusted-publishing-guide]: https://docs.pypi.org/trusted-publishers/adding-a-publisher/
 
 (pre-commit)=
@@ -363,7 +362,7 @@ Don't forget to update the [Making a release section](contributing.md#publishing
 
 ### Automated template sync
 
-Automated template sync is enabled by default for public repositories.
+Automated template sync is enabled by default for public repositories on GitHub.
 Our [scverse-bot][] automatically crawls GitHub for repositories that are based on this template
 and adds them to the [list of template repositories][]. Whenever a new release of the template is made, a pull request is
 opened in every repository listed there. This helps keeping the repository up-to-date with the latest coding standards.
