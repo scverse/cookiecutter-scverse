@@ -16,7 +16,8 @@ the [pyopensci tutorials][], the [scientific Python tutorials][], or the [scanpy
 We highly recommend to familiarize yourself with [hatch][]. Hatch is
 a Python project manager that
 
- * manages virtual environments, separately for development, testing and building the documentation
+ * manages virtual environments, separately for development, testing and building the documentation. Separating
+   the environments is useful to avoid dependency conflicts.
  * allows to run tests locally in different environments (e.g. different python versions)
  * allows to run tasks defined in `pyproject.toml`, e.g. to build documentation.
 
@@ -35,27 +36,70 @@ you need additional python packages to [run tests](#writing-tests) and [build th
 :::::{tabs}
 ::::{group-tab} Hatch
 
+On the command line, you typically interact with hatch through its command line interface (CLI).
+Running one of the following commands will automatically resolve the environments for testing and
+building the documentation in the background:
+
 ```bash
 hatch test  # defined in the table [tool.hatch.envs.hatch-test] in pyproject.toml
 hatch run docs:build  # defined in the table [tool.hatch.envs.docs]
 ```
 
+When using an IDE such as vscode, you'll have to point the editor at the paths to the virtual environments manually.
+
+Run
+
+```bash
+hatch env create
+```
+
+to create the default (development) environment.
+
+The you can find out the path to the environment using
+
+```bash
+hatch env find
+```
+
+::::
+
+::::{group-tab} uv
+
+A popular choice for managing virtual environments is [uv][].
+The main disadvantage compared to hatch is that it supports only a single environment per project at
+at time, which requires you to mix the dependencies for running tests and building docs. This can have
+undesired side-effects, such as requiring to install a lower version of a library your project depends on,
+only because an outdated sphinx plugin pins an older version.
+
+To initalize a virtual environment in the `.venv` directory of your project, simply run
+
+```bash
+uv sync --all-extras
+```
+
+The `.venv` directory is typically automatically discovered by IDEs such as vscode.
+
 ::::
 
 ::::{group-tab} Pip
-If you prefer managing environments manually, you can use `pip`:
+
+Pip is nowadays mostly superseded by environment manager such as [hatch][].
+However, for the sake of completeness, and since it's ubiquitously available,
+we describe how you can manage environments manually using `pip`:
 
 ```bash
-cd {{ cookiecutter.project_name }}
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev,test,doc]"
 ```
 
+The `.venv` directory is typically automatically discovered by IDEs such as vscode.
+
 ::::
 :::::
 
 [hatch environments]: https://hatch.pypa.io/latest/tutorials/environment/basic-usage/
+[uv]: https://docs.astral.sh/uv/
 
 ## Code-style
 
