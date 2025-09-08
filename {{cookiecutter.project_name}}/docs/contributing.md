@@ -138,12 +138,17 @@ in the root of the repository.
 
 ### Continuous integration
 
-Continuous integration will automatically run the tests on all pull requests and test
+Continuous integration via GitHub actions will automatically run the tests on all pull requests and test
 against the minimum and maximum supported Python version.
 
 Additionally, there's a CI job that tests against pre-releases of all dependencies (if there are any).
 The purpose of this check is to detect incompatibilities of new package versions early on and
-gives you time to fix the issue or reach out to the developers of the dependency before the package is released to a wider audience.
+gives you time to fix the issue or reach out to the developers of the dependency before the package
+is released to a wider audience.
+
+The CI job is defined in `.github/workflows/test.yaml`, however the single point of truth for CI jobs
+is the Hatch test matrix defined in `pyproject.toml`. This means that local testing via hatch and remote testing
+on CI tests against the same python versions and uses the same environments.
 
 ## Publishing a release
 
@@ -209,7 +214,7 @@ please check out [this feature request][issue-render-notebooks] in the `cookiecu
 
 (docs-building)=
 
-#### Building the docs locally
+### Building the docs locally
 
 :::::{tabs}
 ::::{group-tab} Hatch
