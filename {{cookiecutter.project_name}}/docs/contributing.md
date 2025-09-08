@@ -1,28 +1,28 @@
 # Contributing guide
 
-This document aims at summarizing the most important information for getting you started on contributin to this project.
+This document aims at summarizing the most important information for getting you started on contributing to this project.
 We assume that you are already familiar with git and with making pull requests on GitHub.
 
-For more extensive tutorials, that also cover the absolute basics, please refer to other resources such as
-the [pyopensci tutorials][], the [scientific Python tutorials][], or the [scanpy developer guide][].
+For more extensive tutorials, that also cover the absolute basics,
+please refer to other resources such as the [pyopensci tutorials][],
+the [scientific Python tutorials][], or the [scanpy developer guide][].
 
 [pyopensci tutorials]: https://www.pyopensci.org/learn.html
 [scientific Python tutorials]: https://learn.scientific-python.org/development/tutorials/
 [scanpy developer guide]: https://scanpy.readthedocs.io/en/latest/dev/index.html
 
-:::{admonition} The *hatch* project manager
-:class: tip
+:::{tip} The *hatch* project manager
 
-We highly recommend to familiarize yourself with [hatch][]. Hatch is
-a Python project manager that
+We highly recommend to familiarize yourself with [`hatch`][hatch].
+Hatch is a Python project manager that
 
- * manages virtual environments, separately for development, testing and building the documentation. Separating
-   the environments is useful to avoid dependency conflicts.
- * allows to run tests locally in different environments (e.g. different python versions)
- * allows to run tasks defined in `pyproject.toml`, e.g. to build documentation.
+- manages virtual environments, separately for development, testing and building the documentation.
+  Separating the environments is useful to avoid dependency conflicts.
+- allows to run tests locally in different environments (e.g. different python versions)
+- allows to run tasks defined in `pyproject.toml`, e.g. to build documentation.
 
-While the project is setup with `hatch` in mind, it is still possible to use different tools
-to manage dependencies, such as `uv` or `pip`.
+While the project is setup with `hatch` in mind,
+it is still possible to use different tools to manage dependencies, such as `uv` or `pip`.
 
 :::
 
@@ -45,7 +45,8 @@ hatch test  # defined in the table [tool.hatch.envs.hatch-test] in pyproject.tom
 hatch run docs:build  # defined in the table [tool.hatch.envs.docs]
 ```
 
-When using an IDE such as vscode, you'll have to point the editor at the paths to the virtual environments manually.
+When using an IDE such as VS Code,
+you’ll have to point the editor at the paths to the virtual environments manually.
 
 Run
 
@@ -55,7 +56,7 @@ hatch env create
 
 to create the default (development) environment.
 
-The you can find out the path to the environment using
+Then you can find out the path to the environment using
 
 ```bash
 hatch env find
@@ -66,9 +67,10 @@ hatch env find
 ::::{group-tab} uv
 
 A popular choice for managing virtual environments is [uv][].
-The main disadvantage compared to hatch is that it supports only a single environment per project at
-at time, which requires you to mix the dependencies for running tests and building docs. This can have
-undesired side-effects, such as requiring to install a lower version of a library your project depends on,
+The main disadvantage compared to hatch is that it supports only a single environment per project at a time,
+which requires you to mix the dependencies for running tests and building docs.
+This can have undesired side-effects,
+such as requiring to install a lower version of a library your project depends on,
 only because an outdated sphinx plugin pins an older version.
 
 To initalize a virtual environment in the `.venv` directory of your project, simply run
@@ -77,14 +79,14 @@ To initalize a virtual environment in the `.venv` directory of your project, sim
 uv sync --all-extras
 ```
 
-The `.venv` directory is typically automatically discovered by IDEs such as vscode.
+The `.venv` directory is typically automatically discovered by IDEs such as VS Code.
 
 ::::
 
 ::::{group-tab} Pip
 
 Pip is nowadays mostly superseded by environment manager such as [hatch][].
-However, for the sake of completeness, and since it's ubiquitously available,
+However, for the sake of completeness, and since it’s ubiquitously available,
 we describe how you can manage environments manually using `pip`:
 
 ```bash
@@ -93,7 +95,7 @@ source .venv/bin/activate
 pip install -e ".[dev,test,doc]"
 ```
 
-The `.venv` directory is typically automatically discovered by IDEs such as vscode.
+The `.venv` directory is typically automatically discovered by IDEs such as VS Code.
 
 ::::
 :::::
@@ -119,7 +121,7 @@ in the root of the repository.
 Pre-commit will automatically download all dependencies when it is run for the first time.
 
 Alternatively, you can rely on the [pre-commit.ci][] service enabled on GitHub.
-If you didn't run `pre-commit` before pushing changes to GitHub it will automatically commit fixes to your pull request, or show an error message.
+If you didn’t run `pre-commit` before pushing changes to GitHub it will automatically commit fixes to your pull request, or show an error message.
 
 If pre-commit.ci added a commit on a branch you still have been working on locally, simply use
 
@@ -185,14 +187,14 @@ in the root of the repository.
 Continuous integration via GitHub actions will automatically run the tests on all pull requests and test
 against the minimum and maximum supported Python version.
 
-Additionally, there's a CI job that tests against pre-releases of all dependencies (if there are any).
+Additionally, there’s a CI job that tests against pre-releases of all dependencies (if there are any).
 The purpose of this check is to detect incompatibilities of new package versions early on and
 gives you time to fix the issue or reach out to the developers of the dependency before the package
 is released to a wider audience.
 
-The CI job is defined in `.github/workflows/test.yaml`, however the single point of truth for CI jobs
-is the Hatch test matrix defined in `pyproject.toml`. This means that local testing via hatch and remote testing
-on CI tests against the same python versions and uses the same environments.
+The CI job is defined in `.github/workflows/test.yaml`,
+however the single point of truth for CI jobs is the Hatch test matrix defined in `pyproject.toml`.
+This means that local testing via hatch and remote testing on CI tests against the same python versions and uses the same environments.
 
 ## Publishing a release
 
