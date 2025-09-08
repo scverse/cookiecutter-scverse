@@ -45,6 +45,7 @@ git push -u origin main
 Your project should be now available at `https://github.com/<your-github-username>/<your-project>`.
 While the repository at this point can be directly used, there are few remaining steps that needs to be done in order to achieve full functionality.
 
+[github quickstart guide]: https://docs.github.com/en/get-started/quickstart/create-a-repo?tool=webui
 
 ### The pyproject.toml file
 
@@ -79,6 +80,8 @@ For example, the line length for auto-formatting can be configured as follows:
 [tool.ruff]
 line-length = 120
 ```
+
+[hatch]: https://hatch.pypa.io/latest/
 
 ### Coverage tests with _Codecov_
 
@@ -125,6 +128,10 @@ In brief, you need to:
     ```
 7. Go back to GitHub `Actions` page an re-run previously failed jobs.
 
+[codecov]: https://about.codecov.io/sign-up/
+[codecov app]: https://github.com/apps/codecov
+[codecov bot]: https://docs.codecov.com/docs/team-bot
+[codecov docs]: https://docs.codecov.com/docs
 
 ### Documentation on _readthedocs_
 
@@ -142,6 +149,8 @@ On the RTD dashboard choose "Import a Project" and follow the instructions to ad
 If your project is private, there are ways to enable docs rendering on [readthedocs.org][] but it is more cumbersome and requires a different RTD subscription.
 See a guide [here](https://docs.readthedocs.io/en/stable/guides/importing-private-repositories.html).
 
+[readthedocs.org]: https://readthedocs.org/
+[rtd-prs]: https://docs.readthedocs.io/en/stable/pull-requests.html
 
 (github-actions)=
 
@@ -163,6 +172,8 @@ This project comes with several pre-configured workflows that can be found in th
 To check the status of these workflows, go to the "Actions" tab in your GitHub repository.
 There you can see the execution history, logs, and (re-)trigger workflows manually if needed.
 
+[Github Actions]: https://github.com/features/actions
+[twine]: https://github.com/pypa/twine
 
 ### Automating PyPI released using GitHub actions
 
@@ -180,6 +191,10 @@ In most cases, you can leave the "Environment name" empty.
 For more details, please refer to the official [PyPI guide for setting up trusted publishing][trusted publisher].
 
 [pypi-trusted-publishing-guide]: https://docs.pypi.org/trusted-publishers/adding-a-publisher/
+
+[PyPI]: https://pypi.org/
+[PyPI publishing settings]: https://pypi.org/manage/account/publishing/
+[trusted publisher]: https://docs.pypi.org/trusted-publishers/
 
 (pre-commit)=
 
@@ -308,6 +323,15 @@ If you want to add a code that comes from a tool other than Ruff,
 add it to Ruff’s [`external = [...]`][ruff-external] setting to prevent `RUF100` from removing it.
 ```
 
+[biome]: https://biomejs.dev/
+[pre-commit]: https://pre-commit.com/
+[pre-commit.ci]: https://pre-commit.ci/
+[pyproject-fmt]: https://pyproject-fmt.readthedocs.io/en/latest/index.html
+[ruff]: https://docs.astral.sh/ruff/
+[ruff-config]: https://docs.astral.sh/ruff/configuration/
+[ruff-error-suppression]: https://docs.astral.sh/ruff/linter/#error-suppression
+[ruff-external]: https://docs.astral.sh/ruff/settings/#external
+
 
 ### API design
 
@@ -322,6 +346,10 @@ You may add additional submodules as appropriate.
 While we encourage to follow a scanpy-like API for ecosystem packages,
 there may also be good reasons to choose a different approach, e.g. using an object-oriented API.
 
+[anndata]: https://github.com/scverse/anndata
+[mudata]: https://github.com/scverse/mudata
+[scanpy-api]: https://scanpy.readthedocs.io/en/stable/usage-principles.html
+[spatialdata]: https://github.com/scverse/spatialdata
 
 (vcs-based-versioning)=
 
@@ -359,6 +387,7 @@ In `pyproject.toml` add the following changes, and you are good to go!
 
 Don't forget to update the [Making a release section](contributing.md#publishing-a-release) in the "Contributing" guide of your repository.
 
+[hatch-vcs]: https://pypi.org/project/hatch-vcs/
 
 ### Automated template sync
 
@@ -379,6 +408,11 @@ The following hints may be useful to work with the template sync:
 
 :::
 
+
+:::
+
+[lits of template repositories]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
+[scverse-bot]: https://github.com/scverse-bot
 
 ## Moving forward
 
@@ -426,33 +460,3 @@ Here's one way how to do it:
    Merge the `cookiecutterize` branch into the main branch, e.g. by making a pull request.
 
 
-[anndata]: https://github.com/scverse/anndata
-[biome]: https://biomejs.dev/
-[codecov]: https://about.codecov.io/sign-up/
-[codecov app]: https://github.com/apps/codecov
-[codecov bot]: https://docs.codecov.com/docs/team-bot
-[codecov docs]: https://docs.codecov.com/docs
-[cruft]: https://cruft.github.io/cruft/
-[cruft-update-project]: https://cruft.github.io/cruft/#updating-a-project
-[github quickstart guide]: https://docs.github.com/en/get-started/quickstart/create-a-repo?tool=webui
-[Github Actions]: https://github.com/features/actions
-[hatch]: https://hatch.pypa.io/latest/
-[hatch-vcs]: https://pypi.org/project/hatch-vcs/
-[mudata]: https://github.com/scverse/mudata
-[pre-commit]: https://pre-commit.com/
-[pre-commit.ci]: https://pre-commit.ci/
-[PyPI]: https://pypi.org/
-[PyPI publishing settings]: https://pypi.org/manage/account/publishing/
-[pyproject-fmt]: https://pyproject-fmt.readthedocs.io/en/latest/index.html
-[readthedocs.org]: https://readthedocs.org/
-[rtd-prs]: https://docs.readthedocs.io/en/stable/pull-requests.html
-[ruff]: https://docs.astral.sh/ruff/
-[ruff-config]: https://docs.astral.sh/ruff/configuration/
-[ruff-error-suppression]: https://docs.astral.sh/ruff/linter/#error-suppression
-[ruff-external]: https://docs.astral.sh/ruff/settings/#external
-[scanpy-api]: https://scanpy.readthedocs.io/en/stable/usage-principles.html
-[scverse-bot]: https://github.com/scverse-bot
-[spatialdata]: https://github.com/scverse/spatialdata
-[trusted publisher]: https://docs.pypi.org/trusted-publishers/
-[twine]: https://github.com/pypa/twine
-[lits of template repositories]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
