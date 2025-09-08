@@ -179,6 +179,9 @@ The "Workflow name" needs to bet set to `release.yaml`.
 In most cases, you can leave the "Environment name" empty.
 For more details, please refer to the official [PyPI guide for setting up trusted publishing][trusted publisher].
 
+[pypi]: https://pypi.org/
+[pypi-trusted-publishing-guide]: https://docs.pypi.org/trusted-publishers/adding-a-publisher/
+
 (pre-commit)=
 
 ### Pre-commit checks
