@@ -55,6 +55,8 @@ hatch env create
 
 to create the default (development) environment.
 
+<!-- TODO tell user to use hatch-test env by default -->
+
 The you can find out the path to the environment using
 
 ```bash
