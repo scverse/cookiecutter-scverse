@@ -64,11 +64,9 @@ packages = [ "src/{{ cookiecutter.package_name }}" ]
 
 [tool.hatch.envs.default]
 installer = "uv"
-features = [ "dev", "test" ]
+features = [ "dev" ]
 
 [tool.hatch.envs.docs]
-template = "docs" # self-referential, doesn't not have to inherit from "default"
-installer = "uv"
 features = [ "doc" ]
 scripts.build = "sphinx-build -M html docs docs/_build -W {args}"
 scripts.open = "python -m webbrowser -t docs/_build/html/index.html"
