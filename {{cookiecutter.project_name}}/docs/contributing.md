@@ -47,22 +47,50 @@ hatch run docs:build  # defined in the table [tool.hatch.envs.docs]
 
 When using an IDE such as VS Code,
 you’ll have to point the editor at the paths to the virtual environments manually.
+The environment you typically want to use as your main development environment is the `hatch-test`
+environment with the latest Python version.
 
-Run
-
-```bash
-hatch env create
-```
-
-to create the default (development) environment.
-
-<!-- TODO tell user to use hatch-test env by default -->
-
-Then you can find out the path to the environment using
+To get a list of all environments for your projects, run
 
 ```bash
-hatch env find
+hatch env show -i
 ```
+
+This will list a table like the following:
+
+```
+┏━━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┓
+┃ Name       ┃ Type    ┃ Envs                     ┃ Features ┃ Dependencies                    ┃ Scripts     ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━┩
+│ hatch-test │ virtual │ hatch-test.py3.10-stable │ dev      │ coverage-enable-subprocess==1.0 │ cov-combine │
+│            │         │ hatch-test.py3.13-stable │ test     │ coverage[toml]~=7.4             │ cov-report  │
+│            │         │ hatch-test.py3.13-pre    │          │ pytest-mock~=3.12               │ run         │
+│            │         │                          │          │ pytest-randomly~=3.15           │ run-cov     │
+│            │         │                          │          │ pytest-rerunfailures~=14.0      │             │
+│            │         │                          │          │ pytest-xdist[psutil]~=3.5       │             │
+│            │         │                          │          │ pytest~=8.1                     │             │
+└────────────┴─────────┴──────────────────────────┴──────────┴─────────────────────────────────┴─────────────┘
+```
+
+From the `Envs` column, select the environment name you want to use for development. In this example, it would be
+`hatch-test.py3.13-stable`.
+
+Next, create the environment with
+
+```bash
+hatch env create hatch-test.py3.13-stable
+```
+
+Then, obtain the path to the environment using
+
+```bash
+hatch env find hatch-test.py3.13-stable
+```
+
+In case you are using VScode, now open the command palette (Ctrl+Shift+P) and search for `Python: Select Interpreter`.
+Choose `Enter Interpreter Path` and paste the path to the virtualenvironment from above.
+
+In this future, this may become easier through a hatch vscode extension.
 
 ::::
 
