@@ -59,17 +59,17 @@ hatch env show -i
 This will list a table like the following:
 
 ```
-┏━━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┓
-┃ Name       ┃ Type    ┃ Envs                     ┃ Features ┃ Dependencies                    ┃ Scripts     ┃
-┡━━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━┩
-│ hatch-test │ virtual │ hatch-test.py3.10-stable │ dev      │ coverage-enable-subprocess==1.0 │ cov-combine │
-│            │         │ hatch-test.py3.13-stable │ test     │ coverage[toml]~=7.4             │ cov-report  │
-│            │         │ hatch-test.py3.13-pre    │          │ pytest-mock~=3.12               │ run         │
-│            │         │                          │          │ pytest-randomly~=3.15           │ run-cov     │
-│            │         │                          │          │ pytest-rerunfailures~=14.0      │             │
-│            │         │                          │          │ pytest-xdist[psutil]~=3.5       │             │
-│            │         │                          │          │ pytest~=8.1                     │             │
-└────────────┴─────────┴──────────────────────────┴──────────┴─────────────────────────────────┴─────────────┘
++------------+---------+--------------------------+----------+---------------------------------+-------------+
+| Name       | Type    | Envs                     | Features | Dependencies                    | Scripts     |
++------------+---------+--------------------------+----------+---------------------------------+-------------+
+| hatch-test | virtual | hatch-test.py3.10-stable | dev      | coverage-enable-subprocess==1.0 | cov-combine |
+|            |         | hatch-test.py3.13-stable | test     | coverage[toml]~=7.4             | cov-report  |
+|            |         | hatch-test.py3.13-pre    |          | pytest-mock~=3.12               | run         |
+|            |         |                          |          | pytest-randomly~=3.15           | run-cov     |
+|            |         |                          |          | pytest-rerunfailures~=14.0      |             |
+|            |         |                          |          | pytest-xdist[psutil]~=3.5       |             |
+|            |         |                          |          | pytest~=8.1                     |             |
++------------+---------+--------------------------+----------+---------------------------------+-------------+
 ```
 
 From the `Envs` column, select the environment name you want to use for development. In this example, it would be
