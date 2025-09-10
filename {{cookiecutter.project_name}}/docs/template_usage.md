@@ -31,8 +31,8 @@ Since `cruft` already populated the local repository of your project with all th
 we suggest to _NOT_ initialize the repository with a `README.md` file or `.gitignore`, because you might encounter git conflicts on your first push.
 
 
-Now that your new project repository has been created on GitHub at `https://github.com/<your-github-username>/<your-project>`,
-you can push it to GitHub. A first commit should already have been created by `cruft` when you created the project.
+Now that your new project repository has been created on GitHub at `https://github.com/<your-github-username>/<your-project>`, you can push it to GitHub.
+A first commit should already have been created by `cruft` when you created the project.
 
 
 ```bash
@@ -51,7 +51,8 @@ While the repository at this point can be directly used, there are few remaining
 
 Modern Python package management uses a `pyproject.toml` that was first introduced in [PEP 518](https://peps.python.org/pep-0518/).
 This file contains build system requirements and information, which are used by pip to build the package, and tool configurations.
-For more details please have a look at [pip's description of the pyproject.toml file](https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml/). It also serves as a single point of truth to define test environments and how docs are built by leveraging
+For more details please have a look at [pip's description of the pyproject.toml file](https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml/).
+It also serves as a single point of truth to define test environments and how docs are built by leveraging
 the [hatch][] project manager, but more about that in the [contributing guide](contributing.md).
 
 #### Important metadata fields
@@ -385,26 +386,30 @@ In `pyproject.toml` add the following changes, and you are good to go!
  omit = [
 ```
 
-Don't forget to update the [Making a release section](contributing.md#publishing-a-release) in the "Contributing" guide of your repository.
+Don't forget to update the [Making a release section](contributing.md#publishing-a-release) in the “Contributing” guide of your repository.
 
 [hatch-vcs]: https://pypi.org/project/hatch-vcs/
 
 ### Automated template sync
 
 Automated template sync is enabled by default for public repositories on GitHub.
-Our [scverse-bot][] automatically crawls GitHub for repositories that are based on this template
-and adds them to the [list of template repositories][]. Whenever a new release of the template is made, a pull request is
-opened in every repository listed there. This helps keeping the repository up-to-date with the latest coding standards.
+Our [scverse-bot][] automatically crawls GitHub for repositories that are based on this template,
+and adds them to the [list of template repositories][].
+Whenever a new release of the template is made,
+a pull request is opened in every repository listed there.
+This helps keeping the repository up-to-date with the latest coding standards.
 
-It may happen that a template sync results in a merge conflict. In that case, you
-need to resolve the merge conflicts manually, either using the GitHub UI, or in your favorite editor.
+It may happen that a template sync results in a merge conflict.
+In that case, you need to resolve the merge conflicts manually,
+either using the GitHub UI, or in your favorite editor.
 
 :::{tip}
 The following hints may be useful to work with the template sync:
 
 - If you want to ignore certain files from the template update,
   you can add them to the `[tool.cruft]` section in the `pyproject.toml` file in the root of your repository.
-- To disable the sync entirely, remove your package from the [list of template repositories][] via pull request, or simply remove the file `.cruft.json` from the root of your repository.
+- To disable the sync entirely, remove your package from the [list of template repositories][] via pull request,
+  or simply remove the file `.cruft.json` from the root of your repository.
 
 :::
 
@@ -417,7 +422,8 @@ The following hints may be useful to work with the template sync:
 ## Moving forward
 
 You have successfully set up your project and are ready to start.
-For everything else related to documentation, code style, testing and publishing your project to pypi, please refer to the [contributing docs](contributing.md#contributing-guide), which is also contained in your repository.
+For everything else related to documentation, code style, testing and publishing your project to pypi,
+please refer to the [contributing docs](contributing.md#contributing-guide), which is also contained in your repository.
 
 ## Migrate existing projects to using this template
 
@@ -458,5 +464,3 @@ Here's one way how to do it:
 
 7. Commit your changes.
    Merge the `cookiecutterize` branch into the main branch, e.g. by making a pull request.
-
-
