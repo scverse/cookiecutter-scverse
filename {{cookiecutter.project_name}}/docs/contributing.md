@@ -168,6 +168,14 @@ hatch test --all  # test with all supported Python versions
 
 ::::
 
+::::{group-tab} uv
+
+```bash
+uv run pytest
+```
+
+::::
+
 ::::{group-tab} Pip
 
 ```bash
@@ -268,6 +276,16 @@ please check out [this feature request][issue-render-notebooks] in the `cookiecu
 ```bash
 hatch run docs:build
 hatch run docs:open
+```
+
+::::
+
+::::{group-tab} uv
+
+```bash
+cd docs
+uv run sphinx-build -M html . _build -W
+(xdg-)open _build/html/index.html
 ```
 
 ::::
