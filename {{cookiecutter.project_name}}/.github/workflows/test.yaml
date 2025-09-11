@@ -81,8 +81,8 @@ jobs:
         run: uvx hatch run ${{ matrix.env.name }}:run-cov
       - name: generate coverage report
         run: |
-          ls .*coverage*
-          uvx hatch run ${{ matrix.env.name }}:cov-combine  # create .coverage file
+          # See https://coverage.readthedocs.io/en/latest/config.html#config-run-parallel
+          test -f .coverage || uvx hatch run ${{ matrix.env.name }}:cov-combine
           uvx hatch run ${{ matrix.env.name }}:cov-report   # report visibly
           uvx hatch run ${{ matrix.env.name }}:coverage xml # create report for upload
       - name: Upload coverage
