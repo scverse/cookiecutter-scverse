@@ -80,7 +80,10 @@ jobs:
           DISPLAY: :42
         run: uvx hatch run ${{ matrix.env.name }}:run-cov
       - name: generate coverage report
-        run: uvx hatch run ${{ matrix.env.name }}:coverage xml
+        run: |
+          uvx hatch run ${{ matrix.env.name }}:cov-combine  # create .coverage file
+          uvx hatch run ${{ matrix.env.name }}:cov-report   # report visibly
+          uvx hatch run ${{ matrix.env.name }}:coverage xml # create report for upload
       - name: Upload coverage
         uses: codecov/codecov-action@v5
 
