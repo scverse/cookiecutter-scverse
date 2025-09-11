@@ -88,7 +88,7 @@ hatch env find hatch-test.py3.13-stable
 ```
 
 In case you are using VScode, now open the command palette (Ctrl+Shift+P) and search for `Python: Select Interpreter`.
-Choose `Enter Interpreter Path` and paste the path to the virtualenvironment from above.
+Choose `Enter Interpreter Path` and paste the path to the virtual environment from above.
 
 In this future, this may become easier through a hatch vscode extension.
 
