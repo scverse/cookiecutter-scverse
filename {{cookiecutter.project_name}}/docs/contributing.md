@@ -72,8 +72,8 @@ This will list a table like the following:
 +------------+---------+--------------------------+----------+---------------------------------+-------------+
 ```
 
-From the `Envs` column, select the environment name you want to use for development. In this example, it would be
-`hatch-test.py3.13-stable`.
+From the `Envs` column, select the environment name you want to use for development.
+In this example, it would be `hatch-test.py3.13-stable`.
 
 Next, create the environment with
 
