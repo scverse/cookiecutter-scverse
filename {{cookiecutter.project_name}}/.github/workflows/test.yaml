@@ -81,7 +81,7 @@ jobs:
         run: uvx hatch run ${{ matrix.env.name }}:run-cov
       - name: generate coverage report
         run: |
-          ls *coverage*
+          ls .*coverage*
           uvx hatch run ${{ matrix.env.name }}:cov-combine  # create .coverage file
           uvx hatch run ${{ matrix.env.name }}:cov-report   # report visibly
           uvx hatch run ${{ matrix.env.name }}:coverage xml # create report for upload
