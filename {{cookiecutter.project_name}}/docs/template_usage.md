@@ -20,7 +20,7 @@ cruft create https://github.com/scverse/cookiecutter-scverse
 and you should have
 
 ```
-cd {{cookiecutter.project_name}}
+cd <your-project>
 ```
 
 into the new project directory.
@@ -30,57 +30,30 @@ You can follow the instructions directly on [github quickstart guide][].
 Since `cruft` already populated the local repository of your project with all the necessary files,
 we suggest to _NOT_ initialize the repository with a `README.md` file or `.gitignore`, because you might encounter git conflicts on your first push.
 
-:::{note}
-If you are looking at this document in the [cookiecutter-scverse-instance][] repository documentation,
-throughout this document the name of the project is `cookiecutter-scverse-instance`.
-Otherwise it should be replaced by your new project name: `{{cookiecutter.project_name}}`.
-:::
 
-Now that your new project repository has been created on GitHub at `https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}`,
-you can push your first commit to GitHub:
+Now that your new project repository has been created on GitHub at `https://github.com/<your-github-username>/<your-project>`, you can push it to GitHub.
+A first commit should already have been created by `cruft` when you created the project.
 
-Assuming you are in `/your/path/to/{{cookiecutter.project_name}}`.
-Add all files and commit.
-
-```bash
-# stage all files of your new repo
-git add --all
-# commit
-git commit -m "first commit"
-```
-
-You'll notice that the command `git commit` installed a bunch of packages and triggered their execution: those are [pre-commit][]!
-To read more about what they are and what they do, you can go to the related section [Pre-commit checks](#pre-commit-checks) in this document.
-
-```bash
-git add -u # update all tracked file
-git commit -m "first commit"
-```
-
-:::
-
-Now that all the files of the newly created project have been committed, go ahead with the remaining steps:
 
 ```bash
 # update the `origin` of your local repo with the remote GitHub link
-git remote add origin https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}.git
-# rename the default branch to main
-git branch -M main
+git remote add origin https://github.com/<your-github-username>/<your-project>.git
 # push all your files to remote
 git push -u origin main
 ```
 
-Your project should be now available at `https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.project_name}}`.
+Your project should be now available at `https://github.com/<your-github-username>/<your-project>`.
 While the repository at this point can be directly used, there are few remaining steps that needs to be done in order to achieve full functionality.
 
 [github quickstart guide]: https://docs.github.com/en/get-started/quickstart/create-a-repo?tool=webui
-[cookiecutter-scverse-instance]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html
 
 ### The pyproject.toml file
 
 Modern Python package management uses a `pyproject.toml` that was first introduced in [PEP 518](https://peps.python.org/pep-0518/).
 This file contains build system requirements and information, which are used by pip to build the package, and tool configurations.
 For more details please have a look at [pip's description of the pyproject.toml file](https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml/).
+It also serves as a single point of truth to define test environments and how docs are built by leveraging
+the [hatch][] project manager, but more about that in the [contributing guide](contributing.md).
 
 #### Important metadata fields
 
@@ -108,6 +81,8 @@ For example, the line length for auto-formatting can be configured as follows:
 [tool.ruff]
 line-length = 120
 ```
+
+[hatch]: https://hatch.pypa.io/latest/
 
 ### Coverage tests with _Codecov_
 
@@ -155,9 +130,9 @@ In brief, you need to:
 7. Go back to GitHub `Actions` page an re-run previously failed jobs.
 
 [codecov]: https://about.codecov.io/sign-up/
-[codecov docs]: https://docs.codecov.com/docs
-[codecov bot]: https://docs.codecov.com/docs/team-bot
 [codecov app]: https://github.com/apps/codecov
+[codecov bot]: https://docs.codecov.com/docs/team-bot
+[codecov docs]: https://docs.codecov.com/docs
 
 ### Documentation on _readthedocs_
 
@@ -171,7 +146,6 @@ On the RTD dashboard choose "Import a Project" and follow the instructions to ad
   This ensures that a PR doesn't introduce changes that break the documentation.
   To do so, got to `Admin -> Advanced Settings`, check the `Build pull requests for this projects` option, and click `Save`.
   For more information, please refer to the [official RTD documentation][rtd-prs].
-- If you find the RTD builds are failing, you can disable the `fail_on_warning` option in `.readthedocs.yaml`.
 
 If your project is private, there are ways to enable docs rendering on [readthedocs.org][] but it is more cumbersome and requires a different RTD subscription.
 See a guide [here](https://docs.readthedocs.io/en/stable/guides/importing-private-repositories.html).
@@ -215,10 +189,13 @@ To set this up, login to [PyPI][], and proceed depending on whether you already 
 
 The "Workflow name" needs to bet set to `release.yaml`.
 In most cases, you can leave the "Environment name" empty.
-For more details, please refer to the official [PyPI guide for setting up trusted publishing][pypi-trusted-publishing-guide].
+For more details, please refer to the official [PyPI guide for setting up trusted publishing][trusted publisher].
 
-[pypi]: https://pypi.org/
 [pypi-trusted-publishing-guide]: https://docs.pypi.org/trusted-publishers/adding-a-publisher/
+
+[PyPI]: https://pypi.org/
+[PyPI publishing settings]: https://pypi.org/manage/account/publishing/
+[trusted publisher]: https://docs.pypi.org/trusted-publishers/
 
 (pre-commit)=
 
@@ -229,7 +206,6 @@ For more details, please refer to the official [PyPI guide for setting up truste
 This template uses a number of pre-commit checks.
 In this section we'll detail what is used, where they're defined, and how to modify these checks.
 
-[pre-commit]: https://pre-commit.com/
 
 #### Pre-commit CI
 
@@ -241,7 +217,6 @@ You may choose to enable the service for an entire organization or on a per-repo
 
 Once authorized, pre-commit.ci should automatically be activated.
 
-[pre-commit.ci]: https://pre-commit.ci/
 
 #### Overview of pre-commit hooks used by the template
 
@@ -261,6 +236,7 @@ The following pre-commit hooks are for code style and format:
       write better list/set/dict comprehensions.
     - [pyupgrade](https://beta.ruff.rs/docs/rules/#pyupgrade-up) (rule category: `UP`):
       upgrade syntax for newer versions of the language.
+- [pyproject-fmt][] formats the `pyproject.toml` file in a consistent way.
 
 The following pre-commit hooks are for errors and inconsistencies:
 
@@ -271,9 +247,6 @@ The following pre-commit hooks are for errors and inconsistencies:
     - **mixed-line-ending**: checks mixed line ending.
     - **trailing-whitespace**: trims trailing whitespace.
     - **check-case-conflict**: check files that would conflict with case-insensitive file systems.
-    - **forbid-to-commit**: Make sure that `*.rej` files cannot be commited.
-      These files are created by the [automated template sync](#automated-template-sync)
-      if there's a merge conflict and need to be addressed manually.
 - [ruff][] based checks:
     - [pyflakes](https://beta.ruff.rs/docs/rules/#pyflakes-f) (rule category: `F`):
       various checks for errors.
@@ -351,10 +324,15 @@ If you want to add a code that comes from a tool other than Ruff,
 add it to Ruff’s [`external = [...]`][ruff-external] setting to prevent `RUF100` from removing it.
 ```
 
+[biome]: https://biomejs.dev/
+[pre-commit]: https://pre-commit.com/
+[pre-commit.ci]: https://pre-commit.ci/
+[pyproject-fmt]: https://pyproject-fmt.readthedocs.io/en/latest/index.html
 [ruff]: https://docs.astral.sh/ruff/
-[ruff-error-suppression]: https://docs.astral.sh/ruff/linter/#error-suppression
 [ruff-config]: https://docs.astral.sh/ruff/configuration/
+[ruff-error-suppression]: https://docs.astral.sh/ruff/linter/#error-suppression
 [ruff-external]: https://docs.astral.sh/ruff/settings/#external
+
 
 ### API design
 
@@ -371,9 +349,8 @@ there may also be good reasons to choose a different approach, e.g. using an obj
 
 [anndata]: https://github.com/scverse/anndata
 [mudata]: https://github.com/scverse/mudata
-[spatialdata]: https://github.com/scverse/spatialdata
-
 [scanpy-api]: https://scanpy.readthedocs.io/en/stable/usage-principles.html
+[spatialdata]: https://github.com/scverse/spatialdata
 
 (vcs-based-versioning)=
 
@@ -409,41 +386,44 @@ In `pyproject.toml` add the following changes, and you are good to go!
  omit = [
 ```
 
-Don't forget to update the [Making a release section](contributing.md#publishing-a-release) in this document accordingly, after you are done!
+Don't forget to update the [Making a release section](contributing.md#publishing-a-release) in the “Contributing” guide of your repository.
 
 [hatch-vcs]: https://pypi.org/project/hatch-vcs/
 
 ### Automated template sync
 
-Automated template sync is enabled by default.
-This means that every night, a GitHub action runs [cruft][] to check if a new version of the `scverse-cookiecutter` template got released.
-If there are any new changes, a pull request proposing these changes is created automatically.
+Automated template sync is enabled by default for public repositories on GitHub.
+Our [scverse-bot][] automatically crawls GitHub for repositories that are based on this template,
+and adds them to the [list of template repositories][].
+Whenever a new release of the template is made,
+a pull request is opened in every repository listed there.
 This helps keeping the repository up-to-date with the latest coding standards.
 
 It may happen that a template sync results in a merge conflict.
-If this is the case a `*.ref` file with the diff is created.
-You need to manually address these changes and remove the `.rej` file when you are done.
-The pull request can only be merged after all `*.rej` files have been removed.
+In that case, you need to resolve the merge conflicts manually,
+either using the GitHub UI, or in your favorite editor.
 
 :::{tip}
 The following hints may be useful to work with the template sync:
 
-- GitHub automatically disables scheduled actions if there has been not activity to the repository for 60 days.
-  You can re-enable or manually trigger the sync by navigating to `Actions` -> `Sync Template` in your GitHub repository.
 - If you want to ignore certain files from the template update,
   you can add them to the `[tool.cruft]` section in the `pyproject.toml` file in the root of your repository.
-  More details are described in the [cruft documentation][cruft-update-project].
-- To disable the sync entirely, simply remove the file `.github/workflows/sync.yaml`.
+- To disable the sync entirely, remove your package from the [list of template repositories][] via pull request,
+  or simply remove the file `.cruft.json` from the root of your repository.
 
 :::
 
-[cruft]: https://cruft.github.io/cruft/
-[cruft-update-project]: https://cruft.github.io/cruft/#updating-a-project
+
+:::
+
+[lits of template repositories]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
+[scverse-bot]: https://github.com/scverse-bot
 
 ## Moving forward
 
 You have successfully set up your project and are ready to start.
-For everything else related to documentation, code style, testing and publishing your project to pypi, please refer to the [contributing docs](contributing.md#contributing-guide).
+For everything else related to documentation, code style, testing and publishing your project to pypi,
+please refer to the [contributing docs](contributing.md#contributing-guide), which is also contained in your repository.
 
 ## Migrate existing projects to using this template
 
