@@ -50,6 +50,7 @@ optional-dependencies.doc = [
 optional-dependencies.test = [
   "coverage",
   "pytest",
+  "pytest-cov",  # For VS Code’s coverage functionality
 ]
 # https://docs.pypi.org/project_metadata/#project-urls
 urls.Documentation = "https://{{ cookiecutter.project_name }}.readthedocs.io/"
