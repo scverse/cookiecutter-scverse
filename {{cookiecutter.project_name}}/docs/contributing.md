@@ -56,7 +56,7 @@ To get a list of all environments for your projects, run
 hatch env show -i
 ```
 
-This will list a table like the following:
+This will list “Standalone” environments and a table of “Matrix” environments like the following:
 
 ```
 +------------+---------+--------------------------+----------+---------------------------------+-------------+
