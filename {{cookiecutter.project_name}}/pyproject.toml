@@ -51,7 +51,7 @@ optional-dependencies.test = [
   "coverage",
   "pytest",
   {% if cookiecutter.ide_integration -%}
-  "pytest-cov",  # For VS Code’s coverage functionality
+  "pytest-cov", # For VS Code’s coverage functionality
   {%- endif %}
 ]
 # https://docs.pypi.org/project_metadata/#project-urls
