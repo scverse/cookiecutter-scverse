@@ -50,7 +50,7 @@ optional-dependencies.doc = [
 optional-dependencies.test = [
   "coverage",
   "pytest",
-{% if cookiecutter.ide_integration -%}
+{%- if cookiecutter.ide_integration %}
   "pytest-cov", # For VS Code’s coverage functionality
 {% endif -%}
 ]
