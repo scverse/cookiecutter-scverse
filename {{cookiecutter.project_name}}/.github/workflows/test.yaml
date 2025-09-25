@@ -78,11 +78,10 @@ jobs:
           MPLBACKEND: agg
           PLATFORM: ${{ matrix.os }}
           DISPLAY: :42
-          COVERAGE_PROCESS_START: ${{ github.workspace }}/pyproject.toml  # https://github.com/pypa/hatch/issues/2048
         run: uvx hatch run ${{ matrix.env.name }}:run-cov -v --color=yes -n auto
       - name: generate coverage report
         run: |
-          # See https://coverage.readthedocs.io/en/latest/config.html#config-run-parallel
+          # See https://coverage.readthedocs.io/en/latest/config.html#run-patch
           test -f .coverage || uvx hatch run ${{ matrix.env.name }}:cov-combine
           uvx hatch run ${{ matrix.env.name }}:cov-report   # report visibly
           uvx hatch run ${{ matrix.env.name }}:coverage xml # create report for upload
