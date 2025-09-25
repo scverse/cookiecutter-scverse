@@ -48,10 +48,10 @@ optional-dependencies.doc = [
   "sphinxext-opengraph",
 ]
 optional-dependencies.test = [
-  "coverage >=7.10",
+  "coverage>=7.10",
   "pytest",
   {% if cookiecutter.ide_integration %}
-  "pytest-cov", # For VS Code’s coverage functionality
+  "pytest-cov",     # For VS Code’s coverage functionality
   {% endif %}
 ]
 # https://docs.pypi.org/project_metadata/#project-urls
