@@ -225,7 +225,7 @@ in the root of the repository.
 Continuous integration via GitHub actions will automatically run the tests on all pull requests and test
 against the minimum and maximum supported Python version.
 
-Additionally, there’s a CI job that tests against pre-releases of all dependencies (if there are any).
+Additionally, there's a CI job that tests against pre-releases of all dependencies (if there are any).
 The purpose of this check is to detect incompatibilities of new package versions early on and
 gives you time to fix the issue or reach out to the developers of the dependency before the package
 is released to a wider audience.
