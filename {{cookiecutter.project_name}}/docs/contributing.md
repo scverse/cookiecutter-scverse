@@ -151,7 +151,7 @@ in the root of the repository.
 Pre-commit will automatically download all dependencies when it is run for the first time.
 
 Alternatively, you can rely on the [pre-commit.ci][] service enabled on GitHub.
-If you didn’t run `pre-commit` before pushing changes to GitHub it will automatically commit fixes to your pull request, or show an error message.
+If you didn't run `pre-commit` before pushing changes to GitHub it will automatically commit fixes to your pull request, or show an error message.
 
 If pre-commit.ci added a commit on a branch you still have been working on locally, simply use
 
