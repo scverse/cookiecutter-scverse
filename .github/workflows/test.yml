@@ -30,6 +30,7 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v7
         with:
+          python-version: ${{ matrix.python }}
           cache-dependency-glob: "{{cookiecutter.project_name}}/pyproject.toml"
       - name: Install Ubuntu system dependencies
         if: matrix.os == 'ubuntu-latest'
@@ -54,6 +55,7 @@ jobs:
           uv run python -c "import ${{ matrix.package-name }}"
       # Docs
       - name: Build the documentation
+        if: matrix.python == '3.14'
         run: |
           cd "$PROJECT_ROOT"
           hatch run docs:build
