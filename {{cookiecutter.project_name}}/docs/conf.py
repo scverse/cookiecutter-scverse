@@ -19,7 +19,7 @@ sys.path.insert(0, str(HERE / "extensions"))
 # NOTE: If you installed your project in editable mode, this might be stale.
 #       If this is the case, reinstall it to refresh the metadata
 info = metadata("{{cookiecutter.project_name}}")
-project_name = info["Name"]
+project = info["Name"]
 author = info["Author"]
 copyright = f"{datetime.now():%Y}, {author}."
 version = info["Version"]
@@ -37,7 +37,7 @@ needs_sphinx = "4.0"
 html_context = {
     "display_github": True,  # Integrate GitHub
     "github_user": "{{cookiecutter.github_user}}",
-    "github_repo": {% if cookiecutter.project_name == cookiecutter.github_repo %}project_name{% else %}"{{cookiecutter.github_repo}}"{% endif %},
+    "github_repo": {% if cookiecutter.project_name == cookiecutter.github_repo %}project{% else %}"{{cookiecutter.github_repo}}"{% endif %},
     "github_version": "main",
     "conf_py_path": "/docs/",
 }
@@ -114,7 +114,7 @@ html_theme = "sphinx_book_theme"
 html_static_path = ["_static"]
 html_css_files = ["css/custom.css"]
 
-html_title = project_name
+html_title = project
 
 html_theme_options = {
     "repository_url": repository_url,
