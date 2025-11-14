@@ -39,9 +39,9 @@ body:
         # ]
         # ///
         #
-        # This script automatically imports the development branch of scanpy to check for issues
+        # This script automatically imports the development branch of {{cookiecutter.package_name}} to check for issues
   
-        import scanpy as sc
+        import {{cookiecutter.package_name}}
         # your reproducer code
           ```
 
