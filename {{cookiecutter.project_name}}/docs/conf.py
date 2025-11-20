@@ -128,6 +128,7 @@ html_theme_options = {
 
 pygments_style = "default"
 katex_prerender = shutil.which(katex.NODEJS_BINARY) is not None
+katex_options = "{output: 'mathml'}"
 
 nitpick_ignore = [
     # If building the documentation fails because of a missing link that is outside your control,
