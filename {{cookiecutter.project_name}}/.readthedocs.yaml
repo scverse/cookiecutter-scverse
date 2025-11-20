@@ -4,14 +4,12 @@ build:
   os: ubuntu-24.04
   tools:
     python: "3.13"
+    nodejs: latest
   jobs:
     create_environment:
       - asdf plugin add uv
-      - asdf plugin add nodejs
       - asdf install uv latest
-      - asdf install nodejs latest
       - asdf global uv latest
-      - asdf global nodejs latest
     build:
       html:
         - uvx hatch run docs:build
