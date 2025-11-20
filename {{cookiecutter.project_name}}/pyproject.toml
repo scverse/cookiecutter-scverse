@@ -45,7 +45,7 @@ optional-dependencies.doc = [
   "sphinx-copybutton",
   "sphinx-tabs",
   "sphinxcontrib-bibtex>=1",
-  "sphinxcontrib.katex",
+  "sphinxcontrib-katex",
   "sphinxext-opengraph",
 ]
 optional-dependencies.test = [
