@@ -29,17 +29,24 @@ def basic_preproc(adata: AnnData) -> int:
 def elaborate_example(
     items: Iterable[ScverseDataStructures],
     transform: Callable[[Any], str],
-    *,  # functions after the asterix are key word only arguments
+    *,  # functions after the asterix are keyword-only arguments
     layer_key: str | None = None,
-    mudata_mod: str | None = "rna",  # Only specify defaults in the signature, not the docstring!
+    # Only specify defaults and types in the signature, not the docstring!
+    mudata_mod: str | None = "rna",
     sdata_table_key: str | None = "table1",
     max_items: int = 100,
 ) -> list[str]:
-    """A method with a more complex docstring.
+    r"""A method with a more complex docstring.
 
     This is where you add more details.
     Try to support general container classes such as Sequence, Mapping, or Collection
     where possible to ensure that your functions can be widely used.
+
+    Data science means there’s lots of math too:
+
+    ..  math::
+
+        x = \frac{-b \pm \sqrt{b^2-4ac}}{2a}
 
     Parameters
     ----------
@@ -73,14 +80,26 @@ def elaborate_example(
         if isinstance(item, AnnData):
             matrix = item.X if not layer_key else item.layers[layer_key]
         elif isinstance(item, MuData):
-            matrix = item.mod[mudata_mod].X if not layer_key else item.mod[mudata_mod].layers[layer_key]
+            matrix = (
+                item.mod[mudata_mod].X
+                if not layer_key
+                else item.mod[mudata_mod].layers[layer_key]
+            )
         elif isinstance(item, SpatialData):
-            matrix = item.tables[sdata_table_key].X if not layer_key else item.tables[sdata_table_key].layers[layer_key]
+            matrix = (
+                item.tables[sdata_table_key].X
+                if not layer_key
+                else item.tables[sdata_table_key].layers[layer_key]
+            )
         else:
-            raise ValueError(f"Item {item} must be of type AnnData, MuData, or SpatialData but is {item.__class__}.")
+            raise ValueError(
+                f"Item {item} must be of type AnnData, MuData, or SpatialData but is {item.__class__}."
+            )
 
         if not isinstance(matrix, np.ndarray):
-            raise ValueError(f"Item {item} matrix is not a Numpy matrix but of type {matrix.__class__}")
+            raise ValueError(
+                f"Item {item} matrix is not a Numpy matrix but of type {matrix.__class__}"
+            )
 
         result.append(transform(matrix.flatten()))
 
