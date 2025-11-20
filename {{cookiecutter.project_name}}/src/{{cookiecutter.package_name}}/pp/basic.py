@@ -80,26 +80,15 @@ def elaborate_example(
         if isinstance(item, AnnData):
             matrix = item.X if not layer_key else item.layers[layer_key]
         elif isinstance(item, MuData):
-            matrix = (
-                item.mod[mudata_mod].X
-                if not layer_key
-                else item.mod[mudata_mod].layers[layer_key]
-            )
+            matrix = item.mod[mudata_mod].X if not layer_key else item.mod[mudata_mod].layers[layer_key]
         elif isinstance(item, SpatialData):
-            matrix = (
-                item.tables[sdata_table_key].X
-                if not layer_key
-                else item.tables[sdata_table_key].layers[layer_key]
-            )
+            matrix = item.tables[sdata_table_key].X if not layer_key else item.tables[sdata_table_key].layers[layer_key]
         else:
-            raise ValueError(
-                f"Item {item} must be of type AnnData, MuData, or SpatialData but is {item.__class__}."
-            )
-
+            msg = f"Item {item} must be of type AnnData, MuData, or SpatialData but is {item.__class__}."
+            raise ValueError(msg)
         if not isinstance(matrix, np.ndarray):
-            raise ValueError(
-                f"Item {item} matrix is not a Numpy matrix but of type {matrix.__class__}"
-            )
+            msg = f"Item {item} matrix is not a Numpy matrix but of type {matrix.__class__}"
+            raise ValueError(msg)
 
         result.append(transform(matrix.flatten()))
 
