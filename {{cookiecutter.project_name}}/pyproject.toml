@@ -37,6 +37,13 @@ dev = [
   "pre-commit",
   "twine>=4.0.2",
 ]
+test = [
+  "coverage>=7.10",
+  "pytest",
+  {% if cookiecutter.ide_integration %}
+  "pytest-cov",     # For VS Code’s coverage functionality
+  {% endif %}
+]
 doc = [
   "ipykernel",
   "ipython",
@@ -50,13 +57,6 @@ doc = [
   "sphinxcontrib-bibtex>=1",
   "sphinxcontrib-katex",
   "sphinxext-opengraph",
-]
-test = [
-  "coverage>=7.10",
-  "pytest",
-  {% if cookiecutter.ide_integration %}
-  "pytest-cov",     # For VS Code’s coverage functionality
-  {% endif %}
 ]
 
 {% if cookiecutter.project_name.lower().replace("-", "_") != cookiecutter.package_name -%}
