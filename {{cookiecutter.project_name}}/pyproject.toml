@@ -27,19 +27,22 @@ dependencies = [
   # for debug logging (referenced from the issue template)
   "session-info2",
 ]
-optional-dependencies.dev = [
+# https://docs.pypi.org/project_metadata/#project-urls
+urls.Documentation = "https://{{ cookiecutter.project_name }}.readthedocs.io/"
+urls.Homepage = "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}"
+urls.Source = "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}"
+
+[dependency-groups]
+dev = [
   "pre-commit",
   "twine>=4.0.2",
 ]
-optional-dependencies.doc = [
-  "docutils>=0.8,!=0.18.*,!=0.19.*",
+doc = [
   "ipykernel",
   "ipython",
   "myst-nb>=1.1",
   "pandas",
-  # Until pybtex >0.24.0 releases: https://bitbucket.org/pybtex-devs/pybtex/issues/169/
-  "setuptools",
-  "sphinx>=8.1",
+  "sphinx>=9.0.2",
   "sphinx-autodoc-typehints",
   "sphinx-book-theme>=1",
   "sphinx-copybutton",
@@ -48,17 +51,13 @@ optional-dependencies.doc = [
   "sphinxcontrib-katex",
   "sphinxext-opengraph",
 ]
-optional-dependencies.test = [
+test = [
   "coverage>=7.10",
   "pytest",
   {% if cookiecutter.ide_integration %}
   "pytest-cov",     # For VS Code’s coverage functionality
   {% endif %}
 ]
-# https://docs.pypi.org/project_metadata/#project-urls
-urls.Documentation = "https://{{ cookiecutter.project_name }}.readthedocs.io/"
-urls.Homepage = "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}"
-urls.Source = "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}"
 
 {% if cookiecutter.project_name.lower().replace("-", "_") != cookiecutter.package_name -%}
 [tool.hatch.build.targets.wheel]
@@ -68,10 +67,10 @@ packages = [ "src/{{ cookiecutter.package_name }}" ]
 
 [tool.hatch.envs.default]
 installer = "uv"
-features = [ "dev" ]
+dependency-groups = [ "dev" ]
 
 [tool.hatch.envs.docs]
-features = [ "doc" ]
+dependency-groups = [ "doc" ]
 scripts.build = "sphinx-build -M html docs docs/_build -W {args}"
 scripts.open = "python -m webbrowser -t docs/_build/html/index.html"
 scripts.clean = "git clean -fdX -- {args:docs}"
@@ -87,7 +86,7 @@ deps = [ "pre" ]
 python = [ "3.14" ]
 
 [tool.hatch.envs.hatch-test]
-features = [ "dev", "test" ]
+dependency-groups = [ "dev", "test" ]
 
 [tool.hatch.envs.hatch-test.overrides]
 # If the matrix variable `deps` is set to "pre",
@@ -136,9 +135,9 @@ lint.per-file-ignores."docs/*" = [ "I" ]
 lint.per-file-ignores."tests/*" = [ "D" ]
 lint.pydocstyle.convention = "numpy"
 
-[tool.pytest.ini_options]
+[tool.pytest]
+strict = true
 testpaths = [ "tests" ]
-xfail_strict = true
 addopts = [
   "--import-mode=importlib", # allow using test files with same name
 ]
