@@ -29,9 +29,6 @@ dependencies = [
   "pyyaml",
   "rich",
 ]
-optional-dependencies.test = [
-  "pytest",
-]
 urls.Documentation = "https://github.com/scverse/cookiecutter-scverse#readme"
 urls.Issues = "https://github.com/scverse/cookiecutter-scverse/issues"
 urls.Source = "https://github.com/scverse/cookiecutter-scverse"
@@ -47,9 +44,6 @@ fallback-version = "0.0"
 
 [tool.hatch.envs.default]
 python = "3.11"
-
-[tool.hatch.envs.hatch-test]
-features = [ "test" ]
 
 [tool.ruff]
 line-length = 120
