@@ -81,7 +81,11 @@ jobs:
           uvx hatch run ${{ matrix.env.name }}:cov-report   # report visibly
           uvx hatch run ${{ matrix.env.name }}:coverage xml # create report for upload
       - name: Upload coverage
+        if: ${{ !cancelled() }}
         uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
 
   # Check that all tests defined above pass. This makes it easy to set a single "required" test in branch
   # protection instead of having to update it frequently. See https://github.com/re-actors/alls-green#why.
