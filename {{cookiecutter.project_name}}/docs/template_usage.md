@@ -384,7 +384,7 @@ The following hints may be useful to work with the template sync:
 
 :::
 
-[lits of template repositories]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
+[list of template repositories]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
 [scverse-bot]: https://github.com/scverse-bot
 
 ## Moving forward
