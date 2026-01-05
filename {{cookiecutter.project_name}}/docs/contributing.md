@@ -103,7 +103,7 @@ This can have undesired side-effects,
 such as requiring to install a lower version of a library your project depends on,
 only because an outdated sphinx plugin pins an older version.
 
-To initalize a virtual environment in the `.venv` directory of your project, simply run
+To initialize a virtual environment in the `.venv` directory of your project, simply run
 
 ```bash
 uv sync --all-extras
