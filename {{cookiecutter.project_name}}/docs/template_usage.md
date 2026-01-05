@@ -125,7 +125,7 @@ See a guide [here](https://docs.readthedocs.io/en/stable/guides/importing-privat
 
 ### Github Actions
 
-[GitHub Actions][] is a continous integration (CI)/continous development (CD) automation tool that enables workflows for building, testing, and deploying code directly from a GitHub repository.
+[GitHub Actions][] is a continuous integration (CI)/continuous development (CD) automation tool that enables workflows for building, testing, and deploying code directly from a GitHub repository.
 It uses YAML-based configuration files to define jobs and steps, which can be triggered by events like pushes, pull requests, or scheduled runs.
 This project comes with several pre-configured workflows that can be found in the `.github/workflows` folder:
 
@@ -225,7 +225,7 @@ The following pre-commit hooks are for errors and inconsistencies:
     - [flake8-blind-except](https://beta.ruff.rs/docs/rules/#flake8-blind-except-ble) (rule category: `BLE`):
       checks for blind, catch-all `except` statements.
     - [Ruff-specific rules](https://beta.ruff.rs/docs/rules/#ruff-specific-rules-ruf) (rule category: `RUF`):
-        - `RUF100`: remove unneccesary `# noqa` comments ()
+        - `RUF100`: remove unnecessary `# noqa` comments ()
 
 #### How to add or remove pre-commit checks
 

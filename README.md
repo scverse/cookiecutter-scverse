@@ -96,7 +96,7 @@ All CI checks should pass, you are ready to start developing your new tool!
 
 Further instructions on using this template can be found in the [dev docs included in the project](https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html).
 
-### Committment
+### Commitment
 
 We expect developers of scverse ecosystem packages to
 

@@ -96,7 +96,7 @@ jobs:
           force: false
           directory: ${{ env.INSTANCE_REPO }}
 
-      # Run the following steps only on the pull request event -- in the other case we just commited
+      # Run the following steps only on the pull request event -- in the other case we just committed
       # to the main branch and are done with it.
       - name: Check if "sister PR" exists and find its ID
         if: github.event_name == 'pull_request'

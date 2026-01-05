@@ -77,7 +77,7 @@ def test_get_template_release(bot_con: GitHubConnection, tag_name: str) -> None:
 
 
 def test_get_repo_urls(bot_con: GitHubConnection) -> None:
-    """Test if lits of repos using template can be obtained from scverse/ecosystem-packages"""
+    """Test if list of repos using template can be obtained from scverse/ecosystem-packages"""
     repo_urls = get_repo_urls(bot_con.gh)
     assert any("scverse/scirpy" in url for url in repo_urls)
 

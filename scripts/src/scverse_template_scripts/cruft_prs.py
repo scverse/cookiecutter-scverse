@@ -221,7 +221,7 @@ def _clone_and_prepare_repo(
      * clones the forked repo
      * adds the original repo as a remote named "upstream"
      * checks out a branch called `{template_branch_name}`. If it does not exist yet,
-       it is created off the inital commit of the default branch of the original repo.
+       it is created off the initial commit of the default branch of the original repo.
 
     Parameters
     ----------
@@ -230,7 +230,7 @@ def _clone_and_prepare_repo(
     clone_dir
         directory into which to clone the repo
     forked_repo
-        referece to the forked repo (to be cloned)
+        reference to the forked repo (to be cloned)
     original_repo
         reference to the original repo (to be set as upstream)
     template_branch_name
@@ -311,13 +311,13 @@ def _apply_update(
     clone_dir = Path(clone.working_dir)
     with TemporaryDirectory() as td:
         template_dir = Path(td)
-        # Initalize a new repo off the current template version, using the configuration from .cruft.json
+        # Initialize a new repo off the current template version, using the configuration from .cruft.json
         cookiecutter_config_file = template_dir / "cookiecutter.json"
         with cookiecutter_config_file.open("w") as f:
             # need to put the cookiecutter-related info from .cruft.json into separate file
             json.dump({k: v for k, v in cookiecutter_config.items() if k not in IGNORE_COOKIECUTTER_VARS}, f)
 
-        # run in a subprocess, otherwise not possible to catpure output of post-run hooks
+        # run in a subprocess, otherwise not possible to capture output of post-run hooks
         with cruft_log_file.open("w") as log_f:
             cmd = [
                 sys.executable,
