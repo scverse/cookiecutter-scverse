@@ -19,6 +19,8 @@ from scverse_template_scripts.cruft_prs import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     from git import Repo
     from github.Repository import Repository
 
@@ -42,15 +44,17 @@ def instance_fork(bot_con: GitHubConnection, instance_orig: Repository) -> Repos
 
 
 @pytest.fixture
-def clone(tmp_path: Path, bot_con: GitHubConnection, instance_orig: Repository, instance_fork: Repository) -> Repo:
-    clone_dir = tmp_path / "clone"
-    return _clone_and_prepare_repo(
+def clone(
+    tmp_path: Path, bot_con: GitHubConnection, instance_orig: Repository, instance_fork: Repository
+) -> Generator[Repo]:
+    with _clone_and_prepare_repo(
         bot_con,
-        clone_dir,
+        tmp_path / "clone",
         "test-template-update-branch",
         forked_repo=instance_fork,
         original_repo=instance_orig,
-    )
+    ) as repo:
+        yield repo
 
 
 @pytest.fixture

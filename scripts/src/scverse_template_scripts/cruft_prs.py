@@ -433,16 +433,17 @@ def template_update(  # noqa: PLR0913, (= too many function arguments)
         If True, do not push changes
 
     """
-    with TemporaryDirectory() as cd:
-        clone_dir = Path(cd)
-        default_branch = original_repo.default_branch
-        clone = _clone_and_prepare_repo(
+    with (
+        TemporaryDirectory() as clone_dir_str,
+        _clone_and_prepare_repo(
             con,
-            clone_dir,
+            (clone_dir := Path(clone_dir_str)),
             template_branch_name,
             forked_repo=forked_repo,
             original_repo=original_repo,
-        )
+        ) as clone,
+    ):
+        default_branch: str = original_repo.default_branch
 
         cruft_config = _get_cruft_config_from_upstream(clone, default_branch)
         cookiecutter_config = cruft_config["context"]["cookiecutter"]
