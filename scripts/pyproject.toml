@@ -38,9 +38,6 @@ scripts.send-cruft-prs = "scverse_template_scripts.cruft_prs:cli"
 source = "vcs"
 fallback-version = "0.0"
 
-[tool.hatch.envs.default]
-python = "3.11"
-
 [tool.ruff]
 line-length = 120
 
