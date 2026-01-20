@@ -77,7 +77,7 @@ jobs:
       - name: Run tests
         env:
           SCVERSE_BOT_READONLY_GITHUB_TOKEN: ${{ secrets.SCVERSE_BOT_READONLY_GITHUB_TOKEN }}
-          PYTHONTRACEMALLOC: '1'
+          PYTHONTRACEMALLOC: '20'
         working-directory: ./scripts
         run: uvx hatch test
 
