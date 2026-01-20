@@ -10,10 +10,9 @@ license = "GPL-3.0"
 authors = [
   { name = "Philipp A.", email = "flying-sheep@web.de" },
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
@@ -34,9 +33,6 @@ urls.Issues = "https://github.com/scverse/cookiecutter-scverse/issues"
 urls.Source = "https://github.com/scverse/cookiecutter-scverse"
 scripts.make-rich-output = "scverse_template_scripts.make_rich_output:main"
 scripts.send-cruft-prs = "scverse_template_scripts.cruft_prs:cli"
-
-[tool.hatch.build.targets.wheel]
-packages = [ "src/testing", "src/scverse_template_scripts" ]
 
 [tool.hatch.version]
 source = "vcs"
@@ -103,7 +99,6 @@ column_width = 120
 [tool.pytest.ini_options]
 addopts = [
   "--import-mode=importlib",
-  "-ptesting.scverse_template_scripts._pytest",
 ]
 filterwarnings = [
   "error",

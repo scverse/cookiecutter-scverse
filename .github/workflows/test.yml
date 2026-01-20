@@ -79,7 +79,7 @@ jobs:
           SCVERSE_BOT_READONLY_GITHUB_TOKEN: ${{ secrets.SCVERSE_BOT_READONLY_GITHUB_TOKEN }}
           PYTHONTRACEMALLOC: '20'
         working-directory: ./scripts
-        run: uvx hatch test
+        run: uvx hatch test --color=yes
 
   check:
     if: always()
