@@ -8,12 +8,9 @@ from ._log import log
 
 if TYPE_CHECKING:
     from collections.abc import Callable
-    from typing import TypeVar
-
-    T = TypeVar("T")
 
 
-def retry_with_backoff(
+def retry_with_backoff[T](
     fn: Callable[[], T],
     retries: int = 5,
     backoff_in_seconds: int | float = 1,
