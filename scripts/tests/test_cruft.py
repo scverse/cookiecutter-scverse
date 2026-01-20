@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-from contextlib import closing
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -48,15 +47,13 @@ def instance_fork(bot_con: GitHubConnection, instance_orig: Repository) -> Repos
 def clone(
     tmp_path: Path, bot_con: GitHubConnection, instance_orig: Repository, instance_fork: Repository
 ) -> Generator[Repo]:
-    clone_dir = tmp_path / "clone"
-    repo = _clone_and_prepare_repo(
+    with _clone_and_prepare_repo(
         bot_con,
-        clone_dir,
+        tmp_path / "clone",
         "test-template-update-branch",
         forked_repo=instance_fork,
         original_repo=instance_orig,
-    )
-    with closing(repo):
+    ) as repo:
         yield repo
 
 

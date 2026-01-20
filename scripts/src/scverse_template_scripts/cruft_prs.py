@@ -10,7 +10,6 @@ import math
 import os
 import sys
 from collections.abc import Iterable
-from contextlib import ExitStack, closing
 from dataclasses import KW_ONLY, InitVar, dataclass, field
 from glob import glob
 from pathlib import Path
@@ -434,17 +433,17 @@ def template_update(  # noqa: PLR0913, (= too many function arguments)
         If True, do not push changes
 
     """
-    with ExitStack() as stack:
-        clone_dir = Path(stack.enter_context(TemporaryDirectory()))
-        default_branch = original_repo.default_branch
-        clone = _clone_and_prepare_repo(
+    with (
+        TemporaryDirectory() as clone_dir_str,
+        _clone_and_prepare_repo(
             con,
-            clone_dir,
+            (clone_dir := Path(clone_dir_str)),
             template_branch_name,
             forked_repo=forked_repo,
             original_repo=original_repo,
-        )
-        stack.enter_context(closing(clone))
+        ) as clone,
+    ):
+        default_branch: str = original_repo.default_branch
 
         cruft_config = _get_cruft_config_from_upstream(clone, default_branch)
         cookiecutter_config = cruft_config["context"]["cookiecutter"]
