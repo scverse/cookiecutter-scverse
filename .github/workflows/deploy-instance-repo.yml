@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout template repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set git identity
         run: |
@@ -28,7 +28,7 @@ jobs:
           git config --global user.email "108668866+scverse-bot@users.noreply.github.com"
 
       - name: Checkout instance repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: ${{ env.INSTANCE_REPO_GITHUB }}
           token: ${{ secrets.BOT_GH_TOKEN }}

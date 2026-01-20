@@ -22,7 +22,7 @@ jobs:
 
     steps:
       # Setup
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set git identity
         run: |
           git config --global user.name "scverse-bot"
@@ -63,7 +63,7 @@ jobs:
   test-scripts:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set git identity
         run: |
           git config --global user.name "scverse-bot"
@@ -77,6 +77,7 @@ jobs:
       - name: Run tests
         env:
           SCVERSE_BOT_READONLY_GITHUB_TOKEN: ${{ secrets.SCVERSE_BOT_READONLY_GITHUB_TOKEN }}
+          PYTHONTRACEMALLOC: '1'
         working-directory: ./scripts
         run: uvx hatch test
 
