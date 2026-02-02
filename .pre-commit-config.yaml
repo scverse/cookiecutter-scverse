@@ -6,7 +6,7 @@ repos:
       - id: biome-format
   # Hooks that are run for scripts
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: v2.11.1
+    rev: v2.12.1
     hooks:
       - id: pyproject-fmt
         files: ^scripts/pyproject\.toml$
