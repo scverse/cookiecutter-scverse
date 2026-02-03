@@ -75,6 +75,9 @@ scripts.build = "sphinx-build -M html docs docs/_build -W {args}"
 scripts.open = "python -m webbrowser -t docs/_build/html/index.html"
 scripts.clean = "git clean -fdX -- {args:docs}"
 
+[tool.hatch.envs.hatch-test]
+dependency-groups = [ "dev", "test" ]
+
 # Test the lowest and highest supported Python versions with normal deps
 [[tool.hatch.envs.hatch-test.matrix]]
 deps = [ "stable" ]
@@ -84,9 +87,6 @@ python = [ "3.11", "3.14" ]
 [[tool.hatch.envs.hatch-test.matrix]]
 deps = [ "pre" ]
 python = [ "3.14" ]
-
-[tool.hatch.envs.hatch-test]
-dependency-groups = [ "dev", "test" ]
 
 [tool.hatch.envs.hatch-test.overrides]
 # If the matrix variable `deps` is set to "pre",
