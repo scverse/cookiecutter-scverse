@@ -1,11 +1,10 @@
 # Using this template
 
-Welcome to the developer guidelines! This document is split into two parts:
-
-1. The [repository setup](#setting-up-the-repository).
-   This section is relevant primarily for the repository maintainer and shows how to connect continuous integration services and documents initial set-up of the repository.
-2. The [contributor guide](contributing.md#contributing-guide).
-   It contains information relevant to all developers who want to make a contribution.
+Welcome to the developer guidelines!
+This section is relevant primarily for the repository maintainer
+and shows how to connect continuous integration services and documents initial set-up of the repository.
+For information relevant to all developers who want to make a contribution,
+please refer to the [contributor guide](contributing.md#contributing-guide).
 
 ## First commit
 
