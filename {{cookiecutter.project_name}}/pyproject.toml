@@ -78,10 +78,10 @@ envs.hatch-test.matrix = [
 envs.hatch-test.overrides.matrix.deps.env-vars = [
   { key = "UV_PRERELEASE", value = "allow", if = [ "pre" ] },
 ]
-{%- if cookiecutter.project_name.lower().replace("-", "_") != cookiecutter.package_name %}
+{% if cookiecutter.project_name.lower().replace("-", "_") != cookiecutter.package_name -%}
 build.targets.wheel.packages = [ "src/{{ cookiecutter.package_name }}" ]
-{%- endif %}
 
+{%- endif %}
 [tool.ruff]
 line-length = 120
 src = [ "src" ]
