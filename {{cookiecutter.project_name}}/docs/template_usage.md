@@ -403,7 +403,7 @@ Here's one way how to do it:
 
     ```bash
     mkdir template && cd template
-    cruft create https://github.com/scverse/cookiecutter-scverse
+    uvx --with pre-commit cruft create https://github.com/scverse/cookiecutter-scverse
     ```
 
 4. remove everything from the existing repo
@@ -420,7 +420,7 @@ Here's one way how to do it:
 
     ```bash
     # move everything, including hidden folders, excluding `.git`.
-    rsync -av --exclude='.git' ../template/$REPO ./
+    rsync -av --exclude='.git' ../template/$REPO/ ./
     git add -A
     git commit -m "init from template"
     ```
