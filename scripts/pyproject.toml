@@ -92,10 +92,10 @@ lint.isort.required-imports = [ "from __future__ import annotations" ]
 column_width = 120
 
 [tool.pytest]
-ini_options.addopts = [
+addopts = [
   "--import-mode=importlib",
 ]
-ini_options.filterwarnings = [
+filterwarnings = [
   "error",
   # https://github.com/man-group/pytest-plugins/issues/224
   "ignore::DeprecationWarning:pytest_shutil",
