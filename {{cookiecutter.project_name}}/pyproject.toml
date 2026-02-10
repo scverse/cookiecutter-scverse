@@ -80,7 +80,7 @@ envs.hatch-test.overrides.matrix.deps.env-vars = [
 ]
 {% if cookiecutter.project_name.lower().replace("-", "_") != cookiecutter.package_name -%}
 build.targets.wheel.packages = [ "src/{{ cookiecutter.package_name }}" ]
-{%- endif %}
+{% endif %}
 
 [tool.ruff]
 line-length = 120
