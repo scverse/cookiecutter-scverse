@@ -133,13 +133,13 @@ jobs:
         uses: mshick/add-pr-comment@v2
         with:
           message: |
-            A PR has been generated to the instance repo:
-            https://github.com/${{ env.INSTANCE_REPO_GITHUB }}/pull/${{ env.SISTER_PR_ID }}
+            A PR has been generated to the instance repo: ${{ env.INSTANCE_REPO_GITHUB }}#${{ env.SISTER_PR_ID }}
 
+            You can check out the PR to preview your changes in an instance of the cookiecutter template.
+            It will be kept in sync with this PR automatically.
 
-            You can check out the PR to preview your changes
-            in an instance of the cookiecutter template. The PR will be kept in sync with
-            this PR automatically.
+            If the documentation builds successfully, you can preview it under
+            https://cookiecutter-scverse-instance--${{ env.SISTER_PR_ID }}.org.readthedocs.build/
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           allow-repeats: false
 
