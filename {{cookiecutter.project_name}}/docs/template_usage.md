@@ -1,15 +1,12 @@
 # Using this template
 
-Welcome to the developer guidelines! This document is split into two parts:
+Welcome to the developer guidelines!
+This section is relevant primarily for the repository maintainer
+and shows how to connect continuous integration services and documents initial set-up of the repository.
+For information relevant to all developers who want to make a contribution,
+please refer to the [contributor guide](contributing.md#contributing-guide).
 
-1. The [repository setup](#setting-up-the-repository).
-   This section is relevant primarily for the repository maintainer and shows how to connect continuous integration services and documents initial set-up of the repository.
-2. The [contributor guide](contributing.md#contributing-guide).
-   It contains information relevant to all developers who want to make a contribution.
-
-## Setting up the repository
-
-### First commit
+## First commit
 
 If you are reading this, you should have just completed the repository creation with:
 
@@ -47,7 +44,7 @@ While the repository at this point can be directly used, there are few remaining
 
 [github quickstart guide]: https://docs.github.com/en/get-started/quickstart/create-a-repo?tool=webui
 
-### The pyproject.toml file
+## The pyproject.toml file
 
 Modern Python package management uses a `pyproject.toml` that was first introduced in [PEP 518](https://peps.python.org/pep-0518/).
 This file contains build system requirements and information, which are used by pip to build the package, and tool configurations.
@@ -55,14 +52,14 @@ For more details please have a look at [pip's description of the pyproject.toml 
 It also serves as a single point of truth to define test environments and how docs are built by leveraging
 the [hatch][] project manager, but more about that in the [contributing guide](contributing.md).
 
-#### Important metadata fields
+### Important metadata fields
 
 The `[project]` section in the `pyproject.toml` file defines several important metadata fields that might require editing.
 For example, the `name`, `description`, `authors` fields could need updates as the project evolves.
 Especially, the `version` field needs to be adapted if newer versions of the package are to be released.
 See {ref}`vcs-based-versioning` for more details.
 
-#### Dependency management
+### Dependency management
 
 Package dependencies can be added to the `dependencies` of the `[project]` section.
 You can constrain versions using any of `>=`, `>`, `<`, `<=`, `==`, `!=`, and `~=`.
@@ -72,7 +69,7 @@ As another example, if there is a known buggy version, you could exclude it like
 Further optional dependencies are defined in the `[project.optional-dependencies]` section such as dependencies only for tests (`test`).
 All dependencies listed in such optional dependency groups can then be installed by specifying them like: `pip install <package-name>[test]`.
 
-#### Tool configurations
+### Tool configurations
 
 The `pyproject.toml` file also serves as single configuration file for many tools such as many {ref}`pre-commit`.
 For example, the line length for auto-formatting can be configured as follows:
@@ -84,7 +81,7 @@ line-length = 120
 
 [hatch]: https://hatch.pypa.io/latest/
 
-### Coverage tests with _Codecov_
+## Coverage tests with _Codecov_
 
 Coverage tells what fraction of the code is "covered" by unit tests,
 thereby encouraging contributors to [write tests](contributing.md#writing-tests).
@@ -102,7 +99,7 @@ To set it up, simply go to the [codecov app][] page and follow the instructions 
 [codecov docs]: https://docs.codecov.com/docs
 [OpenID connect]: https://docs.github.com/en/actions/concepts/security/openid-connect
 
-### Documentation on _readthedocs_
+## Documentation on _readthedocs_
 
 We recommend using [readthedocs.org][] (RTD) to build and host the documentation for your project.
 To enable readthedocs, head over to [their website][readthedocs.org] and sign in with your GitHub account.
@@ -123,7 +120,7 @@ See a guide [here](https://docs.readthedocs.io/en/stable/guides/importing-privat
 
 (github-actions)=
 
-### Github Actions
+## Github Actions
 
 [GitHub Actions][] is a continuous integration (CI)/continuous development (CD) automation tool that enables workflows for building, testing, and deploying code directly from a GitHub repository.
 It uses YAML-based configuration files to define jobs and steps, which can be triggered by events like pushes, pull requests, or scheduled runs.
@@ -148,7 +145,7 @@ There you can see the execution history, logs, and (re-)trigger workflows manual
 (automating-pypi-released-using-github-actions)=
 (configuring-the-github-workflow)=
 
-### Automating the PyPI release using GitHub actions
+## Automating the PyPI release using GitHub actions
 
 Tags adhering to `"*.*.*"` that are pushed to the `main` branch will trigger the release Github workflow that automatically builds and uploads the Python package to [PyPI][].
 
@@ -170,7 +167,7 @@ For more details, please refer to the official [PyPI guide for setting up truste
 
 (pre-commit)=
 
-### Pre-commit checks
+## Pre-commit checks
 
 [Pre-commit][] checks are fast programs that check code for errors, inconsistencies and code styles, before the code is committed.
 
@@ -178,7 +175,7 @@ This template uses a number of pre-commit checks.
 In this section we'll detail what is used, where they're defined, and how to modify these checks.
 
 
-#### Pre-commit CI
+### Pre-commit CI
 
 We recommend setting up [pre-commit.ci][] to enforce consistency checks on every commit and pull-request.
 
@@ -189,7 +186,7 @@ You may choose to enable the service for an entire organization or on a per-repo
 Once authorized, pre-commit.ci should automatically be activated.
 
 
-#### Overview of pre-commit hooks used by the template
+### Overview of pre-commit hooks used by the template
 
 The following pre-commit hooks are for code style and format:
 
@@ -230,19 +227,19 @@ The following pre-commit hooks are for errors and inconsistencies:
     - [Ruff-specific rules](https://beta.ruff.rs/docs/rules/#ruff-specific-rules-ruf) (rule category: `RUF`):
         - `RUF100`: remove unnecessary `# noqa` comments ()
 
-#### How to add or remove pre-commit checks
+### How to add or remove pre-commit checks
 
 The [pre-commit checks](#pre-commit-checks) check for both correctness and stylistic errors.
 In some cases it might overshoot and you may have good reasons to ignore certain warnings.
 This section shows you where these checks are defined, and how to enable/ disable them.
 
-##### pre-commit
+#### pre-commit
 
 You can add or remove pre-commit checks by simply deleting relevant lines in the `.pre-commit-config.yaml` file under the repository root.
 Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` (for [ruff][]) or tool-specific config files,
 such as `biome.jsonc` for [biome][].
 
-##### Ruff
+#### Ruff
 
 This template configures `ruff` through the `[tool.ruff]` entry in the `pyproject.toml`.
 For further information `ruff` configuration, see [the docs][ruff-config].
@@ -305,7 +302,7 @@ add it to Ruff’s [`external = [...]`][ruff-external] setting to prevent `RUF10
 [ruff-external]: https://docs.astral.sh/ruff/settings/#external
 
 
-### API design
+## API design
 
 Scverse ecosystem packages should operate on [AnnData][], [MuData][], and/or [SpatialData][] data structures and typically use an API
 as originally [introduced by scanpy][scanpy-api] with the following submodules:
@@ -325,7 +322,7 @@ there may also be good reasons to choose a different approach, e.g. using an obj
 
 (vcs-based-versioning)=
 
-### Using VCS-based versioning
+## Using VCS-based versioning
 
 By default, the template uses hard-coded version numbers that are set in `pyproject.toml`.
 If you prefer to have your project automatically infer version numbers from git tags,
@@ -361,7 +358,7 @@ Don't forget to update the [Making a release section](contributing.md#publishing
 
 [hatch-vcs]: https://pypi.org/project/hatch-vcs/
 
-### Automated template sync
+## Automated template sync
 
 Automated template sync is enabled by default for public repositories on GitHub.
 Our [scverse-bot][] automatically crawls GitHub for repositories that are based on this template,
@@ -381,9 +378,6 @@ The following hints may be useful to work with the template sync:
   you can add them to the `[tool.cruft]` section in the `pyproject.toml` file in the root of your repository.
 - To disable the sync entirely, remove your package from the [list of template repositories][] via pull request,
   or simply remove the file `.cruft.json` from the root of your repository.
-
-:::
-
 
 :::
 
@@ -408,7 +402,7 @@ Here's one way how to do it:
 
     ```bash
     mkdir template && cd template
-    cruft create https://github.com/scverse/cookiecutter-scverse
+    uvx --with pre-commit cruft create https://github.com/scverse/cookiecutter-scverse
     ```
 
 4. remove everything from the existing repo
@@ -425,7 +419,7 @@ Here's one way how to do it:
 
     ```bash
     # move everything, including hidden folders, excluding `.git`.
-    rsync -av --exclude='.git' ../template/$REPO ./
+    rsync -av --exclude='.git' ../template/$REPO/ ./
     git add -A
     git commit -m "init from template"
     ```
