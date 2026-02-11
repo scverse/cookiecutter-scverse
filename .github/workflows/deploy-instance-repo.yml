@@ -129,7 +129,7 @@ jobs:
           echo "SISTER_PR_ID=$PR_ID" >> $GITHUB_ENV
 
       - name: Add comment about sister PR
-        if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ github.event_name == 'pull_request' && env.GIT_HAS_CHANGES == 'TRUE' }}
         uses: mshick/add-pr-comment@v2
         with:
           message: |
