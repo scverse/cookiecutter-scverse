@@ -138,8 +138,10 @@ jobs:
             You can check out the PR to preview your changes in an instance of the cookiecutter template.
             It will be kept in sync with this PR automatically.
 
-            If the documentation builds successfully, you can preview it under
-            https://cookiecutter-scverse-instance--${{ env.SISTER_PR_ID }}.org.readthedocs.build/
+            Documentation preview: [![docs preview][badge]][docs]
+
+            [badge]: https://app.readthedocs.org/projects/cookiecutter-scverse-instance/badge/?version=${{ env.SISTER_PR_ID }}
+            [docs]: https://cookiecutter-scverse-instance--${{ env.SISTER_PR_ID }}.org.readthedocs.build/
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           allow-repeats: false
 
