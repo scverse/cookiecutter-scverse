@@ -384,6 +384,16 @@ The following hints may be useful to work with the template sync:
 [list of template repositories]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
 [scverse-bot]: https://github.com/scverse-bot
 
+### Manual template sync
+
+If you prefer to check for and apply the pre-release template updates manually, or if you are working on a private repository not tracked by the bot, you can use cruft. Simply:
+
+- Make sure cruft and pre-commit are installed.
+- Make sure your git directory is clean (no unstaged/uncommitted files).
+- Run `cruft update` in the root of your repository.
+
+Cruft will check if a newer version of the template is available. If so, it will show you the diff and ask for confirmation before applying the changes to your local files.
+
 ## Moving forward
 
 You have successfully set up your project and are ready to start.

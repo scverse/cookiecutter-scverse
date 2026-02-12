@@ -136,6 +136,7 @@ run.source = [ "{{ cookiecutter.package_name }}" ]
 
 [tool.cruft]
 skip = [
+  ".git",
   "tests",
   "src/**/__init__.py",
   "src/**/basic.py",
