@@ -1,4 +1,4 @@
-{{ fullname | escape | underline}}
+{{ fullname | escape | underline }}
 
 .. currentmodule:: {{ module }}
 
@@ -6,54 +6,47 @@
 
 .. autoclass:: {{ fullname }}
 
-{% set methods = methods | select("ne", "__init__") | list %}
-
 {% block attributes %}
-{% if attributes %}
+{% for item in attributes %}
+{% if loop.first %}
 Attributes table
 ~~~~~~~~~~~~~~~~
 
 .. autosummary::
-{% for item in attributes %}
+{% endif %}
     ~{{ name }}.{{ item }}
 {%- endfor %}
-{% endif %}
 {% endblock %}
 
 {% block methods %}
-{% if methods %}
+{% for item in methods if item != "__init__" %}
+{% if loop.first %}
 Methods table
 ~~~~~~~~~~~~~
 
 .. autosummary::
-{% for item in methods %}
-    ~{{ name }}.{{ item }}
-{%- endfor %}
 {% endif %}
+    ~{{ name }}.{{ item }}
+{% endfor %}
 {% endblock %}
 
 {% block attributes_documentation %}
-{% if attributes %}
+{% for item in attributes %}
+{% if loop.first %}
 Attributes
 ~~~~~~~~~~
 
-{% for item in attributes %}
-
+{% endif %}
 .. autoattribute:: {{ [fullname, item] | join(".") }}
 {%- endfor %}
-
-{% endif %}
 {% endblock %}
 
 {% block methods_documentation %}
-{% if methods %}
+{% for item in methods if item != "__init__" %}
+{% if loop.first %}
 Methods
 ~~~~~~~
-
-{% for item in methods %}
-
+{% endif %}
 .. automethod:: {{ [fullname, item] | join(".") }}
 {%- endfor %}
-
-{% endif %}
 {% endblock %}
