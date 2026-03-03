@@ -6,6 +6,8 @@
 
 .. autoclass:: {{ fullname }}
 
+{% set methods = methods | select("ne", "__init__") | list %}
+
 {% block attributes %}
 {% for item in attributes %}
 {% if loop.first %}
@@ -19,7 +21,7 @@ Attributes table
 {% endblock %}
 
 {% block methods %}
-{% for item in methods if item != "__init__" %}
+{% for item in methods %}
 {% if loop.first %}
 Methods table
 ~~~~~~~~~~~~~
@@ -42,7 +44,7 @@ Attributes
 {% endblock %}
 
 {% block methods_documentation %}
-{% for item in methods if item != "__init__" %}
+{% for item in methods %}
 {% if loop.first %}
 Methods
 ~~~~~~~
