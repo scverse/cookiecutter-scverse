@@ -100,5 +100,5 @@ filterwarnings = [
   # https://github.com/man-group/pytest-plugins/issues/224
   "ignore::DeprecationWarning:pytest_shutil",
   # https://github.com/psf/requests/issues/7219
-  "ignore::requests.exceptions.RequestsDependencyWarning",
+  "ignore:urllib3.*or chardet.*doesn't match a supported version",
 ]
