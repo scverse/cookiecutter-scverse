@@ -34,7 +34,10 @@ msg = "Initialize project from cookiecutter-scverse"
 run(args=["git", "commit", "--no-verify", "--no-gpg-sign", "-m", msg], check=True)
 
 # Install pre-commit
-run(["pre-commit", "install"], check=True)
+try:
+    run(["prek", "install"], check=True)
+except FileNotFoundError:
+    run(["pre-commit", "install"], check=True)
 
 # The following output was generated using rich
 # The formatted output is included here directly, because I don't want
