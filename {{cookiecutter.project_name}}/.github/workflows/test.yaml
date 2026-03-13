@@ -48,6 +48,7 @@ jobs:
     needs: get-environments
     permissions:
        id-token: write  # for codecov OIDC
+       contents: read
 
     strategy:
       fail-fast: false
