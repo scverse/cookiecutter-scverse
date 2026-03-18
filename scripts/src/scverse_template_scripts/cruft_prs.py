@@ -85,6 +85,7 @@ class GitHubConnection:
     sig: Actor = field(init=False)
 
     def __post_init__(self) -> None:
+        assert self.token.startswith("github_pat_")
         self.gh = Github(auth=Auth.Token(self.token) if self.token else None)
         self.user = cast("NamedUser", self.gh.get_user())
         if self.email is None:
