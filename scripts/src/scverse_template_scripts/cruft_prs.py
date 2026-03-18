@@ -10,7 +10,7 @@ import math
 import os
 import sys
 from collections.abc import Iterable
-from dataclasses import KW_ONLY, InitVar, dataclass, field
+from dataclasses import KW_ONLY, dataclass, field
 from glob import glob
 from pathlib import Path
 from subprocess import run
@@ -76,7 +76,6 @@ IGNORE_COOKIECUTTER_VARS = [
 class GitHubConnection:
     """API connection to a GitHub user (e.g. scverse-bot)"""
 
-    _login: InitVar[str]
     token: str | None = field(repr=False, default=None)
     _: KW_ONLY
     email: str | None = field(default=None)
@@ -85,9 +84,10 @@ class GitHubConnection:
     user: NamedUser = field(init=False)
     sig: Actor = field(init=False)
 
-    def __post_init__(self, _login: str) -> None:
+    def __post_init__(self) -> None:
+        assert self.token.startswith("github_pat_")
         self.gh = Github(auth=Auth.Token(self.token) if self.token else None)
-        self.user = cast("NamedUser", self.gh.get_user(_login))
+        self.user = cast("NamedUser", self.gh.get_user())
         if self.email is None:
             self.email = self.user.email
         self.sig = Actor(self.login, self.email)

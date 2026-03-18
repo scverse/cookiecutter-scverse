@@ -29,7 +29,9 @@ if TYPE_CHECKING:
 def bot_con() -> GitHubConnection:
     """Connect to the scverse-bot github account. Make sure to use only a readonly-token to not destroy anything."""
     token = os.environ["SCVERSE_BOT_READONLY_GITHUB_TOKEN"]
-    return GitHubConnection("scverse-bot", token, email="108668866+scverse-bot@users.noreply.github.com")
+    con = GitHubConnection(token, email="108668866+scverse-bot@users.noreply.github.com")
+    assert con.login == "scverse-bot"
+    return con
 
 
 @pytest.fixture
