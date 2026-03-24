@@ -11,44 +11,44 @@
 {% block attributes %}
 {% for item in attributes %}
 {% if loop.first %}
-Attributes table
-~~~~~~~~~~~~~~~~
+    Attributes table
+    ~~~~~~~~~~~~~~~~
 
-.. autosummary::
+    .. autosummary::
 {% endif %}
-    ~{{ name }}.{{ item }}
+        ~{{ name }}.{{ item }}
 {%- endfor %}
 {% endblock %}
 
 {% block methods %}
 {% for item in methods %}
 {% if loop.first %}
-Methods table
-~~~~~~~~~~~~~
+    Methods table
+    ~~~~~~~~~~~~~
 
-.. autosummary::
+    .. autosummary::
 {% endif %}
-    ~{{ name }}.{{ item }}
+        ~{{ name }}.{{ item }}
 {% endfor %}
 {% endblock %}
 
 {% block attributes_documentation %}
 {% for item in attributes %}
 {% if loop.first %}
-Attributes
-~~~~~~~~~~
+    Attributes
+    ~~~~~~~~~~
 
 {% endif %}
-.. autoattribute:: {{ [fullname, item] | join(".") }}
+    .. autoattribute:: {{ [fullname, item] | join(".") }}
 {%- endfor %}
 {% endblock %}
 
 {% block methods_documentation %}
 {% for item in methods %}
 {% if loop.first %}
-Methods
-~~~~~~~
+    Methods
+    ~~~~~~~
 {% endif %}
-.. automethod:: {{ [fullname, item] | join(".") }}
+    .. automethod:: {{ [fullname, item] | join(".") }}
 {%- endfor %}
 {% endblock %}
