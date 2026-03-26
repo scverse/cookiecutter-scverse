@@ -39,7 +39,7 @@
     ~~~~~~~~~~
 
 {% endif %}
-    .. autoattribute:: {{ [fullname, item] | join(".") }}
+    .. auto{{ [fullname, item] | join(".") | member_type }}:: {{ [fullname, item] | join(".") }}
 {%- endfor %}
 {% endblock %}
 
