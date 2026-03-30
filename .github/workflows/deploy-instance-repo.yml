@@ -39,6 +39,9 @@ jobs:
           private-key: ${{ secrets.PR_CREATOR_PRIVATE_KEY }}
           repositories: cookiecutter-scverse-instance
 
+      - name: Authenticate gh CLI with app token
+        run: echo "${{ steps.app-token.outputs.token }}" | gh auth login --with-token
+
       - name: Checkout instance repository
         uses: actions/checkout@v6
         with:
