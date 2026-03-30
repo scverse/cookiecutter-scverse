@@ -13,6 +13,7 @@ from scverse_template_scripts.cruft_prs import (
     _apply_update,
     _clone_and_prepare_repo,
     _commit_update,
+    _escape_github_mentions,
     _get_cruft_config_from_upstream,
     get_repo_urls,
     get_template_release,
@@ -143,3 +144,37 @@ def test_commit_update(clone: Repo, exclude_files: list[str], expected_untracked
 
 def test_commit_update_no_files(clone: Repo) -> None:
     assert _commit_update(clone, commit_msg="foo", commit_author="scverse-bot") is False
+
+
+@pytest.mark.parametrize(
+    ("input_text", "expected"),
+    [
+        # Basic mention gets escaped
+        ("by @grst in", "by `@grst` in"),
+        # Multiple mentions get escaped
+        ("@alice and @bob", "`@alice` and `@bob`"),
+        # Already-escaped mention stays unchanged
+        ("`@grst`", "`@grst`"),
+        # Email address stays unchanged
+        ("user@example.com", "user@example.com"),
+        # Mention with hyphenated username
+        ("by @some-user in", "by `@some-user` in"),
+        # Mention at start of line
+        ("@grst made changes", "`@grst` made changes"),
+        # No mentions
+        ("no mentions here", "no mentions here"),
+        # Single char username
+        ("@a contributed", "`@a` contributed"),
+        # Realistic release notes
+        (
+            "* Fix bug by @grst in https://github.com/scverse/cookiecutter-scverse/pull/1\n"
+            "* Add feature by @some-user in https://github.com/scverse/cookiecutter-scverse/pull/2",
+            "* Fix bug by `@grst` in https://github.com/scverse/cookiecutter-scverse/pull/1\n"
+            "* Add feature by `@some-user` in https://github.com/scverse/cookiecutter-scverse/pull/2",
+        ),
+        # Bot email should not be escaped
+        ("108668866+scverse-bot@users.noreply.github.com", "108668866+scverse-bot@users.noreply.github.com"),
+    ],
+)
+def test_escape_github_mentions(input_text: str, expected: str) -> None:
+    assert _escape_github_mentions(input_text) == expected
