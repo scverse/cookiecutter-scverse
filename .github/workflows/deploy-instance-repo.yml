@@ -19,26 +19,33 @@ jobs:
       GH_TOKEN: ${{ secrets.BOT_GH_TOKEN }} # for gh cli
 
     steps:
-      - name: Checkout template repository
-        uses: actions/checkout@v6
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          cache-dependency-glob: .github/workflows/deploy-instance-repo.yml
 
       - name: Set git identity
         run: |
           git config --global user.name "scverse-bot"
           git config --global user.email "108668866+scverse-bot@users.noreply.github.com"
 
+      - name: Checkout template repository
+        uses: actions/checkout@v6
+
+      - name: Generate tokens
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.PR_CREATOR_APP_ID }}
+          private-key: ${{ secrets.PR_CREATOR_PRIVATE_KEY }}
+
       - name: Checkout instance repository
         uses: actions/checkout@v6
         with:
           repository: ${{ env.INSTANCE_REPO_GITHUB }}
-          token: ${{ secrets.BOT_GH_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
           path: ${{ env.INSTANCE_REPO }}
           persist-credentials: true
-
-      - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@v7
-        with:
-          cache-dependency-glob: .github/workflows/deploy-instance-repo.yml
 
       - name: define sister PR branch name for pull request
         if: github.event_name == 'pull_request'
@@ -90,7 +97,7 @@ jobs:
         if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
         uses: ad-m/github-push-action@v0.8.0
         with:
-          github_token: ${{ secrets.BOT_GH_TOKEN }}
+          github_token: ${{ steps.app-token.outputs.token }}
           branch: ${{ env.SISTER_PR_BRANCH }}
           repository: scverse/cookiecutter-scverse-instance
           force: false
@@ -144,7 +151,7 @@ jobs:
             [checks]: https://github.com/scverse/cookiecutter-scverse-instance/pull/${{ env.SISTER_PR_ID }}/checks
             [docs-badge]: https://app.readthedocs.org/projects/cookiecutter-scverse-instance/badge/?version=${{ env.SISTER_PR_ID }}
             [docs]: https://cookiecutter-scverse-instance--${{ env.SISTER_PR_ID }}.org.readthedocs.build/
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ steps.app-token.outputs.token }}
           allow-repeats: false
 
       - name: Query status of checks in template repository
