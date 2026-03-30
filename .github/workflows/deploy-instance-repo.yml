@@ -23,10 +23,10 @@ jobs:
         with:
           cache-dependency-glob: .github/workflows/deploy-instance-repo.yml
 
-      # - name: Set git identity
-      #   run: |
-      #     git config --global user.name "scverse-bot"
-      #     git config --global user.email "108668866+scverse-bot@users.noreply.github.com"
+      - name: Set git identity
+        run: |
+          git config --global user.name "scverse-bot"
+          git config --global user.email "108668866+scverse-bot@users.noreply.github.com"
 
       - name: Checkout template repository
         uses: actions/checkout@v6
