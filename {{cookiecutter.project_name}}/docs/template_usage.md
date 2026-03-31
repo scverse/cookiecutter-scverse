@@ -147,7 +147,8 @@ There you can see the execution history, logs, and (re-)trigger workflows manual
 
 ## Automating the PyPI release using GitHub actions
 
-Tags adhering to `"*.*.*"` that are pushed to the `main` branch and subsequently [released][github-releases] will trigger the release Github workflow that automatically builds and uploads the Python package to [PyPI][].
+Releases created via the [Github releases UI][github-releases]
+will trigger the release Github workflow that automatically builds and uploads the Python package to [PyPI][].
 
 For this to work, you'll need to setup GitHub as a [trusted publisher][] on PyPI.
 To set this up, login to [PyPI][], and proceed depending on whether you already have your project on there or not:
@@ -159,7 +160,8 @@ The "Workflow name" needs to bet set to `release.yaml`.
 Set "Environment name" to “pypi” to match `environment: pypi` in `.github/workflows/release.yaml`.
 For more details, please refer to the official [PyPI guide for setting up trusted publishing][trusted publisher].
 
-If you added a new pending publisher to set up your project, the project will be published only once you release your package for the first time (see above).
+If you added a new pending publisher to set up your project,
+the project will be published only once you release your package for the first time (see above).
 
 [github-releases]: https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases
 [pypi-trusted-publishing-guide]: https://docs.pypi.org/trusted-publishers/adding-a-publisher/
