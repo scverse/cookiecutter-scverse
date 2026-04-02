@@ -16,6 +16,8 @@ jobs:
       # directory in which cookiecuter generates the new repository
       INSTANCE_GENERATED: "TEMPLATE_INSTANCE_GENERATED"
       PROJECT_NAME: "cookiecutter-scverse-instance"
+      APP_USERNAME: "scverse-pr-creator[bot]"
+      APP_EMAIL: "272303624+scverse-pr-creator[bot]@users.noreply.github.com"
 
     steps:
       - name: Install the latest version of uv
@@ -25,8 +27,8 @@ jobs:
 
       - name: Set git identity
         run: |
-          git config --global user.name "scverse-pr-creator[bot]"
-          git config --global user.email "272303624+scverse-pr-creator[bot]@users.noreply.github.com"
+          git config --global user.name "${{ env.APP_USERNAME }}"
+          git config --global user.email "${{ env.APP_EMAIL }}"
 
       - name: Checkout template repository
         uses: actions/checkout@v6
@@ -89,7 +91,9 @@ jobs:
         if: ${{ env.GIT_HAS_CHANGES == 'TRUE' }}
         uses: EndBug/add-and-commit@v9
         with:
-          default_author: github_actions
+          author_name: ${{ env.APP_USERNAME }}
+          author_email: ${{ env.APP_EMAIL }}
+          default_author: user_info
           commit: "--no-verify" # no need to run pre-commit at this point - saves runtime!
           cwd: ${{ env.INSTANCE_REPO }}
           message: Update instance repo from cookiecutter template
