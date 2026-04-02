@@ -10,9 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.actor == 'pre-commit-ci[bot]' }}
     steps:
+      - name: Generate tokens
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.PR_CREATOR_APP_ID }}
+          private-key: ${{ secrets.PR_CREATOR_PRIVATE_KEY }}
+
       - uses: actions/checkout@v6
         with:
-          token: ${{ secrets.BOT_GH_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
       - run: pipx install pre-commit
       - run: cd '{{cookiecutter.project_name}}' && pre-commit autoupdate
       - uses: stefanzweifel/git-auto-commit-action@v7
