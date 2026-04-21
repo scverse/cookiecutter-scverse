@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
 import sys
 from collections.abc import Iterable
 from dataclasses import KW_ONLY, InitVar, dataclass, field
@@ -70,6 +71,16 @@ IGNORE_COOKIECUTTER_VARS = [
     # ignored because `cruft create` fails if it contains any different value than the default, see also https://github.com/cruft/cruft/issues/166
     "_copy_without_render",
 ]
+
+
+def _escape_github_mentions(text: str) -> str:
+    """Escape GitHub @mentions with backticks to prevent notifications.
+
+    Wraps ``@username`` patterns in backticks so that GitHub doesn't treat them
+    as real mentions when the text is used in PRs.
+    Already-escaped mentions and email addresses are left unchanged.
+    """
+    return re.sub(r"(?<![`\w])@([a-zA-Z\d](?:[a-zA-Z\d-]*[a-zA-Z\d])?)", r"`@\1`", text)
 
 
 @dataclass
@@ -138,10 +149,11 @@ class TemplateUpdatePR:
 
     @property
     def body(self) -> str:
-        return PR_BODY_TEMPLATE.format(
+        body = PR_BODY_TEMPLATE.format(
             release=self.release,
             template_usage="https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html",
         )
+        return _escape_github_mentions(body)
 
     def matches_prefix(self, pr: PullRequest) -> bool:
         """Check if `pr` is either a current or previous template update PR by matching the branch name"""
