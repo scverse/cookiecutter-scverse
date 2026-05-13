@@ -1,61 +1,54 @@
-{{ fullname | escape | underline}}
+{{ fullname | escape | underline }}
 
 .. currentmodule:: {{ module }}
 
 .. add toctree option to make autodoc generate the pages
 
-.. autoclass:: {{ objname }}
+.. autoclass:: {{ fullname }}
+
+{% set methods = methods | select("ne", "__init__") | list %}
 
 {% block attributes %}
-{% if attributes %}
-Attributes table
-~~~~~~~~~~~~~~~~
-
-.. autosummary::
 {% for item in attributes %}
-    ~{{ name }}.{{ item }}
-{%- endfor %}
+{% if loop.first %}
+    Attributes table
+    ~~~~~~~~~~~~~~~~
+
+    .. autosummary::
 {% endif %}
+        ~{{ name }}.{{ item }}
+{%- endfor %}
 {% endblock %}
 
 {% block methods %}
-{% if methods %}
-Methods table
-~~~~~~~~~~~~~
-
-.. autosummary::
 {% for item in methods %}
-    {%- if item != '__init__' %}
-    ~{{ name }}.{{ item }}
-    {%- endif -%}
-{%- endfor %}
+{% if loop.first %}
+    Methods table
+    ~~~~~~~~~~~~~
+
+    .. autosummary::
 {% endif %}
+        ~{{ name }}.{{ item }}
+{% endfor %}
 {% endblock %}
 
 {% block attributes_documentation %}
-{% if attributes %}
-Attributes
-~~~~~~~~~~
-
 {% for item in attributes %}
-
-.. autoattribute:: {{ [objname, item] | join(".") }}
-{%- endfor %}
+{% if loop.first %}
+    Attributes
+    ~~~~~~~~~~
 
 {% endif %}
+    .. auto{{ [fullname, item] | join(".") | member_type }}:: {{ [fullname, item] | join(".") }}
+{%- endfor %}
 {% endblock %}
 
 {% block methods_documentation %}
-{% if methods %}
-Methods
-~~~~~~~
-
 {% for item in methods %}
-{%- if item != '__init__' %}
-
-.. automethod:: {{ [objname, item] | join(".") }}
-{%- endif -%}
-{%- endfor %}
-
+{% if loop.first %}
+    Methods
+    ~~~~~~~
 {% endif %}
+    .. automethod:: {{ [fullname, item] | join(".") }}
+{%- endfor %}
 {% endblock %}
