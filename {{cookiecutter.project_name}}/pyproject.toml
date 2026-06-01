@@ -121,11 +121,11 @@ lint.per-file-ignores."tests/*" = [ "D" ]
 lint.pydocstyle.convention = "numpy"
 
 [tool.pytest]
-strict = true
-testpaths = [ "tests" ]
 addopts = [
   "--import-mode=importlib", # allow using test files with same name
 ]
+strict = true
+testpaths = [ "tests" ]
 
 [tool.coverage]
 run.omit = [
