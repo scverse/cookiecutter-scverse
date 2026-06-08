@@ -1,6 +1,10 @@
 name: Bug report
 description: Report something that is broken or incorrect
+{% if cookiecutter.issue_categorization == "issue types" %}
 type: Bug
+{% else %}
+labels: bug
+{% endif %}
 body:
   - type: markdown
     attributes:
