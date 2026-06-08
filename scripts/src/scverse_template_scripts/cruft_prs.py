@@ -517,7 +517,7 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir
 
     # check against all PRs, including closed ones -- if one already exists for the current version,
     # and the developer closed it, we do not want to reopen it.
-    if old_pr := next((p for p in original_repo.get_pulls() if pr.matches_current_version(p)), None):
+    if old_pr := next((p for p in original_repo.get_pulls("all") if pr.matches_current_version(p)), None):
         log.info(f"PR already exists: #{old_pr.number} with branch name `{old_pr.head.ref}`. Skipping PR creation.")
         return
 
