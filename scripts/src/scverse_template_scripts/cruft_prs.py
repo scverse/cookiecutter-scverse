@@ -76,11 +76,34 @@ IGNORE_COOKIECUTTER_VARS = [
 def _escape_github_mentions(text: str) -> str:
     """Escape GitHub @mentions with backticks to prevent notifications.
 
-    Wraps ``@username`` patterns in backticks so that GitHub doesn't treat them
-    as real mentions when the text is used in PRs.
+    Wraps ``@username`` patterns in backticks so that GitHub doesn't treat them as
+    real mentions when the release notes are embedded in template-update PRs.
+    Otherwise every contributor named in the release notes would be subscribed to
+    the ~150 template-update PRs that are opened on every release.
+
     Already-escaped mentions and email addresses are left unchanged.
+
+    Note
+    ----
+    This is a simple regex that comes with certain limitations,
+    e.g., a mention that sits *inside* an inline code span but is preceded by whitespace
+    (e.g.  ``\\`see @bar here\\```) would be re-escaped incorrectly.
+    This does not occur in GitHub's auto-generated release notes (a flat bullet list of `… by @user in <url>`).
+
+    At the time of writing, we couldn't identify a library providing a markdown parser
+    that reliably identifies github usernames.
     """
-    return re.sub(r"(?<![`\w])@([a-zA-Z\d](?:[a-zA-Z\d-]*[a-zA-Z\d])?)", r"`@\1`", text)
+    # A GitHub @mention, e.g. `@grst`. The username pattern matches GitHub's own rules:
+    # alphanumeric or single non-leading/non-trailing/non-consecutive hyphens, max 39 chars.
+    # See https://github.com/shinnn/github-username-regex.
+    # The negative lookbehind skips email addresses (e.g. `bot@example.com`) and
+    # already-escaped mentions (e.g. `` `@grst` ``).
+    github_username_regex = re.compile(
+        r"(?<![`\w])@([a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38})",
+        re.IGNORECASE,
+    )
+
+    return github_username_regex.sub(r"`@\1`", text)
 
 
 @dataclass

@@ -174,7 +174,26 @@ def test_commit_update_no_files(clone: Repo) -> None:
         ),
         # Bot email should not be escaped
         ("108668866+scverse-bot@users.noreply.github.com", "108668866+scverse-bot@users.noreply.github.com"),
+        # Trailing hyphen is not part of a valid username
+        ("ping @user- now", "ping `@user`- now"),
+        # Consecutive hyphens are not allowed: only the valid prefix is matched
+        ("@a--b", "`@a`--b"),
+        # Username is capped at 39 characters; the 40th char is left outside the mention
+        (f"@{'a' * 40}", f"`@{'a' * 39}`a"),
     ],
 )
 def test_escape_github_mentions(input_text: str, expected: str) -> None:
     assert _escape_github_mentions(input_text) == expected
+
+
+@pytest.mark.xfail(
+    reason="regex approach has no github-flavored markdown context; mentions inside code spans are wrongly escaped",
+    strict=True,
+)
+def test_escape_github_mentions_inside_code_span() -> None:
+    """A mention inside an inline code span should be left unchanged.
+
+    This is not handled by the regex approach (no full GFM parse), but it does not occur
+    in GitHub's auto-generated release notes. See ``_escape_github_mentions``.
+    """
+    assert _escape_github_mentions("`see @bar here`") == "`see @bar here`"
