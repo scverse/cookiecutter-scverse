@@ -50,6 +50,6 @@
         "github_user": "The GitHub username or org the project is to be published under",
         "github_repo": "If the repo name should differ from the project name, edit it now",
         "ide_integration": "Whether to generate IDE configuration files",
-        "issue_categorization": "How to categorize issues in the issue templates. Choose “issue types” only if your GitHub organization has issue types enabled (https://docs.github.com/en/issues/tracking-your-work-with-issues/configuring-issues/managing-issue-types-in-an-organization); otherwise choose “labels”"
+        "issue_categorization": "How to categorize issues in the issue templates. “issue types” only works in GitHub organizations, while  “labels” also works in personal repos."
     }
 }
