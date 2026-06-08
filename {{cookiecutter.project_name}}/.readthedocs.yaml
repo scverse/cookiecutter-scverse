@@ -6,7 +6,9 @@ build:
     python: "3.14"
     nodejs: latest
   jobs:
+    create_environment:
+      - asdf plugin add uv
     build:
       html:
-        - uv tool run hatch run docs:build
+        - uvx hatch run docs:build
         - mv docs/_build $READTHEDOCS_OUTPUT
