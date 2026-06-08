@@ -16,6 +16,7 @@ from pathlib import Path
 from subprocess import run
 from tempfile import TemporaryDirectory
 from typing import TYPE_CHECKING, ClassVar, TypedDict, cast
+import contextlib
 
 from cyclopts import App
 from furl import furl
@@ -297,7 +298,7 @@ def _apply_update(
     template_tag_name: str | None = None,
     cruft_log_file: Path,
     cookiecutter_config: dict,
-    template_url: str = "https://github.com/scverse/cookiecutter-scverse",
+    template_dir: str,
 ) -> None:
     """
     Apply the changes from the template to the original repo
@@ -307,6 +308,19 @@ def _apply_update(
 
     The outcome is a branch in the original repo that contains the updated template that can be merged
     into the default branch by the user.
+
+    Parameters
+    ----------
+    clone
+        cloned repository (to which the update is to be applied)
+    template_tag_name
+        template version to use (git tag)
+    cruft_log_file
+        file to which the cruft log will be written
+    cookiecutter_config
+        cookiecutter configuration to be passed to cruft as `--extra-context-file`
+    template_dir
+        path to the template (cloned git repository)
     """
     clone_dir = Path(clone.working_dir)
     with TemporaryDirectory() as td:
@@ -324,7 +338,7 @@ def _apply_update(
                 "-m",
                 "cruft",
                 "create",
-                template_url,
+                template_dir,
                 *([f"--checkout={template_tag_name}"] if template_tag_name is not None else []),
                 "--no-input",
                 f"--extra-context-file={cookiecutter_config_file}",
@@ -393,6 +407,7 @@ def template_update(  # noqa: PLR0913, (= too many function arguments)
     tag_name: str,
     cruft_log_file: Path,
     dry_run: bool,
+    template_dir: str,
 ) -> bool:
     """
     Create or update a template branch in the forked repo.
@@ -452,6 +467,7 @@ def template_update(  # noqa: PLR0913, (= too many function arguments)
             template_tag_name=tag_name,
             cruft_log_file=cruft_log_file,
             cookiecutter_config=cookiecutter_config,
+            template_dir=template_dir,
         )
 
         # Load .cruft.json file of the current version of the template (includes `_exclude_on_template_update` key)
@@ -474,7 +490,9 @@ def template_update(  # noqa: PLR0913, (= too many function arguments)
         return updated
 
 
-def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir: Path, dry_run: bool = False) -> None:
+def make_pr(
+    con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir: Path, dry_run: bool = False, template_dir: str
+) -> None:
     """
     Make a pull request with the template update to the original repo
 
@@ -490,7 +508,8 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir
         Path in which cruft logs will be stored
     dry_run
         If True, skip making the actual pull request but perform all other actions up to this point
-
+    template_dir
+        path to the git repository with the cookiecutter template
     """
     repo_id = repo_url.replace("https://github.com/", "").replace("/", "-")
     log.info(f"Working on template update for {repo_id}")
@@ -510,6 +529,7 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir
         tag_name=release.tag_name,
         cruft_log_file=log_dir / f"{pr.template_branch}.log",
         dry_run=dry_run,
+        template_dir=template_dir,
     )
     if dry_run:
         log.info("Skipping PR because in dry-run mode")
@@ -537,6 +557,32 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir
 cli = App()
 
 
+@contextlib.context_manager
+def download_template(con: GitHubConnection, template_url: str, tag_name: str) -> Generator[str, None, None]:
+    """
+    Clone the template repository into a temporary directory.
+
+    Parameters
+    ----------
+    con
+        GitHub connection used to authenticate the clone URL
+    template_url
+        URL of the template repository to clone
+
+    Yields
+    ------
+    str
+        Path to the temporary directory containing the cloned repository
+    """
+    with TemporaryDirectory() as td:
+        clone = Repo.clone_from(con.auth(template_url), td, filter="blob:none")
+        clone.git.checkout(tag_name)
+        with (Path(td) / "cookiecutter.json").open() as f:
+            cookiecutter_config = json.load(f)
+
+        yield td
+
+
 @cli.default
 def main(
     tag_name: str,
@@ -545,6 +591,7 @@ def main(
     all_repos: bool = False,
     log_dir: Path = Path("cruft_logs"),
     dry_run: bool = False,
+    template_url: str = "https://github.com/scverse/cookiecutter-scverse",
 ) -> None:
     """
     Make PRs to GitHub repos.
@@ -579,13 +626,14 @@ def main(
 
     release = get_template_release(con.gh, tag_name)
     failed = 0
-    for repo_url in repo_urls:
-        try:
-            make_pr(con, release, repo_url, log_dir=log_dir, dry_run=dry_run)
-        except Exception as e:
-            failed += 1
-            log.error(f"Error while updating {repo_url}")
-            log.exception(e)
+    with download_template(con, template_url, tag_name) as template_dir:
+        for repo_url in repo_urls:
+            try:
+                make_pr(con, release, repo_url, log_dir=log_dir, dry_run=dry_run, template_dir=template_dir)
+            except Exception as e:
+                failed += 1
+                log.error(f"Error while updating {repo_url}")
+                log.exception(e)
 
     sys.exit(failed > 0)
 
