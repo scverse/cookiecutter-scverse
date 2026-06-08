@@ -21,3 +21,9 @@ __pycache__/
 
 # uv
 /scripts/uv.lock
+
+# agents
+.claude
+
+# repo-specific
+cruft_logs
