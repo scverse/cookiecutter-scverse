@@ -15,10 +15,7 @@
         "Unlicense"
     ],
     "ide_integration": true,
-    "issue_categorization": [
-        "labels",
-        "issue types"
-    ],
+    "issue_categorization": ["labels", "issue types"],
     "_copy_without_render": [
         ".github/workflows/build.yaml",
         ".github/workflows/test.yaml",
