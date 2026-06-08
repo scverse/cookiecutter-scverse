@@ -8,5 +8,5 @@ build:
   jobs:
     build:
       html:
-        - uvx hatch run docs:build
+        - uv tool run hatch run docs:build
         - mv docs/_build $READTHEDOCS_OUTPUT
