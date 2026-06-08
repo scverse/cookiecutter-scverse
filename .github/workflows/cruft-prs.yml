@@ -1,7 +1,7 @@
 name: make cruft PRs for all projects using us
 on:
   release:
-    types: [published]
+    types: [released] # unlike 'published' this does not trigger on pre-releases
   workflow_dispatch:
     inputs:
       release:
