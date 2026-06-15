@@ -4,7 +4,7 @@
 [![Documentation][badge-docs]][documentation]
 
 [badge-tests]: https://img.shields.io/github/actions/workflow/status/{{ cookiecutter.github_user }}/{{ cookiecutter.project_name }}/test.yaml?branch=main
-[badge-docs]: https://img.shields.io/readthedocs/{{ cookiecutter.project_name }}
+[badge-docs]: https://app.readthedocs.org/projects/{{ cookiecutter.project_name }}/badge/?version=latest
 
 {{ cookiecutter.project_description }}
 
