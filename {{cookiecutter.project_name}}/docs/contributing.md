@@ -9,7 +9,7 @@ the [scientific Python tutorials][], or the [scanpy developer guide][].
 
 [pyopensci tutorials]: https://www.pyopensci.org/learn.html
 [scientific Python tutorials]: https://learn.scientific-python.org/development/tutorials/
-[scanpy developer guide]: https://scanpy.readthedocs.io/en/latest/dev/index.html
+[scanpy developer guide]: https://scanpy.scverse.org/page/dev/
 
 :::{tip} The *hatch* project manager
 
@@ -277,11 +277,11 @@ This project uses [sphinx][] with the following features:
 
 See scanpy’s {doc}`scanpy:dev/documentation` for more information on how to write your own.
 
-[sphinx]: https://www.sphinx-doc.org/en/master/
-[myst]: https://myst-parser.readthedocs.io/en/latest/intro.html
-[myst-nb]: https://myst-nb.readthedocs.io/en/latest/
-[numpydoc-napoleon]: https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html
-[numpydoc]: https://numpydoc.readthedocs.io/en/latest/format.html
+[sphinx]: https://www.sphinx-doc.org/
+[myst]: https://myst-parser.readthedocs.io/page/intro.html
+[myst-nb]: https://myst-nb.readthedocs.io/
+[numpydoc-napoleon]: https://www.sphinx-doc.org/page/usage/extensions/napoleon.html
+[numpydoc]: https://numpydoc.readthedocs.io/page/format.html
 [sphinx-autodoc-typehints]: https://github.com/tox-dev/sphinx-autodoc-typehints
 
 ### Tutorials with myst-nb and jupyter notebooks

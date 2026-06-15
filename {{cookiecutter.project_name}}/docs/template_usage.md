@@ -48,7 +48,7 @@ While the repository at this point can be directly used, there are few remaining
 
 Modern Python package management uses a `pyproject.toml` that was first introduced in [PEP 518](https://peps.python.org/pep-0518/).
 This file contains build system requirements and information, which are used by pip to build the package, and tool configurations.
-For more details please have a look at [pip's description of the pyproject.toml file](https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml/).
+For more details please have a look at [pip's description of the pyproject.toml file](https://pip.pypa.io/page/reference/build-system/).
 It also serves as a single point of truth to define test environments and how docs are built by leveraging
 the [hatch][] project manager, but more about that in the [contributing guide](contributing.md).
 
@@ -113,10 +113,10 @@ On the RTD dashboard choose "Import a Project" and follow the instructions to ad
   For more information, please refer to the [official RTD documentation][rtd-prs].
 
 If your project is private, there are ways to enable docs rendering on [readthedocs.org][] but it is more cumbersome and requires a different RTD subscription.
-See a guide [here](https://docs.readthedocs.io/en/stable/guides/importing-private-repositories.html).
+See a guide [here](https://docs.readthedocs.io/page/guides/importing-private-repositories.html).
 
 [readthedocs.org]: https://readthedocs.org/
-[rtd-prs]: https://docs.readthedocs.io/en/stable/pull-requests.html
+[rtd-prs]: https://docs.readthedocs.io/page/pull-requests.html
 
 (github-actions)=
 
@@ -300,7 +300,7 @@ add it to Ruff’s [`external = [...]`][ruff-external] setting to prevent `RUF10
 [biome]: https://biomejs.dev/
 [pre-commit]: https://pre-commit.com/
 [pre-commit.ci]: https://pre-commit.ci/
-[pyproject-fmt]: https://pyproject-fmt.readthedocs.io/en/latest/index.html
+[pyproject-fmt]: https://pyproject-fmt.readthedocs.io/
 [ruff]: https://docs.astral.sh/ruff/
 [ruff-config]: https://docs.astral.sh/ruff/configuration/
 [ruff-error-suppression]: https://docs.astral.sh/ruff/linter/#error-suppression
@@ -322,7 +322,7 @@ there may also be good reasons to choose a different approach, e.g. using an obj
 
 [anndata]: https://github.com/scverse/anndata
 [mudata]: https://github.com/scverse/mudata
-[scanpy-api]: https://scanpy.readthedocs.io/en/stable/usage-principles.html
+[scanpy-api]: https://scanpy.scverse.org/page/usage-principles.html
 [spatialdata]: https://github.com/scverse/spatialdata
 
 (vcs-based-versioning)=
