@@ -140,7 +140,7 @@ class TemplateUpdatePR:
     def body(self) -> str:
         return PR_BODY_TEMPLATE.format(
             release=self.release,
-            template_usage="https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html",
+            template_usage="https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html",
         )
 
     def matches_prefix(self, pr: PullRequest) -> bool:
