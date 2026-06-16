@@ -22,6 +22,25 @@ HERE = Path(__file__).parent
         pytest.param({"github_repo": "floob"}, "docs/conf.py", r'"github_repo": "floob",', id="gh_repo"),
         pytest.param({}, ".vscode/extensions.json", r'"ms-python.python",', id="no_ide_integ"),
         pytest.param({"ide_integration": False}, ".vscode", None, id="ide_integ"),
+        pytest.param({}, ".github/ISSUE_TEMPLATE/bug_report.yml", r"^labels: bug$", id="default_labels"),
+        pytest.param(
+            {"issue_categorization": "labels"},
+            ".github/ISSUE_TEMPLATE/feature_request.yml",
+            r"^labels: enhancement$",
+            id="labels",
+        ),
+        pytest.param(
+            {"issue_categorization": "issue types"},
+            ".github/ISSUE_TEMPLATE/bug_report.yml",
+            r"^type: Bug$",
+            id="issue_types_bug",
+        ),
+        pytest.param(
+            {"issue_categorization": "issue types"},
+            ".github/ISSUE_TEMPLATE/feature_request.yml",
+            r"^type: Enhancement$",
+            id="issue_types_feature",
+        ),
     ],
 )
 def test_build(tmp_path: Path, params: Mapping[str, Any], path: Path | str, pattern: re.Pattern | str | None) -> None:
