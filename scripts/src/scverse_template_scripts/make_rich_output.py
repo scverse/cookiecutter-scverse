@@ -6,7 +6,7 @@ import re
 from rich.console import Console
 from rich.markdown import Markdown
 
-dev_docs_url = "https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html"
+dev_docs_url = "https://cookiecutter-scverse-instance.readthedocs.io/page/developer_docs.html"
 
 message = f"""\
 # Set-up online services

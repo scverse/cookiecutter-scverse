@@ -174,7 +174,7 @@ class TemplateUpdatePR:
     def body(self) -> str:
         body = PR_BODY_TEMPLATE.format(
             release=self.release,
-            template_usage="https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html",
+            template_usage="https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html",
         )
         return _escape_github_mentions(body)
 
@@ -536,7 +536,7 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir
 
     forked_repo = get_fork(con, original_repo)
 
-    updated = template_update(
+    template_update(
         con,
         forked_repo=forked_repo,
         original_repo=original_repo,
@@ -549,24 +549,27 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir
     if dry_run:
         log.info("Skipping PR because in dry-run mode")
         return
-    if updated:
-        if old_pr := next((p for p in original_repo.get_pulls("open") if pr.matches_current_version(p)), None):
-            log.info(f"PR already exists: #{old_pr.number} with branch name `{old_pr.head.ref}`. Skipping PR creation.")
-            return
 
-        if old_pr := next((p for p in original_repo.get_pulls("open") if pr.matches_prefix(p)), None):
-            log.info(f"Closing old PR #{old_pr.number} with branch name `{old_pr.head.ref}`.")
-            old_pr.edit(state="closed")
+    # check against all PRs, including closed ones -- if one already exists for the current version,
+    # and the developer closed it, we do not want to reopen it.
+    if old_pr := next((p for p in original_repo.get_pulls("all") if pr.matches_current_version(p)), None):
+        log.info(f"PR already exists: #{old_pr.number} with branch name `{old_pr.head.ref}`. Skipping PR creation.")
+        return
 
-        log.info(f"Creating PR of {pr.namespaced_head} against {original_repo.default_branch}")
-        new_pr = original_repo.create_pull(
-            title=pr.title,
-            body=pr.body,
-            base=original_repo.default_branch,
-            head=pr.namespaced_head,
-            maintainer_can_modify=True,
-        )
-        log.info(f"Created PR #{new_pr.number} with branch name `{new_pr.head.ref}`.")
+    # check if there's a PR open for an earlier version -- if yes, we close it (in favor of the new one to be created)
+    if old_pr := next((p for p in original_repo.get_pulls("open") if pr.matches_prefix(p)), None):
+        log.info(f"Closing old PR #{old_pr.number} with branch name `{old_pr.head.ref}`.")
+        old_pr.edit(state="closed")
+
+    log.info(f"Creating PR of {pr.namespaced_head} against {original_repo.default_branch}")
+    new_pr = original_repo.create_pull(
+        title=pr.title,
+        body=pr.body,
+        base=original_repo.default_branch,
+        head=pr.namespaced_head,
+        maintainer_can_modify=True,
+    )
+    log.info(f"Created PR #{new_pr.number} with branch name `{new_pr.head.ref}`.")
 
 
 cli = App()

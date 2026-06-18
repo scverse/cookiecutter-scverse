@@ -4,7 +4,7 @@
 [![Documentation][badge-docs]][documentation]
 
 [badge-tests]: https://img.shields.io/github/actions/workflow/status/{{ cookiecutter.github_user }}/{{ cookiecutter.project_name }}/test.yaml?branch=main
-[badge-docs]: https://img.shields.io/readthedocs/{{ cookiecutter.project_name }}
+[badge-docs]: https://app.readthedocs.org/projects/{{ cookiecutter.project_name }}/badge/
 
 {{ cookiecutter.project_description }}
 
@@ -52,6 +52,6 @@ If you found a bug, please use the [issue tracker][].
 [issue tracker]: https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.project_name }}/issues
 [tests]: https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}/actions/workflows/test.yaml
 [documentation]: https://{{ cookiecutter.project_name }}.readthedocs.io
-[changelog]: https://{{ cookiecutter.project_name }}.readthedocs.io/en/latest/changelog.html
-[api documentation]: https://{{ cookiecutter.project_name }}.readthedocs.io/en/latest/api.html
+[changelog]: https://{{ cookiecutter.project_name }}.readthedocs.io/page/changelog.html
+[api documentation]: https://{{ cookiecutter.project_name }}.readthedocs.io/page/api.html
 [pypi]: https://pypi.org/project/{{ cookiecutter.project_name }}

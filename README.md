@@ -9,7 +9,7 @@ Ecosystem packages are independent software libraries that interact with scverse
 Please check out the
 
 - [example repo](https://github.com/scverse/cookiecutter-scverse-instance) and the
-- [example documentation](https://cookiecutter-scverse-instance.readthedocs.io/en/latest/)
+- [example documentation](https://cookiecutter-scverse-instance.readthedocs.io/)
 
 that are automatically generated and kept in sync with this template.
 
@@ -94,7 +94,7 @@ All CI checks should pass, you are ready to start developing your new tool!
 
 ### Customizations
 
-Further instructions on using this template can be found in the [dev docs included in the project](https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html).
+Further instructions on using this template can be found in the [dev docs included in the project](https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html).
 
 ### Commitment
 
@@ -127,17 +127,17 @@ You can cite the scverse publication as follows:
 
 <!-- links -->
 
-[setup-pre-commit]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#pre-commit-checks
-[setup-rtd]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#documentation-on-readthedocs
-[setup-codecov]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#coverage-tests-with-codecov
-[write-tests]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#writing-tests
-[write-docs]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#writing-documentation
+[setup-pre-commit]: https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html#pre-commit-checks
+[setup-rtd]: https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html#documentation-on-readthedocs
+[setup-codecov]: https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html#coverage-tests-with-codecov
+[write-tests]: https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html#writing-tests
+[write-docs]: https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html#writing-documentation
 [readthedocs]: https://readthedocs.org/
 [myst-nb]: https://myst-nb.readthedocs.io/
 [pre-commit]: https://pre-commit.com/
 [scverse]: https://scverse.org/
-[anndata]: https://anndata.readthedocs.io/en/latest/
-[mudata]: https://muon.readthedocs.io/en/latest/notebooks/quickstart_mudata.html
+[anndata]: https://anndata.scverse.org/
+[mudata]: https://muon.readthedocs.io/page/notebooks/quickstart_mudata.html
 [codecov]: https://about.codecov.io/
 [scverse discourse]: https://discourse.scverse.org/
 [pytest]: https://docs.pytest.org
