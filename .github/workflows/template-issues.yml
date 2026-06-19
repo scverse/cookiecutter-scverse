@@ -1,35 +1,31 @@
-name: make cruft PRs for all projects using us
+name: notify projects of a new template release
 on:
   release:
     types: [released] # unlike 'published' this does not trigger on pre-releases
   workflow_dispatch:
     inputs:
       release:
-        description: "Tag of the release PRs should me made for"
+        description: "Tag of the release to notify projects about"
         type: string
         required: true
+      dry_run:
+        description: "Log intended actions without creating/editing issues"
+        type: boolean
+        default: false
 jobs:
-  cruft-prs:
+  template-issues:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Set git identity
-        run: |
-          git config --global user.name "scverse-bot"
-          git config --global user.email "108668866+scverse-bot@users.noreply.github.com"
       - name: Install the latest version of uv
         uses: astral-sh/setup-uv@v7
         with:
           cache-dependency-glob: scripts/pyproject.toml
-      - name: Update template repo registry
-        run: uvx --from ./scripts send-cruft-prs ${{ env.RELEASE }} --all_repos --log-dir log
+      - name: Open template-update issues
+        run: uvx --from ./scripts send-template-issues "$RELEASE" --all-repos ${DRY_RUN:+--dry-run}
         env:
           RELEASE: ${{ github.event_name == 'release' && github.event.release.tag_name || github.event.inputs.release }}
+          DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && '1' || '' }}
           GITHUB_TOKEN: ${{ secrets.BOT_GH_TOKEN }}
           FORCE_COLOR: "1"
           COLUMNS: "150"
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: cruft-logs
-          path: log/

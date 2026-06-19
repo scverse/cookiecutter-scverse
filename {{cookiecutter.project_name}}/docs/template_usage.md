@@ -369,18 +369,24 @@ Automated template sync is enabled by default for public repositories on GitHub.
 Our [scverse-bot][] automatically crawls GitHub for repositories that are based on this template,
 and adds them to the [list of template repositories][].
 Whenever a new release of the template is made,
-a pull request is opened in every repository listed there.
-This helps keeping the repository up-to-date with the latest coding standards.
+the bot opens (or refreshes) a single tracking **issue** in every repository listed there,
+letting you know that a newer template version is available.
 
-It may happen that a template sync results in a merge conflict.
-In that case, you need to resolve the merge conflicts manually,
-either using the GitHub UI, or in your favorite editor.
+To apply the update, **assign an AI coding agent of your choice to that issue**
+(for example the Claude GitHub app, or any agent you run against a local checkout).
+The issue links to a dedicated agent _skill_ that performs the update: it figures out
+which of your files were customized on purpose versus which are merely out of date,
+applies the modernization (CI, build system, tooling) while preserving your
+customizations, and opens a pull request for you to review.
+Because the agent reconciles changes semantically rather than doing a blind merge,
+you should rarely need to untangle a mechanical merge conflict by hand.
 
 :::{tip}
 The following hints may be useful to work with the template sync:
 
-- If you want to ignore certain files from the template update,
-  you can add them to the `[tool.cruft]` section in the `pyproject.toml` file in the root of your repository.
+- If you want certain files to be left untouched by updates,
+  add them to the `[tool.cruft]` section in the `pyproject.toml` file in the root of your repository.
+  The agent honors this list (and the `_exclude_on_template_update` entries) as user-owned files.
 - To disable the sync entirely, remove your package from the [list of template repositories][] via pull request,
   or simply remove the file `.cruft.json` from the root of your repository.
 

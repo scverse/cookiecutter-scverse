@@ -19,11 +19,7 @@ classifiers = [
 ]
 dynamic = [ "version" ]
 dependencies = [
-  "cruft",
   "cyclopts>=3.10",
-  "furl",
-  "gitpython",
-  "pre-commit",     # is ran by cruft
   "pygithub>=2",
   "pyyaml",
   "rich",
@@ -32,11 +28,14 @@ urls.Documentation = "https://github.com/scverse/cookiecutter-scverse#readme"
 urls.Issues = "https://github.com/scverse/cookiecutter-scverse/issues"
 urls.Source = "https://github.com/scverse/cookiecutter-scverse"
 scripts.make-rich-output = "scverse_template_scripts.make_rich_output:main"
-scripts.send-cruft-prs = "scverse_template_scripts.cruft_prs:cli"
+scripts.send-template-issues = "scverse_template_scripts.template_issues:cli"
 
 [tool.hatch]
 version.source = "vcs"
 version.fallback-version = "0.0"
+# `cookiecutter` is only needed to render the template in tests (test_build.py);
+# it used to be pulled in transitively via `cruft`, which the package no longer depends on.
+envs.hatch-test.extra-dependencies = [ "cookiecutter" ]
 
 [tool.ruff]
 line-length = 120
