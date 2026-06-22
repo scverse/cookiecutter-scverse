@@ -3,10 +3,10 @@ import sys
 from subprocess import run
 
 
-def git_config_get(key: str) -> str:
+def git_config_get(key: str) -> str | None:
     """Return the value of a git config key, or an empty string if it is not set."""
     result = run(["git", "config", key], capture_output=True, text=True)
-    return result.stdout.strip() if result.returncode == 0 else ""
+    return result.stdout.strip() if result.returncode == 0 else None
 
 
 # use 'main' as default branch irrespective of git configuration
