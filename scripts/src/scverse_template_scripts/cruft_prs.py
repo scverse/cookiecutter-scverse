@@ -394,7 +394,7 @@ def _commit_update(clone: Repo, *, exclude_files: Sequence = (), commit_msg: str
 
     Returns a `bool` indicating whether changes have been made and committed.
     """
-    # Stage and commit (no_verify to avoid running pre-commit)
+    # Stage and commit (no_verify to avoid running the git hooks)
     log.info("Changes detected. Staging and committing changes.")
     # Check if something has changed at all
     if not clone.is_dirty() and not clone.untracked_files:

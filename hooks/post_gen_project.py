@@ -33,7 +33,7 @@ run(["git", "add", "-A"], check=True)
 msg = "Initialize project from cookiecutter-scverse"
 run(args=["git", "commit", "--no-verify", "--no-gpg-sign", "-m", msg], check=True)
 
-# Install pre-commit
+# Install the git hook (prefer prek, fall back to pre-commit)
 try:
     run(["prek", "install"], check=True)
 except FileNotFoundError:
@@ -74,7 +74,7 @@ To run tests or build the documentation locally, get familiar with \x1b]8;id=707
 \x1b]8;id=707150;https://hatch.pypa.io/latest/tutorials/environment/basic-usage/\x1b\\\x1b[4;34menvironments\x1b[0m\x1b]8;;\x1b\\, and see \x1b[1;36;40m[tool.hatch.envs.*]\x1b[0m in \x1b[1;36;40mpyproject.toml\x1b[0m:
 
 \x1b[40m                                                                        \x1b[0m
-\x1b[40m \x1b[0m\x1b[97;40mhatch\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40mrun\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40mpre-commit\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40mrun\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40m--all-files\x1b[0m\x1b[97;40m  \x1b[0m\x1b[37;40m# tool.hatch.envs.default\x1b[0m\x1b[40m       \x1b[0m\x1b[40m \x1b[0m
+\x1b[40m \x1b[0m\x1b[97;40mhatch\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40mrun\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40mprek\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40mrun\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40m--all-files\x1b[0m\x1b[97;40m  \x1b[0m\x1b[37;40m# tool.hatch.envs.default\x1b[0m\x1b[40m             \x1b[0m\x1b[40m \x1b[0m
 \x1b[40m \x1b[0m\x1b[97;40mhatch\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40mtest\x1b[0m\x1b[97;40m                            \x1b[0m\x1b[37;40m# tool.hatch.envs.hatch-test\x1b[0m\x1b[40m    \x1b[0m\x1b[40m \x1b[0m
 \x1b[40m \x1b[0m\x1b[97;40mhatch\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40mrun\x1b[0m\x1b[97;40m \x1b[0m\x1b[97;40mdocs:build\x1b[0m\x1b[97;40m                  \x1b[0m\x1b[37;40m# tool.hatch.envs.docs\x1b[0m\x1b[40m          \x1b[0m\x1b[40m \x1b[0m
 \x1b[40m                                                                        \x1b[0m
