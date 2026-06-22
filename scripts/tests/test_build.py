@@ -81,7 +81,7 @@ def test_build_without_global_git_config(tmp_path: Path, monkeypatch: pytest.Mon
 
     # The initial commit must exist and be authored by the cookiecutter answers.
     author = subprocess.run(
-        ["git", "-C", str(proj_dir), "log", "-1", "--format=%an <%ae>"],
+        ["/usr/bin/git", "-C", str(proj_dir), "log", "-1", "--format=%an <%ae>"],
         capture_output=True,
         text=True,
         check=True,
