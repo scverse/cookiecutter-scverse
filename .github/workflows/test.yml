@@ -37,18 +37,18 @@ jobs:
         run: sudo apt-get install pandoc
       - name: Install build & check dependencies
         run: |
-          uv tool install pre-commit --with=pre-commit-uv
-          uv tool install cruft --with=pre-commit-uv
+          uv tool install prek
+          uv tool install cruft
           uv tool install hatch
       # Build
       - name: Build from template
         run: cruft create  . --no-input --extra-context='{"package_name":"${{ matrix.package-name }}"}'
       # Check
-      - name: Run pre-commit
+      - name: Run prek
         run: |
           cd "$PROJECT_ROOT"
           git add .
-          pre-commit run --verbose --color=always --show-diff-on-failure --all-files
+          prek run --verbose --color=always --show-diff-on-failure --all-files
       - name: Install the package and check if it can be imported
         run: |
           cd "$PROJECT_ROOT"

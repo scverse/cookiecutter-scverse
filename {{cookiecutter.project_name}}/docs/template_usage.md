@@ -179,6 +179,9 @@ the project will be published only once you release your package for the first t
 This template uses a number of pre-commit checks.
 In this section we'll detail what is used, where they're defined, and how to modify these checks.
 
+To run the checks locally, we recommend [prek][], a fast, drop-in replacement for `pre-commit` that reads the same `.pre-commit-config.yaml`.
+Install it (e.g. with `uv tool install prek`) and run `prek install` once to set up the git hook, then `prek run --all-files` to check the whole repository.
+
 
 ### Pre-commit CI
 
@@ -299,6 +302,7 @@ add it to Ruff’s [`external = [...]`][ruff-external] setting to prevent `RUF10
 
 [biome]: https://biomejs.dev/
 [pre-commit]: https://pre-commit.com/
+[prek]: https://prek.j178.dev/
 [pre-commit.ci]: https://pre-commit.ci/
 [pyproject-fmt]: https://pyproject-fmt.readthedocs.io/
 [ruff]: https://docs.astral.sh/ruff/
@@ -393,7 +397,7 @@ The following hints may be useful to work with the template sync:
 
 If you prefer to check for and apply the pre-release template updates manually, or if you are working on a private repository not tracked by the bot, you can use cruft. Simply:
 
-- Make sure cruft and pre-commit are installed.
+- Make sure cruft and prek are installed.
 - Make sure your git directory is clean (no unstaged/uncommitted files).
 - Run `cruft update` in the root of your repository.
 
@@ -417,7 +421,7 @@ Here's one way how to do it:
 
     ```bash
     mkdir template && cd template
-    uvx --with pre-commit cruft create https://github.com/scverse/cookiecutter-scverse
+    uvx --with prek cruft create https://github.com/scverse/cookiecutter-scverse
     ```
 
 4. remove everything from the existing repo

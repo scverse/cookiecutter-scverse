@@ -20,6 +20,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           token: ${{ steps.app-token.outputs.token }}
-      - run: pipx install pre-commit
-      - run: cd '{{cookiecutter.project_name}}' && pre-commit autoupdate
+      - run: pipx install prek
+      - run: cd '{{cookiecutter.project_name}}' && prek autoupdate
       - uses: stefanzweifel/git-auto-commit-action@v7

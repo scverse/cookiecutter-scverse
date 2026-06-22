@@ -36,7 +36,7 @@ Please consider making a tax-deductible [donation](https://numfocus.org/donate-t
 - continuous integration using GitHub actions.
 - documentation hosted by [readthedocs][]
 - coverage tests with [codecov][]
-- [pre-commit][] checks for code style and consistency
+- [pre-commit][] checks for code style and consistency (run with [prek][])
 - tutorials with [myst-nb][] and jupyter notebooks
 - issue templates for better bug reports and feature requests
 
@@ -61,7 +61,7 @@ To create the project, run the following command and follow the prompts:
 
 ```bash
 # uv will download all dependencies on-the-fly
-uvx --with pre-commit cruft create https://github.com/scverse/cookiecutter-scverse
+uvx --with prek cruft create https://github.com/scverse/cookiecutter-scverse
 ```
 
 This will create a git repository generated from the template.
@@ -73,7 +73,7 @@ Don't forget to create a repository on GitHub and upload your project.
 If you want to permanently install the tools, you can run
 
 ```bash
-pipx install cruft pre-commit # or for each: uv tool install $pkg
+pipx install cruft prek # or for each: uv tool install $pkg
 cruft create https://github.com/scverse/cookiecutter-scverse
 ```
 
@@ -135,6 +135,7 @@ You can cite the scverse publication as follows:
 [readthedocs]: https://readthedocs.org/
 [myst-nb]: https://myst-nb.readthedocs.io/
 [pre-commit]: https://pre-commit.com/
+[prek]: https://prek.j178.dev/
 [scverse]: https://scverse.org/
 [anndata]: https://anndata.scverse.org/
 [mudata]: https://muon.readthedocs.io/page/notebooks/quickstart_mudata.html
