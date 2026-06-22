@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import os
 import re
+import subprocess
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -55,3 +57,33 @@ def test_build(tmp_path: Path, params: Mapping[str, Any], path: Path | str, patt
         assert pattern.search(path.read_text())
 
     assert not list(proj_dir.rglob("DELETE-ME"))
+
+
+def test_build_without_global_git_config(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Generation must succeed without a global/system git identity (see issue #389).
+
+    Users who configure git per-repository only have no global ``user.name``/``user.email``.
+    In that case the hooks should fall back to the cookiecutter ``author_full_name``/
+    ``author_email`` answers so the initial commit still succeeds.
+    """
+    # Neutralize any global/system git config so no ambient git identity is available.
+    monkeypatch.setenv("GIT_CONFIG_GLOBAL", os.devnull)
+    monkeypatch.setenv("GIT_CONFIG_SYSTEM", os.devnull)
+
+    cookiecutter(
+        str(HERE.parent.parent),
+        output_dir=tmp_path,
+        no_input=True,
+        extra_context={"author_full_name": "Jane Doe", "author_email": "jane@example.com"},
+    )
+    proj_dir = tmp_path / "project-name"
+    assert proj_dir.is_dir()
+
+    # The initial commit must exist and be authored by the cookiecutter answers.
+    author = subprocess.run(
+        ["git", "-C", str(proj_dir), "log", "-1", "--format=%an <%ae>"],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
+    assert author == "Jane Doe <jane@example.com>"
