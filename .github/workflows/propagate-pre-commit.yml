@@ -21,5 +21,6 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
       - run: pipx install prek
-      - run: cd '{{cookiecutter.project_name}}' && prek autoupdate
+        # need to explicitly specify config file since prek ignores cookiecutter directories by default: https://github.com/j178/prek/issues/1044
+      - run: cd '{{cookiecutter.project_name}}' && prek autoupdate -c .pre-commit-config.yaml
       - uses: stefanzweifel/git-auto-commit-action@v7
