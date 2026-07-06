@@ -23,37 +23,37 @@ There are several alternative options to install {{ cookiecutter.project_name }}
 <!--
 1. Install the latest release of `{{ cookiecutter.project_name }}` from [PyPI][]:
 
-We recommend using [uv][] to add `{{ cookiecutter.project_name }}` to your project's virtual environment:
+   We recommend using [uv][] to add `{{ cookiecutter.project_name }}` to your project's virtual environment:
 
-```bash
-uv add {{ cookiecutter.project_name }}
-```
+   ```bash
+   uv add {{ cookiecutter.project_name }}
+   ```
 
-<details>
-<summary>If you prefer using `pip`:</summary>
+   <details>
+   <summary>If you prefer using `pip`:</summary>
 
-```bash
-pip install {{ cookiecutter.project_name }}
-```
+   ```bash
+   pip install {{ cookiecutter.project_name }}
+   ```
 
-</details>
+   </details>`
 
 -->
 
 1. Install the latest development version:
 
-```bash
-uv add git+https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}.git@main
-```
+   ```bash
+   uv add git+https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}.git@main
+   ```
 
-<details>
-<summary>If you prefer using `pip`:</summary>
+   <details>
+   <summary>If you prefer using `pip`:</summary>
 
-```bash
-pip install git+https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}.git@main
-```
+   ```bash
+   pip install git+https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}.git@main
+   ```
 
-</details>
+   </details>
 
 ## Release notes
 
