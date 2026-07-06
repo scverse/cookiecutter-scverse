@@ -43,14 +43,14 @@ There are several alternative options to install {{ cookiecutter.project_name }}
 1. Install the latest development version:
 
    ```bash
-   uv add git+https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}.git@main
+   uv add git+https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}.git
    ```
 
    <details>
    <summary>If you prefer using `pip`:</summary>
 
    ```bash
-   pip install git+https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}.git@main
+   pip install git+https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}.git
    ```
 
    </details>
