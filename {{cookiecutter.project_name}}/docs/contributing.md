@@ -82,16 +82,18 @@ Next, create the environment with
 hatch env create hatch-test.py3.14-stable
 ```
 
-Then, obtain the path to the environment using
+If you are using VScode, install the [hatch-code][] extension.
+Now, open the command palette (Ctrl+Shift+P) and search for `Python: Select Interpreter`.
+Choose `hatch-test.py3.14-stable` (or your preferred environment) from the dropdown list.
+
+For other IDEs, you can obtain the path to the virtual environments using
 
 ```bash
 hatch env find hatch-test.py3.14-stable
 ```
 
-In case you are using VScode, now open the command palette (Ctrl+Shift+P) and search for `Python: Select Interpreter`.
-Choose `Enter Interpreter Path` and paste the path to the virtual environment from above.
+and manually point it to the python binary.
 
-In this future, this may become easier through a hatch vscode extension.
 
 ::::
 
@@ -134,6 +136,7 @@ The `.venv` directory is typically automatically discovered by IDEs such as VS C
 :::::
 
 [hatch environments]: https://hatch.pypa.io/latest/tutorials/environment/basic-usage/
+[hatch-code]: https://marketplace.visualstudio.com/items?itemName=PyPA.hatch
 [uv]: https://docs.astral.sh/uv/
 
 ## Code-style
