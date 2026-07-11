@@ -32,6 +32,9 @@ urls.Source = "https://github.com/scverse/cookiecutter-scverse"
 scripts.make-rich-output = "scverse_template_scripts.make_rich_output:main"
 scripts.send-cruft-prs = "scverse_template_scripts.cruft_prs:cli"
 
+[dependency-groups]
+dev = [ "pytest" ]
+
 [tool.hatch]
 version.source = "vcs"
 version.fallback-version = "0.0"

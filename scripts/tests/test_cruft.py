@@ -105,10 +105,9 @@ def test_apply_update(clone: Repo, current_repo_path: Path, tmp_path: Path) -> N
     log_file = tmp_path / "cruft_log.txt"
     _apply_update(
         clone,
-        template_tag_name=None,
         cruft_log_file=log_file,
         cookiecutter_config={"project_name": "cookiecutter-scverse-instance"},
-        template_url=str(current_repo_path),
+        template_dir=str(current_repo_path),
     )
 
 
