@@ -48,7 +48,7 @@ While the repository at this point can be directly used, there are few remaining
 
 Modern Python package management uses a `pyproject.toml` that was first introduced in [PEP 518](https://peps.python.org/pep-0518/).
 This file contains build system requirements and information, which are used by pip to build the package, and tool configurations.
-For more details please have a look at [pip's description of the pyproject.toml file](https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml/).
+For more details please have a look at [pip's description of the pyproject.toml file](https://pip.pypa.io/page/reference/build-system/).
 It also serves as a single point of truth to define test environments and how docs are built by leveraging
 the [hatch][] project manager, but more about that in the [contributing guide](contributing.md).
 
@@ -113,10 +113,10 @@ On the RTD dashboard choose "Import a Project" and follow the instructions to ad
   For more information, please refer to the [official RTD documentation][rtd-prs].
 
 If your project is private, there are ways to enable docs rendering on [readthedocs.org][] but it is more cumbersome and requires a different RTD subscription.
-See a guide [here](https://docs.readthedocs.io/en/stable/guides/importing-private-repositories.html).
+See a guide [here](https://docs.readthedocs.io/page/guides/importing-private-repositories.html).
 
 [readthedocs.org]: https://readthedocs.org/
-[rtd-prs]: https://docs.readthedocs.io/en/stable/pull-requests.html
+[rtd-prs]: https://docs.readthedocs.io/page/pull-requests.html
 
 (github-actions)=
 
@@ -178,6 +178,9 @@ the project will be published only once you release your package for the first t
 
 This template uses a number of pre-commit checks.
 In this section we'll detail what is used, where they're defined, and how to modify these checks.
+
+To run the checks locally, we recommend [prek][], a fast, drop-in replacement for `pre-commit` that reads the same `.pre-commit-config.yaml`.
+Install it (e.g. with `uv tool install prek`) and run `prek install` once to set up the git hook, then `prek run --all-files` to check the whole repository.
 
 
 ### Pre-commit CI
@@ -299,8 +302,9 @@ add it to Ruff’s [`external = [...]`][ruff-external] setting to prevent `RUF10
 
 [biome]: https://biomejs.dev/
 [pre-commit]: https://pre-commit.com/
+[prek]: https://prek.j178.dev/
 [pre-commit.ci]: https://pre-commit.ci/
-[pyproject-fmt]: https://pyproject-fmt.readthedocs.io/en/latest/index.html
+[pyproject-fmt]: https://pyproject-fmt.readthedocs.io/
 [ruff]: https://docs.astral.sh/ruff/
 [ruff-config]: https://docs.astral.sh/ruff/configuration/
 [ruff-error-suppression]: https://docs.astral.sh/ruff/linter/#error-suppression
@@ -322,7 +326,7 @@ there may also be good reasons to choose a different approach, e.g. using an obj
 
 [anndata]: https://github.com/scverse/anndata
 [mudata]: https://github.com/scverse/mudata
-[scanpy-api]: https://scanpy.readthedocs.io/en/stable/usage-principles.html
+[scanpy-api]: https://scanpy.scverse.org/page/usage-principles.html
 [spatialdata]: https://github.com/scverse/spatialdata
 
 (vcs-based-versioning)=
@@ -393,7 +397,7 @@ The following hints may be useful to work with the template sync:
 
 If you prefer to check for and apply the pre-release template updates manually, or if you are working on a private repository not tracked by the bot, you can use cruft. Simply:
 
-- Make sure cruft and pre-commit are installed.
+- Make sure cruft and prek are installed.
 - Make sure your git directory is clean (no unstaged/uncommitted files).
 - Run `cruft update` in the root of your repository.
 
@@ -417,7 +421,7 @@ Here's one way how to do it:
 
     ```bash
     mkdir template && cd template
-    uvx --with pre-commit cruft create https://github.com/scverse/cookiecutter-scverse
+    uvx --with prek cruft create https://github.com/scverse/cookiecutter-scverse
     ```
 
 4. remove everything from the existing repo

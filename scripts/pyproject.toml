@@ -23,7 +23,7 @@ dependencies = [
   "cyclopts>=3.10",
   "furl",
   "gitpython",
-  "pre-commit",     # is ran by cruft
+  "prek",           # is ran by cruft
   "pygithub>=2",
   "pyyaml",
   "rich",

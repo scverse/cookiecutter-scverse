@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
 import sys
 from collections.abc import Iterable
 from dataclasses import KW_ONLY, InitVar, dataclass, field
@@ -70,6 +71,39 @@ IGNORE_COOKIECUTTER_VARS = [
     # ignored because `cruft create` fails if it contains any different value than the default, see also https://github.com/cruft/cruft/issues/166
     "_copy_without_render",
 ]
+
+
+def _escape_github_mentions(text: str) -> str:
+    """Escape GitHub @mentions with backticks to prevent notifications.
+
+    Wraps ``@username`` patterns in backticks so that GitHub doesn't treat them as
+    real mentions when the release notes are embedded in template-update PRs.
+    Otherwise every contributor named in the release notes would be subscribed to
+    the ~150 template-update PRs that are opened on every release.
+
+    Already-escaped mentions and email addresses are left unchanged.
+
+    Note
+    ----
+    This is a simple regex that comes with certain limitations,
+    e.g., a mention that sits *inside* an inline code span but is preceded by whitespace
+    (e.g.  ``\\`see @bar here\\```) would be re-escaped incorrectly.
+    This does not occur in GitHub's auto-generated release notes (a flat bullet list of `… by @user in <url>`).
+
+    At the time of writing, we couldn't identify a library providing a markdown parser
+    that reliably identifies github usernames.
+    """
+    # A GitHub @mention, e.g. `@grst`. The username pattern matches GitHub's own rules:
+    # alphanumeric or single non-leading/non-trailing/non-consecutive hyphens, max 39 chars.
+    # See https://github.com/shinnn/github-username-regex.
+    # The negative lookbehind skips email addresses (e.g. `bot@example.com`) and
+    # already-escaped mentions (e.g. `` `@grst` ``).
+    github_username_regex = re.compile(
+        r"(?<![`\w])@([a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38})",
+        re.IGNORECASE,
+    )
+
+    return github_username_regex.sub(r"`@\1`", text)
 
 
 @dataclass
@@ -138,10 +172,11 @@ class TemplateUpdatePR:
 
     @property
     def body(self) -> str:
-        return PR_BODY_TEMPLATE.format(
+        body = PR_BODY_TEMPLATE.format(
             release=self.release,
-            template_usage="https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html",
+            template_usage="https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html",
         )
+        return _escape_github_mentions(body)
 
     def matches_prefix(self, pr: PullRequest) -> bool:
         """Check if `pr` is either a current or previous template update PR by matching the branch name"""
@@ -359,7 +394,7 @@ def _commit_update(clone: Repo, *, exclude_files: Sequence = (), commit_msg: str
 
     Returns a `bool` indicating whether changes have been made and committed.
     """
-    # Stage and commit (no_verify to avoid running pre-commit)
+    # Stage and commit (no_verify to avoid running the git hooks)
     log.info("Changes detected. Staging and committing changes.")
     # Check if something has changed at all
     if not clone.is_dirty() and not clone.untracked_files:
@@ -501,7 +536,7 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir
 
     forked_repo = get_fork(con, original_repo)
 
-    updated = template_update(
+    template_update(
         con,
         forked_repo=forked_repo,
         original_repo=original_repo,
@@ -514,24 +549,27 @@ def make_pr(con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir
     if dry_run:
         log.info("Skipping PR because in dry-run mode")
         return
-    if updated:
-        if old_pr := next((p for p in original_repo.get_pulls("open") if pr.matches_current_version(p)), None):
-            log.info(f"PR already exists: #{old_pr.number} with branch name `{old_pr.head.ref}`. Skipping PR creation.")
-            return
 
-        if old_pr := next((p for p in original_repo.get_pulls("open") if pr.matches_prefix(p)), None):
-            log.info(f"Closing old PR #{old_pr.number} with branch name `{old_pr.head.ref}`.")
-            old_pr.edit(state="closed")
+    # check against all PRs, including closed ones -- if one already exists for the current version,
+    # and the developer closed it, we do not want to reopen it.
+    if old_pr := next((p for p in original_repo.get_pulls("all") if pr.matches_current_version(p)), None):
+        log.info(f"PR already exists: #{old_pr.number} with branch name `{old_pr.head.ref}`. Skipping PR creation.")
+        return
 
-        log.info(f"Creating PR of {pr.namespaced_head} against {original_repo.default_branch}")
-        new_pr = original_repo.create_pull(
-            title=pr.title,
-            body=pr.body,
-            base=original_repo.default_branch,
-            head=pr.namespaced_head,
-            maintainer_can_modify=True,
-        )
-        log.info(f"Created PR #{new_pr.number} with branch name `{new_pr.head.ref}`.")
+    # check if there's a PR open for an earlier version -- if yes, we close it (in favor of the new one to be created)
+    if old_pr := next((p for p in original_repo.get_pulls("open") if pr.matches_prefix(p)), None):
+        log.info(f"Closing old PR #{old_pr.number} with branch name `{old_pr.head.ref}`.")
+        old_pr.edit(state="closed")
+
+    log.info(f"Creating PR of {pr.namespaced_head} against {original_repo.default_branch}")
+    new_pr = original_repo.create_pull(
+        title=pr.title,
+        body=pr.body,
+        base=original_repo.default_branch,
+        head=pr.namespaced_head,
+        maintainer_can_modify=True,
+    )
+    log.info(f"Created PR #{new_pr.number} with branch name `{new_pr.head.ref}`.")
 
 
 cli = App()

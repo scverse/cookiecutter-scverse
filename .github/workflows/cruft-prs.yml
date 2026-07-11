@@ -25,7 +25,7 @@ jobs:
         run: uvx --from ./scripts send-cruft-prs ${{ env.RELEASE }} --all_repos --log-dir log
         env:
           RELEASE: ${{ github.event_name == 'release' && github.event.release.tag_name || github.event.inputs.release }}
-          GITHUB_TOKEN: ${{ secrets.BOT_GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.SCVERSE_BOT_PRODUCTION_GITHUB_TOKEN }}
           FORCE_COLOR: "1"
           COLUMNS: "150"
       - uses: actions/upload-artifact@v4

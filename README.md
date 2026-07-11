@@ -9,7 +9,7 @@ Ecosystem packages are independent software libraries that interact with scverse
 Please check out the
 
 - [example repo](https://github.com/scverse/cookiecutter-scverse-instance) and the
-- [example documentation](https://cookiecutter-scverse-instance.readthedocs.io/en/latest/)
+- [example documentation](https://cookiecutter-scverse-instance.readthedocs.io/)
 
 that are automatically generated and kept in sync with this template.
 
@@ -36,7 +36,7 @@ Please consider making a tax-deductible [donation](https://numfocus.org/donate-t
 - continuous integration using GitHub actions.
 - documentation hosted by [readthedocs][]
 - coverage tests with [codecov][]
-- [pre-commit][] checks for code style and consistency
+- [pre-commit][] checks for code style and consistency (run with [prek][])
 - tutorials with [myst-nb][] and jupyter notebooks
 - issue templates for better bug reports and feature requests
 
@@ -61,7 +61,7 @@ To create the project, run the following command and follow the prompts:
 
 ```bash
 # uv will download all dependencies on-the-fly
-uvx --with pre-commit cruft create https://github.com/scverse/cookiecutter-scverse
+uvx --with prek cruft create https://github.com/scverse/cookiecutter-scverse
 ```
 
 This will create a git repository generated from the template.
@@ -73,7 +73,7 @@ Don't forget to create a repository on GitHub and upload your project.
 If you want to permanently install the tools, you can run
 
 ```bash
-pipx install cruft pre-commit # or for each: uv tool install $pkg
+pipx install cruft prek # or for each: uv tool install $pkg
 cruft create https://github.com/scverse/cookiecutter-scverse
 ```
 
@@ -94,7 +94,7 @@ All CI checks should pass, you are ready to start developing your new tool!
 
 ### Customizations
 
-Further instructions on using this template can be found in the [dev docs included in the project](https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html).
+Further instructions on using this template can be found in the [dev docs included in the project](https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html).
 
 ### Commitment
 
@@ -127,17 +127,18 @@ You can cite the scverse publication as follows:
 
 <!-- links -->
 
-[setup-pre-commit]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#pre-commit-checks
-[setup-rtd]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#documentation-on-readthedocs
-[setup-codecov]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#coverage-tests-with-codecov
-[write-tests]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#writing-tests
-[write-docs]: https://cookiecutter-scverse-instance.readthedocs.io/en/latest/template_usage.html#writing-documentation
+[setup-pre-commit]: https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html#pre-commit-checks
+[setup-rtd]: https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html#documentation-on-readthedocs
+[setup-codecov]: https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html#coverage-tests-with-codecov
+[write-tests]: https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html#writing-tests
+[write-docs]: https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html#writing-documentation
 [readthedocs]: https://readthedocs.org/
 [myst-nb]: https://myst-nb.readthedocs.io/
 [pre-commit]: https://pre-commit.com/
+[prek]: https://prek.j178.dev/
 [scverse]: https://scverse.org/
-[anndata]: https://anndata.readthedocs.io/en/latest/
-[mudata]: https://muon.readthedocs.io/en/latest/notebooks/quickstart_mudata.html
+[anndata]: https://anndata.scverse.org/
+[mudata]: https://muon.readthedocs.io/page/notebooks/quickstart_mudata.html
 [codecov]: https://about.codecov.io/
 [scverse discourse]: https://discourse.scverse.org/
 [pytest]: https://docs.pytest.org

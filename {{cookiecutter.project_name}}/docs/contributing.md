@@ -9,7 +9,7 @@ the [scientific Python tutorials][], or the [scanpy developer guide][].
 
 [pyopensci tutorials]: https://www.pyopensci.org/learn.html
 [scientific Python tutorials]: https://learn.scientific-python.org/development/tutorials/
-[scanpy developer guide]: https://scanpy.readthedocs.io/en/latest/dev/index.html
+[scanpy developer guide]: https://scanpy.scverse.org/page/dev/
 
 :::{tip} The *hatch* project manager
 
@@ -138,23 +138,24 @@ The `.venv` directory is typically automatically discovered by IDEs such as VS C
 
 ## Code-style
 
-This package uses [pre-commit][] to enforce consistent code-styles.
-On every commit, pre-commit checks will either automatically fix issues with the code, or raise an error message.
+This package uses [pre-commit][]-style hooks to enforce consistent code-styles.
+We recommend running them with [prek][], a fast, drop-in replacement for `pre-commit` that reads the same `.pre-commit-config.yaml`.
+On every commit, the checks will either automatically fix issues with the code, or raise an error message.
 {% if cookiecutter._render_devdocs %}
 See [pre-commit checks](template_usage.md#pre-commit-checks) for a full list of checks enabled for this repository.
 {% endif %}
 
-To enable pre-commit locally, simply run
+To enable the checks locally, install [prek][] (e.g. with `uv tool install prek`) and run
 
 ```bash
-pre-commit install
+prek install
 ```
 
 in the root of the repository.
-Pre-commit will automatically download all dependencies when it is run for the first time.
+prek will automatically download all dependencies when it is run for the first time.
 
 Alternatively, you can rely on the [pre-commit.ci][] service enabled on GitHub.
-If you didn’t run `pre-commit` before pushing changes to GitHub it will automatically commit fixes to your pull request, or show an error message.
+If you didn’t run the checks before pushing changes to GitHub it will automatically commit fixes to your pull request, or show an error message.
 
 If pre-commit.ci added a commit on a branch you still have been working on locally, simply use
 
@@ -163,12 +164,13 @@ git pull --rebase
 ```
 
 to integrate the changes into yours.
-While the [pre-commit.ci][] is useful, we strongly encourage installing and running pre-commit locally first to understand its usage.
+While the [pre-commit.ci][] is useful, we strongly encourage installing and running the checks locally first to understand their usage.
 
 Finally, most editors have an _autoformat on save_ feature.
 Consider enabling this option for [ruff][ruff-editors] and [biome][biome-editors].
 
 [pre-commit]: https://pre-commit.com/
+[prek]: https://prek.j178.dev/
 [pre-commit.ci]: https://pre-commit.ci/
 [ruff-editors]: https://docs.astral.sh/ruff/integrations/
 [biome-editors]: https://biomejs.dev/guides/integrate-in-editor/
@@ -277,11 +279,11 @@ This project uses [sphinx][] with the following features:
 
 See scanpy’s {doc}`scanpy:dev/documentation` for more information on how to write your own.
 
-[sphinx]: https://www.sphinx-doc.org/en/master/
-[myst]: https://myst-parser.readthedocs.io/en/latest/intro.html
-[myst-nb]: https://myst-nb.readthedocs.io/en/latest/
-[numpydoc-napoleon]: https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html
-[numpydoc]: https://numpydoc.readthedocs.io/en/latest/format.html
+[sphinx]: https://www.sphinx-doc.org/
+[myst]: https://myst-parser.readthedocs.io/page/intro.html
+[myst-nb]: https://myst-nb.readthedocs.io/
+[numpydoc-napoleon]: https://www.sphinx-doc.org/page/usage/extensions/napoleon.html
+[numpydoc]: https://numpydoc.readthedocs.io/page/format.html
 [sphinx-autodoc-typehints]: https://github.com/tox-dev/sphinx-autodoc-typehints
 
 ### Tutorials with myst-nb and jupyter notebooks
