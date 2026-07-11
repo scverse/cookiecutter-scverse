@@ -628,7 +628,7 @@ def make_pr(
 cli = App()
 
 
-@contextlib.context_manager
+@contextlib.contextmanager
 def download_template(con: GitHubConnection, template_url: str, tag_name: str) -> Generator[str, None, None]:
     """
     Clone the template repository into a temporary directory and check out a tag name.
