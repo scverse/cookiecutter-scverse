@@ -67,11 +67,9 @@ PR_BODY_TEMPLATE = """\
 N_RETRIES_WAIT_FOR_FORK = math.ceil(math.log(5 * 60) / math.log(2))  # = ⌈~8.22⌉ = 9
 # Due to exponential backoff, we’ll maximally wait 2⁹ sec, or 8.5 min
 
-# Ignore the following variables when re-initializing the template from a cookiecutter.json file
-IGNORE_COOKIECUTTER_VARS = [
-    # ignored because `cruft create` fails if it contains any different value than the default, see also https://github.com/cruft/cruft/issues/166
-    "_copy_without_render",
-]
+# For the following variables, always use the template version
+# (remove them from the cookiecutter context provided by the instance during update)
+COOKIECUTTER_VARS_OVERRIDE_FROM_TEMPLATE = ["_copy_without_render", "_exclude_on_template_update"]
 
 
 def _escape_github_mentions(text: str) -> str:
@@ -147,6 +145,7 @@ class TemplateRelease:
 
     release: GHRelease
     commit: str
+    template_url: str
 
     @property
     def tag_name(self) -> str:
@@ -219,16 +218,16 @@ class RepoInfo(TypedDict):
     skip: NotRequired[bool]
 
 
-def get_template_release(gh: Github, tag_name: str) -> TemplateRelease:
+def get_template_release(gh: Github, template_url: str, tag_name: str) -> TemplateRelease:
     """
     Get a release by tag from the cookiecutter-scverse repo, along with the commit it points to.
 
     `gh` represents the github API, authenticated against scverse-bot.
     """
-    template_repo = gh.get_repo("scverse/cookiecutter-scverse")
+    template_repo = gh.get_repo(template_url.removeprefix("https://github.com/"))
     release = template_repo.get_release(tag_name)
     commit = template_repo.get_commit(tag_name).sha
-    return TemplateRelease(release=release, commit=commit)
+    return TemplateRelease(release=release, template_url=template_url, commit=commit)
 
 
 def _parse_repos(f: IO[str] | str | bytes) -> list[RepoInfo]:
@@ -386,7 +385,9 @@ def _apply_update(
         cookiecutter_config_file = output_dir / "cookiecutter.json"
         with cookiecutter_config_file.open("w") as f:
             # need to put the cookiecutter-related info from .cruft.json into separate file
-            json.dump({k: v for k, v in cookiecutter_config.items() if k not in IGNORE_COOKIECUTTER_VARS}, f)
+            json.dump(
+                {k: v for k, v in cookiecutter_config.items() if k not in COOKIECUTTER_VARS_OVERRIDE_FROM_TEMPLATE}, f
+            )
 
         # run in a subprocess, otherwise not possible to capture output of post-run hooks
         with cruft_log_file.open("w") as log_f:
@@ -533,6 +534,8 @@ def template_update(
         # Update .cruft.json with current tag and commit hash
         tmp_config["commit"] = release.commit
         tmp_config["checkout"] = release.tag_name
+        tmp_config["context"]["_commit"] = release.commit
+        tmp_config["context"]["_template"] = release.template_url
         with (clone_dir / ".cruft.json").open("w") as f:
             json.dump(tmp_config, f, indent=2)
 
@@ -656,10 +659,17 @@ def download_template(con: GitHubConnection, template_url: str, tag_name: str) -
         with (Path(td) / "cookiecutter.json").open() as f:
             cookiecutter_config = json.load(f)
 
-        # Replace list values with an empty string to allow arbitrary values passed in via --extra-context-file
-        cookiecutter_config_patched = {k: "" if isinstance(v, list) else v for k, v in cookiecutter_config.items()}
-        with (Path(td) / "cookiecutter.json").open("wb") as f:
+        # Replace list values with an empty string to allow arbitrary values passed in via --extra-context-file,
+        # but keep those lists that are to be taken from the template
+        cookiecutter_config_patched = {
+            k: "" if isinstance(v, list) and k not in COOKIECUTTER_VARS_OVERRIDE_FROM_TEMPLATE else v
+            for k, v in cookiecutter_config.items()
+        }
+        with (Path(td) / "cookiecutter.json").open("w") as f:
             json.dump(cookiecutter_config_patched, f)
+
+        clone.git.add("cookiecutter.json")
+        clone.git.commit(message="Patch cookiecutter.json")
 
         yield td
 
@@ -705,7 +715,7 @@ def main(
         msg = "Need to either specify `--all` or one or more repo URLs."
         raise ValueError(msg)
 
-    release = get_template_release(con.gh, tag_name)
+    release = get_template_release(con.gh, template_url, tag_name)
     failed = 0
     with download_template(con, template_url, tag_name) as template_dir:
         for repo_url in repo_urls:
