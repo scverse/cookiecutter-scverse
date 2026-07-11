@@ -63,7 +63,7 @@ jobs:
 
       - name: Build from template
         run: |
-          uvx --with pre-commit cruft create \
+          uvx --with prek cruft create \
             --no-input \
             --output-dir $INSTANCE_GENERATED \
             --extra-context-file .github/assets/cookiecutter-scverse-instance.json \
@@ -94,7 +94,7 @@ jobs:
           author_name: ${{ env.APP_USERNAME }}
           author_email: ${{ env.APP_EMAIL }}
           default_author: user_info
-          commit: "--no-verify" # no need to run pre-commit at this point - saves runtime!
+          commit: "--no-verify" # no need to run the git hooks at this point - saves runtime!
           cwd: ${{ env.INSTANCE_REPO }}
           message: Update instance repo from cookiecutter template
           new_branch: ${{ env.SISTER_PR_BRANCH }}

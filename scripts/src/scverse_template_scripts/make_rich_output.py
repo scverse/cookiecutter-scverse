@@ -6,7 +6,7 @@ import re
 from rich.console import Console
 from rich.markdown import Markdown
 
-dev_docs_url = "https://cookiecutter-scverse-instance.readthedocs.io/en/latest/developer_docs.html"
+dev_docs_url = "https://cookiecutter-scverse-instance.readthedocs.io/page/developer_docs.html"
 
 message = f"""\
 # Set-up online services
@@ -28,9 +28,9 @@ To run tests or build the documentation locally, get familiar with [hatch enviro
 and see `[tool.hatch.envs.*]` in `pyproject.toml`:
 
 ```bash
-hatch run pre-commit run --all-files  # tool.hatch.envs.default
-hatch test                            # tool.hatch.envs.hatch-test
-hatch run docs:build                  # tool.hatch.envs.docs
+hatch run prek run --all-files  # tool.hatch.envs.default
+hatch test                      # tool.hatch.envs.hatch-test
+hatch run docs:build            # tool.hatch.envs.docs
 ```
 
 # Customizations

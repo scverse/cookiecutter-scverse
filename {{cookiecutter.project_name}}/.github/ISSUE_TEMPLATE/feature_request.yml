@@ -1,6 +1,10 @@
 name: Feature request
 description: Propose a new feature for {{ cookiecutter.project_name }}
+{% if cookiecutter.issue_categorization == "issue types" %}
 type: Enhancement
+{% else %}
+labels: enhancement
+{% endif %}
 body:
   - type: textarea
     id: description
