@@ -7,9 +7,7 @@ name = "scverse-template-scripts"
 description = "scripts for ecosystem package data"
 readme = "../README.md"
 license = "GPL-3.0"
-authors = [
-  { name = "Philipp A.", email = "flying-sheep@web.de" },
-]
+authors = [ { name = "Philipp A.", email = "flying-sheep@web.de" } ]
 requires-python = ">=3.12"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
@@ -73,28 +71,32 @@ lint.select = [
   "YTT",
 ]
 lint.ignore = [
-  "ISC001", # conflicts with formatter
-  "S101",   # assert should be allowed
-  "S311",   # we don’t need cryptographically secure RNG
-  "S603",   # subprocess with shell=False should be allowed
+  "ISC001",  # conflicts with formatter
+  "PLR0913", # too many arguments in function definition
+  "S101",    # assert should be allowed
+  "S311",    # we don’t need cryptographically secure RNG
+  "S603",    # subprocess with shell=False should be allowed
 ]
 lint.unfixable = [
   "RUF001", # never “fix” “confusables”
 ]
 lint.allowed-confusables = [ "×", "’" ]
 lint.flake8-type-checking.exempt-modules = []
-lint.flake8-type-checking.runtime-evaluated-decorators = [ "cyclopts.App.default" ]
+lint.flake8-type-checking.runtime-evaluated-decorators = [
+  "cyclopts.App.default",
+]
 lint.flake8-type-checking.strict = true
-lint.isort.known-first-party = [ "scverse_template_scripts", "testing.scverse_template_scripts" ]
+lint.isort.known-first-party = [
+  "scverse_template_scripts",
+  "testing.scverse_template_scripts",
+]
 lint.isort.required-imports = [ "from __future__ import annotations" ]
 
 [tool.pyproject-fmt]
 column_width = 120
 
 [tool.pytest]
-addopts = [
-  "--import-mode=importlib",
-]
+addopts = [ "--import-mode=importlib" ]
 filterwarnings = [
   "error",
   # https://github.com/man-group/pytest-plugins/issues/224

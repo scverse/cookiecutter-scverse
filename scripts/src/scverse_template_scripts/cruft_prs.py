@@ -5,6 +5,7 @@ Uses `template-repos.yml` from `scverse/ecosystem-packages`.
 
 from __future__ import annotations
 
+import contextlib
 import json
 import math
 import os
@@ -17,7 +18,6 @@ from pathlib import Path
 from subprocess import run
 from tempfile import TemporaryDirectory
 from typing import TYPE_CHECKING, ClassVar, TypedDict, cast
-import contextlib
 
 from cyclopts import App
 from furl import furl
@@ -139,11 +139,34 @@ class GitHubConnection:
 
 
 @dataclass
+class TemplateRelease:
+    """A cookiecutter-scverse release, together with the exact commit it was tagged at.
+
+    `GHRelease` does not expose the commit sha directly, so we resolve and cache it here.
+    """
+
+    release: GHRelease
+    commit: str
+
+    @property
+    def tag_name(self) -> str:
+        return self.release.tag_name
+
+    @property
+    def html_url(self) -> str:
+        return self.release.html_url
+
+    @property
+    def body(self) -> str:
+        return self.release.body
+
+
+@dataclass
 class TemplateUpdatePR:
     """A template update pull request to a repository using the cookiecutter-scverse template"""
 
     con: GitHubConnection
-    release: GHRelease
+    release: TemplateRelease
     repo_id: str  # something like scverse-scirpy
 
     title_prefix: ClassVar[LiteralString] = "Update template to "
@@ -196,14 +219,16 @@ class RepoInfo(TypedDict):
     skip: NotRequired[bool]
 
 
-def get_template_release(gh: Github, tag_name: str) -> GHRelease:
+def get_template_release(gh: Github, tag_name: str) -> TemplateRelease:
     """
-    Get a release by tag from the cookiecutter-scverse repo
+    Get a release by tag from the cookiecutter-scverse repo, along with the commit it points to.
 
     `gh` represents the github API, authenticated against scverse-bot.
     """
     template_repo = gh.get_repo("scverse/cookiecutter-scverse")
-    return template_repo.get_release(tag_name)
+    release = template_repo.get_release(tag_name)
+    commit = template_repo.get_commit(tag_name).sha
+    return TemplateRelease(release=release, commit=commit)
 
 
 def _parse_repos(f: IO[str] | str | bytes) -> list[RepoInfo]:
@@ -330,7 +355,6 @@ def _get_cruft_config_from_upstream(repo: Repo, default_branch: str) -> CruftCon
 def _apply_update(
     clone: Repo,
     *,
-    template_tag_name: str | None = None,
     cruft_log_file: Path,
     cookiecutter_config: dict,
     template_dir: str,
@@ -338,7 +362,7 @@ def _apply_update(
     """
     Apply the changes from the template to the original repo
 
-    Instantiate the specified version of the cookiecutter template with the config used by the original repo.
+    Instantiate the cookiecutter template with the config used by the original repo.
     Then remove everything from the original repo and copy over all template files.
 
     The outcome is a branch in the original repo that contains the updated template that can be merged
@@ -348,20 +372,19 @@ def _apply_update(
     ----------
     clone
         cloned repository (to which the update is to be applied)
-    template_tag_name
-        template version to use (git tag)
     cruft_log_file
         file to which the cruft log will be written
     cookiecutter_config
         cookiecutter configuration to be passed to cruft as `--extra-context-file`
     template_dir
-        path to the template (cloned git repository)
+        path to the template (cloned git repository, already checked out at the desired tag)
     """
     clone_dir = Path(clone.working_dir)
+    template_dir = Path(template_dir)
     with TemporaryDirectory() as td:
-        template_dir = Path(td)
+        output_dir = Path(td)
         # Initialize a new repo off the current template version, using the configuration from .cruft.json
-        cookiecutter_config_file = template_dir / "cookiecutter.json"
+        cookiecutter_config_file = output_dir / "cookiecutter.json"
         with cookiecutter_config_file.open("w") as f:
             # need to put the cookiecutter-related info from .cruft.json into separate file
             json.dump({k: v for k, v in cookiecutter_config.items() if k not in IGNORE_COOKIECUTTER_VARS}, f)
@@ -374,13 +397,12 @@ def _apply_update(
                 "cruft",
                 "create",
                 template_dir,
-                *([f"--checkout={template_tag_name}"] if template_tag_name is not None else []),
                 "--no-input",
                 f"--extra-context-file={cookiecutter_config_file}",
             ]
             log.info("Running " + " ".join(cmd))
-            run(cmd, stdout=log_f, stderr=log_f, check=True, cwd=template_dir)
-        template_dir_project_name = template_dir / cookiecutter_config["project_name"]
+            run(cmd, stdout=log_f, stderr=log_f, check=True, cwd=output_dir)
+        template_dir_project_name = output_dir / cookiecutter_config["project_name"]
 
         # Remove everything from the original repo (except the `.git` directoroy)
         cmd = ["/usr/bin/find", ".", "-not", "-path", "./.git*", "-delete"]
@@ -432,14 +454,14 @@ def _commit_update(clone: Repo, *, exclude_files: Sequence = (), commit_msg: str
     return True
 
 
-def template_update(  # noqa: PLR0913, (= too many function arguments)
+def template_update(
     con: GitHubConnection,
     *,
     forked_repo: GHRepo,
     original_repo: GHRepo,
     template_branch_name: str,
     versioned_branch_name: str,
-    tag_name: str,
+    release: TemplateRelease,
     cruft_log_file: Path,
     dry_run: bool,
     template_dir: str,
@@ -475,8 +497,8 @@ def template_update(  # noqa: PLR0913, (= too many function arguments)
         version-specific branch name (will be created off the template branch)
     original_repo
         The original (upstream) repo
-    tag_name
-        tag name of cookiecutter template to use
+    release
+        The release of cookiecutter-scverse to use, together with the commit it points to
     cruft_log_file
         Filename to write cruft logs to
     dry_run
@@ -499,7 +521,6 @@ def template_update(  # noqa: PLR0913, (= too many function arguments)
         cookiecutter_config = cruft_config["context"]["cookiecutter"]
         _apply_update(
             clone,
-            template_tag_name=tag_name,
             cruft_log_file=cruft_log_file,
             cookiecutter_config=cookiecutter_config,
             template_dir=template_dir,
@@ -510,11 +531,17 @@ def template_update(  # noqa: PLR0913, (= too many function arguments)
             tmp_config = json.load(f)
             exclude_files = tmp_config["context"]["cookiecutter"].get("_exclude_on_template_update", [])
 
+        # Update .cruft.json with current tag and commit hash
+        tmp_config["commit"] = release.commit
+        tmp_config["checkout"] = release.tag_name
+        with (clone_dir / ".cruft.json").open("w") as f:
+            json.dump(tmp_config, f, indent=2)
+
         if (
             updated := _commit_update(
                 clone,
                 exclude_files=exclude_files,
-                commit_msg=f"Automated template update to {tag_name}",
+                commit_msg=f"Automated template update to {release.tag_name}",
                 commit_author=f"{con.sig.name} <{con.sig.email}>",
             )
         ) and not dry_run:
@@ -526,7 +553,13 @@ def template_update(  # noqa: PLR0913, (= too many function arguments)
 
 
 def make_pr(
-    con: GitHubConnection, release: GHRelease, repo_url: str, *, log_dir: Path, dry_run: bool = False, template_dir: str
+    con: GitHubConnection,
+    release: TemplateRelease,
+    repo_url: str,
+    *,
+    log_dir: Path,
+    dry_run: bool = False,
+    template_dir: str,
 ) -> None:
     """
     Make a pull request with the template update to the original repo
@@ -536,7 +569,7 @@ def make_pr(
     con
         A connection to the github API, authenticated against scverse-bot
     release
-        A github release object, pointing to the release of cookiecutter-scverse to be used
+        The release of cookiecutter-scverse to be used, together with the commit it points to
     repo_url
         git URL of the repo to update
     log_dir
@@ -561,7 +594,7 @@ def make_pr(
         original_repo=original_repo,
         template_branch_name=pr.template_branch,
         versioned_branch_name=pr.pr_branch,
-        tag_name=release.tag_name,
+        release=release,
         cruft_log_file=log_dir / f"{pr.template_branch}.log",
         dry_run=dry_run,
         template_dir=template_dir,
@@ -598,7 +631,13 @@ cli = App()
 @contextlib.context_manager
 def download_template(con: GitHubConnection, template_url: str, tag_name: str) -> Generator[str, None, None]:
     """
-    Clone the template repository into a temporary directory.
+    Clone the template repository into a temporary directory and check out a tag name.
+
+    This avoids repeated downloads of the template.
+
+    Patches cookiecutter.json config, such that lists are replaced with empty strings.
+    This avoids issues with template sync in cases users specified options that are outside the (currently)
+    allowed cateogories specified in the cookiecutter.json (https://github.com/scverse/cookiecutter-scverse/issues/460).
 
     Parameters
     ----------
@@ -617,6 +656,11 @@ def download_template(con: GitHubConnection, template_url: str, tag_name: str) -
         clone.git.checkout(tag_name)
         with (Path(td) / "cookiecutter.json").open() as f:
             cookiecutter_config = json.load(f)
+
+        # Replace list values with an empty string to allow arbitrary values passed in via --extra-context-file
+        cookiecutter_config_patched = {k: "" if isinstance(v, list) else v for k, v in cookiecutter_config.items()}
+        with (Path(td) / "cookiecutter.json").open("wb") as f:
+            json.dump(cookiecutter_config_patched, f)
 
         yield td
 
@@ -667,7 +711,14 @@ def main(
     with download_template(con, template_url, tag_name) as template_dir:
         for repo_url in repo_urls:
             try:
-                make_pr(con, release, repo_url, log_dir=log_dir, dry_run=dry_run, template_dir=template_dir)
+                make_pr(
+                    con,
+                    release,
+                    repo_url,
+                    log_dir=log_dir,
+                    dry_run=dry_run,
+                    template_dir=template_dir,
+                )
             except Exception as e:
                 failed += 1
                 log.error(f"Error while updating {repo_url}")
