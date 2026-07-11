@@ -380,7 +380,6 @@ def _apply_update(
         path to the template (cloned git repository, already checked out at the desired tag)
     """
     clone_dir = Path(clone.working_dir)
-    template_dir = Path(template_dir)
     with TemporaryDirectory() as td:
         output_dir = Path(td)
         # Initialize a new repo off the current template version, using the configuration from .cruft.json
