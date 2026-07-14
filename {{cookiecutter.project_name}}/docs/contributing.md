@@ -46,7 +46,7 @@ hatch test  # defined in the table [tool.hatch.envs.hatch-test] in pyproject.tom
 hatch run docs:build  # defined in the table [tool.hatch.envs.docs]
 ```
 
-### VScode
+### VS Code
 
 If you are using VScode, install the [hatch-code][] extension.
 Additionally, make sure that the `vscode-python-environments` extension is installed (should be by default)
