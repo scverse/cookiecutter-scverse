@@ -7,7 +7,10 @@ name = "scverse-template-scripts"
 description = "scripts for ecosystem package data"
 readme = "../README.md"
 license = "GPL-3.0"
-authors = [ { name = "Philipp A.", email = "flying-sheep@web.de" } ]
+authors = [
+  { name = "Philipp A.", email = "flying-sheep@web.de" },
+  { name = "Gregor Sturm", email = "gregor.sturm@scverse.org" },
+]
 requires-python = ">=3.12"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
