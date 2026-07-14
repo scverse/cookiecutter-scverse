@@ -220,7 +220,7 @@ class RepoInfo(TypedDict):
 
 def get_template_release(gh: Github, template_url: str, tag_name: str) -> TemplateRelease:
     """
-    Get a release by tag from the cookiecutter-scverse repo, along with the commit it points to.
+    Get a release by tag from the template repo, alongside the commit it points to.
 
     `gh` represents the github API, authenticated against scverse-bot.
     """
@@ -359,18 +359,18 @@ def _apply_update(
     template_dir: str,
 ) -> None:
     """
-    Apply the changes from the template to the original repo
+    Apply the changes from the template to the target repo.
 
-    Instantiate the cookiecutter template with the config used by the original repo.
-    Then remove everything from the original repo and copy over all template files.
+    Instantiate the cookiecutter template with the config used by the target repo.
+    Then remove everything from the target repo and copy over all template files.
 
-    The outcome is a branch in the original repo that contains the updated template that can be merged
+    The outcome is a branch in the target repo that contains the updated template that can be merged
     into the default branch by the user.
 
     Parameters
     ----------
     clone
-        cloned repository (to which the update is to be applied)
+        cloned target repository (to which the update is to be applied)
     cruft_log_file
         file to which the cruft log will be written
     cookiecutter_config
@@ -391,6 +391,8 @@ def _apply_update(
 
         # run in a subprocess, otherwise not possible to capture output of post-run hooks
         with cruft_log_file.open("w") as log_f:
+            # Do not specify --checkout to point to a specific tag.
+            # The correct version is already checked out in `template_dir`
             cmd = [
                 sys.executable,
                 "-m",
@@ -531,7 +533,9 @@ def template_update(
             tmp_config = json.load(f)
             exclude_files = tmp_config["context"]["cookiecutter"].get("_exclude_on_template_update", [])
 
-        # Update .cruft.json with current tag and commit hash
+        # Update .cruft.json with current tag and commit hash.
+        # This is necessary since we don't run `cruft create` with `--checkout`
+        # and `template_dir` contains the correct version with an additional patch-commit (see `download_template`).
         tmp_config["commit"] = release.commit
         tmp_config["checkout"] = release.tag_name
         tmp_config["context"]["_commit"] = release.commit
