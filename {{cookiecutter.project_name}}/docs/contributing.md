@@ -48,7 +48,7 @@ hatch run docs:build  # defined in the table [tool.hatch.envs.docs]
 
 ### VS Code
 
-If you are using VScode, install the [hatch-code][] extension.
+If you are using VS code, install the [hatch-code][] extension.
 Additionally, make sure that the `vscode-python-environments` extension is installed (should be by default)
 and `"python.useEnvironmentsExtension": true` is activated in your `settings.json`.
 
