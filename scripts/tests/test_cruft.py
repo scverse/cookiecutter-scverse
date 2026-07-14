@@ -77,7 +77,7 @@ def current_repo_path() -> Path:
 @pytest.mark.parametrize("tag_name", ["v0.4.0", "v0.2.17"])
 def test_get_template_release(bot_con: GitHubConnection, tag_name: str) -> None:
     """Test if reference to release can be obtained"""
-    release = get_template_release(bot_con.gh, tag_name)
+    release = get_template_release(bot_con.gh, "https://github.com/scverse/cookiecutter-scverse", tag_name)
     assert release.tag_name == tag_name
 
 
