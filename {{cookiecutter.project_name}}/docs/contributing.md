@@ -46,11 +46,21 @@ hatch test  # defined in the table [tool.hatch.envs.hatch-test] in pyproject.tom
 hatch run docs:build  # defined in the table [tool.hatch.envs.docs]
 ```
 
-When using an IDE such as VS Code,
-you’ll have to point the editor at the paths to the virtual environments manually.
-The environment you typically want to use as your main development environment is the `hatch-test`
-environment with the latest Python version.
+### VScode
 
+If you are using VScode, install the [hatch-code][] extension.
+Additionally, make sure that the `vscode-python-environments` extension is installed
+and `"python.useEnvironmentsExtension": true` is activated in your `settings.json` (both should be the default).
+
+Next, open the "Python Environment Managers" sidebar.
+You can do so by opening the command palette (Ctrl+Shift+P) and searching for `Python: Focus on Environment Managers View`.
+It will show a collapsible list where you can expand "Hatch"
+and activate an environment by clicking on the checkmark next to it.
+As the main development environment, we recommend to use `hatch-test` with the latest supported Python version.
+
+### Other IDEs
+
+For other IDEs, you’ll have to point the editor at the paths to the virtual environments manually.
 To get a list of all environments for your projects, run
 
 ```bash
@@ -74,6 +84,7 @@ This will list “Standalone” environments and a table of “Matrix” environ
 ```
 
 From the `Envs` column, select the environment name you want to use for development.
+As the main development environment, we recommend to use `hatch-test` with the latest supported Python version.
 In this example, it would be `hatch-test.py3.14-stable`.
 
 Next, create the environment with
@@ -82,11 +93,7 @@ Next, create the environment with
 hatch env create hatch-test.py3.14-stable
 ```
 
-If you are using VScode, install the [hatch-code][] extension.
-Now, open the command palette (Ctrl+Shift+P) and search for `Python: Select Interpreter`.
-Choose `hatch-test.py3.14-stable` (or your preferred environment) from the dropdown list.
-
-For other IDEs, you can obtain the path to the virtual environments using
+Then, obtain the path to the environment using
 
 ```bash
 hatch env find hatch-test.py3.14-stable
