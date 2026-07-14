@@ -49,8 +49,8 @@ hatch run docs:build  # defined in the table [tool.hatch.envs.docs]
 ### VScode
 
 If you are using VScode, install the [hatch-code][] extension.
-Additionally, make sure that the `vscode-python-environments` extension is installed
-and `"python.useEnvironmentsExtension": true` is activated in your `settings.json` (both should be the default).
+Additionally, make sure that the `vscode-python-environments` extension is installed (should be by default)
+and `"python.useEnvironmentsExtension": true` is activated in your `settings.json`.
 
 Next, open the "Python Environment Managers" sidebar.
 You can do so by opening the command palette (Ctrl+Shift+P) and searching for `Python: Focus on Environment Managers View`.
