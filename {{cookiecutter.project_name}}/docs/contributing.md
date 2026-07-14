@@ -193,12 +193,8 @@ This package uses [pytest][] for automated testing.
 Please write {doc}`scanpy:dev/testing` for every function added to the package.
 
 Most IDEs integrate with pytest and provide a GUI to run tests.
-Just point yours to one of the environments returned by
-
-```bash
-hatch env create hatch-test  # create test environments for all supported versions
-hatch env find hatch-test  # list all possible test environment paths
-```
+If you set up your virtual environments as described in [installing dev dependencies](#installing-dev-dependencies),
+test cases should be automatically discovered by your IDE.
 
 Alternatively, you can run all tests from the command line by executing
 
