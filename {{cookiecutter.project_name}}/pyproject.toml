@@ -49,6 +49,7 @@ doc = [
   "ipython",
   "myst-nb>=1.1",
   "pandas",
+  "scverse-misc[sphinx]>=0.1.2",
   "sphinx>=8.1",
   "sphinx-autodoc-typehints",
   "sphinx-book-theme>=1",
