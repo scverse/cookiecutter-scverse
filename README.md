@@ -37,6 +37,7 @@ Please consider making a tax-deductible [donation](https://numfocus.org/donate-t
 - documentation hosted by [readthedocs][]
 - coverage tests with [codecov][]
 - [pre-commit][] checks for code style and consistency (run with [prek][])
+- optional static type checking with [mypy][]
 - tutorials with [myst-nb][] and jupyter notebooks
 - issue templates for better bug reports and feature requests
 
@@ -86,9 +87,8 @@ Your repository is now ready. However, to use all features of the template you w
 online services. Clicking on the links will take you to the respective sections of the developer documentation.
 The developer documentation is also shipped as part of the template in `docs/template_usage.md`.
 
-1.  [pre-commit.ci][setup-pre-commit] to check for inconsistencies and to enforce a code style
-2.  [readthedocs.org][setup-rtd] to build and host documentation
-3.  [codecov][setup-codecov] to generate test coverage reports
+1.  [readthedocs.org][setup-rtd] to build and host documentation
+2.  [codecov][setup-codecov] to generate test coverage reports
 
 All CI checks should pass, you are ready to start developing your new tool!
 
@@ -127,7 +127,6 @@ You can cite the scverse publication as follows:
 
 <!-- links -->
 
-[setup-pre-commit]: https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html#pre-commit-checks
 [setup-rtd]: https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html#documentation-on-readthedocs
 [setup-codecov]: https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html#coverage-tests-with-codecov
 [write-tests]: https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html#writing-tests
@@ -136,6 +135,7 @@ You can cite the scverse publication as follows:
 [myst-nb]: https://myst-nb.readthedocs.io/
 [pre-commit]: https://pre-commit.com/
 [prek]: https://prek.j178.dev/
+[mypy]: https://mypy.readthedocs.io/
 [scverse]: https://scverse.org/
 [anndata]: https://anndata.scverse.org/
 [mudata]: https://muon.readthedocs.io/page/notebooks/quickstart_mudata.html

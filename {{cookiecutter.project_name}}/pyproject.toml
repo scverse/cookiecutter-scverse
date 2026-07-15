@@ -33,6 +33,7 @@ urls.Source = "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter
 
 [dependency-groups]
 dev = [
+  "mypy",
   "prek",
   "twine>=4.0.2",
 ]
@@ -119,6 +120,9 @@ lint.per-file-ignores."*/__init__.py" = [ "F401" ]
 lint.per-file-ignores."docs/*" = [ "I" ]
 lint.per-file-ignores."tests/*" = [ "D" ]
 lint.pydocstyle.convention = "numpy"
+
+[tool.mypy]
+ignore_missing_imports = true
 
 [tool.pytest]
 addopts = [
