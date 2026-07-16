@@ -41,8 +41,8 @@ Choose from the options below to install {{ cookiecutter.project_name }}:
 1. Install the latest development version
 
    ```bash
-   # (or `uv add`)
    pip install git+https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}.git
+   # (or `uv add`)
    ```
 
 ## Release notes
