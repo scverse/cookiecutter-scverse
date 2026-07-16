@@ -12,13 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write # for stefanzweifel/git-auto-commit-action
-    if: ${{ github.actor == 'pre-commit-ci[bot]' }} # zizmor: ignore[bot-conditions] push-triggered (not pull_request_target), so github.actor is the actual pusher and cannot be spoofed via PR history
+    if: ${{ github.actor == 'pre-commit-ci[bot]' }} # zizmor: ignore[bot-conditions] -- action does not run in privileged context (e.g. pull_request_target) and does not execute any user-provided code
     steps:
       - name: Generate tokens
         id: app-token
         uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         with:
-          app-id: ${{ vars.PR_CREATOR_APP_ID }}
+          client-id: ${{ vars.PR_CREATOR_APP_ID }}
           private-key: ${{ secrets.PR_CREATOR_PRIVATE_KEY }}
           permission-contents: write
 
