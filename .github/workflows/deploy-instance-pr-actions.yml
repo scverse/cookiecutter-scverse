@@ -13,14 +13,16 @@ jobs:
     steps:
       - name: Generate tokens
         id: app-token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         with:
           app-id: ${{ vars.PR_CREATOR_APP_ID }}
           private-key: ${{ secrets.PR_CREATOR_PRIVATE_KEY }}
           repositories: cookiecutter-scverse-instance
 
       - name: Authenticate gh CLI with app token
-        run: echo "${{ steps.app-token.outputs.token }}" | gh auth login --with-token
+        run: echo "${STEPS_APP_TOKEN_OUTPUTS_TOKEN}" | gh auth login --with-token
+        env:
+          STEPS_APP_TOKEN_OUTPUTS_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Define sister PR branch name
         run: |

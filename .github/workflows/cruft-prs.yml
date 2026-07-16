@@ -12,23 +12,26 @@ jobs:
   cruft-prs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
       - name: Set git identity
         run: |
           git config --global user.name "scverse-bot"
           git config --global user.email "108668866+scverse-bot@users.noreply.github.com"
       - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
         with:
           cache-dependency-glob: scripts/pyproject.toml
+          enable-cache: false
       - name: Update template repo registry
-        run: uvx --from ./scripts send-cruft-prs ${{ env.RELEASE }} --all_repos --log-dir log
+        run: uvx --from ./scripts send-cruft-prs ${RELEASE} --all_repos --log-dir log
         env:
           RELEASE: ${{ github.event_name == 'release' && github.event.release.tag_name || github.event.inputs.release }}
           GITHUB_TOKEN: ${{ secrets.SCVERSE_BOT_PRODUCTION_GITHUB_TOKEN }}
           FORCE_COLOR: "1"
           COLUMNS: "150"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always()
         with:
           name: cruft-logs
