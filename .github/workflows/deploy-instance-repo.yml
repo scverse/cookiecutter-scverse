@@ -49,6 +49,7 @@ jobs:
           repositories: cookiecutter-scverse-instance
           permission-contents: write
           permission-pull-requests: write
+          permission-workflows: write # required to update files in .github/workflows
 
       - name: Authenticate gh CLI with app token
         run: echo "${STEPS_APP_TOKEN_OUTPUTS_TOKEN}" | gh auth login --with-token
