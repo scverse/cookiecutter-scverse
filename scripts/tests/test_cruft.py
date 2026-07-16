@@ -77,7 +77,7 @@ def current_repo_path() -> Path:
 @pytest.mark.parametrize("tag_name", ["v0.4.0", "v0.2.17"])
 def test_get_template_release(bot_con: GitHubConnection, tag_name: str) -> None:
     """Test if reference to release can be obtained"""
-    release = get_template_release(bot_con.gh, tag_name)
+    release = get_template_release(bot_con.gh, "https://github.com/scverse/cookiecutter-scverse", tag_name)
     assert release.tag_name == tag_name
 
 
@@ -105,10 +105,9 @@ def test_apply_update(clone: Repo, current_repo_path: Path, tmp_path: Path) -> N
     log_file = tmp_path / "cruft_log.txt"
     _apply_update(
         clone,
-        template_tag_name=None,
         cruft_log_file=log_file,
         cookiecutter_config={"project_name": "cookiecutter-scverse-instance"},
-        template_url=str(current_repo_path),
+        template_dir=str(current_repo_path),
     )
 
 

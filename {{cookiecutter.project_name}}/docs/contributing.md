@@ -46,11 +46,21 @@ hatch test  # defined in the table [tool.hatch.envs.hatch-test] in pyproject.tom
 hatch run docs:build  # defined in the table [tool.hatch.envs.docs]
 ```
 
-When using an IDE such as VS Code,
-you’ll have to point the editor at the paths to the virtual environments manually.
-The environment you typically want to use as your main development environment is the `hatch-test`
-environment with the latest Python version.
+### VS Code
 
+If you are using VS code, install the [hatch-code][] extension.
+Additionally, make sure that the `vscode-python-environments` extension is installed (should be by default)
+and `"python.useEnvironmentsExtension": true` is activated in your `settings.json`.
+
+Next, open the "Python Environment Managers" sidebar.
+You can do so by opening the command palette (Ctrl+Shift+P) and searching for `Python: Focus on Environment Managers View`.
+It will show a collapsible list where you can expand "Hatch"
+and activate an environment by clicking on the checkmark next to it.
+As the main development environment, we recommend to use `hatch-test` with the latest supported Python version.
+
+### Other IDEs
+
+For other IDEs, you’ll have to point the editor at the paths to the virtual environments manually.
 To get a list of all environments for your projects, run
 
 ```bash
@@ -63,7 +73,7 @@ This will list “Standalone” environments and a table of “Matrix” environ
 +------------+---------+--------------------------+----------+---------------------------------+-------------+
 | Name       | Type    | Envs                     | Features | Dependencies                    | Scripts     |
 +------------+---------+--------------------------+----------+---------------------------------+-------------+
-| hatch-test | virtual | hatch-test.py3.11-stable | dev      | coverage-enable-subprocess==1.0 | cov-combine |
+| hatch-test | virtual | hatch-test.py3.12-stable | dev      | coverage-enable-subprocess==1.0 | cov-combine |
 |            |         | hatch-test.py3.14-stable | test     | coverage[toml]~=7.4             | cov-report  |
 |            |         | hatch-test.py3.14-pre    |          | pytest-mock~=3.12               | run         |
 |            |         |                          |          | pytest-randomly~=3.15           | run-cov     |
@@ -74,6 +84,7 @@ This will list “Standalone” environments and a table of “Matrix” environ
 ```
 
 From the `Envs` column, select the environment name you want to use for development.
+As the main development environment, we recommend to use `hatch-test` with the latest supported Python version.
 In this example, it would be `hatch-test.py3.14-stable`.
 
 Next, create the environment with
@@ -88,10 +99,8 @@ Then, obtain the path to the environment using
 hatch env find hatch-test.py3.14-stable
 ```
 
-In case you are using VScode, now open the command palette (Ctrl+Shift+P) and search for `Python: Select Interpreter`.
-Choose `Enter Interpreter Path` and paste the path to the virtual environment from above.
+and manually point it to the python binary.
 
-In this future, this may become easier through a hatch vscode extension.
 
 ::::
 
@@ -134,6 +143,7 @@ The `.venv` directory is typically automatically discovered by IDEs such as VS C
 :::::
 
 [hatch environments]: https://hatch.pypa.io/latest/tutorials/environment/basic-usage/
+[hatch-code]: https://marketplace.visualstudio.com/items?itemName=PyPA.hatch
 [uv]: https://docs.astral.sh/uv/
 
 ## Code-style
@@ -183,12 +193,8 @@ This package uses [pytest][] for automated testing.
 Please write {doc}`scanpy:dev/testing` for every function added to the package.
 
 Most IDEs integrate with pytest and provide a GUI to run tests.
-Just point yours to one of the environments returned by
-
-```bash
-hatch env create hatch-test  # create test environments for all supported versions
-hatch env find hatch-test  # list all possible test environment paths
-```
+If you set up your virtual environments as described in [installing dev dependencies](#installing-dev-dependencies),
+test cases should be automatically discovered by your IDE.
 
 Alternatively, you can run all tests from the command line by executing
 
