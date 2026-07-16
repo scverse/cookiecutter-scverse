@@ -141,6 +141,20 @@ There you can see the execution history, logs, and (re-)trigger workflows manual
 [Github Actions]: https://github.com/features/actions
 [twine]: https://github.com/pypa/twine
 
+(dependabot)=
+
+## Dependabot
+
+[Dependabot][] automatically opens pull requests to keep the actions used in your [GitHub Actions](#github-actions) workflows up to date.
+It is configured in `.github/dependabot.yml`.
+
+Dependabot is enabled by default and does not require any additional setup, though you should review and merge its pull requests regularly.
+Since actions in the workflows are pinned to a specific commit SHA rather than a version tag,
+Dependabot's pull requests are the main way to keep these pinned versions current.
+The [zizmor](#pre-commit) pre-commit hook checks that every action remains pinned like this.
+
+[Dependabot]: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/about-dependabot-version-updates
+
 (automating-the-pypi-release-using-github-actions)=
 (automating-pypi-released-using-github-actions)=
 (configuring-the-github-workflow)=
@@ -234,6 +248,19 @@ The following pre-commit hooks are for errors and inconsistencies:
       checks for blind, catch-all `except` statements.
     - [Ruff-specific rules](https://beta.ruff.rs/docs/rules/#ruff-specific-rules-ruf) (rule category: `RUF`):
         - `RUF100`: remove unnecessary `# noqa` comments ()
+
+The following pre-commit hook checks the security of your [GitHub Actions](#github-actions) workflows:
+
+- [zizmor][]: a static analysis tool that audits GitHub Actions workflows (and the `.github/dependabot.yml` configuration) for security issues,
+  such as unpinned or outdated actions, overly broad `permissions:`, and script/template injection vulnerabilities.
+  It runs with `--fix` so that some findings are corrected automatically;
+  the remaining findings are reported as errors and need to be addressed manually.
+  See the [zizmor audits documentation][zizmor-audits] for an explanation of each finding,
+  and the [usage guide][zizmor-ignoring] for how to ignore a finding you've deemed a false positive or an accepted risk.
+
+[zizmor]: https://zizmor.sh
+[zizmor-audits]: https://docs.zizmor.sh/audits/
+[zizmor-ignoring]: https://docs.zizmor.sh/usage/#ignoring-results
 
 ### How to add or remove pre-commit checks
 
