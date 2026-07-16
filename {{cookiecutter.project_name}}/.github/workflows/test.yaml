@@ -12,6 +12,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   # Get the test environment from hatch as defined in pyproject.toml.
   # This ensures that the pyproject.toml is the single point of truth for test definitions and the same tests are
@@ -20,6 +22,8 @@ jobs:
   # more details.
   get-environments:
     runs-on: ubuntu-slim
+    permissions:
+      contents: read # for actions/checkout
     outputs:
       envs: ${{ steps.get-envs.outputs.envs }}
     steps:

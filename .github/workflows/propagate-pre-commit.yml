@@ -5,10 +5,14 @@ on:
     branches:
       - pre-commit-ci-update-config
 
+permissions: {}
+
 jobs:
   update:
     runs-on: ubuntu-latest
-    if: ${{ github.actor == 'pre-commit-ci[bot]' }}
+    permissions:
+      contents: write # for stefanzweifel/git-auto-commit-action
+    if: ${{ github.actor == 'pre-commit-ci[bot]' }} # zizmor: ignore[bot-conditions] push-triggered (not pull_request_target), so github.actor is the actual pusher and cannot be spoofed via PR history
     steps:
       - name: Generate tokens
         id: app-token
@@ -16,11 +20,12 @@ jobs:
         with:
           app-id: ${{ vars.PR_CREATOR_APP_ID }}
           private-key: ${{ secrets.PR_CREATOR_PRIVATE_KEY }}
+          permission-contents: write
 
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           token: ${{ steps.app-token.outputs.token }}
-          persist-credentials: false
+          persist-credentials: true # used by push action
       - run: pipx install prek
         # need to explicitly specify config file since prek ignores cookiecutter directories by default: https://github.com/j178/prek/issues/1044
       - run: cd '{{cookiecutter.project_name}}' && prek autoupdate -c .pre-commit-config.yaml

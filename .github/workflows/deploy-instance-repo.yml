@@ -5,9 +5,14 @@ on:
   push:
     branches: [main]
 
+permissions: {}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # for actions/checkout
+      pull-requests: write # for mshick/add-pr-comment
 
     env:
       PYTHON_VERSION: "3.14"
@@ -42,6 +47,8 @@ jobs:
           app-id: ${{ vars.PR_CREATOR_APP_ID }}
           private-key: ${{ secrets.PR_CREATOR_PRIVATE_KEY }}
           repositories: cookiecutter-scverse-instance
+          permission-contents: write
+          permission-pull-requests: write
 
       - name: Authenticate gh CLI with app token
         run: echo "${STEPS_APP_TOKEN_OUTPUTS_TOKEN}" | gh auth login --with-token
