@@ -55,6 +55,7 @@ PR_BODY_TEMPLATE = """\
 * If there are **merge conflicts**, you need to resolve them manually.
 * The scverse template works best when the [pre-commit.ci][], [readthedocs][] and [codecov][] services are enabled.
   Make sure to activate those apps if you haven't already.
+* If you have questions on the template sync, feel free to tag @grst or reach out on scverse.zulipchat.com.
 
 [`template-repos.yml`]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
 [pre-commit.ci]: {template_usage}#pre-commit-ci
