@@ -52,11 +52,17 @@ PR_BODY_TEMPLATE = """\
 * **unsubscribe**: If you don’t want to receive these PRs in the future,
   add `skip: true` to [`template-repos.yml`][] using a PR or,
   if you never want to sync from the template again, delete the `.cruft.json` file in the root of your repository.
-* If there are **merge conflicts**, you need to resolve them manually.
+* If there are **merge conflicts**, you can resolve them manually, or let an AI coding
+  agent do it for you: assign a coding agent (e.g. GitHub Copilot) to this PR and point
+  it at the [conflict-resolution skill][] with a prompt like *"Resolve the merge conflicts
+  in this PR by following {skill_url}"*. The skill adopts the template's updates while
+  preserving the deviations your project made on purpose. You can also run it locally with
+  Claude Code.
 * The scverse template works best when the [pre-commit.ci][], [readthedocs][] and [codecov][] services are enabled.
   Make sure to activate those apps if you haven't already.
 
 [`template-repos.yml`]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
+[conflict-resolution skill]: {skill_url}
 [pre-commit.ci]: {template_usage}#pre-commit-ci
 [readthedocs]: {template_usage}#documentation-on-readthedocs
 [codecov]: {template_usage}#coverage-tests-with-codecov
@@ -198,6 +204,11 @@ class TemplateUpdatePR:
         body = PR_BODY_TEMPLATE.format(
             release=self.release,
             template_usage="https://cookiecutter-scverse-instance.readthedocs.io/page/template_usage.html",
+            skill_url=(
+                "https://github.com/scverse/cookiecutter-scverse/blob/"
+                f"{self.release.tag_name}"
+                "/.claude/skills/scverse-template-resolve-conflicts/SKILL.md"
+            ),
         )
         return _escape_github_mentions(body)
 

@@ -404,8 +404,13 @@ a pull request is opened in every repository listed there.
 This helps keeping the repository up-to-date with the latest coding standards.
 
 It may happen that a template sync results in a merge conflict.
-In that case, you need to resolve the merge conflicts manually,
+In that case, you can resolve the merge conflicts manually,
 either using the GitHub UI, or in your favorite editor.
+Alternatively, you can let an AI coding agent do it for you:
+the template-update PR links a conflict-resolution skill that adopts the template's updates
+while preserving the deviations your project made on purpose.
+Assign a coding agent (e.g. GitHub Copilot) to the PR and point it at that skill,
+or run it locally with [Claude Code][].
 
 :::{tip}
 The following hints may be useful to work with the template sync:
@@ -419,6 +424,7 @@ The following hints may be useful to work with the template sync:
 
 [list of template repositories]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
 [scverse-bot]: https://github.com/scverse-bot
+[claude code]: https://claude.com/claude-code
 
 ### Manual template sync
 

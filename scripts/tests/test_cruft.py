@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import TYPE_CHECKING
+from types import SimpleNamespace
+from typing import TYPE_CHECKING, cast
 
 import pytest
 from git.repo.base import Repo
@@ -10,6 +11,7 @@ from github.Repository import Repository
 
 from scverse_template_scripts.cruft_prs import (
     GitHubConnection,
+    TemplateUpdatePR,
     _apply_update,
     _clone_and_prepare_repo,
     _commit_update,
@@ -24,6 +26,8 @@ if TYPE_CHECKING:
 
     from git import Repo
     from github.Repository import Repository
+
+    from scverse_template_scripts.cruft_prs import TemplateRelease
 
 
 @pytest.fixture
@@ -183,6 +187,30 @@ def test_commit_update_no_files(clone: Repo) -> None:
 )
 def test_escape_github_mentions(input_text: str, expected: str) -> None:
     assert _escape_github_mentions(input_text) == expected
+
+
+def test_pr_body_links_conflict_skill_pinned_to_tag() -> None:
+    """The PR body points maintainers/agents at the conflict-resolution skill, pinned to the release tag."""
+    release = cast(
+        "TemplateRelease",
+        SimpleNamespace(
+            tag_name="v0.9.9",
+            html_url="https://github.com/scverse/cookiecutter-scverse/releases/tag/v0.9.9",
+            body="* Some change by @grst in https://github.com/scverse/cookiecutter-scverse/pull/1",
+        ),
+    )
+    pr = TemplateUpdatePR(con=cast("GitHubConnection", None), release=release, repo_id="scverse-foo")
+
+    body = pr.body
+
+    skill_url = (
+        "https://github.com/scverse/cookiecutter-scverse/blob/v0.9.9"
+        "/.claude/skills/scverse-template-resolve-conflicts/SKILL.md"
+    )
+    assert skill_url in body
+    # the skill link is pinned to the release tag, not to a moving branch
+    assert "cookiecutter-scverse/blob/main/.claude" not in body
+    assert "[conflict-resolution skill]:" in body
 
 
 @pytest.mark.xfail(
