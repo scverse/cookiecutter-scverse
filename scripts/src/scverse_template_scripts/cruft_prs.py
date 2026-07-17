@@ -44,8 +44,6 @@ if TYPE_CHECKING:
 PR_BODY_TEMPLATE = """\
 `cookiecutter-scverse` released [{release.tag_name}]({release.html_url}).
 
-## Changes
-
 {release.body}
 
 ## Additional remarks
