@@ -538,6 +538,7 @@ def template_update(
         # and `template_dir` contains the correct version with an additional patch-commit (see `download_template`).
         tmp_config["commit"] = release.commit
         tmp_config["checkout"] = release.tag_name
+        tmp_config["template"] = release.template_url
         tmp_config["context"]["_commit"] = release.commit
         tmp_config["context"]["_template"] = release.template_url
         with (clone_dir / ".cruft.json").open("w") as f:
