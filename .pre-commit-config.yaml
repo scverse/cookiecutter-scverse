@@ -27,3 +27,4 @@ repos:
     hooks:
       - id: zizmor
         args: [--no-progress, --fix]
+        exclude: '\{\{cookiecutter\.project_name\}\}'
