@@ -71,7 +71,7 @@ def elaborate_example(
             msg = f"Item {item} matrix is not a NumPy array but of type {matrix.__class__}."
             raise ValueError(msg)
 
-        result.append(transform(matrix.flatten()))
+        result.append(transform(matrix.flatten()))  # type: ignore[attr-defined]
 
         if len(result) >= max_items:
             break
