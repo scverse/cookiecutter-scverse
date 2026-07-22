@@ -239,7 +239,6 @@ The following pre-commit hooks are for errors and inconsistencies:
         - `RUF100`: remove unnecessary `# noqa` comments ()
 - [mypy][]:
   static type checker that verifies the type annotations of the package under `src/` and the `tests/`.
-  Type hints are optional: mypy only checks functions that carry annotations, so you can adopt typing gradually.
 
 The following pre-commit hook checks the security of your [GitHub Actions](#github-actions) workflows:
 
