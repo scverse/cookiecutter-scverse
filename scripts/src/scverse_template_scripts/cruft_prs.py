@@ -44,8 +44,6 @@ if TYPE_CHECKING:
 PR_BODY_TEMPLATE = """\
 `cookiecutter-scverse` released [{release.tag_name}]({release.html_url}).
 
-## Changes
-
 {release.body}
 
 ## Additional remarks
@@ -55,6 +53,7 @@ PR_BODY_TEMPLATE = """\
 * If there are **merge conflicts**, you need to resolve them manually.
 * The scverse template works best when the [pre-commit.ci][], [readthedocs][] and [codecov][] services are enabled.
   Make sure to activate those apps if you haven't already.
+* If you have questions on the template sync, feel free to tag @grst or reach out on scverse.zulipchat.com.
 
 [`template-repos.yml`]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
 [pre-commit.ci]: {template_usage}#pre-commit-ci
@@ -538,6 +537,7 @@ def template_update(
         # and `template_dir` contains the correct version with an additional patch-commit (see `download_template`).
         tmp_config["commit"] = release.commit
         tmp_config["checkout"] = release.tag_name
+        tmp_config["template"] = release.template_url
         tmp_config["context"]["_commit"] = release.commit
         tmp_config["context"]["_template"] = release.template_url
         with (clone_dir / ".cruft.json").open("w") as f:
