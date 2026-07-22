@@ -197,12 +197,6 @@ To run the checks locally, we recommend [prek][], a fast, drop-in replacement fo
 Install it (e.g. with `uv tool install prek`) and run `prek install` once to set up the git hook, then `prek run --all-files` to check the whole repository.
 
 
-### Pre-commit in continuous integration
-
-The checks also run on every push and pull request through the `Pre-commit checks` job of the `test.yaml` GitHub Actions workflow, so nothing slips through if a contributor forgets to install the git hook.
-This needs no external service or sign-up.
-
-
 ### Overview of pre-commit hooks used by the template
 
 The following pre-commit hooks are for code style and format:

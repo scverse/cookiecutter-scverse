@@ -22,7 +22,7 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
-  "anndata",
+  "anndata>=0.13.0",
   # for debug logging (referenced from the issue template)
   "session-info2",
 ]
@@ -120,9 +120,6 @@ lint.per-file-ignores."*/__init__.py" = [ "F401" ]
 lint.per-file-ignores."docs/*" = [ "I" ]
 lint.per-file-ignores."tests/*" = [ "D" ]
 lint.pydocstyle.convention = "numpy"
-
-[tool.mypy]
-ignore_missing_imports = true
 
 [tool.pytest]
 addopts = [

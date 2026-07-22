@@ -23,7 +23,7 @@ def basic_preproc(adata: AnnData) -> int:
 def elaborate_example(
     items: Iterable[AnnData],
     transform: Callable[[np.ndarray], str],
-    *,  # functions after the asterix are keyword-only arguments
+    *,  # arguments after the asterisk are keyword-only arguments
     layer_key: str | None = None,
     # Only specify defaults and types in the signature, not the docstring!
     max_items: int = 100,
@@ -66,7 +66,7 @@ def elaborate_example(
     result: list[str] = []
 
     for item in items:
-        matrix = item.X if not layer_key else item.layers[layer_key]
+        matrix = item.layers[layer_key]
         if not isinstance(matrix, np.ndarray):
             msg = f"Item {item} matrix is not a NumPy array but of type {matrix.__class__}."
             raise ValueError(msg)
