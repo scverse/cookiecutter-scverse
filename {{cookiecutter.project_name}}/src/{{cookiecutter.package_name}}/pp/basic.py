@@ -23,7 +23,7 @@ def basic_preproc(adata: AnnData) -> int:
 def elaborate_example(
     items: Iterable[AnnData],
     transform: Callable[[np.ndarray], str],
-    *,  # arguments after the asterisk are keyword-only arguments
+    *,  # arguments after the asterisk are keyword-only
     layer_key: str | None = None,
     # Only specify defaults and types in the signature, not the docstring!
     max_items: int = 100,
