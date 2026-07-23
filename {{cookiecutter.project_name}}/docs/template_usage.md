@@ -197,17 +197,6 @@ To run the checks locally, we recommend [prek][], a fast, drop-in replacement fo
 Install it (e.g. with `uv tool install prek`) and run `prek install` once to set up the git hook, then `prek run --all-files` to check the whole repository.
 
 
-### Pre-commit CI
-
-We recommend setting up [pre-commit.ci][] to enforce consistency checks on every commit and pull-request.
-
-To do so, head over to [pre-commit.ci][] and click "Sign In With GitHub".
-Follow the instructions to enable pre-commit.ci for your account or your organization.
-You may choose to enable the service for an entire organization or on a per-repository basis.
-
-Once authorized, pre-commit.ci should automatically be activated.
-
-
 ### Overview of pre-commit hooks used by the template
 
 The following pre-commit hooks are for code style and format:
@@ -248,6 +237,8 @@ The following pre-commit hooks are for errors and inconsistencies:
       checks for blind, catch-all `except` statements.
     - [Ruff-specific rules](https://beta.ruff.rs/docs/rules/#ruff-specific-rules-ruf) (rule category: `RUF`):
         - `RUF100`: remove unnecessary `# noqa` comments ()
+- [mypy][]:
+  static type checker that verifies the type annotations of the package under `src/` and the `tests/`.
 
 The following pre-commit hook checks the security of your [GitHub Actions](#github-actions) workflows:
 
@@ -327,10 +318,17 @@ If you want to add a code that comes from a tool other than Ruff,
 add it to Ruff’s [`external = [...]`][ruff-external] setting to prevent `RUF100` from removing it.
 ```
 
+#### mypy
+
+This template type-checks the package under `src/` and the `tests/` with [mypy][], configured through the `[tool.mypy]` entry in the `pyproject.toml`.
+Type hints are optional: mypy only checks functions that carry annotations, so untyped code is left untouched and you can adopt typing gradually.
+To cover other paths, adjust the `entry` and `files` of the `mypy` hook in the `.pre-commit-config.yaml`.
+To silence a specific line, append a `# type: ignore[<error-code>]` comment; to opt out of type checking entirely, remove the `mypy` hook.
+
 [biome]: https://biomejs.dev/
 [pre-commit]: https://pre-commit.com/
 [prek]: https://prek.j178.dev/
-[pre-commit.ci]: https://pre-commit.ci/
+[mypy]: https://mypy.readthedocs.io/
 [pyproject-fmt]: https://pyproject-fmt.readthedocs.io/
 [ruff]: https://docs.astral.sh/ruff/
 [ruff-config]: https://docs.astral.sh/ruff/configuration/

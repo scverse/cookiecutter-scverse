@@ -22,7 +22,7 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
-  "anndata",
+  "anndata>=0.13",
   # for debug logging (referenced from the issue template)
   "session-info2",
 ]
@@ -33,6 +33,7 @@ urls.Source = "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter
 
 [dependency-groups]
 dev = [
+  "mypy",
   "prek",
   "twine>=4.0.2",
 ]
