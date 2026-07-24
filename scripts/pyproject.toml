@@ -41,6 +41,10 @@ dev = [ "pytest" ]
 [tool.hatch]
 version.source = "vcs"
 version.fallback-version = "0.0"
+envs.hatch-check-fmt.dependencies = [ "prek" ]
+envs.hatch-check-fmt.scripts.format-fix = "prek run -a --group=format"
+envs.hatch-check-code.dependencies = [ "prek" ]
+envs.hatch-check-code.scripts.lint-fix = "prek run -a --no-group=format"
 
 [tool.ruff]
 line-length = 120
@@ -82,6 +86,7 @@ lint.ignore = [
   "S101",    # assert should be allowed
   "S311",    # we don’t need cryptographically secure RNG
   "S603",    # subprocess with shell=False should be allowed
+  "TID252",  # relative imports are allowed
 ]
 lint.unfixable = [
   "RUF001", # never “fix” “confusables”

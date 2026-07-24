@@ -52,7 +52,7 @@ jobs:
         run: |
           cd "$PROJECT_ROOT"
           git add .
-          hatch fmt -- --verbose --color=always --show-diff-on-failure
+          hatch check --fix -- --verbose --color=always --show-diff-on-failure
       - name: Install the package and check if it can be imported
         run: |
           cd "$PROJECT_ROOT"

@@ -28,7 +28,7 @@ To run tests or build the documentation locally, get familiar with [hatch enviro
 and see `[tool.hatch.envs.*]` in `pyproject.toml`:
 
 ```bash
-hatch fmt             # tool.hatch.envs.hatch-static-analysis
+hatch check --fix     # tool.hatch.envs.hatch-static-analysis
 hatch test            # tool.hatch.envs.hatch-test
 hatch run docs:build  # tool.hatch.envs.docs
 ```

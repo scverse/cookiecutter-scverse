@@ -33,7 +33,6 @@ urls.Source = "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter
 
 [dependency-groups]
 dev = [
-  "mypy",
   "twine>=4.0.2",
 ]
 test = [
@@ -58,6 +57,10 @@ doc = [
   "sphinxcontrib-katex",
   "sphinxext-opengraph",
 ]
+typecheck = [
+  "mypy",
+  # add any stub packages that you might need here
+]
 
 [tool.hatch]
 {% if cookiecutter.project_name.lower().replace("-", "_") != cookiecutter.package_name -%}
@@ -81,9 +84,15 @@ envs.hatch-test.overrides.matrix.deps.env-vars = [
   { value = "allow", key = "UV_PRERELEASE", if = [ "pre" ] },
 ]
 envs.hatch-test.dependency-groups = [ "dev", "test" ]
-envs.hatch-static-analysis.dependencies = [ "prek" ]
-envs.hatch-static-analysis.scripts.format-fix = "prek run -a --group=format"
-envs.hatch-static-analysis.scripts.lint-fix = "prek run -a --no-group=format"
+envs.hatch-check-fmt.dependencies = [ "prek" ]
+envs.hatch-check-fmt.scripts.format-fix = "prek run -a --group=format --no-group=typecheck"
+envs.hatch-check-code.dependencies = [ "prek" ]
+envs.hatch-check-code.scripts.lint-fix = "prek run -a --no-group=format --no-group=typecheck"
+envs.hatch-check-types.dependencies = [ "mypy" ]
+envs.hatch-check-types.scripts.check = [ "mypy" ]
+
+[tool.mypy]
+files = [ "src", "tests" ]
 
 [tool.ruff]
 line-length = 120

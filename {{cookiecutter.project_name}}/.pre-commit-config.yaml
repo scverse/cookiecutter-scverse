@@ -28,12 +28,13 @@ repos:
     hooks:
       - id: mypy
         name: mypy
-        entry: uv run --group test mypy src tests
+        entry: hatch check types
         language: system
         types: [python]
         files: ^(src|tests)/
         require_serial: true
         pass_filenames: false
+        groups: [typecheck]
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
