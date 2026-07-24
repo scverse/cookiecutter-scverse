@@ -158,7 +158,7 @@ See [pre-commit checks](template_usage.md#pre-commit-checks) for a full list of 
 To enable the checks locally, run
 
 ```bash
-hatch run hatch-static-analysis:prek install
+hatch run hatch-check-code:prek install
 # or
 uvx prek install
 ```
