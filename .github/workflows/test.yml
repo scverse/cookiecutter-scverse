@@ -42,7 +42,6 @@ jobs:
         run: sudo apt-get install pandoc
       - name: Install build & check dependencies
         run: |
-          uv tool install prek
           uv tool install cruft
           uv tool install hatch
       # Build
@@ -53,7 +52,7 @@ jobs:
         run: |
           cd "$PROJECT_ROOT"
           git add .
-          prek run --verbose --color=always --show-diff-on-failure --all-files
+          hatch fmt -- --verbose --color=always --show-diff-on-failure
       - name: Install the package and check if it can be imported
         run: |
           cd "$PROJECT_ROOT"

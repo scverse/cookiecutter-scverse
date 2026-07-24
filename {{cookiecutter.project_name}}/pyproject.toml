@@ -34,7 +34,6 @@ urls.Source = "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter
 [dependency-groups]
 dev = [
   "mypy",
-  "prek",
   "twine>=4.0.2",
 ]
 test = [
@@ -82,6 +81,9 @@ envs.hatch-test.overrides.matrix.deps.env-vars = [
   { value = "allow", key = "UV_PRERELEASE", if = [ "pre" ] },
 ]
 envs.hatch-test.dependency-groups = [ "dev", "test" ]
+envs.hatch-static-analysis.dependencies = [ "prek" ]
+envs.hatch-static-analysis.scripts.format-fix = "prek run -a --group=format"
+envs.hatch-static-analysis.scripts.lint-fix = "prek run -a --no-group=format"
 
 [tool.ruff]
 line-length = 120
