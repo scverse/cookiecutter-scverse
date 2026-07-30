@@ -23,7 +23,10 @@ __pycache__/
 /scripts/uv.lock
 
 # agents
-.claude
+# keep .claude/skills tracked (agent skills shipped with the template repo),
+# but ignore local/machine-specific Claude Code settings
+.claude/*
+!.claude/skills
 
 # repo-specific
 cruft_logs
