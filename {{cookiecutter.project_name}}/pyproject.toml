@@ -89,8 +89,8 @@ envs.hatch-check-fmt.dependencies = [ "prek" ]
 envs.hatch-check-fmt.scripts.format-fix = "prek run -a --group=format --no-group=typecheck"
 envs.hatch-check-code.dependencies = [ "prek" ]
 envs.hatch-check-code.scripts.lint-fix = "prek run -a --no-group=format --no-group=typecheck"
-envs.hatch-check-types.dependency-groups = [ "typecheck", "test" ]
 envs.hatch-check-types.scripts.check = [ "mypy" ]
+envs.hatch-check-types.dependency-groups = [ "typecheck", "test" ]
 
 [tool.ruff]
 line-length = 120
