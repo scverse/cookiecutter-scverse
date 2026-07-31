@@ -166,10 +166,14 @@ def test_commit_update_no_files(clone: Repo) -> None:
         ("@a contributed", "`@a` contributed"),
         # Realistic release notes
         (
-            "* Fix bug by @grst in https://github.com/scverse/cookiecutter-scverse/pull/1\n"
-            "* Add feature by @some-user in https://github.com/scverse/cookiecutter-scverse/pull/2",
-            "* Fix bug by `@grst` in https://github.com/scverse/cookiecutter-scverse/pull/1\n"
-            "* Add feature by `@some-user` in https://github.com/scverse/cookiecutter-scverse/pull/2",
+            (
+                "* Fix bug by @grst in https://github.com/scverse/cookiecutter-scverse/pull/1\n"
+                "* Add feature by @some-user in https://github.com/scverse/cookiecutter-scverse/pull/2"
+            ),
+            (
+                "* Fix bug by `@grst` in https://github.com/scverse/cookiecutter-scverse/pull/1\n"
+                "* Add feature by `@some-user` in https://github.com/scverse/cookiecutter-scverse/pull/2"
+            ),
         ),
         # Bot email should not be escaped
         ("108668866+scverse-bot@users.noreply.github.com", "108668866+scverse-bot@users.noreply.github.com"),
