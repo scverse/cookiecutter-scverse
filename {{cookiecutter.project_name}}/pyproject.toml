@@ -92,9 +92,6 @@ envs.hatch-check-code.scripts.lint-fix = "prek run -a --no-group=format --no-gro
 envs.hatch-check-types.dependencies = [ "mypy" ]
 envs.hatch-check-types.scripts.check = [ "mypy" ]
 
-[tool.mypy]
-files = [ "src", "tests" ]
-
 [tool.ruff]
 line-length = 120
 src = [ "src" ]
@@ -132,6 +129,9 @@ lint.per-file-ignores."*/__init__.py" = [ "F401" ]
 lint.per-file-ignores."docs/*" = [ "I" ]
 lint.per-file-ignores."tests/*" = [ "D" ]
 lint.pydocstyle.convention = "numpy"
+
+[tool.mypy]
+files = [ "src", "tests" ]
 
 [tool.pytest]
 addopts = [
