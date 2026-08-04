@@ -4,12 +4,14 @@ repos:
     rev: v2.5.5
     hooks:
       - id: biome-format
+        groups: [format]
   # Hooks that are run for scripts
   - repo: https://github.com/tox-dev/pyproject-fmt
     rev: v2.26.0
     hooks:
       - id: pyproject-fmt
         files: ^scripts/pyproject\.toml$
+        groups: [format]
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.16.0
     hooks:
@@ -18,6 +20,7 @@ repos:
         files: ^scripts/
       - id: ruff-format
         files: ^scripts/
+        groups: [format]
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.3
     hooks:

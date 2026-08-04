@@ -194,7 +194,7 @@ This template uses a number of pre-commit checks.
 In this section we'll detail what is used, where they're defined, and how to modify these checks.
 
 To run the checks locally, we recommend [prek][], a fast, drop-in replacement for `pre-commit` that reads the same `.pre-commit-config.yaml`.
-Install it (e.g. with `uv tool install prek`) and run `prek install` once to set up the git hook, then `prek run --all-files` to check the whole repository.
+Set up the git hook once by running `prek install` (e.g. `uvx prek install`), then `hatch check --fix` to format and check the whole repository.
 
 
 ### Overview of pre-commit hooks used by the template

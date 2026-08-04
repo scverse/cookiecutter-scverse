@@ -34,8 +34,6 @@ urls.Source = "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter
 
 [dependency-groups]
 dev = [
-  "mypy",
-  "prek",
   "twine>=4.0.2",
 ]
 test = [
@@ -60,6 +58,10 @@ doc = [
   "sphinxcontrib-katex",
   "sphinxext-opengraph",
 ]
+typecheck = [
+  "mypy",
+  "pandas-stubs",
+]
 
 [tool.hatch]
 {% if cookiecutter.project_name.lower().replace("-", "_") != cookiecutter.package_name -%}
@@ -83,6 +85,14 @@ envs.hatch-test.overrides.matrix.deps.env-vars = [
   { value = "allow", key = "UV_PRERELEASE", if = [ "pre" ] },
 ]
 envs.hatch-test.dependency-groups = [ "dev", "test" ]
+envs.hatch-check-fmt.dependencies = [ "prek" ]
+envs.hatch-check-fmt.scripts.format-check = "echo 'try `hatch check fmt --fix`'; false"
+envs.hatch-check-fmt.scripts.format-fix = "prek run -a --group=format --no-group=typecheck"
+envs.hatch-check-code.dependencies = [ "prek" ]
+envs.hatch-check-code.scripts.lint-check = "echo 'try `hatch check code --fix`'; false"
+envs.hatch-check-code.scripts.lint-fix = "prek run -a --no-group=format --no-group=typecheck"
+envs.hatch-check-types.scripts.check = [ "mypy" ]
+envs.hatch-check-types.dependency-groups = [ "typecheck", "test" ]
 
 [tool.ruff]
 line-length = 120
@@ -121,6 +131,9 @@ lint.per-file-ignores."*/__init__.py" = [ "F401" ]
 lint.per-file-ignores."docs/*" = [ "I" ]
 lint.per-file-ignores."tests/*" = [ "D" ]
 lint.pydocstyle.convention = "numpy"
+
+[tool.mypy]
+files = [ "src", "tests" ]
 
 [tool.pytest]
 addopts = [
