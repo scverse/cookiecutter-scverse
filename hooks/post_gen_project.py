@@ -34,10 +34,16 @@ msg = "Initialize project from cookiecutter-scverse"
 run(args=["git", "commit", "--no-verify", "--no-gpg-sign", "-m", msg], check=True)
 
 # Install the git hook (prefer prek, fall back to pre-commit)
-try:
-    run(["prek", "install"], check=True)
-except FileNotFoundError:
-    run(["pre-commit", "install"], check=True)
+exc = None
+for cmd in (["prek", "install"], ["hatch", "run", "hatch-check-code:prek", "install"], ["pre-commit", "install"]):
+    try:
+        run(cmd, check=True)
+        break
+    except FileNotFoundError as e:
+        if exc is None:
+            exc = e
+else:
+    raise exc
 
 # The following output was generated using rich
 # The formatted output is included here directly, because I don't want

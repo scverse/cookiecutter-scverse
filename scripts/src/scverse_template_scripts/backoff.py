@@ -16,8 +16,8 @@ def retry_with_backoff[T](
     backoff_in_seconds: int | float = 1,
     exc_cls: type = Exception,
 ) -> T:
-    exc = None
-    for x in range(retries):
+    exc: Exception | None = None
+    for x in range(retries or 1):
         try:
             return fn()
         except exc_cls as _exc:
@@ -25,4 +25,5 @@ def retry_with_backoff[T](
             sleep = backoff_in_seconds * 2**x + random.uniform(0, 1)
             log.info(f"Action failed. Retrying in {sleep}s.")
             time.sleep(sleep)
+    assert exc is not None
     raise exc
