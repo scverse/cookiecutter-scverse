@@ -42,6 +42,7 @@ jobs:
         run: sudo apt-get install pandoc
       - name: Install build & check dependencies
         run: |
+          uv tool install prek
           uv tool install cruft
           uv tool install hatch
       # Build
