@@ -5,7 +5,7 @@ requires = [ "hatch-vcs", "hatchling" ]
 [project]
 name = "scverse-template-scripts"
 description = "scripts for ecosystem package data"
-readme = "../README.md"
+readme = "README.md"
 license = "GPL-3.0"
 authors = [
   { name = "Philipp A.", email = "flying-sheep@web.de" },
