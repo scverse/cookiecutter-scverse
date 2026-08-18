@@ -143,11 +143,11 @@ strict = true
 testpaths = [ "tests" ]
 
 [tool.coverage]
+run.source = [ "{{ cookiecutter.package_name }}" ]
 run.omit = [
   "**/test_*.py",
 ]
 run.patch = [ "subprocess" ]
-run.source = [ "{{ cookiecutter.package_name }}" ]
 
 [tool.cruft]
 skip = [
