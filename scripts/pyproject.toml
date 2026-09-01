@@ -41,10 +41,10 @@ dev = [ "pytest" ]
 [tool.hatch]
 version.source = "vcs"
 version.fallback-version = "0.0"
-envs.hatch-check-fmt.dependencies = [ "prek" ]
-envs.hatch-check-fmt.scripts.format-fix = "prek run -a --group=format"
 envs.hatch-check-code.dependencies = [ "prek" ]
 envs.hatch-check-code.scripts.lint-fix = "prek run -a --no-group=format"
+envs.hatch-check-fmt.dependencies = [ "prek" ]
+envs.hatch-check-fmt.scripts.format-fix = "prek run -a --group=format"
 
 [tool.ruff]
 line-length = 120
