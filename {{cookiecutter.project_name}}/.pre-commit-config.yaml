@@ -13,7 +13,7 @@ repos:
         exclude: ^\.cruft\.json$ # inconsistent indentation with cruft - file never to be modified manually.
         groups: [format]
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: v2.29.0
+    rev: v2.29.2
     hooks:
       - id: pyproject-fmt
         groups: [format]
