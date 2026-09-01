@@ -7,7 +7,7 @@ repos:
         groups: [format]
   # Hooks that are run for scripts
   - repo: https://github.com/tox-dev/pyproject-fmt
-    rev: v2.29.0
+    rev: v2.29.2
     hooks:
       - id: pyproject-fmt
         files: ^scripts/pyproject\.toml$
