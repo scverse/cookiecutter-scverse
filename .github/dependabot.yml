@@ -1,5 +1,14 @@
 version: 2
 updates:
+  - package-ecosystem: pre-commit
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      pre-commit:
+        patterns: ["*"]
   - package-ecosystem: github-actions
     directories:
       - "/"
@@ -10,17 +19,5 @@ updates:
       default-days: 7
     groups:
       actions-deps:
-        patterns:
-          - "*"
-  - package-ecosystem: pre-commit
-    directories:
-      - "/"
-      - "/{{cookiecutter.project_name}}"
-    schedule:
-      interval: weekly
-    cooldown:
-      default-days: 7
-    groups:
-      pre-commit:
         patterns:
           - "*"
