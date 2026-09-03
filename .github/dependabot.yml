@@ -12,3 +12,15 @@ updates:
       actions-deps:
         patterns:
           - "*"
+  - package-ecosystem: pre-commit
+    directories:
+      - "/"
+      - "/{{cookiecutter.project_name}}"
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    groups:
+      pre-commit:
+        patterns:
+          - "*"

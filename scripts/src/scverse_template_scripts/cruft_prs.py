@@ -51,12 +51,12 @@ PR_BODY_TEMPLATE = """\
   add `skip: true` to [`template-repos.yml`][] using a PR or,
   if you never want to sync from the template again, delete the `.cruft.json` file in the root of your repository.
 * If there are **merge conflicts**, you need to resolve them manually.
-* The scverse template works best when the [pre-commit.ci][], [readthedocs][] and [codecov][] services are enabled.
+* The scverse template works best when the [autofix.ci][], [readthedocs][] and [codecov][] services are enabled.
   Make sure to activate those apps if you haven't already.
 * If you have questions on the template sync, feel free to tag @grst or reach out on scverse.zulipchat.com.
 
 [`template-repos.yml`]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
-[pre-commit.ci]: {template_usage}#pre-commit-ci
+[autofix.ci]: {template_usage}#autofix-ci
 [readthedocs]: {template_usage}#documentation-on-readthedocs
 [codecov]: {template_usage}#coverage-tests-with-codecov
 """

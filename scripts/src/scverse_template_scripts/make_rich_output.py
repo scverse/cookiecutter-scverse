@@ -6,7 +6,9 @@ import re
 from rich.console import Console
 from rich.markdown import Markdown
 
-dev_docs_url = "https://cookiecutter-scverse-instance.readthedocs.io/page/developer_docs.html"
+docs_url = "https://cookiecutter-scverse-instance.readthedocs.io/page"
+dev_docs_url = f"{docs_url}/template_usage.html"
+contrib_docs_url = f"{docs_url}/contributing.html"
 
 message = f"""\
 # Set-up online services
@@ -14,9 +16,9 @@ message = f"""\
 **Your repository is now ready.
 However, to use all features of the template you will need to set up the following online services.**
 Clicking on the links will take you to the respective sections of the developer documentation.
-The developer documentation is also shipped as part of the template in docs/developer_docs.md.
+The developer documentation is also shipped as part of the template in docs/template_usage.md.
 
-1.  [pre-commit.ci][setup-pre-commit] to check for inconsistencies and to enforce a code style
+1.  [autofix.ci][setup-autofix] to check for inconsistencies and to enforce a code style
 2.  [readthedocs.org][setup-rtd] to build and host documentation
 3.  [codecov][setup-codecov] to generate test coverage reports
 
@@ -46,12 +48,12 @@ We expect developers of scverse ecosystem packages to
 -   support users through github and the [scverse discourse][]
 
 [dev-docs]: {dev_docs_url}
-[setup-pre-commit]: {dev_docs_url}#pre-commit-checks
+[setup-autofix]: {dev_docs_url}#autofix-ci
 [setup-rtd]: {dev_docs_url}#documentation-on-readthedocs
 [setup-codecov]: {dev_docs_url}#coverage-tests-with-codecov
 [hatch-envs]: https://hatch.pypa.io/latest/tutorials/environment/basic-usage/
-[write-tests]: {dev_docs_url}#writing-tests
-[write-docs]: {dev_docs_url}#writing-documentation
+[write-tests]: {contrib_docs_url}#writing-tests
+[write-docs]: {contrib_docs_url}#writing-documentation
 [scverse discourse]: https://discourse.scverse.org/
 """
 

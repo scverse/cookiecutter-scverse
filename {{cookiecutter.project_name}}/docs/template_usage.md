@@ -135,6 +135,9 @@ This project comes with several pre-configured workflows that can be found in th
 3. **Release workflow**: Automatically publishes your package to PyPI when you create a new release on GitHub.
    This workflow uses trusted publishing for secure deployment.
 
+4. **Autofix workflow**: Runs the [pre-commit checks](#pre-commit-checks) on pull requests
+   and pushes the automatic fixes back to the pull request branch via [autofix.ci](#autofix-ci).
+
 To check the status of these workflows, go to the "Actions" tab in your GitHub repository.
 There you can see the execution history, logs, and (re-)trigger workflows manually if needed.
 
@@ -188,14 +191,24 @@ the project will be published only once you release your package for the first t
 
 ## Pre-commit checks
 
-[Pre-commit][] checks are fast programs that check code for errors, inconsistencies and code styles, before the code is committed.
+Pre-commit checks are fast programs that check code for errors, inconsistencies and code styles, before the code is committed.
+They are defined in `.pre-commit-config.yaml` and run with [prek][].
 
 This template uses a number of pre-commit checks.
 In this section we'll detail what is used, where they're defined, and how to modify these checks.
 
-To run the checks locally, we recommend [prek][], a fast, drop-in replacement for `pre-commit` that reads the same `.pre-commit-config.yaml`.
 Set up the git hook once by running `prek install` (e.g. `uvx prek install`), then `hatch check --fix` to format and check the whole repository.
 
+(autofix-ci)=
+
+### Set up autofix.ci
+
+[autofix.ci][] runs the same checks on every pull request and pushes the automatic fixes back to the pull request branch.
+To enable it, install the [autofix.ci app][] for your repository and follow the instructions there.
+Findings that cannot be fixed automatically are reported as a failing `Pre-commit checks` job.
+
+[autofix.ci]: https://autofix.ci/
+[autofix.ci app]: https://github.com/apps/autofix-ci
 
 ### Overview of pre-commit hooks used by the template
 
@@ -259,7 +272,7 @@ The [pre-commit checks](#pre-commit-checks) check for both correctness and styli
 In some cases it might overshoot and you may have good reasons to ignore certain warnings.
 This section shows you where these checks are defined, and how to enable/ disable them.
 
-#### pre-commit
+#### prek
 
 You can add or remove pre-commit checks by simply deleting relevant lines in the `.pre-commit-config.yaml` file under the repository root.
 Some pre-commit checks have additional options that can be specified either in the `pyproject.toml` (for [ruff][]) or tool-specific config files,
@@ -326,7 +339,6 @@ To cover other paths, adjust the `entry` and `files` of the `mypy` hook in the `
 To silence a specific line, append a `# type: ignore[<error-code>]` comment; to opt out of type checking entirely, remove the `mypy` hook.
 
 [biome]: https://biomejs.dev/
-[pre-commit]: https://pre-commit.com/
 [prek]: https://prek.j178.dev/
 [mypy]: https://mypy.readthedocs.io/
 [pyproject-fmt]: https://pyproject-fmt.readthedocs.io/
