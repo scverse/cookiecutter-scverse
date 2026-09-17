@@ -67,6 +67,7 @@ typecheck = [
 {% if cookiecutter.project_name.lower().replace("-", "_") != cookiecutter.package_name -%}
 build.targets.wheel.packages = [ "src/{{ cookiecutter.package_name }}" ]
 {% endif -%}
+build.targets.sdist.exclude = [ "/docs", "/tests" ]
 envs.default.installer = "uv"
 envs.default.dependency-groups = [ "dev" ]
 envs.docs.scripts.build = "sphinx-build -M html docs docs/_build -W {args}"
