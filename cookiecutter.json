@@ -16,7 +16,10 @@
         "Unlicense"
     ],
     "ide_integration": true,
-    "issue_categorization": ["labels", "issue types"],
+    "issue_categorization": [
+        "labels",
+        "issue types"
+    ],
     "_copy_without_render": [
         ".github/workflows/build.yaml",
         ".github/workflows/test.yaml",
@@ -35,7 +38,6 @@
         "tests/**"
     ],
     "_render_devdocs": false,
-    "_new_lines": "\n",
     "_jinja2_env_vars": {
         "lstrip_blocks": true,
         "trim_blocks": true
