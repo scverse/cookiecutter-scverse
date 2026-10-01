@@ -8,6 +8,21 @@ from subprocess import run
 Path("docs/template_usage.md").unlink()
 {% endif %}
 
+# Skip directories marked for skipping
+def skipped_dirs():
+    for toplevel in Path().iterdir():
+        if toplevel.name == ".git":
+            continue
+        if toplevel.name == "DELETE-ME":
+            yield toplevel
+        else:
+            yield from toplevel.rglob("DELETE-ME")
+
+
+for path in skipped_dirs():
+    assert path.is_dir(), path
+    shutil.rmtree(path)
+
 # Make initial commit
 # This will make template updates smoother, because like this we can rely on the first commit in the repo
 # being just the template without additional changes.

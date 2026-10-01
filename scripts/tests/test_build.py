@@ -56,6 +56,8 @@ def test_build(tmp_path: Path, params: Mapping[str, Any], path: Path | str, patt
         pattern = re.compile(pattern, re.MULTILINE)
         assert pattern.search(path.read_text())
 
+    assert not list(proj_dir.rglob("DELETE-ME"))
+
 
 def test_build_without_global_git_config(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Generation must succeed without a global/system git identity (see issue #389).
