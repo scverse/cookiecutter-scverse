@@ -20,6 +20,12 @@ jobs:
         os: [ubuntu-latest]
         # one that matches "project-name".lower().replace('-', '_'), one that doesn’t:
         package-name: [project_name, package_alt]
+        include:
+          # Windows only for the latest Python
+          - { os: windows-latest, python: "3.14", package-name: project_name }
+    defaults:
+      run:
+        shell: bash
     env:
       PROJECT_ROOT: project-name
 
@@ -60,7 +66,7 @@ jobs:
           uv run python -c "import ${{ matrix.package-name }}"
       # Docs
       - name: Build the documentation
-        if: matrix.python == '3.14'
+        if: matrix.python == '3.14' && matrix.os == 'ubuntu-latest'
         run: |
           cd "$PROJECT_ROOT"
           hatch run docs:build

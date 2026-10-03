@@ -35,6 +35,7 @@
         "tests/**"
     ],
     "_render_devdocs": false,
+    "_new_lines": "\n",
     "_jinja2_env_vars": {
         "lstrip_blocks": true,
         "trim_blocks": true
