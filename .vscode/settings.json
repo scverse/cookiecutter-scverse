@@ -1,0 +1,4 @@
+{
+    // keep ruff from indexing the jinja-templated pyproject.toml (no braces: they’re glob syntax)
+    "ruff.exclude": ["*cookiecutter.project_name*"]
+}

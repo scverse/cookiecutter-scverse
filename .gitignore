@@ -16,7 +16,6 @@ __pycache__/
 
 # IDEs
 /.idea/
-/.vscode/
 /.env
 
 # uv
