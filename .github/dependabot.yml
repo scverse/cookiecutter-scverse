@@ -1,7 +1,9 @@
 version: 2
 updates:
   - package-ecosystem: pre-commit
-    directory: /
+    directories:
+      - "/"
+      - "/{{cookiecutter.project_name}}"
     schedule:
       interval: weekly
     cooldown:
