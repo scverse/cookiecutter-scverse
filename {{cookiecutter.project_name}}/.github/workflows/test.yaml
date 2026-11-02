@@ -52,8 +52,8 @@ jobs:
   test:
     needs: get-environments
     permissions:
-       id-token: write  # for codecov OIDC
-       contents: read
+      id-token: write # for codecov OIDC
+      contents: read
 
     strategy:
       fail-fast: false
@@ -63,7 +63,7 @@ jobs:
 
     name: ${{ matrix.env.label }}
     runs-on: ${{ matrix.os }}
-    continue-on-error: ${{ contains(matrix.env.name, 'pre') }}  # make "all-green" pass even if pre-release job fails
+    continue-on-error: ${{ contains(matrix.env.name, 'pre') }} # make "all-green" pass even if pre-release job fails
     env:
       UV_PYTHON: ${{ matrix.env.python }}
 
@@ -102,6 +102,6 @@ jobs:
       - test
     runs-on: ubuntu-latest
     steps:
-        - uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe # v1.2.2
-          with:
-            jobs: ${{ toJSON(needs) }}
+      - uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe # v1.2.2
+        with:
+          jobs: ${{ toJSON(needs) }}
