@@ -172,7 +172,7 @@ To set this up, login to [PyPI][], and proceed depending on whether you already 
 - If yes, navigate to the project. In the left sidebar, choose "Publishing", then proceed to add the repository details.
 - If not, go to your [PyPI publishing settings][] and fill out the “Add a new pending publisher” form.
 
-Enter everything *exactly* as it is displayed on GitHub (i.e. use the correct casing for your repository name).
+Enter everything _exactly_ as it is displayed on GitHub (i.e. use the correct casing for your repository name).
 The "Workflow name" needs to bet set to `release.yaml`.
 Set "Environment name" to “pypi” to match `environment: pypi` in `.github/workflows/release.yaml`.
 For more details, please refer to the official [PyPI guide for setting up trusted publishing][trusted publisher].
@@ -182,7 +182,6 @@ the project will be published only once you release your package for the first t
 
 [github-releases]: https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases
 [pypi-trusted-publishing-guide]: https://docs.pypi.org/trusted-publishers/adding-a-publisher/
-
 [PyPI]: https://pypi.org/
 [PyPI publishing settings]: https://pypi.org/manage/account/publishing/
 [trusted publisher]: https://docs.pypi.org/trusted-publishers/
@@ -218,38 +217,38 @@ The following pre-commit hooks are for code style and format:
   code formatter for non-Python files (e.g. JSON).
 - [ruff][] formatting (`ruff-format`) which implements all rules of the also widely used [Black formatter](https://github.com/psf/black)
 - [ruff][] based checks:
-    - [isort](https://beta.ruff.rs/docs/rules/#isort-i) (rule category: `I`):
-      sort module imports into sections and types.
-    - [pydocstyle](https://beta.ruff.rs/docs/rules/#pydocstyle-d) (rule category: `D`):
-      pydocstyle extension of flake8.
-    - [flake8-tidy-imports](https://beta.ruff.rs/docs/rules/#flake8-tidy-imports-tid) (rule category: `TID`):
-      tidy module imports.
-    - [flake8-comprehensions](https://beta.ruff.rs/docs/rules/#flake8-comprehensions-c4) (rule category: `C4`):
-      write better list/set/dict comprehensions.
-    - [pyupgrade](https://beta.ruff.rs/docs/rules/#pyupgrade-up) (rule category: `UP`):
-      upgrade syntax for newer versions of the language.
+  - [isort](https://beta.ruff.rs/docs/rules/#isort-i) (rule category: `I`):
+    sort module imports into sections and types.
+  - [pydocstyle](https://beta.ruff.rs/docs/rules/#pydocstyle-d) (rule category: `D`):
+    pydocstyle extension of flake8.
+  - [flake8-tidy-imports](https://beta.ruff.rs/docs/rules/#flake8-tidy-imports-tid) (rule category: `TID`):
+    tidy module imports.
+  - [flake8-comprehensions](https://beta.ruff.rs/docs/rules/#flake8-comprehensions-c4) (rule category: `C4`):
+    write better list/set/dict comprehensions.
+  - [pyupgrade](https://beta.ruff.rs/docs/rules/#pyupgrade-up) (rule category: `UP`):
+    upgrade syntax for newer versions of the language.
 - [pyproject-fmt][] formats the `pyproject.toml` file in a consistent way.
 
 The following pre-commit hooks are for errors and inconsistencies:
 
 - [pre-commit-hooks](https://github.com/pre-commit/pre-commit-hooks): generic pre-commit hooks for text files.
-    - **detect-private-key**: checks for the existence of private keys.
-    - **check-ast**: check whether files parse as valid python.
-    - **end-of-file-fixer**: check files end in a newline and only a newline.
-    - **mixed-line-ending**: checks mixed line ending.
-    - **trailing-whitespace**: trims trailing whitespace.
-    - **check-case-conflict**: check files that would conflict with case-insensitive file systems.
+  - **detect-private-key**: checks for the existence of private keys.
+  - **check-ast**: check whether files parse as valid python.
+  - **end-of-file-fixer**: check files end in a newline and only a newline.
+  - **mixed-line-ending**: checks mixed line ending.
+  - **trailing-whitespace**: trims trailing whitespace.
+  - **check-case-conflict**: check files that would conflict with case-insensitive file systems.
 - [ruff][] based checks:
-    - [pyflakes](https://beta.ruff.rs/docs/rules/#pyflakes-f) (rule category: `F`):
-      various checks for errors.
-    - [pycodestyle](https://beta.ruff.rs/docs/rules/#pycodestyle-e-w) (rule category: `E`, `W`):
-      various checks for errors.
-    - [flake8-bugbear](https://beta.ruff.rs/docs/rules/#flake8-bugbear-b) (rule category: `B`):
-      find possible bugs and design issues in program.
-    - [flake8-blind-except](https://beta.ruff.rs/docs/rules/#flake8-blind-except-ble) (rule category: `BLE`):
-      checks for blind, catch-all `except` statements.
-    - [Ruff-specific rules](https://beta.ruff.rs/docs/rules/#ruff-specific-rules-ruf) (rule category: `RUF`):
-        - `RUF100`: remove unnecessary `# noqa` comments ()
+  - [pyflakes](https://beta.ruff.rs/docs/rules/#pyflakes-f) (rule category: `F`):
+    various checks for errors.
+  - [pycodestyle](https://beta.ruff.rs/docs/rules/#pycodestyle-e-w) (rule category: `E`, `W`):
+    various checks for errors.
+  - [flake8-bugbear](https://beta.ruff.rs/docs/rules/#flake8-bugbear-b) (rule category: `B`):
+    find possible bugs and design issues in program.
+  - [flake8-blind-except](https://beta.ruff.rs/docs/rules/#flake8-blind-except-ble) (rule category: `BLE`):
+    checks for blind, catch-all `except` statements.
+  - [Ruff-specific rules](https://beta.ruff.rs/docs/rules/#ruff-specific-rules-ruf) (rule category: `RUF`):
+    - `RUF100`: remove unnecessary `# noqa` comments ()
 - [mypy][]:
   static type checker that verifies the type annotations of the package under `src/` and the `tests/`.
 
@@ -456,29 +455,29 @@ Here's one way how to do it:
 2. Clone your repository a second time to `${REPO}_cookiecutterized`
 3. Initialize an empty repository from this cookiecutter template:
 
-    ```bash
-    mkdir template && cd template
-    uvx --with prek cruft create https://github.com/scverse/cookiecutter-scverse
-    ```
+   ```bash
+   mkdir template && cd template
+   uvx --with prek cruft create https://github.com/scverse/cookiecutter-scverse
+   ```
 
 4. remove everything from the existing repo
 
-    ```bash
-    cd ${REPO}_cookiecutterized
-    git switch -c cookiecutterize
-    git rm -r "*"
-    git add -A
-    git commit -m "clean repo"
-    ```
+   ```bash
+   cd ${REPO}_cookiecutterized
+   git switch -c cookiecutterize
+   git rm -r "*"
+   git add -A
+   git commit -m "clean repo"
+   ```
 
 5. move template over from generated folder
 
-    ```bash
-    # move everything, including hidden folders, excluding `.git`.
-    rsync -av --exclude='.git' ../template/$REPO/ ./
-    git add -A
-    git commit -m "init from template"
-    ```
+   ```bash
+   # move everything, including hidden folders, excluding `.git`.
+   rsync -av --exclude='.git' ../template/$REPO/ ./
+   git add -A
+   git commit -m "init from template"
+   ```
 
 6. Migrate your project: Move over files from `$REPO` to `${REPO}_cookiecutterized`.
    Omit files that are not needed anymore and manually merge files where required.
