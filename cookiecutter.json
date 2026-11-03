@@ -27,6 +27,7 @@
         "LICENSE",
         "README.md",
         "docs/api.md",
+        "docs/api/**",
         "docs/citation.md",
         "docs/index.md",
         "docs/installation.md",

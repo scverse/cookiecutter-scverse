@@ -158,6 +158,7 @@ skip = [
   "src/**/__init__.py",
   "src/**/basic.py",
   "docs/api.md",
+  "docs/api",
   "docs/changelog.md",
   "docs/references.bib",
   "docs/references.md",
