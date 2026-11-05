@@ -20,8 +20,8 @@ HERE = Path(__file__).parent
 @pytest.mark.parametrize(
     ("params", "path", "pattern"),
     [
-        pytest.param({}, "docs/conf.py", r'"github_repo": project,', id="no_gh_repo"),
-        pytest.param({"github_repo": "floob"}, "docs/conf.py", r'"github_repo": "floob",', id="gh_repo"),
+        pytest.param({}, "pyproject.toml", r'^urls\.Source = ".*/project-name"$', id="no_gh_repo"),
+        pytest.param({"github_repo": "floob"}, "pyproject.toml", r'^urls\.Source = ".*/floob"$', id="gh_repo"),
         pytest.param({}, ".vscode/extensions.json", r'"ms-python.python",', id="no_ide_integ"),
         pytest.param({"ide_integration": False}, ".vscode", None, id="ide_integ"),
         pytest.param({}, ".github/ISSUE_TEMPLATE/bug_report.yml", r"^labels: bug$", id="default_labels"),
