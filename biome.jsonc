@@ -6,6 +6,7 @@
         // don’t descend into ./{{cookiecutter.project_name}}/
         "includes": ["**", "!\\{*"],
     },
+    "markdown": { "parser": { "frontmatter": true } },
     "overrides": [
         {
             "includes": ["**/*.vscode*/*.json", "**/*.jsonc"],
