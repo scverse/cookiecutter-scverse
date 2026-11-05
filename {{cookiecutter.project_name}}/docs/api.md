@@ -1,9 +1,39 @@
 # API
 
-```{toctree}
-:maxdepth: 1
+## Preprocessing
 
-api/preprocessing.md
-api/tools.md
-api/plotting.md
+```{eval-rst}
+.. module:: {{ cookiecutter.package_name }}.pp
+.. currentmodule:: {{ cookiecutter.package_name }}
+
+.. autosummary::
+    :toctree: generated
+
+    pp.basic_preproc
+    pp.elaborate_example
+```
+
+## Tools
+
+```{eval-rst}
+.. module:: {{ cookiecutter.package_name }}.tl
+.. currentmodule:: {{ cookiecutter.package_name }}
+
+.. autosummary::
+    :toctree: generated
+
+    tl.basic_tool
+```
+
+## Plotting
+
+```{eval-rst}
+.. module:: {{ cookiecutter.package_name }}.pl
+.. currentmodule:: {{ cookiecutter.package_name }}
+
+.. autosummary::
+    :toctree: generated
+
+    pl.basic_plot
+    pl.BasicClass
 ```
