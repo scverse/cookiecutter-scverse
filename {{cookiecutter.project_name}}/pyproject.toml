@@ -48,7 +48,7 @@ doc = [
   "ipykernel",
   "ipython",
   "pandas",
-  "scverse-doc[full]>=0.4",
+  "scverse-doc[full] @ git+https://github.com/scverse/scverse-doc.git@nested-toctrees", # TODO: revert to >=0.4 once scverse/scverse-doc#85 is released
   "scverse-misc[sphinx]>=0.1.8",
   "sphinx-autodoc-typehints",
   "sphinxcontrib-bibtex>=1",
