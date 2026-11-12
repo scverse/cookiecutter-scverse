@@ -25,12 +25,10 @@ Now that you have created a new repository locally, the first step is to push it
 To do this, you have to create a **new repository** on GitHub.
 You can follow the instructions directly on [github quickstart guide][].
 Since `cruft` already populated the local repository of your project with all the necessary files,
-we suggest to _NOT_ initialize the repository with a `README.md` file or `.gitignore`, because you might encounter git conflicts on your first push.
-
+we suggest to *NOT* initialize the repository with a `README.md` file or `.gitignore`, because you might encounter git conflicts on your first push.
 
 Now that your new project repository has been created on GitHub at `https://github.com/<your-github-username>/<your-project>`, you can push it to GitHub.
 A first commit should already have been created by `cruft` when you created the project.
-
 
 ```bash
 # update the `origin` of your local repo with the remote GitHub link
@@ -48,7 +46,7 @@ While the repository at this point can be directly used, there are few remaining
 
 Modern Python package management uses a `pyproject.toml` that was first introduced in [PEP 518](https://peps.python.org/pep-0518/).
 This file contains build system requirements and information, which are used by pip to build the package, and tool configurations.
-For more details please have a look at [pip's description of the pyproject.toml file](https://pip.pypa.io/page/reference/build-system/).
+For more details please have a look at [pip’s description of the pyproject.toml file](https://pip.pypa.io/page/reference/build-system/).
 It also serves as a single point of truth to define test environments and how docs are built by leveraging
 the [hatch][] project manager, but more about that in the [contributing guide](contributing.md).
 
@@ -81,12 +79,12 @@ line-length = 120
 
 [hatch]: https://hatch.pypa.io/latest/
 
-## Coverage tests with _Codecov_
+## Coverage tests with *Codecov*
 
-Coverage tells what fraction of the code is "covered" by unit tests,
+Coverage tells what fraction of the code is “covered” by unit tests,
 thereby encouraging contributors to [write tests](contributing.md#writing-tests).
 To enable coverage checks, head over to [codecov][] and sign in with your GitHub account.
-You'll find more information in "quick start" section of the [codecov docs][].
+You’ll find more information in “quick start” section of the [codecov docs][].
 
 Codecov uses [OpenID connect][] to authenticate, therefore, specifying a token should not be necessary.
 
@@ -99,11 +97,11 @@ To set it up, simply go to the [codecov app][] page and follow the instructions 
 [codecov docs]: https://docs.codecov.com/docs
 [OpenID connect]: https://docs.github.com/en/actions/concepts/security/openid-connect
 
-## Documentation on _readthedocs_
+## Documentation on *readthedocs*
 
 We recommend using [readthedocs.org][] (RTD) to build and host the documentation for your project.
 To enable readthedocs, head over to [their website][readthedocs.org] and sign in with your GitHub account.
-On the RTD dashboard choose "Import a Project" and follow the instructions to add your repository.
+On the RTD dashboard choose “Import a Project” and follow the instructions to add your repository.
 
 - Make sure to choose the correct name of the default branch.
   On GitHub, the name of the default branch should be `main`.
@@ -138,7 +136,7 @@ This project comes with several pre-configured workflows that can be found in th
 4. **Autofix workflow**: Runs the [pre-commit checks](#pre-commit-checks) on pull requests
    and pushes the automatic fixes back to the pull request branch via [autofix.ci](#autofix-ci).
 
-To check the status of these workflows, go to the "Actions" tab in your GitHub repository.
+To check the status of these workflows, go to the “Actions” tab in your GitHub repository.
 There you can see the execution history, logs, and (re-)trigger workflows manually if needed.
 
 [Github Actions]: https://github.com/features/actions
@@ -153,7 +151,7 @@ It is configured in `.github/dependabot.yml`.
 
 Dependabot is enabled by default and does not require any additional setup, though you should review and merge its pull requests regularly.
 Since actions in the workflows are pinned to a specific commit SHA rather than a version tag,
-Dependabot's pull requests are the main way to keep these pinned versions current.
+Dependabot’s pull requests are the main way to keep these pinned versions current.
 The [zizmor](#pre-commit) pre-commit hook checks that every action remains pinned like this.
 
 [Dependabot]: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/about-dependabot-version-updates
@@ -167,14 +165,15 @@ The [zizmor](#pre-commit) pre-commit hook checks that every action remains pinne
 Releases created via the [Github releases UI][github-releases]
 will trigger the release Github workflow that automatically builds and uploads the Python package to [PyPI][].
 
-For this to work, you'll need to setup GitHub as a [trusted publisher][] on PyPI.
+For this to work, you’ll need to setup GitHub as a [trusted publisher][] on PyPI.
 To set this up, login to [PyPI][], and proceed depending on whether you already have your project on there or not:
+
 - If yes, navigate to the project. In the left sidebar, choose "Publishing", then proceed to add the repository details.
 - If not, go to your [PyPI publishing settings][] and fill out the “Add a new pending publisher” form.
 
-Enter everything _exactly_ as it is displayed on GitHub (i.e. use the correct casing for your repository name).
-The "Workflow name" needs to bet set to `release.yaml`.
-Set "Environment name" to “pypi” to match `environment: pypi` in `.github/workflows/release.yaml`.
+Enter everything *exactly* as it is displayed on GitHub (i.e. use the correct casing for your repository name).
+The “Workflow name” needs to bet set to `release.yaml`.
+Set “Environment name” to “pypi” to match `environment: pypi` in `.github/workflows/release.yaml`.
 For more details, please refer to the official [PyPI guide for setting up trusted publishing][trusted publisher].
 
 If you added a new pending publisher to set up your project,
@@ -194,7 +193,7 @@ Pre-commit checks are fast programs that check code for errors, inconsistencies 
 They are defined in `.pre-commit-config.yaml` and run with [prek][].
 
 This template uses a number of pre-commit checks.
-In this section we'll detail what is used, where they're defined, and how to modify these checks.
+In this section we’ll detail what is used, where they’re defined, and how to modify these checks.
 
 Set up the git hook once by running `prek install` (e.g. `uvx prek install`), then `hatch check --fix` to format and check the whole repository.
 
@@ -299,7 +298,7 @@ select = [
 ```
 
 The `ignore` entry is used to disable specific rules for the entire project.
-Add the rule code(s) you want to ignore and don't forget to add a comment explaining why.
+Add the rule code(s) you want to ignore and don’t forget to add a comment explaining why.
 You can find a long list of checks that this template disables by default sitting there already.
 
 ```toml
@@ -345,7 +344,6 @@ To silence a specific line, append a `# type: ignore[<error-code>]` comment; to 
 [ruff-config]: https://docs.astral.sh/ruff/configuration/
 [ruff-error-suppression]: https://docs.astral.sh/ruff/linter/#error-suppression
 [ruff-external]: https://docs.astral.sh/ruff/settings/#external
-
 
 ## API design
 
@@ -399,7 +397,7 @@ In `pyproject.toml` add the following changes, and you are good to go!
  omit = [
 ```
 
-Don't forget to update the [Making a release section](contributing.md#publishing-a-release) in the “Contributing” guide of your repository.
+Don’t forget to update the [Making a release section](contributing.md#publishing-a-release) in the “Contributing” guide of your repository.
 
 [hatch-vcs]: https://pypi.org/project/hatch-vcs/
 
@@ -423,7 +421,6 @@ The following hints may be useful to work with the template sync:
   you can add them to the `[tool.cruft]` section in the `pyproject.toml` file in the root of your repository.
 - To disable the sync entirely, remove your package from the [list of template repositories][] via pull request,
   or simply remove the file `.cruft.json` from the root of your repository.
-
 :::
 
 [list of template repositories]: https://github.com/scverse/ecosystem-packages/blob/main/template-repos.yml
@@ -449,10 +446,12 @@ please refer to the [contributing docs](contributing.md#contributing-guide), whi
 
 You can also update existing projects to make use of this template to benefit from the latest-greatest tooling and automated template updates.
 This requires some manual work though.
-Here's one way how to do it:
+Here’s one way how to do it:
 
 1. Let's assume your repository is checked out to `$REPO`
+
 2. Clone your repository a second time to `${REPO}_cookiecutterized`
+
 3. Initialize an empty repository from this cookiecutter template:
 
    ```bash

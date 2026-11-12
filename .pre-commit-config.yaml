@@ -5,6 +5,12 @@ repos:
     hooks:
       - id: biome-format
         groups: [format]
+  - repo: https://github.com/jolars/panache-pre-commit
+    rev: v3.18.0
+    hooks:
+      - id: panache-format
+        exclude: ^\{\{cookiecutter\.project_name\}\}/ # template has its own panache config and hook
+        groups: [format]
   # Hooks that are run for scripts
   - repo: https://github.com/tox-dev/pyproject-fmt
     rev: v2.30.3
