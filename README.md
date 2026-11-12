@@ -22,7 +22,7 @@ Please consider making a tax-deductible [donation](https://numfocus.org/donate-t
   <img
     src="https://raw.githubusercontent.com/numfocus/templates/master/images/numfocus-logo.png"
     width="200"
-  >
+>
 </a>
 
 [badge-test]: https://github.com/scverse/cookiecutter-scverse/actions/workflows/test.yml/badge.svg
@@ -51,7 +51,6 @@ and how to customize it for your needs.
 You need `git >=2.28` and [`uv`](https://docs.astral.sh/uv/getting-started/installation/) to be installed on your system.
 All other dependencies will be managed through `uv`.
 
-
 ### Create the project
 
 We are using [cruft](https://github.com/cruft/cruft) to initialize the project from the template. Cruft
@@ -67,7 +66,7 @@ uvx --with prek cruft create https://github.com/scverse/cookiecutter-scverse
 
 This will create a git repository generated from the template.
 Now `cd` into the newly created directory and make the initial commit!
-Don't forget to create a repository on GitHub and upload your project.
+Don’t forget to create a repository on GitHub and upload your project.
 
 <details>
 <summary>Working without `uv`</summary>
@@ -80,16 +79,15 @@ cruft create https://github.com/scverse/cookiecutter-scverse
 
 </details>
 
-
 ### Set up online services
 
 Your repository is now ready. However, to use all features of the template you will need to set up the following
 online services. Clicking on the links will take you to the respective sections of the developer documentation.
 The developer documentation is also shipped as part of the template in `docs/template_usage.md`.
 
-1.  [autofix.ci][setup-autofix] to check for inconsistencies and to enforce a code style
-2.  [readthedocs.org][setup-rtd] to build and host documentation
-3.  [codecov][setup-codecov] to generate test coverage reports
+1. [autofix.ci][setup-autofix] to check for inconsistencies and to enforce a code style
+2. [readthedocs.org][setup-rtd] to build and host documentation
+3. [codecov][setup-codecov] to generate test coverage reports
 
 All CI checks should pass, you are ready to start developing your new tool!
 
@@ -124,7 +122,7 @@ You can cite the scverse publication as follows:
 >
 > Isaac Virshup, Danila Bredikhin, Lukas Heumos, Giovanni Palla, Gregor Sturm, Adam Gayoso, Ilia Kats, Mikaela Koutrouli, Scverse Community, Bonnie Berger, Dana Pe’er, Aviv Regev, Sarah A. Teichmann, Francesca Finotello, F. Alexander Wolf, Nir Yosef, Oliver Stegle & Fabian J. Theis
 >
-> _Nat Biotechnol._ 2022 Apr 10. doi: [10.1038/s41587-023-01733-8](https://doi.org/10.1038/s41587-023-01733-8).
+> *Nat Biotechnol.* 2022 Apr 10. doi: [10.1038/s41587-023-01733-8](https://doi.org/10.1038/s41587-023-01733-8).
 
 <!-- links -->
 
