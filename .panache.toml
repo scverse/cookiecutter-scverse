@@ -1,0 +1,6 @@
+#:schema https://panache.bz/panache.schema.json
+flavor = "gfm"
+
+[format]
+wrap = "preserve"
+smart-punctuation = "unicode"
