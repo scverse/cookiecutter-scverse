@@ -180,7 +180,6 @@ If you added a new pending publisher to set up your project,
 the project will be published only once you release your package for the first time (see above).
 
 [github-releases]: https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases
-[pypi-trusted-publishing-guide]: https://docs.pypi.org/trusted-publishers/adding-a-publisher/
 [PyPI]: https://pypi.org/
 [PyPI publishing settings]: https://pypi.org/manage/account/publishing/
 [trusted publisher]: https://docs.pypi.org/trusted-publishers/

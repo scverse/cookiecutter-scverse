@@ -9,8 +9,10 @@ repos:
     rev: v3.18.0
     hooks:
       - id: panache-format
-        exclude: ^\{\{cookiecutter\.project_name\}\}/ # template has its own panache config and hook
+        exclude: &template ^\{\{cookiecutter\.project_name\}\}/ # template has its own panache config and hooks
         groups: [format]
+      - id: panache-lint
+        exclude: *template
   # Hooks that are run for scripts
   - repo: https://github.com/tox-dev/pyproject-fmt
     rev: v2.30.6

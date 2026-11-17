@@ -98,7 +98,6 @@ hatch env find hatch-test.py3.14-stable
 ```
 
 and manually point it to the python binary.
-
 ::::
 
 ::::{tab-item} uv
@@ -137,7 +136,6 @@ The `.venv` directory is typically automatically discovered by IDEs such as VS C
 ::::
 :::::
 
-[hatch environments]: https://hatch.pypa.io/latest/tutorials/environment/basic-usage/
 [hatch-code]: https://marketplace.visualstudio.com/items?itemName=PyPA.hatch
 [uv]: https://docs.astral.sh/uv/
 
