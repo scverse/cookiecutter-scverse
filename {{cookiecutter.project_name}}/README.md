@@ -16,7 +16,7 @@ in particular, the [API documentation][].
 ## Installation
 
 <!-- TODO  - replace dev version with PyPI version once released -->
-Add `git+https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}.git` to your dependencies. 
+Add `git+https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}.git` to your dependencies.
 
 For more details, see the [installation][] section in the docs.
 
