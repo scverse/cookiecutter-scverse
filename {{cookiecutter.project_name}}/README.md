@@ -61,7 +61,6 @@ If you found a bug, please use the [issue tracker][].
 
 [uv]: https://github.com/astral-sh/uv
 [scverse discourse]: https://discourse.scverse.org/
-
 [issue tracker]: https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.project_name }}/issues
 [tests]: https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}/actions/workflows/test.yaml
 [documentation]: https://{{ cookiecutter.project_name }}.readthedocs.io

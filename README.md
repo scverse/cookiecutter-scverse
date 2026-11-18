@@ -14,7 +14,7 @@ Please check out the
 that are automatically generated and kept in sync with this template.
 
 <!-- panache-ignore-lint-start -->
-[//]: # "numfocus-fiscal-sponsor-attribution"
+[//]: # (numfocus-fiscal-sponsor-attribution)
 <!-- panache-ignore-lint-end -->
 
 This template is part of the scverse® project ([website](https://scverse.org), [governance](https://scverse.org/about/roles)) and is fiscally sponsored by [NumFOCUS](https://numfocus.org/).
@@ -24,7 +24,7 @@ Please consider making a tax-deductible [donation](https://numfocus.org/donate-t
   <img
     src="https://raw.githubusercontent.com/numfocus/templates/master/images/numfocus-logo.png"
     width="200"
->
+  >
 </a>
 
 [badge-test]: https://github.com/scverse/cookiecutter-scverse/actions/workflows/test.yml/badge.svg
