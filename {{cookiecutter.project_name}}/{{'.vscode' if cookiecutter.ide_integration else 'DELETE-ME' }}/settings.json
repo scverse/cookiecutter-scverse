@@ -9,8 +9,11 @@
             "source.organizeImports": "always",
         },
     },
-    "[json][jsonc][yaml][markdown]": {
+    "[json][jsonc][yaml]": {
         "editor.defaultFormatter": "biomejs.biome",
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "jolars.panache",
     },
     "python.analysis.typeCheckingMode": "basic",
     "python.testing.pytestEnabled": true,

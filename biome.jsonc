@@ -1,12 +1,12 @@
 {
-    "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+    "$schema": "https://biomejs.dev/schemas/2.6.8/schema.json",
     "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
     "formatter": { "useEditorconfig": true },
     "files": {
         // don’t descend into ./{{cookiecutter.project_name}}/
         "includes": ["**", "!\\{*"],
     },
-    "markdown": { "parser": { "frontmatter": true } },
+    "markdown": { "formatter": { "enabled": false } }, // handled by panache
     "overrides": [
         {
             "includes": ["**/*.vscode*/*.json", "**/*.jsonc"],
