@@ -56,6 +56,8 @@ It will show a collapsible list where you can expand “Hatch”
 and activate an environment by clicking on the checkmark next to it.
 As the main development environment, we recommend to use `hatch-test` with the latest supported Python version.
 
+[hatch-code]: https://marketplace.visualstudio.com/items?itemName=PyPA.hatch
+
 ### Other IDEs
 
 For other IDEs, you’ll have to point the editor at the paths to the virtual environments manually.
@@ -117,6 +119,8 @@ uv sync --all-extras
 ```
 
 The `.venv` directory is typically automatically discovered by IDEs such as VS Code.
+
+[uv]: https://docs.astral.sh/uv/
 ::::
 
 ::::{tab-item} Pip
@@ -135,9 +139,6 @@ pip install -e ".[dev,test,doc]"
 The `.venv` directory is typically automatically discovered by IDEs such as VS Code.
 ::::
 :::::
-
-[hatch-code]: https://marketplace.visualstudio.com/items?itemName=PyPA.hatch
-[uv]: https://docs.astral.sh/uv/
 
 ## Code-style
 
