@@ -16,7 +16,7 @@ in particular, the [API documentation][].
 ## Installation
 
 You need to have Python 3.12 or newer installed on your system.
-If you don't have Python installed, we recommend installing [uv][].
+If you don’t have Python installed, we recommend installing [uv][].
 
 We recommend managing dependencies in project-specific virtual environments to avoid dependency conflicts.
 This is most convenient using package managers such as [uv][].
@@ -36,6 +36,8 @@ Choose from the options below to install {{ cookiecutter.project_name }}:
    pip install {{ cookiecutter.project_name }}
    ```
 
+[pypi]: https://pypi.org/project/{{ cookiecutter.project_name }}
+[venv]: https://docs.python.org/3/tutorial/venv.html
 -->
 
 1. Install the latest development version:
@@ -64,5 +66,3 @@ If you found a bug, please use the [issue tracker][].
 [documentation]: https://{{ cookiecutter.project_name }}.readthedocs.io
 [changelog]: https://{{ cookiecutter.project_name }}.readthedocs.io/page/changelog.html
 [api documentation]: https://{{ cookiecutter.project_name }}.readthedocs.io/page/api.html
-[pypi]: https://pypi.org/project/{{ cookiecutter.project_name }}
-[venv]: https://docs.python.org/3/tutorial/venv.html
