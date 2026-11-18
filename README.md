@@ -51,7 +51,6 @@ and how to customize it for your needs.
 You need `git >=2.28` and [`uv`](https://docs.astral.sh/uv/getting-started/installation/) to be installed on your system.
 All other dependencies will be managed through `uv`.
 
-
 ### Create the project
 
 We are using [cruft](https://github.com/cruft/cruft) to initialize the project from the template. Cruft
@@ -79,7 +78,6 @@ cruft create https://github.com/scverse/cookiecutter-scverse
 ```
 
 </details>
-
 
 ### Set up online services
 
