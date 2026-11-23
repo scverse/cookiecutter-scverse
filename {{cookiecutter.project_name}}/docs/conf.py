@@ -27,7 +27,6 @@ extensions = [
 
 myst_enable_extensions = [*DEFAULTS.myst_enable_extensions, "substitution"]
 myst_substitutions = {
-    # used in installation.md, so the stated Python requirement follows `requires-python` in pyproject.toml
     "requires_python": info["Requires-Python"],
 }
 
