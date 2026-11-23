@@ -1,6 +1,6 @@
 # Installation
 
-{{ cookiecutter.project_name }} needs {% raw %}{{ python_requirement }}{% endraw %}.
+{{ cookiecutter.project_name }} needs Python {% raw %}{{ requires_python }}{% endraw %}.
 We recommend [uv][], which installs Python for you and keeps each project’s dependencies in their own virtual environment.
 
 <!--

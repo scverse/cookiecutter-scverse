@@ -2,7 +2,6 @@
 # `scverse_doc` sets the theme and shared defaults, see https://scverse-doc.readthedocs.io
 # For the full list of options, see https://www.sphinx-doc.org/page/usage/configuration.html
 
-import re
 from datetime import datetime
 from importlib.metadata import metadata
 
@@ -17,8 +16,6 @@ copyright = f"{datetime.now():%Y}, {author}."
 version = release = info["Version"]
 urls = dict(pu.split(", ") for pu in info.get_all("Project-URL"))
 source_repository = urls["Source"]
-requires_python = info["Requires-Python"]
-min_python = m[1] if (m := re.fullmatch(r">=\s*([\d.]+)", requires_python)) else None
 
 extensions = [
     "scverse_doc",
@@ -31,7 +28,7 @@ extensions = [
 myst_enable_extensions = [*DEFAULTS.myst_enable_extensions, "substitution"]
 myst_substitutions = {
     # used in installation.md, so the stated Python requirement follows `requires-python` in pyproject.toml
-    "python_requirement": f"Python {min_python} or newer" if min_python else f"Python {requires_python}",
+    "requires_python": info["Requires-Python"],
 }
 
 bibtex_bibfiles = ["references.bib"]
