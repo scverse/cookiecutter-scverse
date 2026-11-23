@@ -1,6 +1,6 @@
 # Installation
 
-{{ cookiecutter.project_name }} needs Python 3.12 or newer.
+{{ cookiecutter.project_name }} needs {% raw %}{{ python_requirement }}{% endraw %}.
 We recommend [uv][], which installs Python for you and keeps each project’s dependencies in their own virtual environment.
 
 <!--
