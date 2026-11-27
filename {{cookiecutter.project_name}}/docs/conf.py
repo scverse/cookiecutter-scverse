@@ -5,6 +5,8 @@
 from datetime import datetime
 from importlib.metadata import metadata
 
+from scverse_doc.config import DEFAULTS
+
 # NOTE: If you installed your project in editable mode, this might be stale.
 #       If this is the case, reinstall it to refresh the metadata
 info = metadata("{{cookiecutter.project_name}}")
@@ -22,6 +24,11 @@ extensions = [
     "sphinx_autodoc_typehints",
     "IPython.sphinxext.ipython_console_highlighting",
 ]
+
+myst_enable_extensions = [*DEFAULTS.myst_enable_extensions, "substitution"]
+myst_substitutions = {
+    "requires_python": info["Requires-Python"],
+}
 
 bibtex_bibfiles = ["references.bib"]
 typehints_defaults = "braces"
